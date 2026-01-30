@@ -1,6 +1,6 @@
 # ARQUIVO: main.py
-# FUNÇÃO: Interface UI/UX - Mobile First & High Contrast
-# VERSÃO: 5.0 (Correção Mobile Definitiva)
+# FUNÇÃO: Interface UI/UX - Visual Pro Dinâmico
+# VERSÃO: 6.0 (Layout Atrativo & Subtítulo Original)
 
 import streamlit as st
 import pandas as pd
@@ -23,11 +23,11 @@ except ImportError as e:
     st.stop()
 
 # ==============================================================================
-# 1. CONFIGURAÇÃO VISUAL (MOBILE FIRST CSS)
+# 1. CONFIGURAÇÃO VISUAL (VISUAL PRO CSS)
 # ==============================================================================
 st.set_page_config(
     page_title="Agro-Intel Pro",
-    page_icon="🛡️",
+    page_icon="🌱",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
@@ -44,76 +44,100 @@ def load_css():
 
     st.markdown(f"""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap');
     
     html, body, [class*="css"] {{ font-family: 'Roboto', sans-serif; }}
 
-    /* FUNDO FIXO */
+    /* FUNDO AGRO-DARK (IMERSIVO) */
     .stApp {{
-        background-image: linear-gradient(rgba(0,0,0, 0.8), rgba(0,0,0, 0.9)), url("{img_url}");
+        background-image: linear-gradient(rgba(0,0,0, 0.85), rgba(0,0,0, 0.92)), url("{img_url}");
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
     }}
 
-    /* HEADER */
+    /* HEADER COM SUBTÍTULO ORIGINAL */
     .titan-title {{
         color: #ffffff !important; 
-        font-size: 2.5em; 
+        font-size: 2.8em; 
         font-weight: 900; 
         margin: 0;
-        text-shadow: 2px 2px 4px #000000;
+        text-transform: uppercase;
+        letter-spacing: -1px;
+        text-shadow: 0px 4px 10px rgba(0,0,0,0.8);
     }}
-    .titan-sub {{ color: #e0e0e0 !important; font-size: 1.0em; }}
+    .titan-sub {{ 
+        color: #4fc3f7 !important; /* Azul Neon Suave */
+        font-size: 1.2em; 
+        font-weight: 500;
+        letter-spacing: 1px;
+        margin-top: 5px;
+        text-transform: uppercase;
+    }}
 
-    /* CARTÕES - FORÇAR BRANCO OPACO */
+    /* CARTÕES DINÂMICOS (HOVER EFFECT) */
     .pro-card {{
         background-color: #ffffff !important;
         border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        border: 1px solid #d1d5db;
+        padding: 25px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        border-left: 5px solid #0288d1; /* Borda lateral azul */
         margin-bottom: 20px;
-        opacity: 1 !important; /* Garante que não fique transparente */
+        opacity: 1 !important;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+    }}
+    .pro-card:hover {{
+        transform: translateY(-3px); /* Levanta levemente ao passar o mouse */
+        box-shadow: 0 10px 20px rgba(0,0,0,0.4);
     }}
 
-    /* TEXTOS - FORÇAR PRETO (Alto Contraste) */
-    .card-title {{
-        color: #000000 !important;
-        font-size: 1.3em; 
-        font-weight: 800; 
-        border-bottom: 3px solid #0288d1;
+    /* TIPOGRAFIA DE DADOS (VISIBILIDADE TOTAL) */
+    .data-label {{
+        color: #546e7a !important;
+        font-size: 0.8em;
+        font-weight: 800;
+        text-transform: uppercase;
+        margin-bottom: 3px;
+    }}
+    .data-value {{
+        color: #102027 !important;
+        font-size: 1.1em;
+        font-weight: 500;
+        line-height: 1.4;
+    }}
+    .section-header {{
+        color: #01579b !important;
+        font-size: 1.3em;
+        font-weight: 900;
+        border-bottom: 2px solid #e1f5fe;
         padding-bottom: 10px;
         margin-bottom: 15px;
     }}
 
-    .label-tech {{ 
-        color: #0277bd !important; /* Azul Escuro */
-        font-size: 0.85em; 
-        font-weight: 900; 
-        text-transform: uppercase; 
-        margin-top: 15px;
+    /* ETIQUETAS QUÍMICAS */
+    .chem-tag {{
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.75em;
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-top: 5px;
     }}
-    
-    .value-tech {{ 
-        color: #111111 !important; /* Preto Quase Absoluto */
-        font-size: 1.1em; 
-        line-height: 1.5; 
-        font-weight: 500;
-    }}
+    .tag-sistemico {{ background: #fff3e0; color: #e65100; border: 1px solid #ffb74d; }} /* Laranja */
+    .tag-contato {{ background: #e8f5e9; color: #1b5e20; border: 1px solid #81c784; }} /* Verde */
+    .tag-bio {{ background: #e1f5fe; color: #01579b; border: 1px solid #4fc3f7; }} /* Azul */
 
-    /* ALERTAS */
-    .alert-box-red {{ background: #ffcdd2; border-left: 8px solid #b71c1c; padding: 15px; color: #b71c1c; font-weight: bold; border-radius: 5px; }}
-    .alert-box-green {{ background: #c8e6c9; border-left: 8px solid #1b5e20; padding: 15px; color: #1b5e20; font-weight: bold; border-radius: 5px; }}
-
-    /* KPIs (Métricas) - Forçar Fundo Branco */
+    /* AJUSTES KPI DO STREAMLIT */
     div[data-testid="metric-container"] {{
         background-color: #ffffff !important;
-        border: 2px solid #90caf9;
-        box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+        border-radius: 10px;
+        padding: 15px;
+        border: 1px solid #cfd8dc;
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
     }}
-    label[data-testid="stMetricLabel"] {{ color: #444444 !important; font-weight: 700 !important; }}
-    div[data-testid="stMetricValue"] {{ color: #000000 !important; font-weight: 900 !important; }}
+    label[data-testid="stMetricLabel"] {{ color: #455a64 !important; font-weight: 700 !important; }}
+    div[data-testid="stMetricValue"] {{ color: #000000 !important; font-weight: 900 !important; font-size: 1.8em !important; }}
     </style>
     """, unsafe_allow_html=True)
 
@@ -133,32 +157,32 @@ if 'd_plantio' not in st.session_state: st.session_state['d_plantio'] = date(202
 url_w, url_g = st.query_params.get("w_key", None), st.query_params.get("g_key", None)
 
 # ==============================================================================
-# 3. TELA DE LOGIN (Simplificada)
+# 3. TELA DE LOGIN
 # ==============================================================================
 if not url_w:
-    st.markdown("<br>", unsafe_allow_html=True)
-    c1, c2, c3 = st.columns([1, 6, 1])
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    c1, c2, c3 = st.columns([1, 4, 1])
     with c2:
         st.markdown("""
         <div class="pro-card" style="text-align:center;">
-            <h2 style="color:#000;">🔒 Agro-Intel Enterprise</h2>
-            <p style="color:#333;">Login do Sistema</p>
+            <h2 style="color:#000; margin:0;">🔒 ACESSO SEGURO</h2>
+            <p style="color:#555;">Gestão Agronômica de Precisão</p>
         </div>
         """, unsafe_allow_html=True)
         kw = st.text_input("API Key OpenWeather", type="password")
         kg = st.text_input("API Key Gemini AI", type="password")
-        if st.button("ENTRAR", type="primary", use_container_width=True):
+        if st.button("ENTRAR NO SISTEMA", type="primary", use_container_width=True):
             if kw and kg:
                 st.query_params["w_key"] = kw; st.query_params["g_key"] = kg; st.rerun()
     st.stop()
 
 # ==============================================================================
-# 4. DASHBOARD
+# 4. DASHBOARD (CABEÇALHO)
 # ==============================================================================
 st.markdown("""
-<div style="text-align:center; padding: 20px;">
+<div style="text-align:center; padding: 25px 0 40px 0;">
     <h1 class="titan-title">AGRO-INTEL</h1>
-    <div class="titan-sub">Enterprise System v5.0</div>
+    <div class="titan-sub">Gestão Agronômica de Precisão</div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -167,28 +191,28 @@ st.markdown('<div class="pro-card">', unsafe_allow_html=True)
 c1, c2, c3 = st.columns([1.5, 1.5, 1])
 
 with c1:
-    st.markdown("**📍 LOCALIZAÇÃO**")
-    t1, t2 = st.tabs(["Busca", "GPS"])
+    st.markdown("<div class='data-label'>📍 LOCALIZAÇÃO</div>", unsafe_allow_html=True)
+    t1, t2 = st.tabs(["Cidade", "GPS"])
     with t1:
-        city = st.text_input("Cidade:", label_visibility="collapsed", placeholder="Digite a cidade...")
+        city = st.text_input("Busca:", label_visibility="collapsed", placeholder="Digite a cidade...")
         if st.button("🔍") and city:
             lat, lon = WeatherConn.get_coords(city, url_w)
             if lat: st.session_state['loc_lat'], st.session_state['loc_lon'] = lat, lon; st.rerun()
     with t2:
-        st.write(f"{st.session_state['loc_lat']:.4f}, {st.session_state['loc_lon']:.4f}")
+        st.write(f"Coord: {st.session_state['loc_lat']:.4f}, {st.session_state['loc_lon']:.4f}")
 
 with c2:
-    st.markdown("**🚜 CULTURA**")
+    st.markdown("<div class='data-label'>🚜 PRODUÇÃO</div>", unsafe_allow_html=True)
     cult_sel = st.selectbox("Cultura", sorted(list(BANCO_MASTER.keys())))
     col_v, col_f = st.columns(2)
     var_sel = col_v.selectbox("Variedade", list(BANCO_MASTER[cult_sel]['vars'].keys()))
     fase_sel = col_f.selectbox("Fase", list(BANCO_MASTER[cult_sel]['fases'].keys()))
 
 with c3:
-    st.markdown("**📆 IDADE**")
+    st.markdown("<div class='data-label'>📆 CICLO</div>", unsafe_allow_html=True)
     st.session_state['d_plantio'] = st.date_input("Início", st.session_state['d_plantio'])
     dias = (date.today() - st.session_state['d_plantio']).days
-    st.markdown(f"<h2 style='color:#0277bd; margin:0;'>{dias} Dias</h2>", unsafe_allow_html=True)
+    st.markdown(f"<div style='font-size:2.2em; font-weight:900; color:#0277bd; line-height:1;'>{dias} Dias</div>", unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
 
@@ -202,7 +226,7 @@ if not df_clima.empty:
     gda_acum = dias * df_clima['GDA'].mean()
     progresso = min(1.0, gda_acum / info.get('gda_meta', 1500))
 
-    # KPIs
+    # KPI STRIP
     k1, k2, k3, k4 = st.columns(4)
     k1.metric("🌡️ Temp", f"{hoje['Temp']:.1f}°C")
     k2.metric("💧 VPD", f"{hoje['VPD']} kPa")
@@ -210,41 +234,58 @@ if not df_clima.empty:
     k4.metric("🛡️ Delta T", f"{hoje['Delta T']}°C")
     st.write("")
 
-    # ABAS
-    tabs = st.tabs(["🎓 TÉCNICO", "📊 CLIMA", "📡 RADAR", "👁️ IA", "💰 CUSTOS", "🗺️ MAPA", "📄 PDF"])
+    # ==========================================================================
+    # ABAS DE CONTEÚDO (LAYOUT DINÂMICO)
+    # ==========================================================================
+    tabs = st.tabs(["🎓 TÉCNICO", "📊 CLIMA", "📡 RADAR", "👁️ IA", "💰 CUSTOS", "🗺️ MAPA", "📄 LAUDO"])
 
-    # 1. TÉCNICO
+    # 1. TÉCNICO (RECEITUÁRIO COLORIDO)
     with tabs[0]:
-        st.markdown(f"**Maturação (GDA):** {gda_acum:.0f} / {info.get('gda_meta', 1500)}")
+        st.markdown(f"**Progresso de Maturação (GDA):** {gda_acum:.0f} / {info.get('gda_meta', 1500)}")
         st.progress(progresso)
 
         if hoje['Umid'] > 85 or hoje['Chuva'] > 2:
-            st.markdown('<div class="alert-box-red">🚨 ALERTA: Alta Umidade. Risco de Doenças.</div>', unsafe_allow_html=True)
+            st.error("🚨 ALERTA: Alta Umidade. Risco de Doenças. Priorize Sistêmicos.")
         else:
-            st.markdown('<div class="alert-box-green">✅ CLIMA: Favorável para Aplicações.</div>', unsafe_allow_html=True)
+            st.success("✅ CLIMA: Favorável para Preventivos e Manejo.")
 
         c1, c2 = st.columns(2)
         with c1:
             st.markdown(f"""
             <div class="pro-card">
-                <div class="card-title">🧬 Fisiologia</div>
-                <div class="label-tech">DESCRIÇÃO</div><div class="value-tech">{dados_fase['desc']}</div>
-                <div class="label-tech">DINÂMICA</div><div class="value-tech">{dados_fase['fisiologia']}</div>
-                <div class="label-tech">GENÉTICA</div><div class="value-tech">{info['info']}</div>
+                <div class="section-header">🧬 Fisiologia</div>
+                <div class="data-label">DESCRIÇÃO</div><div class="value-tech">{dados_fase['desc']}</div>
+                <div style="margin-top:10px;"></div>
+                <div class="data-label">DINÂMICA</div><div class="value-tech">{dados_fase['fisiologia']}</div>
+                <div style="margin-top:10px;"></div>
+                <div class="data-label">GENÉTICA</div><div class="value-tech">{info['info']}</div>
             </div>""", unsafe_allow_html=True)
         
         with c2:
-            # AQUI ESTÁ A CORREÇÃO PRINCIPAL: SUBSTITUÍMOS HTML PURO POR STREAMLIT NATIVO
-            st.markdown('<div class="pro-card"><div class="card-title">🛡️ Protocolo de Manejo</div>', unsafe_allow_html=True)
+            st.markdown('<div class="pro-card"><div class="section-header">🛡️ Protocolo de Manejo</div>', unsafe_allow_html=True)
             
-            st.markdown(f"**MANEJO CULTURAL:**\n\n{dados_fase.get('manejo', '-')}")
-            st.markdown("---")
-            st.markdown("**🧪 FARMÁCIA DIGITAL:**")
+            st.markdown(f"<div class='data-label'>MANEJO CULTURAL</div><div class='value-tech'>{dados_fase.get('manejo', '-')}</div>", unsafe_allow_html=True)
+            st.divider()
+            st.markdown("<div class='data-label'>🧪 FARMÁCIA DIGITAL</div>", unsafe_allow_html=True)
             
-            # Loop Python para gerar a lista (Nativo = Sem erro no mobile)
+            # LÓGICA DE CORES PARA QUÍMICOS
             if isinstance(dados_fase['quimica'], list):
                 for q in dados_fase['quimica']:
-                    st.info(f"**{q['Alvo']}**: {q['Ativo']} \n\n *({q['Grupo']} - {q['Tipo']})*")
+                    # Define a cor baseada no tipo
+                    tipo_str = q['Tipo'].lower()
+                    classe_css = "tag-bio" # Default azul
+                    if "sistêmico" in tipo_str or "curativo" in tipo_str:
+                        classe_css = "tag-sistemico" # Laranja
+                    elif "contato" in tipo_str or "protetor" in tipo_str:
+                        classe_css = "tag-contato" # Verde
+                    
+                    st.markdown(f"""
+                    <div style="background:#f9f9f9; padding:10px; border-radius:8px; border:1px solid #eee; margin-bottom:8px;">
+                        <div style="font-weight:bold; color:#000;">{q['Alvo']}</div>
+                        <div style="color:#333;">{q['Ativo']}</div>
+                        <div class="{classe_css} chem-tag">{q['Grupo']} • {q['Tipo']}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
             else:
                 st.info(f"{dados_fase['quimica']}")
             
@@ -256,6 +297,7 @@ if not df_clima.empty:
         fig = go.Figure()
         fig.add_trace(go.Bar(x=df_clima['Data'], y=df_clima['Chuva'], name='Chuva', marker_color='#0288d1'))
         fig.add_trace(go.Scatter(x=df_clima['Data'], y=df_clima['ETc'], name='ETc', line=dict(color='#d32f2f', width=3)))
+        fig.update_layout(title="Balanço Hídrico (5 Dias)", height=350)
         st.plotly_chart(fig, use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
@@ -267,11 +309,11 @@ if not df_clima.empty:
         if not df_r.empty:
             cols = st.columns(4)
             for i, r in df_r.iterrows():
-                bg = "#ffebee" if r['Chuva'] == "Sim" else "#e8f5e9"
+                bg = "#ffebee" if r['Chuva'] == "Sim" else "#f1f8e9"
                 with cols[i]: st.markdown(f"""
-                <div style="background:{bg}; padding:10px; border-radius:8px; text-align:center; color:black; border:1px solid #ccc;">
+                <div style="background:{bg}; padding:15px; border-radius:8px; text-align:center; border:1px solid #ccc; color:black;">
                     <b>{r["Direcao"]}</b><br>
-                    <span style="font-size:1.5em; font-weight:bold;">{r["Temp"]:.0f}°C</span><br>
+                    <span style="font-size:1.5em; font-weight:900;">{r["Temp"]:.0f}°C</span><br>
                     {r["Chuva"]}
                 </div>""", unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
@@ -280,7 +322,7 @@ if not df_clima.empty:
     with tabs[3]:
         st.markdown('<div class="pro-card">', unsafe_allow_html=True)
         st.subheader("👁️ Diagnóstico IA")
-        img = st.camera_input("Foto")
+        img = st.camera_input("Foto da Lavoura")
         if img and url_g:
             genai.configure(api_key=url_g)
             with st.spinner("Analisando..."):
@@ -320,7 +362,7 @@ if not df_clima.empty:
     with tabs[6]:
         st.markdown('<div class="pro-card">', unsafe_allow_html=True)
         st.subheader("📄 Relatório")
-        txt = f"LAUDO TÉCNICO\nCultura: {cult_sel}\nFase: {fase_sel}\nRecomendação: {dados_fase['manejo']}\nQuímicos: {dados_fase['quimica']}"
+        txt = f"LAUDO TÉCNICO - AGRO INTEL\n\nCultura: {cult_sel}\nFase: {fase_sel}\n\nRecomendação: {dados_fase['manejo']}\n\nQuímicos: {dados_fase['quimica']}"
         st.download_button("Baixar TXT", data=txt, file_name="Laudo.txt")
         st.markdown('</div>', unsafe_allow_html=True)
 else:
