@@ -1,1 +1,95 @@
-
+{
+  "Trigo (Triticum aestivum)": {
+    "t_base": 5,
+    "vars": {
+      "TBIO Audaz": { 
+        "kc": 1.1, 
+        "gda_meta": 1280, 
+        "info": "Trigo Melhorador (W alto). Ciclo precoce. Exige excelente manejo de N para manter proteína/glúten. Alta resistência ao acamamento." 
+      },
+      "ORS Senna": { 
+        "kc": 1.1, 
+        "gda_meta": 1250, 
+        "info": "Trigo Branqueador. Ciclo super precoce. Ideal para sucessão rápida soja/milho. Sanidade foliar muito alta." 
+      },
+      "TBIO Toruk": { 
+        "kc": 1.15, 
+        "gda_meta": 1350, 
+        "info": "O recordista de teto produtivo. Exige alta fertilidade e uso de regulador de crescimento. Mais sensível a Oídio." 
+      },
+      "BRS 264": { 
+        "kc": 1.1, 
+        "gda_meta": 1150, 
+        "info": "Trigo de sequeiro/cerrado. Ciclo curto (100 dias). Tolerante ao calor e seca moderada. Cuidado com Brusone." 
+      }
+    },
+    "fases": {
+      "Emergência": {
+        "desc": "Coleóptilo visível.",
+        "fisiologia": "Início da germinação. Dependência das reservas da semente. Baixa temperatura do solo favorece o perfilhamento inicial.",
+        "manejo": "Tratamento de Sementes é vital para evitar Pulgão (Vetor do Vírus do Nanismo Amarelo - VNAC) e doenças de solo.",
+        "quimica": [
+          { "Alvo": "Pulgão (Vetor VNAC)", "Ativo": "Imidacloprido", "Grupo": "Neonicotinoide", "Tipo": "Tratamento Sementes (TS)" },
+          { "Alvo": "Pulgão (Vetor)", "Ativo": "Tiametoxam", "Grupo": "Neonicotinoide", "Tipo": "TS" },
+          { "Alvo": "Manchas/Carvão", "Ativo": "Carbendazim + Tiram", "Grupo": "Benzimidazol", "Tipo": "TS" }
+        ]
+      },
+      "Perfilhamento (V3-V5)": {
+        "desc": "Emissão de afilhos laterais.",
+        "fisiologia": "A planta define o número de espigas/m². Fase crítica para aplicação de Nitrogênio em cobertura (induz a sobrevivência dos afilhos).",
+        "manejo": "Aplicação de N (Ureia/Sulfato). Controle rigoroso de Pulgões e Manchas foliares iniciais (Mancha Amarela).",
+        "quimica": [
+          { "Alvo": "Pulgão da Folha", "Ativo": "Acetamiprido", "Grupo": "Neonicotinoide", "Tipo": "Sistêmico" },
+          { "Alvo": "Mancha Amarela (Drechslera)", "Ativo": "Propiconazol", "Grupo": "Triazol", "Tipo": "Curativo" },
+          { "Alvo": "Ervas Folha Larga", "Ativo": "Metsulfurom-Metílico", "Grupo": "ALS", "Tipo": "Herbicida Seletivo" }
+        ]
+      },
+      "Alongamento (Primeiro Nó)": {
+        "desc": "Primeiro nó visível acima do solo.",
+        "fisiologia": "Início do crescimento vertical rápido. A espiga começa a subir no colmo. Risco de acamamento em cultivares altas.",
+        "manejo": "Aplicação de Regulador de Crescimento (Trinexapac) se a população/adubação for alta. Controle de Oídio.",
+        "quimica": [
+          { "Alvo": "Regulador de Crescimento", "Ativo": "Trinexapac-ethyl", "Grupo": "Inibidor Giberelina", "Tipo": "Fisiológico (Redutor de porte)" },
+          { "Alvo": "Oídio", "Ativo": "Tebuconazol", "Grupo": "Triazol", "Tipo": "Sistêmico" },
+          { "Alvo": "Complexo Manchas", "Ativo": "Azoxistrobina + Ciproconazol", "Grupo": "Estrob + Triazol", "Tipo": "Preventivo" }
+        ]
+      },
+      "Folha Bandeira (Emborrachamento)": {
+        "desc": "Última folha totalmente exposta.",
+        "fisiologia": "A Folha Bandeira é responsável por 70% do enchimento de grãos. Ela deve permanecer verde e sadia a todo custo.",
+        "manejo": "Aplicação do Fungicida Premium (O mais robusto do ciclo). Proteger a bandeira contra Ferrugem e Manchas.",
+        "quimica": [
+          { "Alvo": "Ferrugem da Folha", "Ativo": "Protioconazol + Trifloxistrobina", "Grupo": "Triazol + Estrob", "Tipo": "Sistêmico Premium" },
+          { "Alvo": "Manchas Foliares", "Ativo": "Fluxapiroxade + Piraclostrobina", "Grupo": "Carboxamida + Estrob", "Tipo": "Sistêmico Longa Duração" }
+        ]
+      },
+      "Espigamento / Antese": {
+        "desc": "Espiga exposta e anteras visíveis (Flores).",
+        "fisiologia": "Polinização. Momento crítico para infecção de Giberela (Fusarium) se houver chuva, ou Brusone (Pyricularia) no Trigo tropical.",
+        "manejo": "Aplicação específica para Giberela quando houver antera presa. Monitorar Lagarta do Trigo comendo aristas.",
+        "quimica": [
+          { "Alvo": "Giberela (Fusarium)", "Ativo": "Metconazol", "Grupo": "Triazol", "Tipo": "Curativo Específico" },
+          { "Alvo": "Giberela (Fusarium)", "Ativo": "Tebuconazol", "Grupo": "Triazol", "Tipo": "Curativo" },
+          { "Alvo": "Lagarta do Trigo", "Ativo": "Lambda-Cialotrina", "Grupo": "Piretroide", "Tipo": "Contato" }
+        ]
+      },
+      "Enchimento de Grãos": {
+        "desc": "Grão leitoso a pastoso.",
+        "fisiologia": "Translocação de amido e proteínas da folha bandeira para a espiga. Pulgões na espiga causam dano direto e reduzem qualidade.",
+        "manejo": "Monitorar Pulgão da Espiga (Sitobion). Manter sanidade até a maturação.",
+        "quimica": [
+          { "Alvo": "Pulgão da Espiga", "Ativo": "Acefato", "Grupo": "Organofosforado", "Tipo": "Choque (Respeitar Carência)" },
+          { "Alvo": "Pulgão (Alternativa)", "Ativo": "Imidacloprido", "Grupo": "Neonicotinoide", "Tipo": "Sistêmico" }
+        ]
+      },
+      "Maturação": {
+        "desc": "Perda da cor verde (Amarelecimento).",
+        "fisiologia": "Grão atinge maturidade fisiológica. Perda de umidade.",
+        "manejo": "Dessecação pré-colheita (se necessário e permitido) para uniformizar áreas com rebrote.",
+        "quimica": [
+          { "Alvo": "Dessecação", "Ativo": "Glufosinato de Amônio", "Grupo": "Inibidor Glutamina", "Tipo": "Contato" }
+        ]
+      }
+    }
+  }
+}
