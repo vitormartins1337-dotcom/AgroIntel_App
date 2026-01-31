@@ -1,5 +1,5 @@
 # ARQUIVO: main.py
-# FUNÇÃO: Interface Enterprise V12 (Full Expanders - Cockpit Agronômico)
+# FUNÇÃO: Interface Enterprise V13 (UI/UX Premium - Abas Grandes)
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
@@ -29,22 +29,47 @@ def load_css():
 
     /* HEADER */
     .titan-header {
-        background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%); /* Verde Agro Profissional */
-        padding: 20px; border-radius: 10px; text-align: center; color: white;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.15); margin-bottom: 20px;
+        background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+        padding: 25px; border-radius: 12px; text-align: center; color: white;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.15); margin-bottom: 25px;
     }
     
     /* CARDS GERAIS */
     .pro-card {
-        background: white; border-radius: 8px; padding: 15px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid #e0e0e0;
-        margin-bottom: 15px;
+        background: white; border-radius: 10px; padding: 20px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;
+        margin-bottom: 20px;
+    }
+
+    /* --- ESTILO PROFISSIONAL DAS ABAS (TABS) --- */
+    /* Tamanho da Fonte e Ícones */
+    button[data-baseweb="tab"] {
+        font-size: 20px !important; /* AUMENTADO PARA 20PX */
+        font-weight: 600 !important;
+        padding: 15px 25px !important; /* MAIS ESPAÇO PARA O TOQUE */
+        background-color: white !important;
+        border-radius: 8px 8px 0 0 !important;
+        margin-right: 5px !important;
+        border: 1px solid transparent !important;
+    }
+    
+    /* Aba Selecionada (Ativa) */
+    button[data-baseweb="tab"][aria-selected="true"] {
+        color: #1b5e20 !important; /* VERDE AGRO */
+        background-color: #f1f8e9 !important; /* FUNDO VERDE CLARO SUAVE */
+        border-bottom: 4px solid #1b5e20 !important; /* LINHA GROSSA EMBAIXO */
+    }
+    
+    /* Aba Não Selecionada (Hover) */
+    button[data-baseweb="tab"]:hover {
+        color: #2e7d32 !important;
+        background-color: #fafafa !important;
     }
 
     /* TAGS QUÍMICAS (VISUAL NOVO) */
     .chem-card {
-        background: #fafafa; border: 1px solid #ddd; border-radius: 6px; 
-        padding: 10px; margin-bottom: 8px; 
+        background: #fafafa; border: 1px solid #ddd; border-radius: 8px; 
+        padding: 15px; margin-bottom: 12px; 
     }
     </style>
     """, unsafe_allow_html=True)
@@ -53,7 +78,6 @@ load_css()
 # 2. CARREGAMENTO DE DADOS
 BANCO_MASTER = get_database()
 if not BANCO_MASTER: 
-    # Fallback silencioso para não travar o app se o JSON estiver com erro
     st.warning("⚠️ Aviso: Banco de dados instável ou vazio. Verifique os arquivos JSON.")
     BANCO_MASTER = {}
 
@@ -137,10 +161,10 @@ if not df_clima.empty:
     k3.metric("💦 Evapotranspiração", f"{hoje['ETc']} mm/dia")
     k4.metric("🛡️ Delta T (Pulverização)", f"{hoje['Delta T']}°C", delta_color="inverse")
     
-    # ABAS
+    # --- ABAS COM ESTILO NOVO ---
     tabs = st.tabs(["🎓 TÉCNICO", "📊 CLIMA", "📡 RADAR", "👁️ IA", "💰 CUSTOS", "🗺️ MAPA", "📄 LAUDO"])
 
-    # --- ABA 1: TÉCNICO (MODELO NOVO EXPANDER) ---
+    # ABA 1: TÉCNICO
     with tabs[0]:
         st.markdown('<div class="pro-card">', unsafe_allow_html=True)
         st.progress(progresso)
@@ -168,7 +192,6 @@ if not df_clima.empty:
         with st.expander("🧪 PROTOCOLO AVANÇADO (FRAC/IRAC/BIO)", expanded=False):
             if isinstance(dados_fase.get('quimica'), list):
                 for q in dados_fase['quimica']:
-                    # Cores dinâmicas
                     tipo = q.get('Tipo', 'Geral')
                     cor_borda = "#1976d2" # Azul Padrão
                     icone = "💊"
@@ -180,20 +203,19 @@ if not df_clima.empty:
                     elif "Nutrição" in tipo: 
                         cor_borda = "#fbc02d"; icone = "⚡" # Amarelo Nutri
 
-                    # Layout do Card
                     st.markdown(f"""
                     <div class="chem-card" style="border-left: 5px solid {cor_borda};">
                         <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <span style="font-weight:bold; font-size:1.05em; color:#333;">{icone} {q.get('Alvo', 'Alvo Geral')}</span>
-                            <span style="background:{cor_borda}; color:white; padding:2px 8px; border-radius:4px; font-size:0.75em; font-weight:bold;">{tipo}</span>
+                            <span style="font-weight:bold; font-size:1.1em; color:#333;">{icone} {q.get('Alvo', 'Alvo Geral')}</span>
+                            <span style="background:{cor_borda}; color:white; padding:4px 10px; border-radius:4px; font-size:0.8em; font-weight:bold;">{tipo}</span>
                         </div>
-                        <div style="margin-top:8px; color:#444; font-size:0.95em;">
+                        <div style="margin-top:10px; color:#444; font-size:1em;">
                             <b>Ativo:</b> {q.get('Ativo', '-')}
                         </div>
-                        <div style="margin-top:4px; font-size:0.9em; color:#666;">
+                        <div style="margin-top:5px; font-size:0.95em; color:#666;">
                             🧬 <b>Grupo:</b> <span style="background:#eee; padding:2px 6px; border-radius:4px;">{q.get('Codigos', q.get('Grupo', '-'))}</span>
                         </div>
-                        <div style="margin-top:8px; font-style:italic; font-size:0.9em; color:#0277bd;">
+                        <div style="margin-top:10px; font-style:italic; font-size:0.95em; color:#0277bd;">
                             💡 <b>Estratégia:</b> {q.get('Estrategia', q.get('Obs', ''))}
                         </div>
                     </div>
@@ -220,7 +242,7 @@ if not df_clima.empty:
             cols = st.columns(4)
             for i, r in df_r.iterrows():
                 bg = "#ffebee" if r['Chuva'] == "Sim" else "#e8f5e9"
-                with cols[i]: st.markdown(f"""<div style="background:{bg}; padding:10px; border-radius:8px; text-align:center;"><b>{r["Direcao"]}</b><br><h3>{r["Temp"]:.0f}°C</h3>{r["Chuva"]}</div>""", unsafe_allow_html=True)
+                with cols[i]: st.markdown(f"""<div style="background:{bg}; padding:15px; border-radius:8px; text-align:center;"><b>{r["Direcao"]}</b><br><h3 style='margin:10px 0;'>{r["Temp"]:.0f}°C</h3>{r["Chuva"]}</div>""", unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
     # ABA 4: IA
