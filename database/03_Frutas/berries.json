@@ -1,0 +1,66 @@
+{
+  "Mirtilo (Blueberry)": {
+    "t_base": 7,
+    "vars": {
+      "Emerald": { "kc": 0.95, "gda_meta": 1800, "info": "Padrão Brasil. Exige pH 4.5 a 5.2. Alta produtividade." },
+      "Biloxi": { "kc": 0.90, "gda_meta": 1900, "info": "Baixa exigência de frio (Chill hours). Vigorosa. Fruta média." },
+      "Jewel": { "kc": 0.95, "gda_meta": 1800, "info": "Precoce. Fruta muito grande. Sabor ácido se colhido cedo." }
+    },
+    "fases": {
+      "Repouso/Poda": {
+        "desc": "Pós-colheita/Inverno.",
+        "fisiologia": "Acúmulo de reservas nas raízes.",
+        "manejo": "Poda de limpeza. Aplicação de Calda Sulfocálcica (Limpeza).",
+        "quimica": [
+          { "Alvo": "Cochonilha/Musgo", "Ativo": "Calda Sulfocálcica", "Grupo": "Inorgânico", "Tipo": "Caustico" }
+        ]
+      },
+      "Florada": {
+        "desc": "Abertura das flores (Campânulas).",
+        "fisiologia": "Polinização cruzada aumenta tamanho do fruto. Dependência de Mamangavas (Bombus).",
+        "manejo": "Controle de Botrytis (Mofo Cinzento) e Tripes. Cuidado com abelhas.",
+        "quimica": [
+          { "Alvo": "Botrytis", "Ativo": "Fludioxonil", "Grupo": "Fenilpirrol", "Tipo": "Contato (Seguro p/ abelhas à noite)" },
+          { "Alvo": "Antracnose", "Ativo": "Piraclostrobina", "Grupo": "Estrobilurina", "Tipo": "Preventivo" }
+        ]
+      },
+      "Frutificação": {
+        "desc": "Frutos verdes a azuis.",
+        "fisiologia": "Acúmulo de açúcar. Não usar Nitrato (Tóxico), apenas Amônio.",
+        "manejo": "Ferrugem e Lagartas.",
+        "quimica": [
+          { "Alvo": "Ferrugem", "Ativo": "Difenoconazol", "Grupo": "Triazol", "Tipo": "Curativo" }
+        ]
+      }
+    }
+  },
+  "Morango (Fragaria)": {
+    "t_base": 7,
+    "vars": {
+      "Albion": { "kc": 0.85, "gda_meta": 1250, "info": "Dia neutro. Sabor excelente. Sensível a Colletotrichum (Antracnose)." },
+      "San Andreas": { "kc": 0.85, "gda_meta": 1200, "info": "Dia neutro. Mais rústica. Menor sabor que Albion." },
+      "Camarosa": { "kc": 0.85, "gda_meta": 1200, "info": "Dia curto. Produção concentrada no inverno. Fruto firme." }
+    },
+    "fases": {
+      "Plantio/Pegamento": {
+        "desc": "Mudas recém transplantadas.",
+        "fisiologia": "Emissão de raízes novas. Risco de coroa apodrecer.",
+        "manejo": "Imersão de mudas em fungicidas antes do plantio.",
+        "quimica": [
+          { "Alvo": "Podridão de Coroa", "Ativo": "Metalaxil-M", "Grupo": "Fenilamida", "Tipo": "Drench" }
+        ]
+      },
+      "Produção Plena": {
+        "desc": "Flores e Frutos simultâneos.",
+        "fisiologia": "Dreno constante de K e Ca. Sensível a salinidade (EC > 1.2).",
+        "manejo": "Controle diário de Ácaro Rajado e Botrytis.",
+        "quimica": [
+          { "Alvo": "Ácaro Rajado (Adulto)", "Ativo": "Abamectina", "Grupo": "Avermectina", "Tipo": "Contato" },
+          { "Alvo": "Ácaro (Ovos)", "Ativo": "Etoxazol", "Grupo": "Inibidor de Crescimento", "Tipo": "Contato" },
+          { "Alvo": "Botrytis", "Ativo": "Iprodiona", "Grupo": "Dicarboximida", "Tipo": "Contato" },
+          { "Alvo": "Oídio", "Ativo": "Enxofre", "Grupo": "Inorgânico", "Tipo": "Protetor" }
+        ]
+      }
+    }
+  }
+}
