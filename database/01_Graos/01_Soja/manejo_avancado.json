@@ -1,0 +1,56 @@
+{
+  "Soja (Glycine max)": {
+    "fases": {
+      "R1 - Início Floração": {
+        "quimica": [
+          {
+            "Alvo": "Ferrugem Asiática",
+            "Ativo": "Protioconazol + Trifloxistrobina",
+            "Codigos": "FRAC 3 (Triazol) + FRAC 11 (Estrob)",
+            "Tipo": "Químico Sistêmico",
+            "Estrategia": "Base do programa. Alta eficácia curativa/preventiva."
+          },
+          {
+            "Alvo": "Blindagem (Reforço)",
+            "Ativo": "Mancozebe",
+            "Codigos": "FRAC M03 (Multissítio)",
+            "Tipo": "Químico Protetor",
+            "Estrategia": "OBRIGATÓRIO para evitar resistência dos fungos."
+          },
+          {
+            "Alvo": "Indução de Resistência",
+            "Ativo": "Bacillus subtilis",
+            "Codigos": "FRAC BM02",
+            "Tipo": "Biológico",
+            "Estrategia": "Ativa as defesas naturais da planta (Fitoalexinas)."
+          }
+        ]
+      },
+      "R5.1 - Enchimento de Grãos": {
+        "quimica": [
+          {
+            "Alvo": "Percevejo Marrom",
+            "Ativo": "Acefato",
+            "Codigos": "IRAC 1B (Organofosforado)",
+            "Tipo": "Químico Choque",
+            "Estrategia": "Limpeza de área (Knockdown)."
+          },
+          {
+            "Alvo": "Percevejo (Residual)",
+            "Ativo": "Dinotefuram",
+            "Codigos": "IRAC 4A (Neonicotinoide)",
+            "Tipo": "Químico Sistêmico",
+            "Estrategia": "Proteção prolongada."
+          },
+          {
+            "Alvo": "Lagartas (Geral)",
+            "Ativo": "Baculovirus anticarsia",
+            "Codigos": "IRAC 31 (Vírus)",
+            "Tipo": "Biológico",
+            "Estrategia": "Manejo ecológico sem afetar inimigos naturais."
+          }
+        ]
+      }
+    }
+  }
+}
