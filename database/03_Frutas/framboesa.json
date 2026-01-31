@@ -1,0 +1,59 @@
+{
+  "Framboesa (Raspberry)": {
+    "t_base": 7,
+    "vars": {
+      "Heritage": { 
+        "kc": 1.1, 
+        "gda_meta": 1300, 
+        "info": "Cultivar Remontante (produz no outono e primavera). Rústica. Frutos médios, vermelhos e firmes. Espinhosa." 
+      },
+      "Autumn Bliss": { 
+        "kc": 1.1, 
+        "gda_meta": 1350, 
+        "info": "Produção concentrada no outono. Frutos grandes e saborosos. Menor exigência de horas de frio." 
+      },
+      "Golden Bliss": { 
+        "kc": 1.1, 
+        "gda_meta": 1350, 
+        "info": "Framboesa amarela. Nicho de mercado gourmet. Mais sensível ao manuseio." 
+      }
+    },
+    "fases": {
+      "Brotação de Hastes (Primocanes)": {
+        "desc": "Emergência de novas hastes do solo.",
+        "fisiologia": "A planta renova seu sistema produtivo anualmente. Alta demanda de Nitrogênio.",
+        "manejo": "Seleção de hastes (raleio). Controle de Ferrugem (Pucciniastrum) e Ácaro Rajado.",
+        "quimica": [
+          { "Alvo": "Ferrugem", "Ativo": "Azoxistrobina", "Grupo": "Estrobilurina", "Tipo": "Preventivo" },
+          { "Alvo": "Ácaro Rajado", "Ativo": "Abamectina", "Grupo": "Avermectina", "Tipo": "Translaminar" }
+        ]
+      },
+      "Florada": {
+        "desc": "Botões brancos e polinização.",
+        "fisiologia": "Flores hermafroditas ricas em néctar. A presença de abelhas é OBRIGATÓRIA para evitar frutos deformados.",
+        "manejo": "O fungo Botrytis infecta a flor e fica latente até o fruto madurar. Controle preventivo aqui é vital.",
+        "quimica": [
+          { "Alvo": "Botrytis (Mofo Cinzento)", "Ativo": "Ciprodinil + Fludioxonil", "Grupo": "Switch", "Tipo": "Padrão Ouro (Sistêmico)" },
+          { "Alvo": "Besouros (Dano Flor)", "Ativo": "Piretrina Natural", "Grupo": "Botânico", "Tipo": "Contato (Seguro)" }
+        ]
+      },
+      "Frutificação Verde": {
+        "desc": "Formação das drupas.",
+        "fisiologia": "Crescimento celular. Necessidade de água constante (sistema superficial).",
+        "manejo": "Monitoramento de Percevejos (causam gosto ruim no fruto).",
+        "quimica": [
+          { "Alvo": "Antracnose", "Ativo": "Piraclostrobina", "Grupo": "Estrobilurina", "Tipo": "Preventivo" }
+        ]
+      },
+      "Maturação e Colheita": {
+        "desc": "Fruto vermelho/amarelo macio.",
+        "fisiologia": "Fruto climatérico extremamente perecível (shelf-life de 3-5 dias).",
+        "manejo": "A Drosophila da Asa Manchada (SWD) põe ovos dentro da fruta madura. É a praga nº 1. Usar iscas e produtos de carência zero.",
+        "quimica": [
+          { "Alvo": "Drosophila (SWD)", "Ativo": "Espinosade", "Grupo": "Espinocina", "Tipo": "Biológico (Carência 1 dia)" },
+          { "Alvo": "Drosophila (Monitoramento)", "Ativo": "Isca Vinagre + Levedura", "Grupo": "Armadilha", "Tipo": "Físico" }
+        ]
+      }
+    }
+  }
+}
