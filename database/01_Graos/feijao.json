@@ -1,0 +1,63 @@
+{
+  "Feijão (Phaseolus vulgaris)": {
+    "t_base": 10,
+    "vars": {
+      "BRS Estilo (Carioca)": { 
+        "kc": 1.15, 
+        "gda_meta": 1300, 
+        "info": "Carioca de porte ereto (Tipo II). Ideal para colheita mecanizada direta. Grão claro de excelente mercado. Exige alta tecnologia." 
+      },
+      "IAC 1850 (Carioca)": { 
+        "kc": 1.15, 
+        "gda_meta": 1250, 
+        "info": "Resistente ao escurecimento do grão (Shelf-life longo). Ciclo precoce (85-90 dias). Tolerante à Antracnose." 
+      },
+      "BRS Esteio (Preto)": { 
+        "kc": 1.15, 
+        "gda_meta": 1350, 
+        "info": "Feijão preto rústico. Alto potencial produtivo. Resistente a Mosaico Dourado e Antracnose." 
+      }
+    },
+    "fases": {
+      "V3 - Primeira Folha Trifoliolada": {
+        "desc": "Primeira folha composta aberta.",
+        "fisiologia": "Início da ramificação lateral. A planta define sua arquitetura. Sistema radicular ainda superficial.",
+        "manejo": "Controle de Mosca Branca (Vetor de Mosaico Dourado - Vírus letal). Aplicação de herbicidas pós-emergentes.",
+        "quimica": [
+          { "Alvo": "Mosca Branca (Vetor)", "Ativo": "Ciantraniliprole", "Grupo": "Diamida", "Tipo": "Sistêmico (Drench ou Foliar)" },
+          { "Alvo": "Mosca Branca (Ninfas)", "Ativo": "Piriproxifem", "Grupo": "Regulador de Crescimento", "Tipo": "Contato" },
+          { "Alvo": "Folhas Largas", "Ativo": "Fomesafen", "Grupo": "Protox", "Tipo": "Herbicida de Contato" }
+        ]
+      },
+      "V4 - Terceira Folha Trifoliolada": {
+        "desc": "Pré-florescimento. Botões florais visíveis.",
+        "fisiologia": "Momento CRÍTICO da Adubação Nitrogenada de Cobertura. A planta precisa de N para sustentar a florada que vem a seguir.",
+        "manejo": "Aplicação de N (Ureia). Início do programa preventivo para doenças (Antracnose e Mancha Angular).",
+        "quimica": [
+          { "Alvo": "Antracnose", "Ativo": "Piraclostrobina", "Grupo": "Estrobilurina", "Tipo": "Preventivo" },
+          { "Alvo": "Mancha Angular", "Ativo": "Trifloxistrobina + Tebuconazol", "Grupo": "Estrob + Triazol", "Tipo": "Sistêmico" },
+          { "Alvo": "Nutrição", "Ativo": "Molibdênio (Mo)", "Grupo": "Micronutriente", "Tipo": "Foliar (Essencial p/ N)" }
+        ]
+      },
+      "R6 - Florescimento (Abertura)": {
+        "desc": "50% das flores abertas.",
+        "fisiologia": "Abortamento ocorre se faltar água ou T > 30°C. Pétalas velhas caindo no chão são fonte de inóculo para Mofo Branco.",
+        "manejo": "Controle OBRIGATÓRIO de Mofo Branco (Sclerotinia) se houver histórico e frio/umidade. Controle de Tripes (abortam flor).",
+        "quimica": [
+          { "Alvo": "Mofo Branco (Padrão Ouro)", "Ativo": "Fluazinam", "Grupo": "Fenilpiridinilamina", "Tipo": "Protetor Específico" },
+          { "Alvo": "Mofo Branco (Curativo)", "Ativo": "Procimidona", "Grupo": "Dicarboximida", "Tipo": "Contato" },
+          { "Alvo": "Tripes", "Ativo": "Espinetoram", "Grupo": "Espinocina", "Tipo": "Choque" }
+        ]
+      },
+      "R8 - Enchimento de Vagens": {
+        "desc": "Vagens formadas e grãos enchendo.",
+        "fisiologia": "Dreno de fotoassimilados. O grão ganha peso e cor.",
+        "manejo": "Manejo de Lagartas (Falsa-Medideira) e Ácaro Rajado (se tempo seco). Manter a folha sadia.",
+        "quimica": [
+          { "Alvo": "Lagartas", "Ativo": "Indoxacarbe", "Grupo": "Oxadiazina", "Tipo": "Ingestão" },
+          { "Alvo": "Ácaro Rajado", "Ativo": "Abamectina", "Grupo": "Avermectina", "Tipo": "Translaminar" }
+        ]
+      }
+    }
+  }
+}
