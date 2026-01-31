@@ -1,5 +1,5 @@
 # ARQUIVO: main.py
-# FUNÇÃO: Interface Vibrant Pro V9.0
+# FUNÇÃO: Interface Vibrant Pro V9.1 (Correção de Botões Duplicados)
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
@@ -67,8 +67,6 @@ def load_css():
     label[data-testid="stMetricLabel"] { color: #555 !important; font-weight: 600 !important; }
     div[data-testid="stMetricValue"] { font-size: 2em !important; font-weight: 800 !important; }
     
-    /* Cores específicas para métricas (hack CSS via seletor de irmão não funciona bem no Streamlit, então usamos padrão) */
-    
     </style>
     """, unsafe_allow_html=True)
 load_css()
@@ -92,7 +90,7 @@ if not url_w:
         st.markdown('<div class="pro-card" style="text-align:center;"><h2 style="color:#000851;">🔒 Login Seguro</h2></div>', unsafe_allow_html=True)
         kw = st.text_input("API Key OpenWeather", type="password")
         kg = st.text_input("API Key Gemini AI", type="password")
-        if st.button("ACESSAR PAINEL", type="primary", use_container_width=True):
+        if st.button("ACESSAR PAINEL", type="primary", use_container_width=True, key="btn_login"):
             if kw and kg: st.query_params["w_key"] = kw; st.query_params["g_key"] = kg; st.rerun()
     st.stop()
 
@@ -109,7 +107,7 @@ c1, c2, c3 = st.columns([1.5, 1.5, 1])
 with c1:
     st.markdown("### 📍 Localização")
     city = st.text_input("Cidade", label_visibility="collapsed", placeholder="Buscar cidade...")
-    if st.button("🔍 Buscar") and city:
+    if st.button("🔍 Buscar", key="btn_buscar_cidade") and city:
         lat, lon = WeatherConn.get_coords(city, url_w)
         if lat: st.session_state['loc_lat'], st.session_state['loc_lon'] = lat, lon; st.rerun()
 with c2:
@@ -219,7 +217,8 @@ if not df_clima.empty:
         st.markdown('<div class="pro-card">', unsafe_allow_html=True)
         c1, c2, c3 = st.columns([2,1,1])
         i = c1.text_input("Item"); v = c2.number_input("Valor"); 
-        if c3.button("Salvar") and i: st.session_state['custos'].append({"Data": date.today(), "Item": i, "Valor": v}); st.rerun()
+        # AQUI FOI CORRIGIDO: key="btn_save_custo"
+        if c3.button("Salvar", key="btn_save_custo") and i: st.session_state['custos'].append({"Data": date.today(), "Item": i, "Valor": v}); st.rerun()
         if st.session_state['custos']: st.dataframe(pd.DataFrame(st.session_state['custos']), use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
@@ -228,7 +227,8 @@ if not df_clima.empty:
         c1, c2 = st.columns([1,3])
         with c1:
             nm = st.text_input("Talhão"); 
-            if st.button("Salvar") and st.session_state.get('last_click'): st.session_state['pontos_mapa'].append({"nome": nm, "lat": st.session_state['last_click'][0], "lon": st.session_state['last_click'][1]}); st.rerun()
+            # AQUI FOI CORRIGIDO: key="btn_save_mapa"
+            if st.button("Salvar", key="btn_save_mapa") and st.session_state.get('last_click'): st.session_state['pontos_mapa'].append({"nome": nm, "lat": st.session_state['last_click'][0], "lon": st.session_state['last_click'][1]}); st.rerun()
             for p in st.session_state['pontos_mapa']: st.write(f"📍 {p['nome']}")
         with c2:
             m = folium.Map(location=[st.session_state['loc_lat'], st.session_state['loc_lon']], zoom_start=15)
