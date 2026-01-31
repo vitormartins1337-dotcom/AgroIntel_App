@@ -1,1 +1,67 @@
-
+{
+  "Soja (Glycine max)": {
+    "t_base": 10,
+    "vars": {
+      "Intacta 2 Xtend (I2X)": { "kc": 1.15, "gda_meta": 1380, "info": "Resistência a Dicamba, Glifosato e lagartas (Helicoverpa/Spodoptera). Exige refúgio estruturado de 20%." },
+      "Conkesta E3 (Enlist)": { "kc": 1.15, "gda_meta": 1420, "info": "Resistência a 2,4-D Colina, Glufosinato e Glifosato. Ideal para áreas com Buva e Amargoso resistentes." },
+      "Brasmax (Convencional/RR)": { "kc": 1.15, "gda_meta": 1350, "info": "Alto teto produtivo. Exige manejo químico rigoroso para lagartas." }
+    },
+    "fases": {
+      "VE - Emergência": {
+        "desc": "Cotilédones acima do solo.",
+        "fisiologia": "A planta ainda depende das reservas da semente. A raiz pivotante desce a 1cm/dia.",
+        "manejo": "Avaliação de stand (plantas/metro). Monitorar Damping-off, Lagarta Elasmo e Caracóis.",
+        "quimica": [
+          { "Alvo": "Damping-off (Rhizoctonia)", "Ativo": "Carboxina + Tiram", "Grupo": "Carboxamida", "Tipo": "Tratamento Sementes" },
+          { "Alvo": "Nematoides/Pragas Iniciais", "Ativo": "Abamectina + Tiodicarbe", "Grupo": "Avermectina", "Tipo": "TS" }
+        ]
+      },
+      "V1 - Primeiro Trifólio": {
+        "desc": "Primeiro par de folhas trifolioladas.",
+        "fisiologia": "Início da infecção pelos Rizóbios (FBN). Não aplicar Nitrogênio mineral para não inibir a nodulação.",
+        "manejo": "Aplicação de Glifosato (se RR/I2X) para limpeza de mato competição inicial.",
+        "quimica": [
+          { "Alvo": "Folhas Largas/Estreitas", "Ativo": "Glifosato Potássico", "Grupo": "G (EPSPS)", "Tipo": "Herbicida Sistêmico" },
+          { "Alvo": "Buva (Se I2X)", "Ativo": "Dicamba", "Grupo": "O (Auxina)", "Tipo": "Herbicida Hormonal" }
+        ]
+      },
+      "V3-V6 - Desenvolvimento": {
+        "desc": "Definição do potencial produtivo.",
+        "fisiologia": "Planta define número de nós totais. A FBN deve estar suprindo 100% do N. Raízes atingindo 30-40cm.",
+        "manejo": "Monitoramento de Lagartas (Helicoverpa armigera) e Ácaros. Aplicação de Manganês (Mn) foliar se houver 'Yellow Flash'.",
+        "quimica": [
+          { "Alvo": "Lagartas Difíceis", "Ativo": "Benzoato de Emamectina", "Grupo": "Avermectina", "Tipo": "Ingestão" },
+          { "Alvo": "Lagartas (Residual)", "Ativo": "Clorantraniliprole", "Grupo": "Diamida", "Tipo": "Sistêmico Longo" },
+          { "Alvo": "Antracnose/Mancha", "Ativo": "Azoxistrobina + Ciproconazol", "Grupo": "Estrob+Triazol", "Tipo": "Preventivo 0.5L" }
+        ]
+      },
+      "R1 - Início Floração": {
+        "desc": "Uma flor aberta em qualquer nó.",
+        "fisiologia": "Virada hormonal. Planta para de priorizar raiz e foca na flor. Altíssima demanda de Boro.",
+        "manejo": "Aplicação ZERO de Fungicida (Essencial). Controle de Percevejo Marrom (invasão).",
+        "quimica": [
+          { "Alvo": "Ferrugem Asiática", "Ativo": "Protioconazol + Trifloxistrobina", "Grupo": "Triazol+Estrob", "Tipo": "Sistêmico Premium" },
+          { "Alvo": "Mancha Alvo", "Ativo": "Fluxapiroxade", "Grupo": "Carboxamida", "Tipo": "Sistêmico" },
+          { "Alvo": "Reforço", "Ativo": "Mancozebe", "Grupo": "Ditiocarbamato", "Tipo": "Protetor Multissítio" }
+        ]
+      },
+      "R5.1 - Enchimento de Grãos": {
+        "desc": "Grãos perceptíveis ao tato (3mm).",
+        "fisiologia": "Máxima translocação de fotoassimilados. O Peso de Mil Grãos (PMG) é definido agora. Estresse hídrico causa perda direta.",
+        "manejo": "Controle 'militar' de Percevejos. Eles picam a vagem e causam retenção foliar (soja louca) e grão chocho.",
+        "quimica": [
+          { "Alvo": "Percevejo (Adulto)", "Ativo": "Acefato", "Grupo": "Organofosforado", "Tipo": "Choque" },
+          { "Alvo": "Percevejo (Ninfa/Ovo)", "Ativo": "Tiametoxam + Lambda", "Grupo": "Neo+Piretroide", "Tipo": "Sistêmico" }
+        ]
+      },
+      "R7 - Maturação Fisiológica": {
+        "desc": "Uma vagem com cor madura.",
+        "fisiologia": "Cessa a translocação. Grão atinge peso máximo. Perda de umidade começa.",
+        "manejo": "Dessecação para uniformizar colheita (se necessário).",
+        "quimica": [
+          { "Alvo": "Dessecação", "Ativo": "Diquat", "Grupo": "D (Fotossistema I)", "Tipo": "Contato" }
+        ]
+      }
+    }
+  }
+}
