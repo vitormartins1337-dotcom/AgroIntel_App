@@ -1,0 +1,64 @@
+{
+  "Pastagens (Forrageiras)": {
+    "t_base": 15,
+    "vars": {
+      "Urochloa (Brachiaria) brizantha cv. Marandu": { 
+        "kc": 1.0, 
+        "gda_meta": 1200, 
+        "info": "O 'Rei' do Brasil (Braquiarão). Resistente à Cigarrinha-das-pastagens. Morre em solos encharcados (Síndrome da Morte Súbita). Rústico." 
+      },
+      "Panicum maximum cv. Mombaça": { 
+        "kc": 1.2, 
+        "gda_meta": 1000, 
+        "info": "Alta tecnologia. Exige solo fértil e adubação nitrogenada. Suporta alta lotação (rotacionado). Folhas largas e macias." 
+      },
+      "Urochloa ruziziensis": { 
+        "kc": 1.0, 
+        "gda_meta": 1100, 
+        "info": "Ideal para Integração Lavoura-Pecuária (ILP) e palhada para Soja. Semente barata, fácil dessecação, mas muito suscetível a pragas." 
+      },
+      "Panicum maximum cv. BRS Zuri": { 
+        "kc": 1.2, 
+        "gda_meta": 1050, 
+        "info": "Superior ao Mombaça. Mais resistente ao fungo Bipolaris (Mancha foliar). Alta produção de carne/ha." 
+      }
+    },
+    "fases": {
+      "Estabelecimento / Reforma": {
+        "desc": "Germinação até o primeiro perfilhamento.",
+        "fisiologia": "A semente forrageira precisa de contato com o solo. Fósforo (P) no sulco é determinante para o 'arranque'. Competição crítica com ervas daninhas.",
+        "manejo": "Herbicidas pré-emergentes ou pós-inicial. Monitorar Lagarta-do-cartucho (Elasmo) na plântula.",
+        "quimica": [
+          { "Alvo": "Folhas Largas (Mole)", "Ativo": "2,4-D + Picloram", "Grupo": "Auxina Sintética", "Tipo": "Sistêmico Seletivo" },
+          { "Alvo": "Lagarta Elasmo/Cartucho", "Ativo": "Clorpirifós", "Grupo": "Organofosforado", "Tipo": "Contato" },
+          { "Alvo": "Tratamento Semente", "Ativo": "Fipronil", "Grupo": "Pirazol", "Tipo": "TS (Contra Cupim/Formiga)" }
+        ]
+      },
+      "Crescimento Vegetativo (Águas)": {
+        "desc": "Período chuvoso e quente.",
+        "fisiologia": "Explosão de crescimento. A planta absorve Nitrogênio para produzir proteína bruta (carne/leite).",
+        "manejo": "Ataque severo de Cigarrinha-das-pastagens (Notozulia/Deois). A saliva da ninfa causa 'queima' da pastagem e reduz drasticamente a capacidade de suporte.",
+        "quimica": [
+          { "Alvo": "Cigarrinha (Ninfas/Adultos)", "Ativo": "Thiamethoxam + Lambda-Cialotrina", "Grupo": "Neo + Piretroide", "Tipo": "Sistêmico" },
+          { "Alvo": "Cigarrinha (Biológico)", "Ativo": "Metarhizium anisopliae", "Grupo": "Fungo Entomopatogênico", "Tipo": "Contato (Exige umidade)" },
+          { "Alvo": "Adubação Nitrogenada", "Ativo": "Ureia Protegida", "Grupo": "Fertilizante", "Tipo": "Cobertura (Aplicar na chuva)" }
+        ]
+      },
+      "Manejo de Pastoreio (Entrada/Saída)": {
+        "desc": "Ponto de pastejo.",
+        "fisiologia": "Respeitar a altura de entrada (95% interceptação luz) e saída (resíduo foliar). Comer o 'filé' e deixar a 'bateria' (talo/base) para rebrota.",
+        "manejo": "Controle de Plantas Daninhas Lenhosas/Duras. Se o gado não come, o mato domina.",
+        "quimica": [
+          { "Alvo": "Plantas Daninhas Duras (Toco)", "Ativo": "Triclopir + Fluroxipir", "Grupo": "Auxina", "Tipo": "Basal ou Foliar Localizado" },
+          { "Alvo": "Limpeza Geral", "Ativo": "Aminopiralide + 2,4-D", "Grupo": "Auxina Premium", "Tipo": "Sistêmico (Não mata o capim)" }
+        ]
+      },
+      "Seca / Diferimento (Inverno)": {
+        "desc": "Veda de pasto ou suplementação.",
+        "fisiologia": "Parada de crescimento por falta de água/luz. Queda no teor de proteína. Acúmulo de fibra (lignina).",
+        "manejo": "Uso de Sal Proteinado/Ureia para ajudar o gado a digerir a fibra. Controle de lagartas que comem a massa seca.",
+        "quimica": []
+      }
+    }
+  }
+}
