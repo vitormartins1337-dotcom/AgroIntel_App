@@ -1,1 +1,61 @@
-
+{
+  "Batata (Solanum tuberosum)": {
+    "t_base": 7,
+    "vars": {
+      "Agata": { "kc": 1.10, "gda_meta": 1450, "info": "Mesa. Pele amarela lisa. Ciclo curto (90 dias). Baixa matéria seca. Muito sensível a Requeima." },
+      "Asterix": { "kc": 1.15, "gda_meta": 1600, "info": "Indústria/Fritura. Pele vermelha. Rústica. Resistência média a viroses." },
+      "Atlantic": { "kc": 1.15, "gda_meta": 1650, "info": "Chips. Exige manejo perfeito de água para evitar 'Coração Oco'." },
+      "Orchestra": { "kc": 1.15, "gda_meta": 1600, "info": "Mercado Premium. Pele brilhante. Exige níveis altos de Cálcio e Boro." },
+      "Cupido": { "kc": 1.10, "gda_meta": 1400, "info": "Ciclo ultra-precoce. Extremamente suscetível à Requeima e Alternaria." }
+    },
+    "fases": {
+      "I - Brotamento": {
+        "desc": "Olhos ativos e emergência.",
+        "fisiologia": "Dependência da batata-mãe. Raízes frágeis.",
+        "manejo": "Aplicação de sulco é vital para Rizoctoniose (Cancro).",
+        "quimica": [
+          { "Alvo": "Rizoctonia", "Ativo": "Azoxistrobina", "Grupo": "Estrobilurina", "Tipo": "Sulco de Plantio" },
+          { "Alvo": "Pragas de Solo", "Ativo": "Fipronil", "Grupo": "Pirazol", "Tipo": "Sulco" }
+        ]
+      },
+      "II - Estolonização": {
+        "desc": "Formação de hastes e estolões.",
+        "fisiologia": "Alta demanda de Nitrogênio para formar área foliar (IAF).",
+        "manejo": "Controle de Vaquinha (Diabrotica) e Larva Minadora. Início da Amontoa.",
+        "quimica": [
+          { "Alvo": "Vaquinha", "Ativo": "Tiametoxam", "Grupo": "Neonicotinoide", "Tipo": "Sistêmico" },
+          { "Alvo": "Minadora", "Ativo": "Ciromazina", "Grupo": "Regulador de Crescimento", "Tipo": "Foliar" },
+          { "Alvo": "Preventivo Doenças", "Ativo": "Mancozebe", "Grupo": "Ditiocarbamato", "Tipo": "Protetor" }
+        ]
+      },
+      "III - Tuberização (Crítica)": {
+        "desc": "Ponta do estolão vira gancho.",
+        "fisiologia": "Inversão hormonal. A planta para de crescer folha e foca no tubérculo. O solo NÃO PODE secar (risco de Sarna).",
+        "manejo": "Controle rigoroso de Requeima (Phytophthora). Monitorar Pulgão (Vetor de Vírus Y/Enrolamento).",
+        "quimica": [
+          { "Alvo": "Requeima (Choque)", "Ativo": "Cimoxanil + Mancozebe", "Grupo": "Acetamida", "Tipo": "Curativo + Protetor" },
+          { "Alvo": "Requeima (Nobre)", "Ativo": "Mandipropamida", "Grupo": "CAA", "Tipo": "Translaminar (Alta fixação)" },
+          { "Alvo": "Pinta Preta", "Ativo": "Boscalida", "Grupo": "Carboxamida", "Tipo": "Sistêmico" }
+        ]
+      },
+      "IV - Enchimento": {
+        "desc": "Engorda dos tubérculos.",
+        "fisiologia": "Máximo dreno de Potássio. Translocação intensa.",
+        "manejo": "Monitorar Traça (Phthorimaea) e Mosca Branca. Evitar rachaduras com irrigação constante.",
+        "quimica": [
+          { "Alvo": "Traça da Batata", "Ativo": "Clorfenapir", "Grupo": "Pirrol", "Tipo": "Ingestão" },
+          { "Alvo": "Traça/Larva", "Ativo": "Benzoato de Emamectina", "Grupo": "Avermectina", "Tipo": "Choque" },
+          { "Alvo": "Mosca Branca", "Ativo": "Ciantraniliprole", "Grupo": "Diamida", "Tipo": "Sistêmico" }
+        ]
+      },
+      "V - Maturação": {
+        "desc": "Senescência natural ou Dessecação.",
+        "fisiologia": "Pele do tubérculo firma (suberização).",
+        "manejo": "Dessecação para colheita. Evitar batida (dano mecânico).",
+        "quimica": [
+          { "Alvo": "Dessecação", "Ativo": "Diquat", "Grupo": "Fotossistema I", "Tipo": "Contato" }
+        ]
+      }
+    }
+  }
+}
