@@ -2,37 +2,54 @@
   "Batata (Solanum tuberosum)": {
     "t_base": 7,
     "vars": {
-      "Orchestra": { "kc": 1.15, "gda_meta": 1600, "info": "Pele lisa. Exige K e Ca." },
-      "Cupido": { "kc": 1.10, "gda_meta": 1400, "info": "Ciclo curto. Sensível à Requeima." },
-      "Atlantic": { "kc": 1.15, "gda_meta": 1650, "info": "Chips. Monitorar Chocolate." },
-      "Agata": { "kc": 1.10, "gda_meta": 1450, "info": "Mesa. Pele amarela." }
+      "Orchestra": { "kc": 1.15, "gda_meta": 1600, "info": "Pele lisa premium. Exige K e Ca. Sensível a Pinta Preta." },
+      "Cupido": { "kc": 1.10, "gda_meta": 1400, "info": "Ciclo curto. Extrema sensibilidade à Requeima (Phytophthora)." },
+      "Atlantic": { "kc": 1.15, "gda_meta": 1650, "info": "Indústria (Chips). Monitorar Matéria Seca." },
+      "Agata": { "kc": 1.10, "gda_meta": 1450, "info": "Mesa. Pele amarela. Muito consumida no Brasil." },
+      "Asterix": { "kc": 1.15, "gda_meta": 1600, "info": "Pele vermelha. Fritura. Rústica." },
+      "Markies": { "kc": 1.15, "gda_meta": 1650, "info": "Processamento (Palito). Ciclo longo." }
     },
     "fases": {
-      "Estolonização": { "desc": "Crescimento vegetativo.", "fisiologia": "Alta demanda N.", "manejo": "Amontoa e Vaquinha.", "quimica": [{ "Alvo": "Vaquinha", "Ativo": "Tiametoxam", "Grupo": "Neo", "Tipo": "Sistêmico" }] },
-      "Tuberização": { "desc": "Gancho.", "fisiologia": "Crítica água.", "manejo": "Requeima e Alternaria.", "quimica": [{ "Alvo": "Requeima", "Ativo": "Mandipropamida", "Grupo": "CAA", "Tipo": "Translaminar" }, { "Alvo": "Alternaria", "Ativo": "Boscalida", "Grupo": "Carboxamida", "Tipo": "Sistêmico" }] },
-      "Enchimento": { "desc": "Engorda.", "fisiologia": "Dreno de K.", "manejo": "Traça e Mosca Branca.", "quimica": [{ "Alvo": "Traça", "Ativo": "Clorfenapir", "Grupo": "Pirrol", "Tipo": "Ingestão" }] }
+      "Emergência": { "desc": "Brotamento.", "fisiologia": "Enraizamento.", "manejo": "Rizoctonia (Cancro).", "quimica": [{ "Alvo": "Rizoctonia", "Ativo": "Azoxistrobina", "Grupo": "Estrobilurina", "Tipo": "Sulco" }] },
+      "Estolonização": { "desc": "Crescimento vegetativo.", "fisiologia": "Alta demanda N.", "manejo": "Vaquinha e Minadora.", "quimica": [{ "Alvo": "Vaquinha", "Ativo": "Tiametoxam", "Grupo": "Neo", "Tipo": "Sistêmico" }, { "Alvo": "Minadora", "Ativo": "Ciromazina", "Grupo": "Regulador", "Tipo": "Foliar" }] },
+      "Tuberização": { "desc": "Gancho (Início tubérculo).", "fisiologia": "Crítica água. Sarna.", "manejo": "Requeima e Alternaria.", "quimica": [{ "Alvo": "Requeima", "Ativo": "Mandipropamida", "Grupo": "CAA", "Tipo": "Translaminar" }, { "Alvo": "Alternaria", "Ativo": "Boscalida", "Grupo": "Carboxamida", "Tipo": "Sistêmico" }] },
+      "Enchimento": { "desc": "Engorda.", "fisiologia": "Dreno de K.", "manejo": "Traça e Mosca Branca.", "quimica": [{ "Alvo": "Traça", "Ativo": "Clorfenapir", "Grupo": "Pirrol", "Tipo": "Ingestão" }, { "Alvo": "Mosca Branca", "Ativo": "Ciantraniliprole", "Grupo": "Diamida", "Tipo": "Sistêmico" }] }
     }
   },
   "Tomate (Solanum lycopersicum)": {
     "t_base": 10,
-    "vars": { "Italiano": { "kc": 1.2, "gda_meta": 1600, "info": "Determinado." }, "Grape": { "kc": 1.1, "gda_meta": 1450, "info": "Indeterminado." } },
+    "vars": { "Italiano": { "kc": 1.2, "gda_meta": 1600, "info": "Saladete. Determinado." }, "Grape": { "kc": 1.1, "gda_meta": 1450, "info": "Doce. Indeterminado." }, "Carmen": { "kc": 1.2, "gda_meta": 1700, "info": "Longa Vida." } },
     "fases": {
-      "Vegetativo": { "desc": "Estruturação.", "fisiologia": "Crescimento.", "manejo": "Tripes e Mosca Branca.", "quimica": [{ "Alvo": "Tripes", "Ativo": "Espinetoram", "Grupo": "Espinocina", "Tipo": "Choque" }] },
-      "Frutificação": { "desc": "Frutos.", "fisiologia": "Cálcio.", "manejo": "Traça e Requeima.", "quimica": [{ "Alvo": "Tuta", "Ativo": "Clorantraniliprole", "Grupo": "Diamida", "Tipo": "Sistêmico" }] }
+      "Vegetativo": { "desc": "Estruturação.", "fisiologia": "Crescimento.", "manejo": "Tripes e Mosca.", "quimica": [{ "Alvo": "Tripes", "Ativo": "Espinetoram", "Grupo": "Espinocina", "Tipo": "Choque" }] },
+      "Frutificação": { "desc": "Frutos.", "fisiologia": "Cálcio (Fundo preto).", "manejo": "Traça e Requeima.", "quimica": [{ "Alvo": "Tuta", "Ativo": "Clorantraniliprole", "Grupo": "Diamida", "Tipo": "Sistêmico" }] }
     }
   },
   "Cebola (Allium cepa)": {
     "t_base": 7,
-    "vars": { "Crioula": { "kc": 1.0, "gda_meta": 1800, "info": "Bulbos roxos." }, "Baia Periforme": { "kc": 1.0, "gda_meta": 1700, "info": "Amarela." } },
+    "vars": { "Crioula": { "kc": 1.0, "gda_meta": 1800, "info": "Bulbos roxos." }, "Baia Periforme": { "kc": 1.0, "gda_meta": 1700, "info": "Amarela." }, "Optima": { "kc": 1.0, "gda_meta": 1600, "info": "Híbrida precoce." } },
     "fases": {
-      "Bulbificação": { "desc": "Formação do bulbo.", "fisiologia": "Fotoperíodo crítico.", "manejo": "Tripes e Míldio.", "quimica": [{ "Alvo": "Tripes", "Ativo": "Cipermetrina", "Grupo": "Piretroide", "Tipo": "Contato" }, { "Alvo": "Míldio", "Ativo": "Metalaxil-M", "Grupo": "Fenilamida", "Tipo": "Sistêmico" }] }
+      "Bulbificação": { "desc": "Formação bulbo.", "fisiologia": "Fotoperíodo.", "manejo": "Tripes e Míldio.", "quimica": [{ "Alvo": "Tripes", "Ativo": "Cipermetrina", "Grupo": "Piretroide", "Tipo": "Contato" }, { "Alvo": "Míldio", "Ativo": "Metalaxil-M", "Grupo": "Fenilamida", "Tipo": "Sistêmico" }] }
     }
   },
-  "Alface (Lactuca sativa)": {
-    "t_base": 4,
-    "vars": { "Crespa": { "kc": 1.0, "gda_meta": 800, "info": "Ciclo rápido." }, "Americana": { "kc": 1.0, "gda_meta": 900, "info": "Formação de cabeça." } },
+  "Alho (Allium sativum)": {
+    "t_base": 5,
+    "vars": { "Roxo Nobre": { "kc": 1.0, "gda_meta": 1800, "info": "Alto valor." }, "Ito": { "kc": 1.0, "gda_meta": 1700, "info": "Precoce." } },
     "fases": {
-      "Desenvolvimento": { "desc": "Expansão foliar.", "fisiologia": "Nitrogênio e Água.", "manejo": "Bremia (Míldio) e Sclerotinia.", "quimica": [{ "Alvo": "Bremia", "Ativo": "Mandipropamida", "Grupo": "CAA", "Tipo": "Translaminar" }] }
+      "Diferenciação": { "desc": "Dentes.", "fisiologia": "Frio.", "manejo": "Ferrugem e Ácaro.", "quimica": [{ "Alvo": "Ferrugem", "Ativo": "Tebuconazol", "Grupo": "Triazol", "Tipo": "Sistêmico" }] }
+    }
+  },
+  "Cenoura (Daucus carota)": {
+    "t_base": 7,
+    "vars": { "Juliana": { "kc": 1.0, "gda_meta": 1200, "info": "Verão." }, "Nantes": { "kc": 1.0, "gda_meta": 1300, "info": "Inverno." } },
+    "fases": {
+      "Raiz": { "desc": "Engorda.", "fisiologia": "K e Boro.", "manejo": "Queima das Folhas.", "quimica": [{ "Alvo": "Alternaria", "Ativo": "Difenoconazol", "Grupo": "Triazol", "Tipo": "Curativo" }] }
+    }
+  },
+  "Pimentão (Capsicum annuum)": {
+    "t_base": 12,
+    "vars": { "Magali": { "kc": 1.0, "gda_meta": 1500, "info": "Vermelho." }, "Amarelo": { "kc": 1.0, "gda_meta": 1500, "info": "Estufa." } },
+    "fases": {
+      "Frutificação": { "desc": "Frutos.", "fisiologia": "Cálcio.", "manejo": "Oídio e Ácaro.", "quimica": [{ "Alvo": "Oídio", "Ativo": "Enxofre", "Grupo": "Inorgânico", "Tipo": "Protetor" }] }
     }
   }
 }
