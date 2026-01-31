@@ -1,0 +1,38 @@
+{
+  "Batata (Solanum tuberosum)": {
+    "t_base": 7,
+    "vars": {
+      "Orchestra": { "kc": 1.15, "gda_meta": 1600, "info": "Pele lisa. Exige K e Ca." },
+      "Cupido": { "kc": 1.10, "gda_meta": 1400, "info": "Ciclo curto. Sensível à Requeima." },
+      "Atlantic": { "kc": 1.15, "gda_meta": 1650, "info": "Chips. Monitorar Chocolate." },
+      "Agata": { "kc": 1.10, "gda_meta": 1450, "info": "Mesa. Pele amarela." }
+    },
+    "fases": {
+      "Estolonização": { "desc": "Crescimento vegetativo.", "fisiologia": "Alta demanda N.", "manejo": "Amontoa e Vaquinha.", "quimica": [{ "Alvo": "Vaquinha", "Ativo": "Tiametoxam", "Grupo": "Neo", "Tipo": "Sistêmico" }] },
+      "Tuberização": { "desc": "Gancho.", "fisiologia": "Crítica água.", "manejo": "Requeima e Alternaria.", "quimica": [{ "Alvo": "Requeima", "Ativo": "Mandipropamida", "Grupo": "CAA", "Tipo": "Translaminar" }, { "Alvo": "Alternaria", "Ativo": "Boscalida", "Grupo": "Carboxamida", "Tipo": "Sistêmico" }] },
+      "Enchimento": { "desc": "Engorda.", "fisiologia": "Dreno de K.", "manejo": "Traça e Mosca Branca.", "quimica": [{ "Alvo": "Traça", "Ativo": "Clorfenapir", "Grupo": "Pirrol", "Tipo": "Ingestão" }] }
+    }
+  },
+  "Tomate (Solanum lycopersicum)": {
+    "t_base": 10,
+    "vars": { "Italiano": { "kc": 1.2, "gda_meta": 1600, "info": "Determinado." }, "Grape": { "kc": 1.1, "gda_meta": 1450, "info": "Indeterminado." } },
+    "fases": {
+      "Vegetativo": { "desc": "Estruturação.", "fisiologia": "Crescimento.", "manejo": "Tripes e Mosca Branca.", "quimica": [{ "Alvo": "Tripes", "Ativo": "Espinetoram", "Grupo": "Espinocina", "Tipo": "Choque" }] },
+      "Frutificação": { "desc": "Frutos.", "fisiologia": "Cálcio.", "manejo": "Traça e Requeima.", "quimica": [{ "Alvo": "Tuta", "Ativo": "Clorantraniliprole", "Grupo": "Diamida", "Tipo": "Sistêmico" }] }
+    }
+  },
+  "Cebola (Allium cepa)": {
+    "t_base": 7,
+    "vars": { "Crioula": { "kc": 1.0, "gda_meta": 1800, "info": "Bulbos roxos." }, "Baia Periforme": { "kc": 1.0, "gda_meta": 1700, "info": "Amarela." } },
+    "fases": {
+      "Bulbificação": { "desc": "Formação do bulbo.", "fisiologia": "Fotoperíodo crítico.", "manejo": "Tripes e Míldio.", "quimica": [{ "Alvo": "Tripes", "Ativo": "Cipermetrina", "Grupo": "Piretroide", "Tipo": "Contato" }, { "Alvo": "Míldio", "Ativo": "Metalaxil-M", "Grupo": "Fenilamida", "Tipo": "Sistêmico" }] }
+    }
+  },
+  "Alface (Lactuca sativa)": {
+    "t_base": 4,
+    "vars": { "Crespa": { "kc": 1.0, "gda_meta": 800, "info": "Ciclo rápido." }, "Americana": { "kc": 1.0, "gda_meta": 900, "info": "Formação de cabeça." } },
+    "fases": {
+      "Desenvolvimento": { "desc": "Expansão foliar.", "fisiologia": "Nitrogênio e Água.", "manejo": "Bremia (Míldio) e Sclerotinia.", "quimica": [{ "Alvo": "Bremia", "Ativo": "Mandipropamida", "Grupo": "CAA", "Tipo": "Translaminar" }] }
+    }
+  }
+}
