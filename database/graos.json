@@ -1,0 +1,48 @@
+{
+  "Soja (Glycine max)": {
+    "t_base": 10,
+    "vars": {
+      "Intacta 2 Xtend": { "kc": 1.15, "gda_meta": 1400, "info": "Biotecnologia I2X. Resistência a Dicamba e Lagartas. Refúgio 20% obrigatório." },
+      "Brasmax": { "kc": 1.15, "gda_meta": 1350, "info": "Alto teto produtivo. Exige fertilidade corrigida (Sat. Bases > 60%)." },
+      "Conkesta Enlist": { "kc": 1.15, "gda_meta": 1450, "info": "Sistema Enlist (2,4-D Colina). Ideal para áreas com Buva resistente." }
+    },
+    "fases": {
+      "Emergência (VE)": { "desc": "Cotilédones acima do solo.", "fisiologia": "Início da autotrofia. Raiz pivotante descendo. Risco de Damping-off.", "manejo": "Tratamento de Sementes (TS) é crucial.", "quimica": [{ "Alvo": "Damping-off", "Ativo": "Carboxina+Tiram", "Grupo": "Carboxamida", "Tipo": "TS" }] },
+      "Vegetativo (V3-V6)": { "desc": "Desenvolvimento vegetativo pleno.", "fisiologia": "Definição de nós produtivos. A FBN deve suprir 100% do Nitrogênio.", "manejo": "Monitorar Lagartas desfolhadoras.", "quimica": [{ "Alvo": "Lagartas", "Ativo": "Benzoato de Emamectina", "Grupo": "Avermectina", "Tipo": "Ingestão" }, { "Alvo": "Folhas Largas", "Ativo": "Diclosulam", "Grupo": "ALS", "Tipo": "Herbicida" }] },
+      "Reprodutivo (R1-R2)": { "desc": "Florescimento.", "fisiologia": "Abortamento de flores se T > 32°C. Início da demanda crítica de água.", "manejo": "Aplicação ZERO de Fungicida.", "quimica": [{ "Alvo": "Ferrugem Asiática", "Ativo": "Protioconazol + Trifloxistrobina", "Grupo": "Triazol + Estrob", "Tipo": "Sistêmico" }, { "Alvo": "Mancha Alvo", "Ativo": "Fluxapiroxade", "Grupo": "Carboxamida", "Tipo": "Sistêmico" }] },
+      "Enchimento (R5)": { "desc": "Enchimento de grãos.", "fisiologia": "Translocação máxima. Peso de grãos sendo definido.", "manejo": "Controle de Percevejos (Dano direto).", "quimica": [{ "Alvo": "Percevejos", "Ativo": "Acefato", "Grupo": "Organofosforado", "Tipo": "Choque" }, { "Alvo": "Percevejos", "Ativo": "Tiametoxam+Lambda", "Grupo": "Neo+Piretroide", "Tipo": "Sistêmico" }] }
+    }
+  },
+  "Milho (Zea mays)": {
+    "t_base": 10,
+    "vars": {
+      "Pioneer Bt": { "kc": 1.2, "gda_meta": 1600, "info": "Híbrido Precoce. Tecnologia Leptra." },
+      "Dekalb": { "kc": 1.2, "gda_meta": 1650, "info": "Rústico. VTPro3." }
+    },
+    "fases": {
+      "Vegetativo (V4-V8)": { "desc": "Definição de fileiras.", "fisiologia": "Meristema sai do solo. Alta absorção de N.", "manejo": "Cigarrinha (Dalbulus).", "quimica": [{ "Alvo": "Cigarrinha", "Ativo": "Clotianidina", "Grupo": "Neonicotinoide", "Tipo": "Sistêmico" }] },
+      "Pendoamento (VT)": { "desc": "Emissão do pendão.", "fisiologia": "Polinização. Sensível a calor.", "manejo": "Fungicidas.", "quimica": [{ "Alvo": "Mancha Branca", "Ativo": "Azoxistrobina+Ciproconazol", "Grupo": "Estrob+Triazol", "Tipo": "Sistêmico" }] }
+    }
+  },
+  "Trigo (Triticum aestivum)": {
+    "t_base": 5,
+    "vars": {
+      "TBIO Audaz": { "kc": 1.1, "gda_meta": 1300, "info": "Trigo melhorador. Alta força de glúten." },
+      "ORS Senna": { "kc": 1.1, "gda_meta": 1250, "info": "Branqueador. Ciclo precoce." }
+    },
+    "fases": {
+      "Perfilhamento": { "desc": "Emissão de perfilhos.", "fisiologia": "Definição de espigas/m². Adubação nitrogenada define afilhamento.", "manejo": "Controle de Pulgões (Viroses).", "quimica": [{ "Alvo": "Pulgão", "Ativo": "Acetamiprido", "Grupo": "Neonicotinoide", "Tipo": "Sistêmico" }] },
+      "Espigamento": { "desc": "Emissão da espiga.", "fisiologia": "Antese. Risco de Giberela se chover.", "manejo": "Fungicida para Fusarium (Giberela).", "quimica": [{ "Alvo": "Giberela", "Ativo": "Metconazol", "Grupo": "Triazol", "Tipo": "Curativo" }] }
+    }
+  },
+  "Algodão (Gossypium hirsutum)": {
+    "t_base": 15,
+    "vars": {
+      "FiberMax": { "kc": 1.2, "gda_meta": 2200, "info": "Alta qualidade de fibra." },
+      "TMG": { "kc": 1.15, "gda_meta": 2100, "info": "Resistência a Ramulária." }
+    },
+    "fases": {
+      "Botão Floral (B1)": { "desc": "Botões visíveis.", "fisiologia": "Necessidade de Boro.", "manejo": "Bicudo e Regulador de Crescimento.", "quimica": [{ "Alvo": "Bicudo", "Ativo": "Malationa", "Grupo": "Fosforado", "Tipo": "Choque" }, { "Alvo": "Regulador", "Ativo": "Cloreto de Mepiquat", "Grupo": "Inibidor", "Tipo": "Fisiológico" }] }
+    }
+  }
+}
