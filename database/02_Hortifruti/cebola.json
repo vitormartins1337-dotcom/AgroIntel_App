@@ -1,1 +1,61 @@
-
+{
+  "Cebola (Allium cepa)": {
+    "t_base": 7,
+    "vars": {
+      "Crioula (Dia Curto)": { 
+        "kc": 1.05, 
+        "gda_meta": 1800, 
+        "info": "Bulbos roxos ou amarelos. Exige fotoperíodo de ~12h para bulbificar. Padrão de mercado no Sul do Brasil. Alta pungência." 
+      },
+      "Híbrida Optima/Sirius": { 
+        "kc": 1.0, 
+        "gda_meta": 1600, 
+        "info": "Precoce. Alta uniformidade e produtividade. Casca firme (boa pós-colheita). Exige manejo nutricional de ponta." 
+      },
+      "Baia Periforme": { 
+        "kc": 1.05, 
+        "gda_meta": 1700, 
+        "info": "Cebola amarela formato pera. Ciclo médio. Muito resistente ao transporte. Rústica." 
+      }
+    },
+    "fases": {
+      "Sementeira/Transplante": {
+        "desc": "Fase de 'Gancho' até 2 folhas verdadeiras.",
+        "fisiologia": "Crescimento lento. Sistema radicular fasciculado e superficial. Baixa competição com ervas daninhas.",
+        "manejo": "Herbicidas pré-emergentes são vitais (Pendimetalina/Oxifluorfen). Drench para Podridão Branca (Sclerotium) se houver histórico.",
+        "quimica": [
+          { "Alvo": "Ervas Daninhas", "Ativo": "Oxifluorfen", "Grupo": "Protox", "Tipo": "Herbicida (Dose baixa)" },
+          { "Alvo": "Mosca da Semente", "Ativo": "Fipronil", "Grupo": "Pirazol", "Tipo": "Sulco/Semente" }
+        ]
+      },
+      "Desenvolvimento Vegetativo (3-6 folhas)": {
+        "desc": "Expansão da área foliar.",
+        "fisiologia": "Cada folha emitida corresponde a uma escama do bulbo futuro. Planta precisa de N para crescer, mas excesso causa 'pescoço grosso'.",
+        "manejo": "Guerra ao TRIPES (Thrips tabaci), vetor do vírus 'Sapeca' (IYSV). O controle deve ser preventivo.",
+        "quimica": [
+          { "Alvo": "Tripes (Ninfa/Adulto)", "Ativo": "Cipermetrina + Profenofós", "Grupo": "Piretroide + Fosforado", "Tipo": "Choque" },
+          { "Alvo": "Tripes (Manejo Resistência)", "Ativo": "Espinetoram", "Grupo": "Espinocina", "Tipo": "Ingestão/Contato" },
+          { "Alvo": "Míldio (Peronospora)", "Ativo": "Metalaxil-M + Mancozeb", "Grupo": "Fenilamida", "Tipo": "Sistêmico + Protetor" }
+        ]
+      },
+      "Bulbificação (Crítica)": {
+        "desc": "Início do 'inchamento' da base.",
+        "fisiologia": "Gatilho: Fotoperíodo crítico atingido. A planta para de emitir folhas e drena tudo para o bulbo. Parar adubação Nitrogenada aqui.",
+        "manejo": "Controle de Mancha Púrpura (Alternaria) e Estenfiliose. Doenças foliares agora reduzem o tamanho do bulbo.",
+        "quimica": [
+          { "Alvo": "Mancha Púrpura", "Ativo": "Azoxistrobina + Difenoconazol", "Grupo": "Estrob + Triazol", "Tipo": "Sistêmico" },
+          { "Alvo": "Botrytis/Queima", "Ativo": "Iprodiona", "Grupo": "Dicarboximida", "Tipo": "Contato" },
+          { "Alvo": "Tripes (Ação Profunda)", "Ativo": "Abamectina", "Grupo": "Avermectina", "Tipo": "Translaminar" }
+        ]
+      },
+      "Maturação e Estalo": {
+        "desc": "Amolecimento do pseudocaule (Tombamento).",
+        "fisiologia": "Estalo: Quando 50% das plantas tombam. Translocação final. Momento de parar a irrigação para evitar podridão bacteriana.",
+        "manejo": "Cura (secagem) no campo. Aplicação de inibidor de brotamento (Hidrazida) se for armazenar.",
+        "quimica": [
+          { "Alvo": "Inibidor de Brotamento", "Ativo": "Hidrazida Maleica", "Grupo": "Regulador", "Tipo": "Sistêmico (Aplicar com planta verde)" }
+        ]
+      }
+    }
+  }
+}
