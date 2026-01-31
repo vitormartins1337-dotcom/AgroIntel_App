@@ -1,0 +1,62 @@
+{
+  "Algodão (Gossypium hirsutum)": {
+    "t_base": 15,
+    "vars": {
+      "FiberMax 985 GLTP": { 
+        "kc": 1.2, 
+        "gda_meta": 2300, 
+        "info": "Líder de mercado. Tecnologia TwinLink Plus (Resistência a lagartas). Ciclo médio. Exige manejo rigoroso de Regulador devido ao alto vigor." 
+      },
+      "TMG 44 B2RF": { 
+        "kc": 1.15, 
+        "gda_meta": 2200, 
+        "info": "Referência em sanidade. Alta tolerância à Ramulária (reduz custo com fungicida). Ciclo médio-tardio. Ideal para abertura de plantio." 
+      },
+      "DP 1746 B2RF": { 
+        "kc": 1.2, 
+        "gda_meta": 2150, 
+        "info": "Deltapine. Precoce. Excelente qualidade de fibra (Micronaire e Resistência). Exige solos de alta fertilidade." 
+      }
+    },
+    "fases": {
+      "B1 - Botão Floral (40 DAE)": {
+        "desc": "Primeiro botão visível (cabeça de alfinete).",
+        "fisiologia": "Início da fase reprodutiva. A planta muda drasticamente a demanda hormonal. Alta exigência de Boro para viabilidade do pólen.",
+        "manejo": "Início do monitoramento do Bicudo (Anthonomus grandis). Instalação de armadilhas. Início da aplicação de Regulador de Crescimento (Pix) para evitar que a planta cresça demais e perca maçãs.",
+        "quimica": [
+          { "Alvo": "Bicudo (Monitoramento/Borda)", "Ativo": "Malationa", "Grupo": "Organofosforado", "Tipo": "Choque (Baixa Seletividade)" },
+          { "Alvo": "Regulador de Crescimento", "Ativo": "Cloreto de Mepiquat", "Grupo": "Inibidor de Giberelina", "Tipo": "Fisiológico (Dose baixa sequencial)" },
+          { "Alvo": "Ramulária (Preventivo)", "Ativo": "Azoxistrobina + Difenoconazol", "Grupo": "Estrob + Triazol", "Tipo": "Sistêmico" }
+        ]
+      },
+      "F1 - Florescimento (60 DAE)": {
+        "desc": "Primeira flor branca aberta.",
+        "fisiologia": "A flor branca abre de manhã e vira rosa/roxa à tarde (polinizada). Período de máxima demanda hídrica (8mm/dia). Estresse aqui causa abortamento direto.",
+        "manejo": "Guerra química contra o Bicudo (Bateria de aplicações a cada 5 dias se houver pressão). Controle de Pulgão (Mela a fibra).",
+        "quimica": [
+          { "Alvo": "Bicudo (Adultos)", "Ativo": "Fipronil", "Grupo": "Pirazol", "Tipo": "Choque/Residual" },
+          { "Alvo": "Bicudo (Alternativa)", "Ativo": "Bifentrina + Carbosulfano", "Grupo": "Piretroide + Carbamato", "Tipo": "Choque Fulminante" },
+          { "Alvo": "Pulgão das Inflorescências", "Ativo": "Acetamiprido", "Grupo": "Neonicotinoide", "Tipo": "Sistêmico" }
+        ]
+      },
+      "C1 - Maçãs / Cutout (90 DAE)": {
+        "desc": "Enchimento das maçãs. Cutout (Parada de crescimento).",
+        "fisiologia": "A planta drena toda energia para as maçãs. O crescimento vegetativo cessa (Cutout = 5 nós acima da última flor branca).",
+        "manejo": "Manejo de Lagartas (Spodoptera e Heliothis) que furam a maçã. Proteção contra Ramulária para manter as folhas até o final.",
+        "quimica": [
+          { "Alvo": "Lagartas (Maçã)", "Ativo": "Clorantraniliprole", "Grupo": "Diamida", "Tipo": "Sistêmico" },
+          { "Alvo": "Ramulária (Pesado)", "Ativo": "Fluxapiroxade + Piraclostrobina", "Grupo": "Carboxamida + Estrob", "Tipo": "Sistêmico Premium" }
+        ]
+      },
+      "M1 - Abertura de Capulhos (120 DAE)": {
+        "desc": "Primeiro capulho aberto.",
+        "fisiologia": "Maturação da fibra. O fruto seca e expõe a pluma. Risco de apodrecimento se chover.",
+        "manejo": "Preparação para colheita. Aplicação de Maturadores (Etefon) e Desfolhantes para uniformizar e limpar a fibra.",
+        "quimica": [
+          { "Alvo": "Maturador (Abrir Maçã)", "Ativo": "Etefon", "Grupo": "Etileno", "Tipo": "Hormonal" },
+          { "Alvo": "Desfolhante (Cair folha)", "Ativo": "Thidiazuron (TDZ)", "Grupo": "Citoquinina", "Tipo": "Contato" }
+        ]
+      }
+    }
+  }
+}
