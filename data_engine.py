@@ -1,11 +1,15 @@
 # ARQUIVO: data_engine.py
+# VERSÃO: Enterprise Silent (Ignora falhas sem travar o app)
 import json
 import streamlit as st
 from pathlib import Path
 import collections.abc
-import os
 
 def deep_update(d, u):
+    """
+    Função recursiva para fundir dicionários (Merge Profundo).
+    Garante que dados novos não apaguem dados antigos, apenas complementem.
+    """
     for k, v in u.items():
         if isinstance(v, collections.abc.Mapping):
             d[k] = deep_update(d.get(k, {}), v)
@@ -16,39 +20,44 @@ def deep_update(d, u):
 @st.cache_data(show_spinner=False)
 def get_database():
     combined_data = {}
+    
+    # 1. Localiza a pasta database de forma robusta
     base_dir = Path(__file__).parent.resolve()
     db_folder = base_dir / "database"
     
-    # 1. DEBUG: Mostra na tela onde ele está procurando
-    # st.warning(f"🕵️ Procurando arquivos na pasta: {db_folder}")
-
+    # Se a pasta não existir, retorna vazio silenciosamente (sem erro vermelho)
     if not db_folder.exists():
+        print(f"⚠️ Alerta: Pasta {db_folder} não encontrada.")
         return {}
 
+    # 2. Varre todos os arquivos .json em todas as subpastas
     json_files = list(db_folder.rglob("*.json"))
     
     for json_file in json_files:
         try:
-            # 2. IGNORA ARQUIVOS VAZIOS (A SOLUÇÃO DO SEU PROBLEMA)
-            # Se o arquivo tiver menos de 5 bytes (vazio ou só chaves {}), ele pula.
+            # --- BLINDAGEM NÍVEL 1: Tamanho do Arquivo ---
+            # Se for menor que 5 bytes (vazio ou só "{}"), pula silenciosamente.
             if json_file.stat().st_size < 5:
-                # Opcional: Mostra qual arquivo está vazio para você saber
-                print(f"⚠️ Ignorando arquivo vazio: {json_file.name}")
-                continue
+                continue 
 
+            # --- BLINDAGEM NÍVEL 2: Leitura Segura ---
             with open(json_file, 'r', encoding='utf-8') as f:
                 data = json.load(f)
-                combined_data = deep_update(combined_data, data)
                 
-        except json.JSONDecodeError as e:
-            # 3. DEDO DURO: Mostra o caminho exato do arquivo com erro
-            st.error(f"""
-            ❌ ARQUIVO CORROMPIDO ENCONTRADO!
-            Nome: {json_file.name}
-            Localização Exata: {json_file.absolute()}
-            Erro: O arquivo está em branco ou mal formatado.
-            """)
+                # Verifica se o JSON realmente tem dados (não é uma lista vazia ou null)
+                if data:
+                    combined_data = deep_update(combined_data, data)
+                
+        except (json.JSONDecodeError, OSError, UnicodeDecodeError):
+            # --- BLINDAGEM NÍVEL 3: Supressão de Erro ---
+            # Se der QUALQUER erro de leitura, nós NÃO mostramos st.error.
+            # Apenas imprimimos no console (invisível para o usuário final) e continuamos.
+            print(f"⚠️ Arquivo ignorado (corrompido/vazio): {json_file.name}")
+            continue
+            
         except Exception as e:
-            st.warning(f"Erro genérico em {json_file.name}: {e}")
+            # Erros genéricos também são apenas logados
+            print(f"⚠️ Erro inesperado em {json_file.name}: {e}")
+            continue
 
     return combined_data
