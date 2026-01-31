@@ -143,15 +143,35 @@ if not df_clima.empty:
             st.markdown(f"<div class='tech-val'>{dados_fase.get('manejo', '-')}</div>", unsafe_allow_html=True)
             st.write("")
             
-            with st.expander("🧪 VER FARMÁCIA DIGITAL (Recomendação)", expanded=True):
-                if isinstance(dados_fase['quimica'], list):
+            with st.expander("🧪 PROTOCOLO AVANÇADO DE MANEJO (FRAC/IRAC)", expanded=True):
+                if isinstance(dados_fase.get('quimica'), list):
                     for q in dados_fase['quimica']:
-                        # Lógica de Tags
-                        tipo = q['Tipo'].lower()
-                        tag_cls = "bio"
-                        if "sistêmico" in tipo or "ingestão" in tipo: tag_cls = "sys"
-                        elif "contato" in tipo or "protetor" in tipo: tag_cls = "con"
-                        elif "hormonal" in tipo: tag_cls = "hor"
+                        # Cores dinâmicas para as etiquetas
+                        tipo = q.get('Tipo', 'Geral')
+                        cor_tipo = "#1976d2" # Azul padrão
+                        if "Biológico" in tipo: cor_tipo = "#2e7d32" # Verde Bio
+                        elif "Químico" in tipo: cor_tipo = "#d32f2f" # Vermelho Quimico
+                        
+                        # Layout do Card Químico
+                        st.markdown(f"""
+                        <div style="background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; margin-bottom: 10px; border-left: 5px solid {cor_tipo};">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <span style="font-weight:bold; font-size:1.1em; color:#333;">🎯 {q['Alvo']}</span>
+                                <span style="background:{cor_tipo}; color:white; padding:2px 8px; border-radius:4px; font-size:0.8em;">{tipo}</span>
+                            </div>
+                            <div style="margin-top:5px; color:#555;">
+                                💊 <b>Ativo:</b> {q['Ativo']}
+                            </div>
+                            <div style="margin-top:5px; font-size:0.9em; color:#666;">
+                                🧬 <b>Grupo (Resistência):</b> <span style="background:#eee; padding:2px 5px; border-radius:3px; font-weight:bold;">{q.get('Codigos', '-')}</span>
+                            </div>
+                            <div style="margin-top:8px; font-style:italic; font-size:0.9em; color:#1565c0;">
+                                💡 <b>Estratégia:</b> {q.get('Estrategia', '')}
+                            </div>
+                        </div>
+                        """, unsafe_allow_html=True)
+                else: 
+                    st.info("Nenhum protocolo cadastrado para esta fase.")
 
                         st.markdown(f"""
                         <div style="border-bottom:1px solid #eee; padding:10px 0;">
