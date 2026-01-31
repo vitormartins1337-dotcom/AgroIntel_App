@@ -1,0 +1,221 @@
+Soja (Glycine max)": {
+
+    "t_base": 10,
+
+    "vars": {
+
+      "Intacta 2 Xtend (I2X)": { 
+
+        "kc": 1.15, 
+
+        "gda_meta": 1380, 
+
+        "info": "Biotecnologia de última geração. Tolerância aos herbicidas Dicamba e Glifosato. Proteção contra lagartas (Helicoverpa, Spodoptera, Falsa-medideira). Obrigatório uso de refúgio estruturado (20%). Exige manejo de deriva rigoroso (bicos de indução de ar)." 
+
+      },
+
+      "Brasmax (Convencional/RR)": { 
+
+        "kc": 1.15, 
+
+        "gda_meta": 1350, 
+
+        "info": "Genética de alto teto produtivo e ramificação. Exige perfil de solo corrigido (Sat. Bases > 60%, P > 15ppm). Alta resposta ao manejo de fungicidas premium." 
+
+      },
+
+      "Conkesta Enlist E3": { 
+
+        "kc": 1.15, 
+
+        "gda_meta": 1420, 
+
+        "info": "Sistema Enlist. Tolerância a 2,4-D Sal Colina, Glufosinato e Glifosato. Ferramenta essencial para áreas infestadas com Buva (Conyza) e Amargoso resistentes. Proteção Bt ampla." 
+
+      },
+
+      "TMG Inox": { 
+
+        "kc": 1.10, 
+
+        "gda_meta": 1380, 
+
+        "info": "Tecnologia Inox com resistência genética à Ferrugem Asiática (genes Rpp). Não dispensa fungicidas, mas oferece segurança em atrasos de aplicação por chuva." 
+
+      }
+
+    },
+
+    "fases": {
+
+      "VE - Emergência": {
+
+        "desc": "Cotilédones acima do solo e abertos.",
+
+        "fisiologia": "A planta passa de heterotrófica (reservas) para autotrófica (fotossíntese). Raiz pivotante descendo a 1-2cm/dia. Momento crítico para estabelecimento do stand.",
+
+        "manejo": "Avaliação de população inicial. Monitoramento de Damping-off (Rhizoctonia/Pythium), Lagarta Elasmo e Caracóis/Lesmas em plantio direto.",
+
+        "quimica": [
+
+          { "Alvo": "Damping-off", "Ativo": "Carboxina + Tiram", "Grupo": "Carboxamida", "Tipo": "Tratamento de Sementes (TS)" },
+
+          { "Alvo": "Nematoides/Pragas", "Ativo": "Abamectina + Tiodicarbe", "Grupo": "Avermectina", "Tipo": "TS" },
+
+          { "Alvo": "Inoculação", "Ativo": "Bradyrhizobium japonicum", "Grupo": "Bactéria", "Tipo": "Biológico (FBN)" }
+
+        ]
+
+      },
+
+      "VC - Cotiledonar": {
+
+        "desc": "Folhas unifolioladas desenroladas (bordas não se tocam).",
+
+        "fisiologia": "Início da infecção dos pelos radiculares pelas bactérias fixadoras (Inoculação). Raízes laterais começam a surgir.",
+
+        "manejo": "Aplicação de herbicidas pós-emergentes para limpeza (Glifosato/Cletodim). Cuidado com fito em solo úmido.",
+
+        "quimica": [
+
+          { "Alvo": "Folhas Estreitas", "Ativo": "Cletodim", "Grupo": "DIM (Graminicida)", "Tipo": "Sistêmico" },
+
+          { "Alvo": "Folhas Largas", "Ativo": "Glifosato Potássico", "Grupo": "G (EPSPS)", "Tipo": "Sistêmico" }
+
+        ]
+
+      },
+
+      "V1 - Primeiro Trifólio": {
+
+        "desc": "Primeiro par de folhas trifolioladas totalmente abertas.",
+
+        "fisiologia": "Nódulos da FBN visíveis (pequenos e brancos). A planta define o potencial de ramificação.",
+
+        "manejo": "Monitoramento de Percevejo Castanho (Raiz) e Vaquinha (Desfolha).",
+
+        "quimica": [
+
+          { "Alvo": "Vaquinha", "Ativo": "Lambda-Cialotrina", "Grupo": "Piretroide", "Tipo": "Contato" }
+
+        ]
+
+      },
+
+      "V3 - Terceiro Trifólio": {
+
+        "desc": "Três nós com folhas trifolioladas abertas.",
+
+        "fisiologia": "A planta define o número total de nós (potencial produtivo). FBN deve estar ativa (nódulos rosados ao corte). Início rápido de acúmulo de matéria seca.",
+
+        "manejo": "Entrada preventiva de fungicidas (Opcional/Manejo Alto Investimento) para Antracnose e Septoria (Baixeiro). Monitorar Lagartas.",
+
+        "quimica": [
+
+          { "Alvo": "Doenças Final de Ciclo", "Ativo": "Azoxistrobina + Ciproconazol", "Grupo": "Estrob + Triazol", "Tipo": "Preventivo (0.3L/ha)" },
+
+          { "Alvo": "Lagartas", "Ativo": "Benzoato de Emamectina", "Grupo": "Avermectina", "Tipo": "Ingestão/Contato" },
+
+          { "Alvo": "Nutrição", "Ativo": "Manganês (Mn) + Molibdênio (Mo)", "Grupo": "Micronutrientes", "Tipo": "Foliar" }
+
+        ]
+
+      },
+
+      "V6 - Sexto Trifólio": {
+
+        "desc": "Seis nós desenvolvidos. Fechamento da entrelinha.",
+
+        "fisiologia": "Máxima taxa de crescimento vegetativo. Raízes atingindo profundidade de 40-50cm. Início da diferenciação floral (invisível).",
+
+        "manejo": "Última chance para entrada de trator (Barra) sem dano (amassamento). Aplicação 'Pré-Fechamento' de fungicida robusto.",
+
+        "quimica": [
+
+          { "Alvo": "Ferrugem/Mancha Alvo", "Ativo": "Trifloxistrobina + Protioconazol", "Grupo": "Estrob + Triazol", "Tipo": "Sistêmico Premium" },
+
+          { "Alvo": "Lagarta Falsa-Medideira", "Ativo": "Clorantraniliprole", "Grupo": "Diamida", "Tipo": "Sistêmico/Residual" }
+
+        ]
+
+      },
+
+      "R1 - Início do Florescimento": {
+
+        "desc": "Uma flor aberta em qualquer nó da haste principal.",
+
+        "fisiologia": "Mudança hormonal drástica. Planta para de priorizar raiz e foca na flor. Altíssima demanda de Boro para viabilidade do pólen. Abortamento ocorre se T > 32°C ou déficit hídrico.",
+
+        "manejo": "Aplicação ZERO de Fungicida (Mandatória). Monitoramento de Percevejos migrantes.",
+
+        "quimica": [
+
+          { "Alvo": "Ferrugem Asiática", "Ativo": "Picoxistrobina + Ciproconazol", "Grupo": "Estrob + Triazol", "Tipo": "Sistêmico" },
+
+          { "Alvo": "Mancha Alvo", "Ativo": "Fluxapiroxade", "Grupo": "Carboxamida", "Tipo": "Sistêmico Específico" },
+
+          { "Alvo": "Reforço", "Ativo": "Mancozebe ou Clorotalonil", "Grupo": "Multissítio", "Tipo": "Protetor (Indispensável)" }
+
+        ]
+
+      },
+
+      "R3 - Início da Frutificação": {
+
+        "desc": "Vagens com 5mm de comprimento nos 4 nós superiores.",
+
+        "fisiologia": "Definição do número de vagens por planta. Estresse aqui causa abortamento de vagem (perda direta de produtividade).",
+
+        "manejo": "Controle rigoroso de Lagartas (comem vagem) e Percevejos (picam vagem jovem).",
+
+        "quimica": [
+
+          { "Alvo": "Lagarta (Vagem)", "Ativo": "Indoxacarbe", "Grupo": "Oxadiazina", "Tipo": "Contato/Ingestão" },
+
+          { "Alvo": "Percevejo Marrom", "Ativo": "Acefato + Imidacloprido", "Grupo": "Fosforado + Neo", "Tipo": "Choque + Sistêmico" }
+
+        ]
+
+      },
+
+      "R5.1 - Enchimento de Grãos": {
+
+        "desc": "Grãos perceptíveis ao tato (3mm) no terço superior.",
+
+        "fisiologia": "Máxima translocação de fotoassimilados das folhas para os grãos. O Peso de Mil Grãos (PMG) é definido agora. Raízes começam a senescer.",
+
+        "manejo": "O manejo de Percevejo aqui define a qualidade do grão. Picadas causam 'grão chocho', 'soja louca' e retenção foliar.",
+
+        "quimica": [
+
+          { "Alvo": "Percevejo (Adultos/Ninfas)", "Ativo": "Tiametoxam + Lambda-Cialotrina", "Grupo": "Neo + Piretroide", "Tipo": "Sistêmico + Contato" },
+
+          { "Alvo": "Ferrugem (Residual)", "Ativo": "Tebuconazol", "Grupo": "Triazol", "Tipo": "Curativo" }
+
+        ]
+
+      },
+
+      "R7 - Maturação Fisiológica": {
+
+        "desc": "Uma vagem com coloração madura (marrom/palha).",
+
+        "fisiologia": "Cessa a translocação de nutrientes. O grão atingiu peso máximo e desliga-se da planta. Perda de umidade inicia.",
+
+        "manejo": "Monitoramento para Dessecação (Colheita antecipada ou uniformização).",
+
+        "quimica": [
+
+          { "Alvo": "Dessecação", "Ativo": "Diquat", "Grupo": "Fotossistema I", "Tipo": "Contato (Exige sol)" },
+
+          { "Alvo": "Dessecação (Alternativa)", "Ativo": "Glufosinato de Amônio", "Grupo": "Inibidor Glutamina", "Tipo": "Contato" }
+
+        ]
+
+      }
+
+    }
+
+  }
+
+}
