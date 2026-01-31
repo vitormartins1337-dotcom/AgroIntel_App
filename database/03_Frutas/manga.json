@@ -1,0 +1,68 @@
+{
+  "Manga (Mangifera indica)": {
+    "t_base": 13,
+    "vars": {
+      "Tommy Atkins": { 
+        "kc": 0.9, 
+        "gda_meta": 2700, 
+        "info": "A mais plantada. Resistente a transporte e doenças (Antracnose). Casca vermelha. Polpa fibrosa. Ciclo médio." 
+      },
+      "Palmer": { 
+        "kc": 0.9, 
+        "gda_meta": 2800, 
+        "info": "Polpa sem fibras (manteiga). Casca roxa/vermelha. Alta aceitação no mercado interno e externo. Exige boa nutrição de Cálcio." 
+      },
+      "Keitt": { 
+        "kc": 0.9, 
+        "gda_meta": 2900, 
+        "info": "Manga tardia. Frutos gigantes (pode passar de 1kg). Colheita na entressafra. Menos colorida (verde/rosada)." 
+      },
+      "Kent": { 
+        "kc": 0.9, 
+        "gda_meta": 2850, 
+        "info": "Excelente qualidade (sem fibra, doce). Muito sensível a colapso interno. Exige manejo de pós-colheita impecável." 
+      }
+    },
+    "fases": {
+      "Poda e Maturação de Ramos": {
+        "desc": "Pós-colheita e preparo vegetativo.",
+        "fisiologia": "A planta precisa emitir fluxos vegetativos e 'amadurecer' esses ramos para suportar a florada. Excesso de N aqui atrapalha a indução.",
+        "manejo": "Aplicação de Paclobutrazol (PBZ) no solo (Drench) para inibir giberelina e parar o crescimento. Monitorar Cochonilha.",
+        "quimica": [
+          { "Alvo": "Regulador de Crescimento", "Ativo": "Paclobutrazol (PBZ)", "Grupo": "Triazol", "Tipo": "Sistêmico (Absorção Radicular)" },
+          { "Alvo": "Cochonilha", "Ativo": "Sulfoxaflor", "Grupo": "Sulfoximina", "Tipo": "Sistêmico" },
+          { "Alvo": "Maturação de Ramo", "Ativo": "Sulfato de Potássio", "Grupo": "Nutrição", "Tipo": "Foliar" }
+        ]
+      },
+      "Indução Floral": {
+        "desc": "Quebra de dormência da gema.",
+        "fisiologia": "Estresse induzido: Aplicação de Nitratos (K ou Ca) para 'quebrar' a gema e transformá-la em flor. Redução da irrigação.",
+        "manejo": "Monitorar a temperatura (frio ajuda). Se brotar folha em vez de flor, quebrar o broto (Tip Pruning) e reinduzir.",
+        "quimica": [
+          { "Alvo": "Indutor Floral", "Ativo": "Nitrato de Potássio", "Grupo": "Sal", "Tipo": "Contato/Fisiológico" },
+          { "Alvo": "Indutor (Alternativa)", "Ativo": "Nitrato de Cálcio", "Grupo": "Sal", "Tipo": "Contato" }
+        ]
+      },
+      "Florada e Pegamento": {
+        "desc": "Panículas abertas.",
+        "fisiologia": "Polinização depende de moscas (não abelhas). Alta suscetibilidade a Oídio (Pó branco) e Antracnose (se chover).",
+        "manejo": "Aplicação de Enxofre (Oídio). Evitar inseticidas fortes para não matar os polinizadores.",
+        "quimica": [
+          { "Alvo": "Oídio (Pó Branco)", "Ativo": "Enxofre Elementar", "Grupo": "Inorgânico", "Tipo": "Protetor/Vapor" },
+          { "Alvo": "Antracnose (Chuva)", "Ativo": "Tiofanato Metílico", "Grupo": "Benzimidazol", "Tipo": "Sistêmico" },
+          { "Alvo": "Antracnose (Preventivo)", "Ativo": "Azoxistrobina", "Grupo": "Estrobilurina", "Tipo": "Sistêmico" }
+        ]
+      },
+      "Frutificação (Chumbinho a Vez)": {
+        "desc": "Crescimento do fruto.",
+        "fisiologia": "Dreno de Potássio e Boro. Fruto muito sensível a queimadura solar (Colapso).",
+        "manejo": "Monitoramento da Mosca-das-Frutas (Ceratitis/Bactrocera). Ovos na fruta impedem exportação. Uso de iscas tóxicas.",
+        "quimica": [
+          { "Alvo": "Mosca-das-Frutas (Isca)", "Ativo": "Proteína Hidrolisada + Espinosade", "Grupo": "Atrativo + Bio", "Tipo": "Ingestão" },
+          { "Alvo": "Mosca-das-Frutas (Cobertura)", "Ativo": "Deltametrina", "Grupo": "Piretroide", "Tipo": "Contato" },
+          { "Alvo": "Cochonilha", "Ativo": "Acetamiprido", "Grupo": "Neonicotinoide", "Tipo": "Sistêmico" }
+        ]
+      }
+    }
+  }
+}
