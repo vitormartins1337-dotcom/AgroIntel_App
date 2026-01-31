@@ -29,11 +29,14 @@ def get_database():
     # Lê todos os JSONs em todas as subpastas
     json_files = list(db_folder.rglob("*.json"))
     
-    for json_file in json_files:
+    # DENTRO DO LOOP FOR no data_engine.py:
         try:
+            # PULA O ARQUIVO SE ESTIVER VAZIO (0 BYTES)
+            if json_file.stat().st_size == 0:
+                continue
+
             with open(json_file, 'r', encoding='utf-8') as f:
                 data = json.load(f)
-                # Aqui acontece a mágica: Fusão Inteligente
                 combined_data = deep_update(combined_data, data)
         except Exception as e:
             st.warning(f"Erro no arquivo {json_file.name}: {e}")
