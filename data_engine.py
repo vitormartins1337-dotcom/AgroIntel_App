@@ -3,11 +3,9 @@ import json
 import streamlit as st
 from pathlib import Path
 import collections.abc
+import os
 
 def deep_update(d, u):
-    """
-    Funde dicionários aninhados (Biologia + Manejo)
-    """
     for k, v in u.items():
         if isinstance(v, collections.abc.Mapping):
             d[k] = deep_update(d.get(k, {}), v)
@@ -21,25 +19,36 @@ def get_database():
     base_dir = Path(__file__).parent.resolve()
     db_folder = base_dir / "database"
     
+    # 1. DEBUG: Mostra na tela onde ele está procurando
+    # st.warning(f"🕵️ Procurando arquivos na pasta: {db_folder}")
+
     if not db_folder.exists():
         return {}
 
-    # Busca em todas as subpastas
     json_files = list(db_folder.rglob("*.json"))
     
     for json_file in json_files:
         try:
-            # 1. PROTEÇÃO CONTRA ARQUIVO VAZIO (O ERRO QUE VOCÊ TEVE)
-            if json_file.stat().st_size < 5: # Menor que 5 bytes é lixo ou vazio
+            # 2. IGNORA ARQUIVOS VAZIOS (A SOLUÇÃO DO SEU PROBLEMA)
+            # Se o arquivo tiver menos de 5 bytes (vazio ou só chaves {}), ele pula.
+            if json_file.stat().st_size < 5:
+                # Opcional: Mostra qual arquivo está vazio para você saber
+                print(f"⚠️ Ignorando arquivo vazio: {json_file.name}")
                 continue
 
-            # 2. CARREGAMENTO SEGURO
             with open(json_file, 'r', encoding='utf-8') as f:
                 data = json.load(f)
                 combined_data = deep_update(combined_data, data)
-
+                
+        except json.JSONDecodeError as e:
+            # 3. DEDO DURO: Mostra o caminho exato do arquivo com erro
+            st.error(f"""
+            ❌ ARQUIVO CORROMPIDO ENCONTRADO!
+            Nome: {json_file.name}
+            Localização Exata: {json_file.absolute()}
+            Erro: O arquivo está em branco ou mal formatado.
+            """)
         except Exception as e:
-            # Apenas imprime no terminal, não quebra o app
-            print(f"Ignorando arquivo corrompido: {json_file.name} - {e}")
+            st.warning(f"Erro genérico em {json_file.name}: {e}")
 
     return combined_data
