@@ -1,53 +1,79 @@
 {
   "Café (Coffea arabica)": {
     "t_base": 10,
-    "vars": { "Catuaí": { "kc": 1.1, "gda_meta": 3000, "info": "Suscetível a ferrugem." }, "Arara": { "kc": 1.2, "gda_meta": 2900, "info": "Resistente a ferrugem." } },
+    "vars": {
+      "Catuaí": { "kc": 1.1, "gda_meta": 3000, "info": "Vermelho/Amarelo. Padrão de bebida." },
+      "Arara": { "kc": 1.2, "gda_meta": 2900, "info": "Alta produtividade e resistência à Ferrugem." },
+      "Mundo Novo": { "kc": 1.1, "gda_meta": 3100, "info": "Porte alto. Rústico." },
+      "Bourbon": { "kc": 1.1, "gda_meta": 3000, "info": "Bebida especial (Gourmet)." }
+    },
     "fases": {
       "Chumbinho": { "desc": "Expansão.", "fisiologia": "Divisão celular.", "manejo": "Ferrugem e Cercospora.", "quimica": [{ "Alvo": "Ferrugem", "Ativo": "Ciproconazol+Azoxistrobina", "Grupo": "Triazol+Estrob", "Tipo": "Sistêmico" }] },
-      "Granação": { "desc": "Enchimento.", "fisiologia": "Sólidos.", "manejo": "Broca e Bicho Mineiro.", "quimica": [{ "Alvo": "Broca", "Ativo": "Ciantraniliprole", "Grupo": "Diamida", "Tipo": "Sistêmico" }] }
-    }
-  },
-  "Citros (Limão/Laranja)": {
-    "t_base": 13,
-    "vars": { "Tahiti": { "kc": 0.75, "gda_meta": 2000, "info": "Limão Ácido." }, "Pera Rio": { "kc": 0.75, "gda_meta": 2500, "info": "Laranja Doce." } },
-    "fases": {
-      "Fluxo Vegetativo": { "desc": "Brotação.", "fisiologia": "Folhas novas.", "manejo": "Psilídeo (Greening).", "quimica": [{ "Alvo": "Psilídeo", "Ativo": "Imidacloprido+Bifentrina", "Grupo": "Neo+Piretroide", "Tipo": "Choque" }] }
+      "Granação": { "desc": "Enchimento.", "fisiologia": "Sólidos.", "manejo": "Broca e Bicho Mineiro.", "quimica": [{ "Alvo": "Broca", "Ativo": "Ciantraniliprole", "Grupo": "Diamida", "Tipo": "Sistêmico" }, { "Alvo": "Bicho Mineiro", "Ativo": "Clorpirifós", "Grupo": "Fosforado", "Tipo": "Vapor" }] }
     }
   },
   "Amora Preta (Blackberry)": {
     "t_base": 7,
-    "vars": { "Tupy": { "kc": 1.0, "gda_meta": 1500, "info": "Com espinhos." }, "BRS Xingu": { "kc": 1.05, "gda_meta": 1400, "info": "Sem espinhos." } },
+    "vars": { "Tupy": { "kc": 1.0, "gda_meta": 1500, "info": "Com espinhos. Produtiva." }, "BRS Xingu": { "kc": 1.05, "gda_meta": 1400, "info": "Sem espinhos. Doce." } },
     "fases": {
       "Brotação": { "desc": "Hastes.", "fisiologia": "Vigor.", "manejo": "Ferrugem.", "quimica": [{ "Alvo": "Ferrugem", "Ativo": "Tebuconazol", "Grupo": "Triazol", "Tipo": "Curativo" }] },
       "Frutificação": { "desc": "Bagas.", "fisiologia": "Brix.", "manejo": "Drosófila (SWD).", "quimica": [{ "Alvo": "SWD", "Ativo": "Espinosade", "Grupo": "Espinocina", "Tipo": "Isca" }] }
     }
   },
-  "Morango": {
+  "Framboesa (Raspberry)": {
     "t_base": 7,
-    "vars": { "Albion": { "kc": 0.85, "gda_meta": 1250, "info": "Dia neutro." }, "San Andreas": { "kc": 0.85, "gda_meta": 1200, "info": "Rústico." } },
+    "vars": { "Heritage": { "kc": 1.1, "gda_meta": 1300, "info": "Remontante." }, "Autumn Bliss": { "kc": 1.1, "gda_meta": 1350, "info": "Outono." } },
     "fases": {
-      "Produção": { "desc": "Colheita.", "fisiologia": "Alta extração K/Ca.", "manejo": "Ácaro e Botrytis.", "quimica": [{ "Alvo": "Ácaro", "Ativo": "Etoxazol", "Grupo": "Inibidor", "Tipo": "Contato" }, { "Alvo": "Botrytis", "Ativo": "Iprodiona", "Grupo": "Dicarboximida", "Tipo": "Contato" }] }
+      "Florada": { "desc": "Flores.", "fisiologia": "Sensível chuva.", "manejo": "Botrytis.", "quimica": [{ "Alvo": "Botrytis", "Ativo": "Ciprodinil+Fludioxonil", "Grupo": "Switch", "Tipo": "Sistêmico" }] }
     }
   },
   "Mirtilo (Blueberry)": {
     "t_base": 7,
-    "vars": { "Emerald": { "kc": 0.95, "gda_meta": 1800, "info": "pH 4.5." }, "Biloxi": { "kc": 0.90, "gda_meta": 1900, "info": "Baixo frio." } },
+    "vars": { "Emerald": { "kc": 0.95, "gda_meta": 1800, "info": "pH 4.5." }, "Biloxi": { "kc": 0.90, "gda_meta": 1900, "info": "Baixo frio." }, "Jewel": { "kc": 0.95, "gda_meta": 1800, "info": "Precoce." } },
     "fases": {
       "Florada": { "desc": "Polinização.", "fisiologia": "Abelhas.", "manejo": "Botrytis.", "quimica": [{ "Alvo": "Botrytis", "Ativo": "Fludioxonil", "Grupo": "Fenilpirrol", "Tipo": "Contato" }] }
     }
   },
-  "Manga": {
-    "t_base": 13,
-    "vars": { "Palmer": { "kc": 0.9, "gda_meta": 2800, "info": "Fibrosa." }, "Tommy": { "kc": 0.9, "gda_meta": 2700, "info": "Resistente." } },
+  "Morango": {
+    "t_base": 7,
+    "vars": { "Albion": { "kc": 0.85, "gda_meta": 1250, "info": "Dia neutro." }, "San Andreas": { "kc": 0.85, "gda_meta": 1200, "info": "Rústico." }, "Camarosa": { "kc": 0.85, "gda_meta": 1200, "info": "Dia curto." } },
     "fases": {
-      "Florada": { "desc": "Panícula.", "fisiologia": "Polinização.", "manejo": "Oídio e Antracnose.", "quimica": [{ "Alvo": "Oídio", "Ativo": "Enxofre", "Grupo": "Inorgânico", "Tipo": "Protetor" }] }
+      "Produção": { "desc": "Colheita.", "fisiologia": "Alta extração K/Ca.", "manejo": "Ácaro e Botrytis.", "quimica": [{ "Alvo": "Ácaro", "Ativo": "Etoxazol", "Grupo": "Inibidor", "Tipo": "Contato" }, { "Alvo": "Botrytis", "Ativo": "Iprodiona", "Grupo": "Dicarboximida", "Tipo": "Contato" }] }
+    }
+  },
+  "Citros (Limão/Laranja)": {
+    "t_base": 13,
+    "vars": { "Tahiti": { "kc": 0.75, "gda_meta": 2000, "info": "Limão Ácido." }, "Pera Rio": { "kc": 0.75, "gda_meta": 2500, "info": "Laranja Doce." }, "Ponkan": { "kc": 0.75, "gda_meta": 2200, "info": "Tangerina." } },
+    "fases": {
+      "Fluxo Vegetativo": { "desc": "Brotação.", "fisiologia": "Folhas novas.", "manejo": "Psilídeo (Greening).", "quimica": [{ "Alvo": "Psilídeo", "Ativo": "Imidacloprido+Bifentrina", "Grupo": "Neo+Piretroide", "Tipo": "Choque" }] }
     }
   },
   "Uva": {
     "t_base": 10,
-    "vars": { "Vitoria": { "kc": 0.85, "gda_meta": 1500, "info": "Sem semente." }, "Niagara": { "kc": 0.85, "gda_meta": 1400, "info": "Rústica." } },
+    "vars": { "Vitoria": { "kc": 0.85, "gda_meta": 1500, "info": "Sem semente." }, "Niagara": { "kc": 0.85, "gda_meta": 1400, "info": "Mesa." }, "Cabernet": { "kc": 0.85, "gda_meta": 1600, "info": "Vinho." } },
     "fases": {
       "Maturação": { "desc": "Véraison.", "fisiologia": "Açúcar.", "manejo": "Podridão.", "quimica": [{ "Alvo": "Podridão", "Ativo": "Iprodiona", "Grupo": "Dicarboximida", "Tipo": "Contato" }] }
+    }
+  },
+  "Banana": {
+    "t_base": 14,
+    "vars": { "Prata": { "kc": 1.1, "gda_meta": 3000, "info": "Comum." }, "Nanica": { "kc": 1.1, "gda_meta": 3000, "info": "D'água." } },
+    "fases": {
+      "Cacho": { "desc": "Engorda.", "fisiologia": "Potássio.", "manejo": "Sigatoka.", "quimica": [{ "Alvo": "Sigatoka", "Ativo": "Tebuconazol", "Grupo": "Triazol", "Tipo": "Sistêmico" }] }
+    }
+  },
+  "Mamão": {
+    "t_base": 15,
+    "vars": { "Formosa": { "kc": 1.0, "gda_meta": 2500, "info": "Grande." }, "Papaya": { "kc": 1.0, "gda_meta": 2400, "info": "Pequeno (Solo)." } },
+    "fases": {
+      "Florada": { "desc": "Flores.", "fisiologia": "Sexo da flor (Hermafrodita).", "manejo": "Ácaro e Varíola.", "quimica": [{ "Alvo": "Ácaro", "Ativo": "Abamectina", "Grupo": "Avermectina", "Tipo": "Translaminar" }] }
+    }
+  },
+  "Manga": {
+    "t_base": 13,
+    "vars": { "Palmer": { "kc": 0.9, "gda_meta": 2800, "info": "Fibrosa." }, "Tommy": { "kc": 0.9, "gda_meta": 2700, "info": "Resistente." }, "Keitt": { "kc": 0.9, "gda_meta": 2900, "info": "Tardia." } },
+    "fases": {
+      "Florada": { "desc": "Panícula.", "fisiologia": "Polinização.", "manejo": "Oídio e Antracnose.", "quimica": [{ "Alvo": "Oídio", "Ativo": "Enxofre", "Grupo": "Inorgânico", "Tipo": "Protetor" }] }
     }
   }
 }
