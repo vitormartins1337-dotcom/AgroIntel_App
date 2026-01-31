@@ -1,0 +1,124 @@
+{
+  "Soja (Glycine max)": {
+    "t_base": 10,
+    "vars": {
+      "Intacta 2 Xtend": { "kc": 1.15, "gda_meta": 1400, "info": "Tecnologia I2X. Resistência a Dicamba e Lagartas. Refúgio 20% obrigatório." },
+      "Brasmax": { "kc": 1.15, "gda_meta": 1350, "info": "Alto teto produtivo. Exige fertilidade corrigida (Sat. Bases > 60%)." },
+      "Conkesta Enlist": { "kc": 1.15, "gda_meta": 1450, "info": "Sistema Enlist (2,4-D Colina). Ideal para áreas com Buva resistente." }
+    },
+    "fases": {
+      "Vegetativo (V3-V6)": {
+        "desc": "Desenvolvimento vegetativo pleno.",
+        "fisiologia": "A planta define seu potencial produtivo. A FBN deve estar suprindo 100% da demanda de N.",
+        "manejo": "Monitoramento de Lagartas e Percevejo Castanho.",
+        "quimica": [
+          { "Alvo": "Lagartas", "Ativo": "Benzoato de Emamectina", "Grupo": "Avermectina", "Tipo": "Ingestão" },
+          { "Alvo": "Spodoptera", "Ativo": "Clorantraniliprole", "Grupo": "Diamida", "Tipo": "Sistêmico" },
+          { "Alvo": "Folhas Largas", "Ativo": "Diclosulam", "Grupo": "ALS", "Tipo": "Herbicida" }
+        ]
+      },
+      "Reprodutivo (R1-R2)": {
+        "desc": "Florescimento pleno.",
+        "fisiologia": "O abortamento de flores pode ocorrer por estresse hídrico ou térmico (>32°C).",
+        "manejo": "Entrada obrigatória de fungicidas (Ferrugem e Mancha Alvo).",
+        "quimica": [
+          { "Alvo": "Ferrugem", "Ativo": "Protioconazol + Trifloxistrobina", "Grupo": "Triazol + Estrobilurina", "Tipo": "Sistêmico" },
+          { "Alvo": "Mancha Alvo", "Ativo": "Fluxapiroxade", "Grupo": "Carboxamida", "Tipo": "Sistêmico" },
+          { "Alvo": "Multissítio", "Ativo": "Mancozebe", "Grupo": "Ditiocarbamato", "Tipo": "Protetor" }
+        ]
+      },
+      "Enchimento (R5)": {
+        "desc": "Enchimento de grãos.",
+        "fisiologia": "Máxima translocação. Peso de mil grãos (PMG) é definido aqui.",
+        "manejo": "Controle rigoroso de Percevejos para evitar grão picado.",
+        "quimica": [
+          { "Alvo": "Percevejos", "Ativo": "Acefato", "Grupo": "Organofosforado", "Tipo": "Choque" },
+          { "Alvo": "Percevejos", "Ativo": "Tiametoxam + Lambda", "Grupo": "Neo + Piretroide", "Tipo": "Sistêmico" }
+        ]
+      }
+    }
+  },
+  "Milho (Zea mays)": {
+    "t_base": 10,
+    "vars": {
+      "Pioneer Bt": { "kc": 1.2, "gda_meta": 1600, "info": "Híbrido Precoce. Tecnologia Leptra." },
+      "Dekalb": { "kc": 1.2, "gda_meta": 1650, "info": "Rústico. VTPro3." }
+    },
+    "fases": {
+      "Vegetativo (V4-V8)": {
+        "desc": "Definição do número de fileiras.",
+        "fisiologia": "O meristema sai do solo. Deficiência de Zinco causa encurtamento.",
+        "manejo": "Controle da Cigarrinha (Dalbulus maidis) CRÍTICO (Enfezamentos).",
+        "quimica": [
+          { "Alvo": "Cigarrinha", "Ativo": "Clotianidina", "Grupo": "Neonicotinoide", "Tipo": "Sistêmico" },
+          { "Alvo": "Cigarrinha", "Ativo": "Metomil", "Grupo": "Carbamato", "Tipo": "Choque" },
+          { "Alvo": "Lagarta", "Ativo": "Espinetoram", "Grupo": "Espinocina", "Tipo": "Ingestão" }
+        ]
+      },
+      "Pendoamento (VT)": {
+        "desc": "Emissão do pendão.",
+        "fisiologia": "Polinização. Alta sensibilidade térmica.",
+        "manejo": "Aplicação de Fungicida (Mancha Branca, Cercospora).",
+        "quimica": [
+          { "Alvo": "Doenças", "Ativo": "Azoxistrobina + Ciproconazol", "Grupo": "Estrob + Triazol", "Tipo": "Sistêmico" },
+          { "Alvo": "Pulgão", "Ativo": "Acetamiprido", "Grupo": "Neonicotinoide", "Tipo": "Sistêmico" }
+        ]
+      }
+    }
+  },
+  "Tomate (Solanum lycopersicum)": {
+    "t_base": 10,
+    "vars": {
+      "Italiano": { "kc": 1.2, "gda_meta": 1600, "info": "Determinado. Sensível a Fundo Preto." },
+      "Grape": { "kc": 1.1, "gda_meta": 1450, "info": "Indeterminado. Alto brix." }
+    },
+    "fases": {
+      "Vegetativo": {
+        "desc": "Crescimento estrutural.",
+        "fisiologia": "Formação da estrutura fotossintética.",
+        "manejo": "Controle de Tripes (Vira-Cabeça) e Mosca Branca.",
+        "quimica": [
+          { "Alvo": "Tripes", "Ativo": "Espinetoram", "Grupo": "Espinocina", "Tipo": "Choque" },
+          { "Alvo": "Mosca Branca", "Ativo": "Ciantraniliprole", "Grupo": "Diamida", "Tipo": "Drench" },
+          { "Alvo": "Bacteriose", "Ativo": "Cobre + Mancozeb", "Grupo": "Inorgânico", "Tipo": "Protetor" }
+        ]
+      },
+      "Frutificação": {
+        "desc": "Formação dos frutos.",
+        "fisiologia": "Alta demanda de Cálcio e Boro.",
+        "manejo": "Monitorar Traça (Tuta absoluta) e Requeima.",
+        "quimica": [
+          { "Alvo": "Tuta absoluta", "Ativo": "Clorfenapir", "Grupo": "Pirrol", "Tipo": "Ingestão" },
+          { "Alvo": "Requeima", "Ativo": "Mandipropamida", "Grupo": "CAA", "Tipo": "Translaminar" }
+        ]
+      }
+    }
+  },
+  "Café (Coffea arabica)": {
+    "t_base": 10,
+    "vars": {
+      "Catuaí": { "kc": 1.1, "gda_meta": 3000, "info": "Padrão de bebida. Suscetível a ferrugem." },
+      "Arara": { "kc": 1.2, "gda_meta": 2900, "info": "Alta produtividade e resistência à Ferrugem." }
+    },
+    "fases": {
+      "Chumbinho": {
+        "desc": "Expansão rápida do fruto.",
+        "fisiologia": "Divisão celular intensa. Déficit hídrico fatal.",
+        "manejo": "Controle preventivo de Ferrugem e Cercospora.",
+        "quimica": [
+          { "Alvo": "Ferrugem", "Ativo": "Ciproconazol + Azoxistrobina", "Grupo": "Triazol+Estrob", "Tipo": "Sistêmico" },
+          { "Alvo": "Cercospora", "Ativo": "Tebuconazol", "Grupo": "Triazol", "Tipo": "Foliar" }
+        ]
+      },
+      "Granação": {
+        "desc": "Enchimento de grão.",
+        "fisiologia": "Deposição de matéria seca. Dreno de K.",
+        "manejo": "Monitorar Broca do Café e Bicho Mineiro.",
+        "quimica": [
+          { "Alvo": "Broca", "Ativo": "Ciantraniliprole", "Grupo": "Diamida", "Tipo": "Sistêmico" },
+          { "Alvo": "Bicho Mineiro", "Ativo": "Clorpirifós", "Grupo": "Organofosforado", "Tipo": "Vapor" }
+        ]
+      }
+    }
+  }
+}
