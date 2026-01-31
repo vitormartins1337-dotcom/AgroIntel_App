@@ -1,1 +1,100 @@
-
+{
+  "Milho (Zea mays)": {
+    "t_base": 10,
+    "vars": {
+      "Pioneer P3016 VYHR": { 
+        "kc": 1.2, 
+        "gda_meta": 1580, 
+        "info": "Tecnologia Leptra. Alta resposta ao investimento. Precoce. Exige manejo rigoroso de Cigarrinha. Tolerante a Glifosato/Glufosinato." 
+      },
+      "Dekalb DKB 390 PRO3": { 
+        "kc": 1.2, 
+        "gda_meta": 1650, 
+        "info": "Híbrido rústico com excelente sanidade foliar e radicular. Estabilidade produtiva em anos secos. Tecnologia VTPro3 (Raiz/Aérea)." 
+      },
+      "Agroceres AG 8780 PRO3": { 
+        "kc": 1.15, 
+        "gda_meta": 1550, 
+        "info": "Dupla aptidão (Grão e Silagem de alta qualidade). Porte alto, muita massa verde. Exige cuidado com acamamento em altas populações." 
+      },
+      "Syngenta VIP3 (Supra)": { 
+        "kc": 1.2, 
+        "gda_meta": 1600, 
+        "info": "Melhor tecnologia atual (Viptera) para controle de Lagarta-do-cartucho (Spodoptera). Não dispensa monitoramento." 
+      }
+    },
+    "fases": {
+      "VE - Emergência": {
+        "desc": "Coleóptilo rompe o solo.",
+        "fisiologia": "Início da autotrofia. O sistema radicular seminal é responsável pela absorção. Risco de ataque de pragas de solo.",
+        "manejo": "O Tratamento de Sementes (TS) Industrial é a única barreira contra a Cigarrinha (Dalbulus maidis) nos primeiros 10 dias. Monitorar Percevejo Barriga-Verde.",
+        "quimica": [
+          { "Alvo": "Cigarrinha (Vetor Enfezamento)", "Ativo": "Clotianidina", "Grupo": "Neonicotinoide", "Tipo": "Tratamento de Sementes (Sistêmico)" },
+          { "Alvo": "Percevejo Barriga-Verde", "Ativo": "Acefato", "Grupo": "Organofosforado", "Tipo": "Sulco/Foliar (Choque)" },
+          { "Alvo": "Lagarta Elasmo", "Ativo": "Fipronil", "Grupo": "Pirazol", "Tipo": "Sulco/TS" }
+        ]
+      },
+      "V3 - Definição (3 Folhas)": {
+        "desc": "Colar da terceira folha visível.",
+        "fisiologia": "Ponto de transição: A planta começa a depender das raízes nodais. Início da definição do número de fileiras da espiga (Potencial Produtivo).",
+        "manejo": "Controle de Ervas Daninhas (O milho sofre muito com competição inicial). Entrada de herbicidas seletivos (Atrazina). Monitorar Spodoptera.",
+        "quimica": [
+          { "Alvo": "Folhas Largas", "Ativo": "Atrazina", "Grupo": "C1 (Fotossistema II)", "Tipo": "Sistêmico Seletivo" },
+          { "Alvo": "Capim Amargoso", "Ativo": "Mesotriona", "Grupo": "HPPD", "Tipo": "Sistêmico" },
+          { "Alvo": "Cigarrinha (Controle de Adultos)", "Ativo": "Metomil", "Grupo": "Carbamato", "Tipo": "Choque (Bater e cair)" }
+        ]
+      },
+      "V4-V6 - Diferenciação": {
+        "desc": "Ponto de crescimento sai do solo.",
+        "fisiologia": "Definição do comprimento da espiga (número de grãos por fileira). Pico de absorção de Nitrogênio (N). Deficiência aqui reduz a espiga drasticamente.",
+        "manejo": "Adubação de Cobertura (Ureia/Sulfato) Obrigatória. Aplicação de preventivos para doenças foliares (Mancha Branca).",
+        "quimica": [
+          { "Alvo": "Mancha Branca (Phaeosphaeria)", "Ativo": "Azoxistrobina + Ciproconazol", "Grupo": "Estrob + Triazol", "Tipo": "Preventivo" },
+          { "Alvo": "Lagarta-do-Cartucho", "Ativo": "Espinetoram", "Grupo": "Espinocina", "Tipo": "Ingestão/Contato" },
+          { "Alvo": "Lagarta (Alternativa)", "Ativo": "Clorfenapir", "Grupo": "Pirrol", "Tipo": "Contato" }
+        ]
+      },
+      "V8-V10 - Pré-Pendoamento": {
+        "desc": "Crescimento acelerado do colmo.",
+        "fisiologia": "Formação do pendão e da boneca dentro do colmo. Alta demanda hídrica. A planta define o tamanho final.",
+        "manejo": "Última entrada tratorizada (Barra Alta). Aplicação do 'Fungicida Pré-Pendoamento' (Essencial para sanidade de folha em híbridos modernos).",
+        "quimica": [
+          { "Alvo": "Cercospora/Ferrugem Polissora", "Ativo": "Trifloxistrobina + Protioconazol", "Grupo": "Estrob + Triazol", "Tipo": "Sistêmico Premium" },
+          { "Alvo": "Nutrição", "Ativo": "Zinco (Zn)", "Grupo": "Micronutriente", "Tipo": "Foliar (Alongamento de internódio)" },
+          { "Alvo": "Cigarrinha (Residual)", "Ativo": "Isocicloseram", "Grupo": "Isolina", "Tipo": "Contato Longo" }
+        ]
+      },
+      "VT - Pendoamento": {
+        "desc": "Emissão completa do pendão.",
+        "fisiologia": "Liberação de pólen. A planta está extremamente sensível a estresse térmico (>35°C). O pólen precisa cair na boneca úmida.",
+        "manejo": "Se houver irrigação, manter solo na capacidade de campo. Monitorar Pulgão do Milho (produz melada que inviabiliza o pólen).",
+        "quimica": [
+          { "Alvo": "Pulgão do Milho", "Ativo": "Acetamiprido", "Grupo": "Neonicotinoide", "Tipo": "Sistêmico" },
+          { "Alvo": "Percevejo Barriga-Verde", "Ativo": "Bifentrina + Imidacloprido", "Grupo": "Piretroide + Neo", "Tipo": "Choque + Residual" }
+        ]
+      },
+      "R1 - Embonecamento": {
+        "desc": "Estigmas (cabelos) visíveis.",
+        "fisiologia": "Período Crítico da Água. Cada cabelo polinizado vira um grão. Seca agora causa 'espiga dentada' ou falhada.",
+        "manejo": "Evitar qualquer estresse. Nenhuma aplicação química recomendada sobre os cabelos frescos (risco de queima e falha de polinização).",
+        "quimica": [
+          { "Alvo": "Nenhum", "Ativo": "Evitar Aplicação", "Grupo": "Manejo", "Tipo": "Preservação da Polinização" }
+        ]
+      },
+      "R3 - Grão Leitoso": {
+        "desc": "Grão com líquido leitoso ao pressionar.",
+        "fisiologia": "Enchimento rápido. Translocação de açúcares. Ataque de percevejo aqui causa grão ardido e porta de entrada para fungos de espiga.",
+        "manejo": "Monitoramento de doenças de colmo e grãos ardidos.",
+        "quimica": [
+          { "Alvo": "Podridão de Espiga", "Ativo": "Tiofanato Metílico", "Grupo": "Benzimidazol", "Tipo": "Sistêmico" }
+        ]
+      },
+      "R6 - Maturidade Fisiológica": {
+        "desc": "Camada preta na base do grão.",
+        "fisiologia": "O grão atinge peso máximo e para de receber nutrientes. Perda de umidade para colheita.",
+        "manejo": "Planejamento de colheita. Monitorar umidade (Ideal 18-22% para colher e secar).",
+        "quimica": []
+      }
+    }
+  }
+}
