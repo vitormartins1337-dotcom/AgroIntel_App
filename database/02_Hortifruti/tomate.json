@@ -1,1 +1,80 @@
-
+{
+  "Tomate (Solanum lycopersicum)": {
+    "t_base": 10,
+    "vars": {
+      "Italiano (Saladete)": { 
+        "kc": 1.2, 
+        "gda_meta": 1600, 
+        "info": "Hábito Determinado (rasteiro ou tutorado curto). Frutos alongados. Alta produtividade concentrada. Sensível a Fundo Preto (Deficiência de Ca)." 
+      },
+      "Grape / Cherry": { 
+        "kc": 1.1, 
+        "gda_meta": 1500, 
+        "info": "Hábito Indeterminado (Crescimento contínuo). Frutos pequenos, alto Brix (Doçura). Exige mão de obra intensiva para desbrota e condução." 
+      },
+      "Longa Vida (Carmen)": { 
+        "kc": 1.2, 
+        "gda_meta": 1700, 
+        "info": "Tomate de mesa tradicional. Gene Rin/Nor retardam a maturação. Resistente ao transporte. Sabor menos acentuado." 
+      },
+      "Industrial (Rasteiro)": { 
+        "kc": 1.15, 
+        "gda_meta": 1550, 
+        "info": "Destinado a molhos/extratos. Colheita mecanizada. Parede grossa, alta concentração de sólidos solúveis (Brix)." 
+      }
+    },
+    "fases": {
+      "Transplante e Pegamento": {
+        "desc": "0 a 10 dias após transplante (DAT).",
+        "fisiologia": "Estresse pós-plantio. Necessidade de enraizamento rápido. Risco de 'canela preta' e morte de mudas.",
+        "manejo": "Aplicação via 'Drench' (esguicho no pé) ou Gotejo é OBRIGATÓRIA para proteção contra Mosca Branca (Viroses) e doenças de solo.",
+        "quimica": [
+          { "Alvo": "Mosca Branca/Pulgão (Vetores)", "Ativo": "Tiametoxam + Clorantraniliprole", "Grupo": "Neo + Diamida", "Tipo": "Drench/Sistêmico" },
+          { "Alvo": "Doenças de Solo (Pythium/Rhizoctonia)", "Ativo": "Metalaxil-M + Fludioxonil", "Grupo": "Fenilamida", "Tipo": "Drench" },
+          { "Alvo": "Enraizamento", "Ativo": "Ácidos Húmicos/Fúlvicos", "Grupo": "Bioestimulante", "Tipo": "Solo" }
+        ]
+      },
+      "Desenvolvimento Vegetativo": {
+        "desc": "Crescimento de hastes e folhas (10 a 30 DAT).",
+        "fisiologia": "Definição da estrutura da planta. Formação de área foliar. Alta demanda de Nitrogênio.",
+        "manejo": "Monitorar Tripes (Vetor do Vira-Cabeça), Larva Minadora e Bacterioses (Mancha Bacteriana/Cancro). Desbrota lateral (em Indeterminados).",
+        "quimica": [
+          { "Alvo": "Tripes (Vira-Cabeça)", "Ativo": "Espinetoram", "Grupo": "Espinocina", "Tipo": "Choque/Ingestão" },
+          { "Alvo": "Minadora/Ácaro", "Ativo": "Abamectina", "Grupo": "Avermectina", "Tipo": "Translaminar" },
+          { "Alvo": "Bacterioses", "Ativo": "Cobre (Hidróxido ou Oxicloreto)", "Grupo": "Inorgânico", "Tipo": "Protetor (Bacteriostático)" },
+          { "Alvo": "Preventivo Doenças", "Ativo": "Mancozebe", "Grupo": "Ditiocarbamato", "Tipo": "Protetor" }
+        ]
+      },
+      "Florada e Fixação": {
+        "desc": "Abertura de cachos florais.",
+        "fisiologia": "Polinização (Vento/Vibração). O abortamento ocorre se houver excesso de N, falta de Boro ou T > 30°C. Período crítico para Cálcio.",
+        "manejo": "Aplicação de Cálcio e Boro. Controle de Requeima (Phytophthora) em climas úmidos e Oídio em climas secos.",
+        "quimica": [
+          { "Alvo": "Requeima (Nobre)", "Ativo": "Mandipropamida", "Grupo": "CAA", "Tipo": "Translaminar (Resiste a chuva)" },
+          { "Alvo": "Oídio", "Ativo": "Azoxistrobina + Difenoconazol", "Grupo": "Estrob + Triazol", "Tipo": "Sistêmico" },
+          { "Alvo": "Nutrição", "Ativo": "Cálcio + Boro", "Grupo": "Nutrientes", "Tipo": "Foliar (Evitar Fundo Preto)" }
+        ]
+      },
+      "Frutificação (O Desafio)": {
+        "desc": "Frutos verdes em crescimento.",
+        "fisiologia": "O fruto é o dreno principal. Risco máximo de 'Fundo Preto' (Deficiência de Ca induzida por falta de água).",
+        "manejo": "Guerra contra a Traça-do-Tomate (Tuta absoluta) e Brocas (Helicoverpa/Neoleucinodes). Monitoramento diário. Alternar modos de ação.",
+        "quimica": [
+          { "Alvo": "Tuta absoluta (Traça)", "Ativo": "Clorfenapir", "Grupo": "Pirrol", "Tipo": "Contato/Ingestão (Mudar Grupo!)" },
+          { "Alvo": "Tuta/Brocas", "Ativo": "Indoxacarbe", "Grupo": "Oxadiazina", "Tipo": "Ingestão" },
+          { "Alvo": "Tuta (Biológico)", "Ativo": "Bacillus thuringiensis (Bt)", "Grupo": "Bactéria", "Tipo": "Ingestão (pH Água < 6.5)" },
+          { "Alvo": "Pinta Preta (Alternaria)", "Ativo": "Boscalida", "Grupo": "Carboxamida", "Tipo": "Sistêmico" }
+        ]
+      },
+      "Maturação e Colheita": {
+        "desc": "Frutos pintando (Véraison) a Vermelhos.",
+        "fisiologia": "Pico de produção de Etileno. Conversão de ácidos em açúcares.",
+        "manejo": "Respeitar o Período de Carência (PC) dos produtos químicos. Foco em doenças de pós-colheita.",
+        "quimica": [
+          { "Alvo": "Pragas (Baixa Carência)", "Ativo": "Espinosade", "Grupo": "Espinocina", "Tipo": "Biológico (PC 1 dia)" },
+          { "Alvo": "Doenças (Baixa Carência)", "Ativo": "Azoxistrobina", "Grupo": "Estrobilurina", "Tipo": "Sistêmico" }
+        ]
+      }
+    }
+  }
+}
