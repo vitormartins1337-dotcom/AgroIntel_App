@@ -1,0 +1,53 @@
+{
+  "Banana (Musa spp.)": {
+    "t_base": 14,
+    "vars": {
+      "Prata-Anã (Catarina)": { 
+        "kc": 1.1, 
+        "gda_meta": 3000, 
+        "info": "Preferida do brasileiro. Sabor ácido-doce. Resistente a Mal do Panamá (Raça 1), mas suscetível a Sigatoka. Ciclo mais longo." 
+      },
+      "Nanica (Williams/Cavendish)": { 
+        "kc": 1.1, 
+        "gda_meta": 3000, 
+        "info": "Padrão exportação. Fruto doce e curvo. Porte baixo. Muito produtiva. Extremamente suscetível a Sigatoka Negra." 
+      },
+      "Maçã": { 
+        "kc": 1.05, 
+        "gda_meta": 2800, 
+        "info": "Fruto nobre, nicho de mercado. Sabor único. Quase extinta devido à alta suscetibilidade ao Mal do Panamá (Fusarium)." 
+      }
+    },
+    "fases": {
+      "Vegetativo (Filha/Neta)": {
+        "desc": "Crescimento e emissão de folhas.",
+        "fisiologia": "A bananeira precisa de 10-12 folhas sadias para 'encher' o cacho. A Sigatoka destrói a área foliar, reduzindo o peso do cacho.",
+        "manejo": "Monitoramento da Sigatoka (Método de Stover). Aplicação de fungicidas com Óleo Mineral (espalhante). Desbaste de filhos.",
+        "quimica": [
+          { "Alvo": "Sigatoka (Sistêmico)", "Ativo": "Difenoconazol + Propiconazol", "Grupo": "Triazol", "Tipo": "Curativo" },
+          { "Alvo": "Sigatoka (Preventivo)", "Ativo": "Mancozebe", "Grupo": "Ditiocarbamato", "Tipo": "Protetor (Essencial p/ Resistência)" },
+          { "Alvo": "Sigatoka (Estrob)", "Ativo": "Azoxistrobina", "Grupo": "Estrobilurina", "Tipo": "Sistêmico" },
+          { "Alvo": "Adjuvante Obrigatório", "Ativo": "Óleo Mineral", "Grupo": "Hidrocarboneto", "Tipo": "Físico (Aumenta penetração)" }
+        ]
+      },
+      "Emissão do Cacho (Coração)": {
+        "desc": "Aparência da inflorescência (Coração).",
+        "fisiologia": "Definição do número de pencas. Momento de alta demanda nutricional. Tripes podem atacar a casca do fruto jovem (Mancha lixa).",
+        "manejo": "Ensacamento do cacho (proteção física). Eliminação do 'Coração' (Mangará) para evitar Trips e traças.",
+        "quimica": [
+          { "Alvo": "Tripes da Ferrugem", "Ativo": "Imidacloprido", "Grupo": "Neonicotinoide", "Tipo": "Injeção no Pseudocaule ou Pulverização do Cacho" },
+          { "Alvo": "Traça da Banana", "Ativo": "Bacillus thuringiensis", "Grupo": "Bactéria", "Tipo": "Biológico" }
+        ]
+      },
+      "Desenvolvimento do Cacho": {
+        "desc": "Enchimento dos dedos.",
+        "fisiologia": "Extração violenta de Potássio (K) do solo. Bananeira é uma das plantas que mais exige K no mundo.",
+        "manejo": "Controle do Moleque-da-Bananeira (Cosmopolites) na base da planta (Iscas tipo 'queijo').",
+        "quimica": [
+          { "Alvo": "Moleque-da-Bananeira", "Ativo": "Fipronil", "Grupo": "Pirazol", "Tipo": "Aplicação na base/Isca" },
+          { "Alvo": "Moleque (Biológico)", "Ativo": "Beauveria bassiana", "Grupo": "Fungo", "Tipo": "Contato" }
+        ]
+      }
+    }
+  }
+}
