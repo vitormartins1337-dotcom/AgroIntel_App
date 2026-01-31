@@ -1,1 +1,74 @@
-
+{
+  "Uva (Vitis spp.)": {
+    "t_base": 10,
+    "vars": {
+      "BRS Vitoria": { 
+        "kc": 0.85, 
+        "gda_meta": 1500, 
+        "info": "Uva sem semente (Seedless) preta. Sabor framboesa. Tolerante ao Míldio, mas exige manejo para Podridão da Uva Madura." 
+      },
+      "Niagara Rosada": { 
+        "kc": 0.85, 
+        "gda_meta": 1400, 
+        "info": "Uva de mesa rústica (Labrusca). Muito plantada em SP/RS. Suscetível a Míldio e Antracnose. Mercado interno forte." 
+      },
+      "Cabernet Sauvignon": { 
+        "kc": 0.85, 
+        "gda_meta": 1600, 
+        "info": "Vinífera tinta. Cachos pequenos e compactos. Casca grossa (resiste melhor a chuvas na colheita que outras tintas)." 
+      },
+      "Chardonnay": { 
+        "kc": 0.85, 
+        "gda_meta": 1550, 
+        "info": "Vinífera branca. Precoce. Brotação antecipada (risco de geada). Muito suscetível ao Oídio." 
+      }
+    },
+    "fases": {
+      "Poda e Quebra de Dormência": {
+        "desc": "Ramos secos (varas). Aplicação de produtos.",
+        "fisiologia": "A videira precisa de estímulo para 'acordar' uniforme em regiões tropicais (falta de frio).",
+        "manejo": "Aplicação de Cianamida Hidrogenada (Dormex) para uniformizar brotação. Tratamento de inverno no lenho.",
+        "quimica": [
+          { "Alvo": "Quebra de Dormência", "Ativo": "Cianamida Hidrogenada", "Grupo": "Regulador", "Tipo": "Contato (Tóxico)" },
+          { "Alvo": "Limpeza de Tronco (Cochonilha)", "Ativo": "Calda Sulfocálcica", "Grupo": "Inorgânico", "Tipo": "Cáustico" }
+        ]
+      },
+      "Brotação (Lã) a 15cm": {
+        "desc": "Folhas novas e tenras.",
+        "fisiologia": "Tecidos jovens muito suscetíveis. A planta gasta reservas do tronco.",
+        "manejo": "Controle rigoroso de Antracnose (Olho de passarinho) e Míldio (Mancha de Óleo) se houver chuva/orvalho.",
+        "quimica": [
+          { "Alvo": "Antracnose (Elsinoe)", "Ativo": "Tiofanato Metílico", "Grupo": "Benzimidazol", "Tipo": "Sistêmico" },
+          { "Alvo": "Míldio (Plasmopara)", "Ativo": "Metalaxil-M + Mancozeb", "Grupo": "Fenilamida", "Tipo": "Sistêmico + Protetor" }
+        ]
+      },
+      "Florada (Chumbinho)": {
+        "desc": "Cachos floridos e limpeza.",
+        "fisiologia": "Abertura da caliptra. Polinização. Se chover, ocorre abortamento ou 'bagoinha'.",
+        "manejo": "Aplicação de Giberelina (em Seedless) para alongamento e raleio. Controle de Botrytis e Tripes.",
+        "quimica": [
+          { "Alvo": "Botrytis (Mofo Cinzento)", "Ativo": "Ciprodinil + Fludioxonil", "Grupo": "Anilinopirimidina", "Tipo": "Sistêmico" },
+          { "Alvo": "Oídio (Pó branco)", "Ativo": "Tebuconazol", "Grupo": "Triazol", "Tipo": "Sistêmico" },
+          { "Alvo": "Crescimento (Seedless)", "Ativo": "Ácido Giberélico (GA3)", "Grupo": "Hormônio", "Tipo": "Fisiológico" }
+        ]
+      },
+      "Véraison (Mudança de Cor)": {
+        "desc": "Amolecimento da baga e cor.",
+        "fisiologia": "Parada do crescimento ácido. Início do acúmulo brutal de açúcar (Brix). A casca fica fina e vulnerável.",
+        "manejo": "Manejo da Podridão Ácida (Mosca das Frutas + Leveduras) e Podridão da Uva Madura (Glomerella).",
+        "quimica": [
+          { "Alvo": "Podridão Ácida/Mosca", "Ativo": "Etofenproxi", "Grupo": "Éter", "Tipo": "Contato" },
+          { "Alvo": "Podridão Madura", "Ativo": "Difenoconazol", "Grupo": "Triazol", "Tipo": "Curativo" }
+        ]
+      },
+      "Maturação Final": {
+        "desc": "Colheita.",
+        "fisiologia": "Brix ideal (16-18°). Acidez baixa.",
+        "manejo": "Respeitar carência (LMR). Cuidado com manuseio para não tirar a pruína (cera natural).",
+        "quimica": [
+          { "Alvo": "Botrytis (Pré-colheita)", "Ativo": "Fenhexamida", "Grupo": "Hidroxianilida", "Tipo": "Contato Específico (Curto PC)" }
+        ]
+      }
+    }
+  }
+}
