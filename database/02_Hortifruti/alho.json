@@ -1,0 +1,58 @@
+{
+  "Alho (Allium sativum)": {
+    "t_base": 5,
+    "vars": {
+      "Roxo Nobre (Caçador)": { 
+        "kc": 1.0, 
+        "gda_meta": 1800, 
+        "info": "Alto valor comercial. Dentes grandes e roxos. Exige vernalização (frigorífico) antes do plantio para 'superar' a dormência e não 'embonecar'." 
+      },
+      "Ito (Semi-Nobre)": { 
+        "kc": 1.0, 
+        "gda_meta": 1700, 
+        "info": "Precoce. Menor exigência de frio. Produtivo, mas com menor conservação pós-colheita." 
+      },
+      "Chonan": { 
+        "kc": 1.0, 
+        "gda_meta": 1750, 
+        "info": "Variedade do Sul. Bulbos de excelente qualidade visual. Sensível a Bacterioses." 
+      }
+    },
+    "fases": {
+      "Brotamento e Emergência": {
+        "desc": "Emergência do broto.",
+        "fisiologia": "O dente semente consome suas reservas. Fase lenta. Risco de ataque de Nematoides (Ditylenchus) e Ácaro do Bulbo.",
+        "manejo": "Escolha de semente livre de vírus. Tratamento de Bulbilhos.",
+        "quimica": [
+          { "Alvo": "Ácaro e Nematoides", "Ativo": "Abamectina", "Grupo": "Avermectina", "Tipo": "Imersão de Semente" },
+          { "Alvo": "Podridão Branca (Sclerotium)", "Ativo": "Iprodiona", "Grupo": "Dicarboximida", "Tipo": "Sulco de Plantio" }
+        ]
+      },
+      "Crescimento Vegetativo": {
+        "desc": "Emissão de folhas.",
+        "fisiologia": "Acúmulo de reservas. Se faltar frio ou houver excesso de N, ocorre o 'Superbrotamento' (Dente de cachorro/Perfilhamento excessivo), que inviabiliza o comércio.",
+        "manejo": "Manejo nutricional equilibrado. Controle de Ferrugem (Puccinia porri), a principal doença foliar.",
+        "quimica": [
+          { "Alvo": "Ferrugem do Alho", "Ativo": "Tebuconazol", "Grupo": "Triazol", "Tipo": "Sistêmico (Curativo)" },
+          { "Alvo": "Ferrugem (Preventivo)", "Ativo": "Azoxistrobina", "Grupo": "Estrobilurina", "Tipo": "Sistêmico" },
+          { "Alvo": "Tripes", "Ativo": "Clorpirifós", "Grupo": "Organofosforado", "Tipo": "Contato/Vapor" }
+        ]
+      },
+      "Diferenciação (Cabeça)": {
+        "desc": "Início da formação dos dentes.",
+        "fisiologia": "Gatilho: Fotoperíodo longo + Temperatura subindo. A planta para de fazer folha e enche o bulbo. Estresse hídrico agora reduz o calibre (classificação).",
+        "manejo": "Mancha Púrpura (Alternaria) pode dizimar a área foliar restante. Aplicação de Potássio para finalizar a cabeça.",
+        "quimica": [
+          { "Alvo": "Mancha Púrpura", "Ativo": "Boscalida", "Grupo": "Carboxamida", "Tipo": "Sistêmico" },
+          { "Alvo": "Nutrição", "Ativo": "Sulfato de Potássio", "Grupo": "Fertilizante", "Tipo": "Foliar/Fertirrigação" }
+        ]
+      },
+      "Maturação e Cura": {
+        "desc": "Senescência das folhas (Amarelecimento).",
+        "fisiologia": "Cura: Secagem das túnicas externas para proteger o bulbo. Colher com 2/3 das folhas secas.",
+        "manejo": "Suspender irrigação 20 dias antes. Evitar machucões na colheita (porta para Penicillium).",
+        "quimica": []
+      }
+    }
+  }
+}
