@@ -1,1 +1,75 @@
-
+{
+  "Café (Coffea arabica)": {
+    "t_base": 10,
+    "vars": {
+      "Catuaí Vermelho/Amarelo": { 
+        "kc": 1.1, 
+        "gda_meta": 3000, 
+        "info": "Cultivar mais plantada no Brasil. Porte baixo, alta produtividade, excelente bebida. Muito suscetível à Ferrugem e Nematoides." 
+      },
+      "Arara": { 
+        "kc": 1.2, 
+        "gda_meta": 2900, 
+        "info": "A revolução da cafeicultura. Imune à Ferrugem, alta produtividade, frutos grandes (peneira alta) e maturação tardia. Exige boa nutrição." 
+      },
+      "Mundo Novo": { 
+        "kc": 1.1, 
+        "gda_meta": 3100, 
+        "info": "Porte alto, vigoroso, rústico. Sistema radicular profundo (resistente a seca). Exige poda mais frequente. Bebida boa." 
+      },
+      "Bourbon": { 
+        "kc": 1.1, 
+        "gda_meta": 3000, 
+        "info": "Mercado de Cafés Especiais. Bebida exótica e adocicada. Baixa produtividade e alta suscetibilidade a doenças." 
+      }
+    },
+    "fases": {
+      "Vegetativo / Repouso (Jun-Ago)": {
+        "desc": "Período de dormência e indução floral.",
+        "fisiologia": "Dias curtos e noites frias induzem as gemas vegetativas a se tornarem reprodutivas. Acúmulo de reservas (amido) nas raízes e ramos.",
+        "manejo": "Amostragem de solo. Calagem e Gessagem. Poda de limpeza ou esqueletamento. Controle de Bicho Mineiro em regiões quentes.",
+        "quimica": [
+          { "Alvo": "Bicho Mineiro", "Ativo": "Clorpirifós", "Grupo": "Organofosforado", "Tipo": "Vapor/Contato" },
+          { "Alvo": "Cochonilhas", "Ativo": "Imidacloprido", "Grupo": "Neonicotinoide", "Tipo": "Sistêmico (Drench/Solo)" }
+        ]
+      },
+      "Florada (Set-Out)": {
+        "desc": "Abertura dos botões florais (Antese).",
+        "fisiologia": "Gatilho hídrico: Chuva de >10mm após período seco faz os botões abrirem em 8-10 dias. Polinização define o pegamento.",
+        "manejo": "Evitar pulverizações sobre as flores abertas. Monitoramento de Phoma e Mancha Aureolada se houver chuvas frias e granizo.",
+        "quimica": [
+          { "Alvo": "Phoma/Ascochyta", "Ativo": "Boscalida", "Grupo": "Carboxamida", "Tipo": "Sistêmico" },
+          { "Alvo": "Mancha Aureolada (Bactéria)", "Ativo": "Hidróxido de Cobre", "Grupo": "Cobre", "Tipo": "Protetor Bacteriostático" }
+        ]
+      },
+      "Chumbinho (Nov-Dez)": {
+        "desc": "Expansão rápida dos frutos (3-4mm).",
+        "fisiologia": "Intensa divisão celular. O tamanho final do grão é definido pela quantidade de água disponível agora. Déficit hídrico causa queda de frutos.",
+        "manejo": "Controle preventivo OBRIGATÓRIO de Ferrugem (Hemileia) e Cercospora. Aplicação de foliares (N, Ca, B).",
+        "quimica": [
+          { "Alvo": "Ferrugem do Cafeeiro", "Ativo": "Ciproconazol + Azoxistrobina", "Grupo": "Triazol + Estrob", "Tipo": "Sistêmico (Via Solo ou Foliar)" },
+          { "Alvo": "Cercospora", "Ativo": "Tiofanato Metílico", "Grupo": "Benzimidazol", "Tipo": "Sistêmico" },
+          { "Alvo": "Ácaro Vermelho", "Ativo": "Abamectina", "Grupo": "Avermectina", "Tipo": "Translaminar" }
+        ]
+      },
+      "Expansão / Granação (Jan-Mar)": {
+        "desc": "Enchimento dos grãos (Água -> Sólidos).",
+        "fisiologia": "Deposição de matéria seca. Dreno intenso de Potássio e Nitrogênio. O fruto solidifica o endosperma.",
+        "manejo": "Pico de ataque da Broca-do-Café (Hypothenemus hampei). Monitoramento mensal (nível de controle 3%). Bicho Mineiro volta a atacar se parar de chover.",
+        "quimica": [
+          { "Alvo": "Broca do Café", "Ativo": "Ciantraniliprole", "Grupo": "Diamida", "Tipo": "Sistêmico (Absorção Raiz ou Folha)" },
+          { "Alvo": "Broca (Alternativa)", "Ativo": "Espinosade", "Grupo": "Espinocina", "Tipo": "Biológico/Contato" },
+          { "Alvo": "Ferrugem Tardia", "Ativo": "Epoxiconazol", "Grupo": "Triazol", "Tipo": "Curativo" }
+        ]
+      },
+      "Maturação (Abr-Jun)": {
+        "desc": "Mudança de cor (Verde -> Cereja).",
+        "fisiologia": "Degradação da clorofila na casca. Aumento de açúcares (Brix). O grão atinge umidade ideal.",
+        "manejo": "Aplicação de potássio foliar para uniformizar maturação. Planejamento de colheita. Limpeza do terreiro.",
+        "quimica": [
+          { "Alvo": "Maturação Uniforme", "Ativo": "Etefon", "Grupo": "Etileno", "Tipo": "Regulador Vegetal (Apenas se necessário)" }
+        ]
+      }
+    }
+  }
+}
