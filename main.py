@@ -265,10 +265,16 @@ if not df_clima.empty:
         st.markdown(f"**Progresso do Ciclo:** {progresso*100:.1f}%")
         st.progress(progresso)
         
-        # Inserindo imagem ilustrativa da soja se estiver selecionada
-        if "Soja" in cult_sel:
-            # Imagem de contexto (ilustração técnica)
-            st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Soybean.jpg/800px-Soybean.jpg", height=200, caption="Glycine max - Referência Visual")
+        # --- CORREÇÃO DO ERRO DA IMAGEM ---
+        # Adicionamos um tratamento de erro (try/except).
+        # Se a internet falhar ou a imagem der erro, o app NÃO trava.
+        if "Soja" in str(cult_sel):
+            try:
+                # Tenta carregar a imagem
+                st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Soybean.jpg/800px-Soybean.jpg", width=400, caption="Glycine max - Referência Visual")
+            except Exception:
+                # Se falhar, mostra apenas um ícone discreto, sem tela vermelha
+                st.info("🖼️ Imagem de referência não disponível no momento.")
 
         col1, col2 = st.columns(2)
         with col1:
@@ -281,7 +287,7 @@ if not df_clima.empty:
         st.markdown("---")
         st.subheader("🛡️ Protocolo de Manejo Integrado")
         
-        # Cards Químicos melhorados
+        # Cards Químicos
         if isinstance(dados_fase.get('quimica'), list):
             for q in dados_fase['quimica']:
                 tipo = q.get('Tipo', 'Geral')
