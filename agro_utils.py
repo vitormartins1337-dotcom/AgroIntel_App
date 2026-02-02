@@ -1,5 +1,5 @@
 # ARQUIVO: agro_utils.py
-# VERSÃO: V-NATIVE (Layout Nativo Streamlit - Robusto e Moderno)
+# VERSÃO: V-NATIVE FINAL (Correção visual do Background)
 
 import streamlit as st
 import math
@@ -7,7 +7,7 @@ import math
 class AgroBrain:
     """
     Motor de Inteligência Agronômica.
-    Usa componentes nativos do Streamlit para evitar erros de renderização HTML.
+    Usa componentes nativos do Streamlit.
     """
 
     # --- 1. INTELIGÊNCIA DE DADOS ---
@@ -61,13 +61,8 @@ class AgroBrain:
         return status_geral, cor_status, alertas
 
     # --- 4. RENDERIZADORES VISUAIS (NATIVO - JOGADA DE MESTRE) ---
-    
     @staticmethod
     def gerar_cartao_kpi(titulo, valor, unidade, status_texto, cor_status, tooltip=""):
-        """
-        Gera o HTML do cartão de KPI do Cockpit. 
-        Mantivemos HTML aqui pois KPIs são simples e raramente quebram.
-        """
         return f"""
         <div class="kpi-box" title="{tooltip}">
             <div class="kpi-header">{titulo}</div>
@@ -81,8 +76,8 @@ class AgroBrain:
     @staticmethod
     def render_protocolo_quimico(lista_produtos):
         """
-        Renderiza os cards usando APENAS componentes nativos do Streamlit.
-        Visual limpo, profissional e sem erros de código aparecendo na tela.
+        Renderiza os cards usando APENAS componentes nativos.
+        Visual limpo, profissional e sem erros de código.
         """
         if not lista_produtos:
             st.warning("⚠️ Nenhum protocolo cadastrado para esta fase.")
@@ -96,10 +91,10 @@ class AgroBrain:
             grupo = AgroBrain.get_info_segura(prod, ['Grupo', 'Mecanismo'], "Não listado")
             tipo = prod.get('Tipo', 'Geral')
 
-            # 2. Definição Visual (Ícones e Cores Nativas)
+            # 2. Definição Visual
             if any(x in tipo for x in ["Químico", "Sistêmico", "Choque"]):
                 icon = "☠️"
-                border_color = "red" # Streamlit entende cores básicas
+                border_color = "red"
             elif "Biológico" in tipo or "FBN" in tipo:
                 icon = "🦠"
                 border_color = "green"
@@ -113,23 +108,19 @@ class AgroBrain:
                 icon = "🛡️"
                 border_color = "grey"
 
-            # 3. CONSTRUÇÃO DO CARD (LAYOUT NATIVO)
-            # Usamos st.container com borda para agrupar
+            # 3. CONSTRUÇÃO DO CARD
             with st.container(border=True):
                 c1, c2 = st.columns([0.15, 0.85])
                 
                 with c1:
-                    # Ícone grande centralizado
                     st.markdown(f"<div style='font-size: 2.5rem; text-align: center;'>{icon}</div>", unsafe_allow_html=True)
                 
                 with c2:
-                    # Cabeçalho: Alvo + Badge de Tipo
                     st.markdown(f"**{alvo}**")
                     st.caption(f"TIPO: {tipo} | GRUPO: {grupo}")
                     
-                    # Ingrediente Ativo destacado
-                    st.markdown(f"🧬 **Ativo:** `:grey-background[{ativo}]`")
+                    # CORREÇÃO AQUI: Usando crase (`) para destacar o ativo
+                    st.markdown(f"🧬 **Ativo:** `{ativo}`")
 
-                # A Estratégia Técnica ganha destaque em um box azul (Info)
-                # Isso garante que o agrônomo LEIA a recomendação.
+                # Caixa azul para a estratégia
                 st.info(f"💡 **Estratégia Técnica:** {estrategia}", icon="👨‍🌾")
