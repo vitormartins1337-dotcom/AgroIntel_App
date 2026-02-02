@@ -184,8 +184,8 @@ if not df_clima.empty:
         img_local_path = None
         if nome_arquivo:
             # Tenta achar .jpg ou .png na pasta 'images'
-            potential_jpg = os.path.join("images", f"{nome_arquivo}.jpg")
-            potential_png = os.path.join("images", f"{nome_arquivo}.png")
+            potential_jpg = os.path.join("images", f"(nome_arquivo).jpg")
+            potential_png = os.path.join("images", f"(nome_arquivo).png")
             
             if os.path.exists(potential_jpg):
                 img_local_path = potential_jpg
