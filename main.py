@@ -11,6 +11,7 @@ from folium.plugins import LocateControl, Fullscreen, Draw
 from streamlit_folium import st_folium
 from PIL import Image
 import google.generativeai as genai
+import os
 
 # --- 1. IMPORTAÇÃO DOS MOTORES DE INTELIGÊNCIA ---
 try:
