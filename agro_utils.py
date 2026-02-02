@@ -1,95 +1,78 @@
 # ARQUIVO: agro_utils.py
-# VERSÃO: GEMINI MASTER INTELLIGENCE (VPD + Fisiologia Avançada)
+# VERSÃO: V-RENDER (Correção de HTML + Busca Insensível a Maiúsculas)
 
 import streamlit as st
 import math
 
 class AgroBrain:
     """
-    Motor de Inteligência Agronômica.
-    Responsável por transformar dados brutos em decisões de campo.
+    Motor de Inteligência Agronômica e Renderização Visual.
     """
     
-    # --- 1. INTELIGÊNCIA DE DADOS (ANTI-FALHA) ---
+    # --- 1. INTELIGÊNCIA DE DADOS (Busca Robusta) ---
     @staticmethod
-    def get_info_segura(dicionario, lista_chaves, padrao="Consulte a bula ou Engenheiro Agrônomo."):
+    def get_info_segura(dicionario, lista_chaves, padrao="Consulte Eng. Agrônomo"):
         """
-        Busca inteligente: tenta encontrar a informação por vários sinônimos.
-        Se não achar nada, retorna um texto padrão seguro.
+        Busca inteligente: ignora maiúsculas/minúsculas para encontrar a chave.
+        Ex: Encontra 'Estrategia' mesmo se estiver escrito 'estrategia' ou 'ESTRATEGIA'.
         """
         if not dicionario: return padrao
         
-        # Normaliza chaves para busca insensível a maiúsculas/minúsculas
+        # Cria um mapa com todas as chaves em minúsculo
         chaves_norm = {k.lower(): v for k, v in dicionario.items()}
         
         for chave in lista_chaves:
-            if chave.lower() in chaves_norm:
-                valor = chaves_norm[chave.lower()]
+            chave_lower = chave.lower()
+            if chave_lower in chaves_norm:
+                valor = chaves_norm[chave_lower]
                 if valor and str(valor).strip() != "":
                     return valor
         return padrao
 
-    # --- 2. CÁLCULOS FISIOLÓGICOS AVANÇADOS (VPD) ---
+    # --- 2. CÁLCULOS FISIOLÓGICOS (VPD) ---
     @staticmethod
     def calcular_vpd(temp, umid):
-        """
-        Calcula o Déficit de Pressão de Vapor (VPD) em kPa.
-        O VPD é o indicador mais preciso de estresse hídrico na planta.
-        """
         try:
-            # Fórmula de Tetens para Pressão de Saturação de Vapor (es)
             es = 0.6108 * math.exp((17.27 * temp) / (temp + 237.3))
-            
-            # Pressão Atual de Vapor (ea)
             ea = es * (umid / 100.0)
-            
-            # VPD
-            vpd = es - ea
-            return max(0.0, vpd)
+            return max(0.0, es - ea)
         except:
             return 0.0
 
-    # --- 3. ANÁLISE CLIMÁTICA PARA PULVERIZAÇÃO (DELTA T + MODO DE AÇÃO) ---
+    # --- 3. ANÁLISE CLIMÁTICA ---
     @staticmethod
     def analisar_risco_aplicacao(temp, umid, delta_t, tipo_produto="Sistêmico"):
-        """
-        Analisa a janela de aplicação cruzando dados climáticos com o tipo de produto.
-        """
         alertas = []
         status_geral = "APTO"
-        cor_status = "#16a34a" # Verde
+        cor_status = "#16a34a"
 
-        # A. Análise de Delta T (Padrão Ouro para Gota)
         if delta_t < 2:
-            alertas.append(("🛑 Risco de Deriva/Inversão", "Gotas muito finas podem não decantar ou evaporar muito lentamente."))
+            alertas.append(("🛑 Risco de Deriva", "Gota muito leve (inversão térmica)."))
             status_geral = "PARE"
             cor_status = "#dc2626"
         elif delta_t > 8:
             if delta_t > 10:
-                alertas.append(("🔥 Evaporação Crítica", "Perda imediata da gota. Aplicação proibida."))
+                alertas.append(("🔥 Evaporação Crítica", "Perda imediata. Proibido aplicar."))
                 status_geral = "PARE"
                 cor_status = "#dc2626"
             else:
-                alertas.append(("⚠️ Alta Evaporação", "Obrigatório uso de óleo/adjuvante redutor de deriva."))
+                alertas.append(("⚠️ Alta Evaporação", "Use óleo/adjuvante redutor de deriva."))
                 status_geral = "ATENÇÃO"
                 cor_status = "#ca8a04"
 
-        # B. Análise Fisiológica (Para Sistêmicos)
-        # Sistêmicos precisam que a planta esteja com estômatos abertos para absorver.
         if "Sistêmico" in tipo_produto:
             vpd = AgroBrain.calcular_vpd(temp, umid)
             if vpd > 2.0 or temp > 32:
-                alertas.append(("🌵 Estresse Fisiológico", "Planta fechando estômatos. Produto sistêmico não será absorvido."))
+                alertas.append(("🌵 Estresse Fisiológico", "Estômatos fechados. Absorção comprometida."))
                 if status_geral == "APTO": 
                     status_geral = "EVITAR"
                     cor_status = "#ca8a04"
 
         return status_geral, cor_status, alertas
 
-    # --- 4. RENDERIZADORES VISUAIS (HTML/CSS) ---
+    # --- 4. RENDERIZADORES VISUAIS (AQUI ESTAVA O PROBLEMA) ---
     @staticmethod
     def gerar_cartao_kpi(titulo, valor, unidade, status_texto, cor_status, tooltip=""):
-        """Gera o HTML do cartão de KPI do Cockpit."""
         return f"""
         <div class="kpi-box" title="{tooltip}">
             <div class="kpi-header">{titulo}</div>
@@ -103,32 +86,35 @@ class AgroBrain:
     @staticmethod
     def render_protocolo_quimico(lista_produtos):
         """
-        Renderiza os cards de produtos químicos com blindagem visual e inteligência de cor.
+        Renderiza os cards diretamente na tela usando st.markdown com HTML ativado.
         """
         if not lista_produtos:
-            return st.warning("⚠️ Nenhum produto cadastrado especificamente para esta fase no banco de dados.")
+            st.warning("⚠️ Nenhum protocolo cadastrado para esta fase.")
+            return # Encerra a função se não tiver produtos
             
         for prod in lista_produtos:
-            # Busca Inteligente de Dados
-            alvo = AgroBrain.get_info_segura(prod, ['Alvo', 'Doenca', 'Praga'], "Alvo Biológico")
-            ativo = AgroBrain.get_info_segura(prod, ['Ativo', 'Ingrediente', 'Produto'], "Ingrediente não informado")
-            estrategia = AgroBrain.get_info_segura(prod, ['Estrategia', 'Obs', 'Manejo', 'Nota'], "Seguir recomendação de bula.")
-            grupo = AgroBrain.get_info_segura(prod, ['Grupo', 'Codigos', 'Mecanismo'], "")
+            # Busca Inteligente de Dados (Usa várias chaves possíveis)
+            alvo = AgroBrain.get_info_segura(prod, ['Alvo', 'Doenca', 'Praga', 'Target'], "Alvo Biológico")
+            ativo = AgroBrain.get_info_segura(prod, ['Ativo', 'Ingrediente', 'Produto', 'Active'], "Ingrediente não informado")
+            estrategia = AgroBrain.get_info_segura(prod, ['Estrategia', 'Obs', 'Manejo', 'Nota', 'Strategy'], "Seguir recomendação de bula.")
+            grupo = AgroBrain.get_info_segura(prod, ['Grupo', 'Mecanismo'], "")
             tipo = prod.get('Tipo', 'Geral')
             
             # Lógica de Cores Semântica
-            if "Químico" in tipo: 
-                cor_borda = "#ef4444"; bg_icon = "#fee2e2"; icone = "☠️" # Vermelho
+            if any(x in tipo for x in ["Químico", "Choque", "Sistêmico"]): 
+                cor_borda = "#3b82f6"; bg_icon = "#dbeafe"; icone = "🧪" # Azul
             elif "Biológico" in tipo: 
                 cor_borda = "#22c55e"; bg_icon = "#dcfce7"; icone = "🦠" # Verde
-            elif "Nutri" in tipo: 
+            elif "Nutri" in tipo or "Fisiológico" in tipo: 
                 cor_borda = "#eab308"; bg_icon = "#fef9c3"; icone = "⚡" # Amarelo
+            elif "TS" in tipo:
+                cor_borda = "#8b5cf6"; bg_icon = "#f3e8ff"; icone = "🟣" # Roxo
             else:
-                cor_borda = "#3b82f6"; bg_icon = "#dbeafe"; icone = "🧪" # Azul
+                cor_borda = "#64748b"; bg_icon = "#f1f5f9"; icone = "🛡️" # Cinza
             
-            # HTML Robusto
             html_grupo = f'<span style="background:#f1f5f9; color:#64748b; padding:2px 6px; border-radius:4px; font-size:0.75rem; margin-left:10px;">🧬 {grupo}</span>' if grupo else ""
             
+            # O SEGREDO ESTÁ AQUI: st.markdown(..., unsafe_allow_html=True)
             st.markdown(f"""
             <div style="
                 background: white; 
