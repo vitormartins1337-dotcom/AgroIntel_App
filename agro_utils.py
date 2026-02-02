@@ -1,5 +1,5 @@
 # ARQUIVO: agro_utils.py
-# VERSÃO: V-NATIVE FINAL (Correção visual do Background)
+# VERSÃO: V-DEDUP (Com Filtro Anti-Duplicação)
 
 import streamlit as st
 import math
@@ -7,7 +7,7 @@ import math
 class AgroBrain:
     """
     Motor de Inteligência Agronômica.
-    Usa componentes nativos do Streamlit.
+    Versão Blindada contra duplicidade de dados.
     """
 
     # --- 1. INTELIGÊNCIA DE DADOS ---
@@ -60,7 +60,7 @@ class AgroBrain:
 
         return status_geral, cor_status, alertas
 
-    # --- 4. RENDERIZADORES VISUAIS (NATIVO - JOGADA DE MESTRE) ---
+    # --- 4. RENDERIZADORES VISUAIS (NATIVO + FILTRO) ---
     @staticmethod
     def gerar_cartao_kpi(titulo, valor, unidade, status_texto, cor_status, tooltip=""):
         return f"""
@@ -76,14 +76,32 @@ class AgroBrain:
     @staticmethod
     def render_protocolo_quimico(lista_produtos):
         """
-        Renderiza os cards usando APENAS componentes nativos.
-        Visual limpo, profissional e sem erros de código.
+        Renderiza os cards com sistema inteligente que remove duplicatas.
         """
         if not lista_produtos:
             st.warning("⚠️ Nenhum protocolo cadastrado para esta fase.")
             return
 
-        for i, prod in enumerate(lista_produtos):
+        # --- INÍCIO DO FILTRO ANTI-DUPLICIDADE ---
+        produtos_unicos = []
+        assinaturas_vistas = set() # Memória temporária
+
+        for prod in lista_produtos:
+            # Cria uma "impressão digital" do produto (Nome do Alvo + Nome do Ativo)
+            alvo_check = AgroBrain.get_info_segura(prod, ['Alvo', 'Doenca', 'Praga'], "").strip().lower()
+            ativo_check = AgroBrain.get_info_segura(prod, ['Ativo', 'Ingrediente', 'Produto'], "").strip().lower()
+            
+            # Cria uma chave única. Ex: "ferrugem-protioconazol"
+            chave_unica = f"{alvo_check}|{ativo_check}"
+
+            # Se eu ainda não vi essa chave, adiciono na lista de exibição
+            if chave_unica not in assinaturas_vistas:
+                assinaturas_vistas.add(chave_unica)
+                produtos_unicos.append(prod)
+        # --- FIM DO FILTRO ---
+
+        # Agora iteramos SOMENTE sobre a lista limpa (produtos_unicos)
+        for i, prod in enumerate(produtos_unicos):
             # 1. Extração de Dados
             alvo = AgroBrain.get_info_segura(prod, ['Alvo', 'Doenca', 'Praga'], "Alvo Biológico")
             ativo = AgroBrain.get_info_segura(prod, ['Ativo', 'Ingrediente', 'Produto'], "Ingrediente não informado")
@@ -108,19 +126,14 @@ class AgroBrain:
                 icon = "🛡️"
                 border_color = "grey"
 
-            # 3. CONSTRUÇÃO DO CARD
+            # 3. Construção do Card
             with st.container(border=True):
                 c1, c2 = st.columns([0.15, 0.85])
-                
                 with c1:
                     st.markdown(f"<div style='font-size: 2.5rem; text-align: center;'>{icon}</div>", unsafe_allow_html=True)
-                
                 with c2:
                     st.markdown(f"**{alvo}**")
                     st.caption(f"TIPO: {tipo} | GRUPO: {grupo}")
-                    
-                    # CORREÇÃO AQUI: Usando crase (`) para destacar o ativo
                     st.markdown(f"🧬 **Ativo:** `{ativo}`")
 
-                # Caixa azul para a estratégia
                 st.info(f"💡 **Estratégia Técnica:** {estrategia}", icon="👨‍🌾")
