@@ -151,18 +151,11 @@ if not df_clima.empty:
     # --- 7. ABAS DE CONTEÚDO (ENTERPRISE) ---
     tabs = st.tabs(["🧬 TÉCNICO & MANEJO", "☁️ CLIMA & RISCO", "📡 RADAR", "👁️ IA VISION", "💰 GESTÃO", "🗺️ GIS MAP", "📄 LAUDO"])
 
-    # ABA 1: TÉCNICO (AGRONOMIA PURA)
-    with tabs[0]:
-        st.markdown('<div class="app-card">', unsafe_allow_html=True)
-        st.caption(f"Evolução do Ciclo Fenológico ({progresso*100:.1f}%)")
-        st.progress(progresso)
-
-        # --- INÍCIO DO BLOCO DE IMAGENS INTELIGENTE ---
-        # 1. Mapeamento da Cultura para Nome do Arquivo
-        nome_arquivo = None
+    # 1. Normalização do nome (Transforma "Algodão" em "algodao")
+        # Isso ajuda a achar o arquivo mesmo se tiver acento ou maiúscula
         cultura_lower = str(cult_sel).lower()
+        nome_arquivo = None
 
-        # Dicionário de mapeamento (Nome no App -> Nome do Arquivo)
         if "soja" in cultura_lower: nome_arquivo = "soja"
         elif "milho" in cultura_lower: nome_arquivo = "milho"
         elif "algodão" in cultura_lower or "algodao" in cultura_lower: nome_arquivo = "algodao"
@@ -175,34 +168,36 @@ if not df_clima.empty:
         elif "cebola" in cultura_lower: nome_arquivo = "cebola"
         elif "uva" in cultura_lower: nome_arquivo = "uva"
         elif "banana" in cultura_lower: nome_arquivo = "banana"
-        elif "citros" in cultura_lower or "laranja" in cultura_lower or "limão" in cultura_lower: nome_arquivo = "citros"
+        elif "citros" in cultura_lower or "laranja" in cultura_lower: nome_arquivo = "citros"
         elif "manga" in cultura_lower: nome_arquivo = "manga"
         elif "morango" in cultura_lower: nome_arquivo = "morango"
         elif "mirtilo" in cultura_lower: nome_arquivo = "mirtilo"
         elif "framboesa" in cultura_lower: nome_arquivo = "framboesa"
 
-        # 2. Busca pelo Arquivo Local (Prioridade Máxima)
         img_local_path = None
+        
+        # 2. Busca Inteligente na pasta 'images'
         if nome_arquivo:
-            # Tenta achar .jpg ou .png na pasta 'images'
-            potential_jpg = os.path.join("images", f"(nome_arquivo).jpg")
-            potential_png = os.path.join("images", f"(nome_arquivo).png")
+            # ATENÇÃO AQUI: Usamos chaves {} e não parênteses ()
+            caminho_jpg = os.path.join("images", f"{nome_arquivo}.jpg")
+            caminho_png = os.path.join("images", f"{nome_arquivo}.png")
             
-            if os.path.exists(potential_jpg):
-                img_local_path = potential_jpg
-            elif os.path.exists(potential_png):
-                img_local_path = potential_png
+            # Verifica se o arquivo existe de verdade
+            if os.path.exists(caminho_jpg):
+                img_local_path = caminho_jpg
+            elif os.path.exists(caminho_png):
+                img_local_path = caminho_png
 
-        # 3. Renderização (Local ou Genérica)
-        st.markdown("<br>", unsafe_allow_html=True) # Espaçamento
-        c_img1, c_img2, c_img3 = st.columns([1, 2, 1]) # Centralizar a imagem
+        # 3. Exibição
+        st.markdown("<br>", unsafe_allow_html=True)
+        c_img1, c_img2, c_img3 = st.columns([1, 2, 1])
         
         with c_img2:
             if img_local_path:
-                # MOSTRA A SUA IMAGEM DA PASTA /IMAGES
+                # Mostra a imagem local (do seu computador)
                 st.image(img_local_path, caption=f"Fenologia: {cult_sel}", use_container_width=True)
             else:
-                # FALLBACK: Se não tiver imagem na pasta, mostra uma bonita da internet
+                # Se não achar, mostra imagem genérica online
                 st.image("https://images.unsplash.com/photo-1625246333195-58197bd47d26?q=80&w=1000&auto=format&fit=crop", 
                          caption="Imagem Ilustrativa (Adicione foto na pasta /images)", 
                          use_container_width=True)
