@@ -158,12 +158,11 @@ if not df_clima.empty:
         st.caption(f"Evolução do Ciclo Fenológico ({progresso*100:.1f}%)")
         st.progress(progresso)
 
-        # --- BLOCO DE IMAGENS INTELIGENTE ---
-        # 1. Normalização do nome para busca
+        # --- IMAGENS INTELIGENTES (BLOCO ÚNICO) ---
         cultura_lower = str(cult_sel).lower()
         nome_arquivo = None
 
-        # Mapeamento simples
+        # Mapeamento
         if "soja" in cultura_lower: nome_arquivo = "soja"
         elif "milho" in cultura_lower: nome_arquivo = "milho"
         elif "algodão" in cultura_lower or "algodao" in cultura_lower: nome_arquivo = "algodao"
@@ -182,33 +181,53 @@ if not df_clima.empty:
         elif "mirtilo" in cultura_lower: nome_arquivo = "mirtilo"
         elif "framboesa" in cultura_lower: nome_arquivo = "framboesa"
 
-        # 2. Busca o arquivo na pasta images
+        # Busca Imagem
         img_local_path = None
         if nome_arquivo:
-            # Tenta jpg
-            caminho_jpg = os.path.join("images", f"{nome_arquivo}.jpg")
-            # Tenta png
-            caminho_png = os.path.join("images", f"{nome_arquivo}.png")
-            
-            if os.path.exists(caminho_jpg):
-                img_local_path = caminho_jpg
-            elif os.path.exists(caminho_png):
-                img_local_path = caminho_png
+            # Tenta jpg e png
+            c_jpg = os.path.join("images", f"{nome_arquivo}.jpg")
+            c_png = os.path.join("images", f"{nome_arquivo}.png")
+            if os.path.exists(c_jpg): img_local_path = c_jpg
+            elif os.path.exists(c_png): img_local_path = c_png
 
-        # 3. Exibição Centralizada
+        # Exibição da Imagem
         st.markdown("<br>", unsafe_allow_html=True)
         c_img1, c_img2, c_img3 = st.columns([1, 2, 1])
-        
         with c_img2:
             if img_local_path:
-                st.image(img_local_path, caption=f"Fenologia: {cult_sel}", use_container_width=True)
+                st.image(img_local_path, caption=f"Visualização: {cult_sel}", use_container_width=True)
             else:
                 st.image("https://images.unsplash.com/photo-1625246333195-58197bd47d26?q=80&w=1000&auto=format&fit=crop", 
-                         caption="Imagem Ilustrativa (Adicione foto na pasta /images)", 
-                         use_container_width=True)
+                         caption="Imagem Ilustrativa (Adicione foto na pasta /images)", use_container_width=True)
         
         st.divider()
 
+        # Dados Técnicos
+        c_tec1, c_tec2 = st.columns(2)
+        with c_tec1:
+            st.markdown('<div class="section-title">🧬 CARACTERIZAÇÃO GENÉTICA</div>', unsafe_allow_html=True)
+            info_txt = AgroBrain.get_info_segura(info, ['info', 'desc', 'detalhes'])
+            st.markdown(f'<div class="info-text"><b>{var_sel}</b><br>{info_txt}</div>', unsafe_allow_html=True)
+        
+        with c_tec2:
+            st.markdown('<div class="section-title">🌱 FISIOLOGIA DO ESTÁDIO</div>', unsafe_allow_html=True)
+            fisio_txt = AgroBrain.get_info_segura(dados_fase, ['fisiologia', 'desenvolvimento'])
+            st.markdown(f'<div class="info-text">{fisio_txt}</div>', unsafe_allow_html=True)
+
+        st.divider()
+
+        # Manejo e Protocolo (AQUI ERA ONDE DUPLICAVA - AGORA SÓ TEM UMA VEZ)
+        st.markdown('<div class="section-title">🛡️ DIRETRIZES TÉCNICAS (MANEJO)</div>', unsafe_allow_html=True)
+        manejo_txt = AgroBrain.get_info_segura(dados_fase, ['manejo', 'recomendacao'])
+        st.warning(f"🎯 **Ação Recomendada:** {manejo_txt}")
+
+        st.markdown("### 🧪 Protocolo de Defesa (Químico/Biológico)")
+        
+        # Esta é a ÚNICA chamada para desenhar os cards. 
+        # Se aparecer duas vezes no app, é porque esta linha existe em outro lugar do arquivo.
+        AgroBrain.render_protocolo_quimico(dados_fase.get('quimica')) 
+        
+        st.markdown('</div>', unsafe_allow_html=True)
         # --- DADOS TÉCNICOS (GENÉTICA E FISIOLOGIA) ---
         c_tec1, c_tec2 = st.columns(2)
         with c_tec1:
