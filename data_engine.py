@@ -1,82 +1,62 @@
 # ARQUIVO: data_engine.py
-# VERSÃO: V5 - HUNTER (Busca recursiva por biologia.json e manejo_avancado.json)
+# VERSÃO: RESTORE (Lê qualquer arquivo .json na pasta database e subpastas)
 
 import json
 import streamlit as st
 import os
 from pathlib import Path
+import collections.abc
 
-# Função auxiliar para mesclar dicionários profundamente
-def deep_merge(dict1, dict2):
-    for key, value in dict2.items():
-        if key in dict1 and isinstance(dict1[key], dict) and isinstance(value, dict):
-            deep_merge(dict1[key], value)
+# Função para garantir que dados novos se somem aos antigos sem apagar
+def deep_update(d, u):
+    for k, v in u.items():
+        if isinstance(v, collections.abc.Mapping):
+            d[k] = deep_update(d.get(k, {}), v)
         else:
-            dict1[key] = value
+            d[k] = v
+    return d
 
 @st.cache_data(show_spinner=False)
 def get_database():
+    """
+    Varre a pasta 'database' inteira e carrega TODOS os arquivos .json encontrados.
+    Funciona para estruturas antigas (soja.json) e novas.
+    """
     combined_data = {}
     
-    # Define o caminho absoluto para evitar erros de pasta não encontrada
+    # 1. Localiza a pasta database de forma absoluta (Blindagem)
     base_dir = Path(os.path.dirname(os.path.abspath(__file__)))
     db_folder = base_dir / "database"
-
+    
+    # Se não achar a pasta, não trava o app, só retorna vazio
     if not db_folder.exists():
-        print("⚠️ Pasta database não encontrada.")
+        print(f"⚠️ A pasta {db_folder} não foi encontrada.")
         return {}
 
-    print(f"🚜 Data Engine: Varrendo {db_folder}...")
+    # 2. O ASPIRADOR: Busca recursiva por qualquer .json (*.json)
+    # rglob = Recursive Global search
+    arquivos_json = list(db_folder.rglob("*.json"))
+    
+    print(f"🔄 Data Engine: Encontrados {len(arquivos_json)} arquivos JSON.")
 
-    # O os.walk desce em TODAS as subpastas, não importa a profundidade
-    for root, dirs, files in os.walk(db_folder):
-        
-        # Só nos interessa pastas que tenham 'biologia.json'
-        if "biologia.json" in files:
-            cultura_path = Path(root)
-            dados_cultura = {"vars": {}, "fases": {}, "t_base": 10}
-            nome_cultura = None
-
-            # 1. CARREGA BIOLOGIA (Obrigatório)
-            try:
-                with open(cultura_path / "biologia.json", 'r', encoding='utf-8') as f:
-                    d_bio = json.load(f)
-                    # Pega a primeira chave (Ex: "Soja (Glycine max)")
-                    nome_cultura = list(d_bio.keys())[0]
-                    # Preenche os dados base
-                    dados_cultura = d_bio[nome_cultura]
-            except Exception as e:
-                print(f"❌ Erro lendo biologia em {cultura_path.name}: {e}")
+    for arquivo in arquivos_json:
+        try:
+            # Ignora arquivos de sistema ou vazios
+            if arquivo.name.startswith(".") or arquivo.stat().st_size < 5:
                 continue
 
-            # 2. CARREGA MANEJO AVANÇADO (Opcional, mas desejado)
-            if "manejo_avancado.json" in files:
-                try:
-                    with open(cultura_path / "manejo_avancado.json", 'r', encoding='utf-8') as f:
-                        d_man = json.load(f)
-                        # Verifica se a chave bate ou pega a primeira disponível
-                        chave_man = list(d_man.keys())[0]
-                        dados_manejo = d_man[chave_man]
-                        
-                        # AQUI ACONTECE A MÁGICA:
-                        # O Engine injeta a química e estratégias dentro da biologia
-                        # Ele procura pelas fases (Ex: "V3", "R1") e mescla os dados
-                        if "fases" in dados_manejo:
-                            for fase_nome, conteudos in dados_manejo["fases"].items():
-                                if fase_nome in dados_cultura["fases"]:
-                                    # Adiciona/Atualiza a lista 'quimica' na fase correspondente
-                                    if "quimica" in conteudos:
-                                        dados_cultura["fases"][fase_nome]["quimica"] = conteudos["quimica"]
-                                    # Se tiver outras infos de manejo extra, adiciona também
-                                    if "manejo_extra" in conteudos:
-                                        dados_cultura["fases"][fase_nome]["manejo_extra"] = conteudos["manejo_extra"]
-
-                except Exception as e:
-                    print(f"⚠️ Erro lendo manejo em {cultura_path.name}: {e}")
-
-            # Adiciona ao dicionário final se tudo deu certo
-            if nome_cultura:
-                combined_data[nome_cultura] = dados_cultura
-                print(f"✅ Cultura Carregada: {nome_cultura}")
+            with open(arquivo, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                
+                # Se o arquivo tiver dados, mistura no caldeirão principal
+                if data:
+                    combined_data = deep_update(combined_data, data)
+                    
+        except json.JSONDecodeError:
+            print(f"⚠️ Erro de formatação no arquivo: {arquivo.name}")
+            continue
+        except Exception as e:
+            print(f"⚠️ Erro genérico ao ler {arquivo.name}: {e}")
+            continue
 
     return combined_data
