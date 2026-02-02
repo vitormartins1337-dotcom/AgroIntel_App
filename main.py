@@ -156,10 +156,38 @@ if not df_clima.empty:
         st.caption(f"Evolução do Ciclo Fenológico ({progresso*100:.1f}%)")
         st.progress(progresso)
 
-        # Imagem Blindada (Não quebra se falhar)
-        if "Soja" in str(cult_sel):
-            try: st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Soybean.jpg/800px-Soybean.jpg", width=400)
-            except: pass
+       # --- BLOCO DE IMAGENS DINÂMICAS ENTERPRISE ---
+        # Dicionário de imagens de alta resolução para as culturas
+        img_map = {
+            "Algodão": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Cotton_plant.jpg/800px-Cotton_plant.jpg",
+            "Soja": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Soybean.jpg/800px-Soybean.jpg",
+            "Milho": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Zea_mays_-_Köhler–s_Medizinal-Pflanzen-283.jpg/800px-Zea_mays_-_Köhler–s_Medizinal-Pflanzen-283.jpg",
+            "Café": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Coffea_arabica_002.JPG/800px-Coffea_arabica_002.JPG",
+            "Feijão": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phaseolus_vulgaris_002.JPG/800px-Phaseolus_vulgaris_002.JPG",
+            "Trigo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Wheat_close-up.JPG/800px-Wheat_close-up.JPG",
+            "Tomate": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Bright_red_tomato_and_cross_section02.jpg/800px-Bright_red_tomato_and_cross_section02.jpg",
+            "Batata": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Patates.jpg/800px-Patates.jpg",
+            "Alho": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Garlic_bulbs.jpg/800px-Garlic_bulbs.jpg",
+            "Cebola": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Onion_on_White.JPG/800px-Onion_on_White.JPG",
+            "Uva": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Abb_grape.jpg/800px-Abb_grape.jpg",
+            "Banana": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Banana_and_cross_section.jpg/800px-Banana_and_cross_section.jpg",
+            "Citros": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Citrus_sinensis_-_Köhler–s_Medizinal-Pflanzen-186.jpg/800px-Citrus_sinensis_-_Köhler–s_Medizinal-Pflanzen-186.jpg",
+            "Manga": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Mango_and_cross_section.jpg/800px-Mango_and_cross_section.jpg",
+            "Morango": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Strawberry_cross_section.jpg/800px-Strawberry_cross_section.jpg"
+        }
+        
+        # Lógica inteligente para encontrar a imagem certa
+        img_url = None
+        for key, url in img_map.items():
+            if key in str(cult_sel): # Se "Algodão" estiver em "Algodão (Gossypium...)"
+                img_url = url
+                break
+        
+        if img_url:
+            st.image(img_url, width=400)
+        else:
+            # Imagem genérica bonita se não achar específica
+            st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Farming_cultivated_field.jpg/800px-Farming_cultivated_field.jpg", width=400)
 
         c_tec1, c_tec2 = st.columns(2)
         with c_tec1:
