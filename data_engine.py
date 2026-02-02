@@ -1,5 +1,5 @@
 # ARQUIVO: data_engine.py
-# VERSÃO: RESTORE (Lê qualquer arquivo .json na pasta database e subpastas)
+# VERSÃO: V6 - THE INTEGRATOR (Lê TUDO e funde as informações)
 
 import json
 import streamlit as st
@@ -7,56 +7,62 @@ import os
 from pathlib import Path
 import collections.abc
 
-# Função para garantir que dados novos se somem aos antigos sem apagar
-def deep_update(d, u):
-    for k, v in u.items():
-        if isinstance(v, collections.abc.Mapping):
-            d[k] = deep_update(d.get(k, {}), v)
+# --- FUNÇÃO DE FUSÃO INTELIGENTE (DEEP MERGE) ---
+def deep_merge(dic_destino, dic_origem):
+    """
+    Funde dois dicionários. Se a chave já existe, entra nela e atualiza.
+    Se é uma lista (como quimica), substitui pela nova (mais atualizada).
+    """
+    for k, v in dic_origem.items():
+        if (k in dic_destino and 
+            isinstance(dic_destino[k], dict) and 
+            isinstance(v, collections.abc.Mapping)):
+            deep_merge(dic_destino[k], v)
         else:
-            d[k] = v
-    return d
+            # Aqui a mágica acontece: se o novo arquivo tem informação, ele grava.
+            dic_destino[k] = v
+    return dic_destino
 
 @st.cache_data(show_spinner=False)
 def get_database():
-    """
-    Varre a pasta 'database' inteira e carrega TODOS os arquivos .json encontrados.
-    Funciona para estruturas antigas (soja.json) e novas.
-    """
     combined_data = {}
     
-    # 1. Localiza a pasta database de forma absoluta (Blindagem)
+    # Define o caminho da pasta database
     base_dir = Path(os.path.dirname(os.path.abspath(__file__)))
     db_folder = base_dir / "database"
-    
-    # Se não achar a pasta, não trava o app, só retorna vazio
+
     if not db_folder.exists():
-        print(f"⚠️ A pasta {db_folder} não foi encontrada.")
+        print("⚠️ Pasta database não encontrada.")
         return {}
 
-    # 2. O ASPIRADOR: Busca recursiva por qualquer .json (*.json)
-    # rglob = Recursive Global search
-    arquivos_json = list(db_folder.rglob("*.json"))
+    print(f"🚜 Data Engine V6: Iniciando Varredura em {db_folder}...")
+
+    # 1. BUSCA UNIVERSAL: Encontra TODO arquivo .json, onde quer que esteja
+    # rglob("*") procura em todas as subpastas
+    todos_arquivos = list(db_folder.rglob("*.json"))
     
-    print(f"🔄 Data Engine: Encontrados {len(arquivos_json)} arquivos JSON.")
+    # Ordena para garantir consistência (arquivos 'master' costumam ficar por último se nomeados assim)
+    todos_arquivos.sort()
 
-    for arquivo in arquivos_json:
+    count = 0
+    for arquivo in todos_arquivos:
         try:
-            # Ignora arquivos de sistema ou vazios
-            if arquivo.name.startswith(".") or arquivo.stat().st_size < 5:
-                continue
-
+            # Ignora arquivos ocultos ou de sistema
+            if arquivo.name.startswith("."): continue
+            
             with open(arquivo, 'r', encoding='utf-8') as f:
-                data = json.load(f)
+                conteudo_novo = json.load(f)
                 
-                # Se o arquivo tiver dados, mistura no caldeirão principal
-                if data:
-                    combined_data = deep_update(combined_data, data)
+                # Validação básica: O JSON precisa ser um dicionário
+                if isinstance(conteudo_novo, dict):
+                    # FUSÃO: Mistura o que acabou de ler com o que já tinha
+                    deep_merge(combined_data, conteudo_novo)
+                    count += 1
                     
         except json.JSONDecodeError:
-            print(f"⚠️ Erro de formatação no arquivo: {arquivo.name}")
-            continue
+            print(f"❌ Erro de sintaxe JSON no arquivo: {arquivo.name}")
         except Exception as e:
-            print(f"⚠️ Erro genérico ao ler {arquivo.name}: {e}")
-            continue
+            print(f"⚠️ Erro ao processar {arquivo.name}: {e}")
 
+    print(f"✅ Fusão Concluída! {count} arquivos processados e integrados.")
     return combined_data
