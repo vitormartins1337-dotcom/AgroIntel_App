@@ -12,6 +12,7 @@ from streamlit_folium import st_folium
 from PIL import Image
 import google.generativeai as genai
 import os  # <--- OBRIGATÓRIO PARA AS IMAGENS FUNCIONAREM
+from notification_engine import NotificationSystem
 
 # --- 1. IMPORTAÇÃO DOS MOTORES ---
 try:
