@@ -142,46 +142,45 @@ def load_css():
                 letter-spacing: 0.5px;
             }
 
-            /* ============================================================
-               7. ABAS PREMIUM (ESTILO BOTÃO DE APLICATIVO)
-               ============================================================ */
+            /* 7. ABAS PREMIUM (ESTILO BOTÃO FLUTUANTE) */
+            /* Aqui está a mágica que transforma as abas */
             
-            /* Container da lista de abas (o fundo onde elas ficam) */
             .stTabs [data-baseweb="tab-list"] {
-                gap: 10px; /* Espaço entre cada aba */
+                gap: 10px;
                 background-color: transparent;
-                padding-bottom: 10px;
-                padding-top: 10px;
-                border-bottom: none; /* Remove a linha feia de baixo */
+                padding: 10px 0;
+                border-bottom: none;
             }
 
-            /* Estilo da Aba DESATIVADA (Normal) */
+            /* Aba Normal (Desativada) */
             .stTabs [data-baseweb="tab"] {
-                height: 50px; /* Altura boa para o dedo no celular */
+                height: 45px;
                 background-color: #ffffff;
                 border: 1px solid #e2e8f0;
-                border-radius: 10px; /* Cantos arredondados modernos */
-                box-shadow: 0 2px 4px rgba(0,0,0,0.03); /* Sombra leve */
+                border-radius: 10px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.02);
                 padding: 0 20px;
                 font-weight: 600;
-                color: #64748b; /* Cinza profissional */
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Animação suave */
+                color: #64748b;
+                transition: all 0.3s ease;
             }
 
-            /* Efeito quando passa o mouse (Hover) */
+            /* Aba quando passa o mouse */
             .stTabs [data-baseweb="tab"]:hover {
-                color: #064e3b;
                 border-color: #10b981;
-                background-color: #f0fdf4; /* Fundo verde bem clarinho */
-                transform: translateY(-2px); /* Sobe um pouquinho */
+                color: #064e3b;
+                transform: translateY(-2px);
             }
 
-            /* Estilo da Aba ATIVA (Selecionada) - O Padrão Ouro */
+            /* Aba ATIVA (Selecionada) */
             .stTabs [aria-selected="true"] {
-                background: linear-gradient(135deg, #064e3b 0%, #059669 100%) !important; /* Degradê Verde */
-                color: white !important; /* Texto Branco */
+                background: linear-gradient(135deg, #064e3b 0%, #059669 100%) !important;
+                color: white !important;
                 border: none !important;
                 font-weight: 800 !important;
-                box-shadow: 0 4px 12px rgba(6, 78, 59, 0.4) !important; /* Sombra Verde Brilhante */
-                transform: scale(1.05) !important; /* Fica um pouco maior que as outras */
+                box-shadow: 0 4px 10px rgba(6, 78, 59, 0.3) !important;
+                transform: scale(1.05) !important;
             }
+
+        </style>
+    """, unsafe_allow_html=True)
