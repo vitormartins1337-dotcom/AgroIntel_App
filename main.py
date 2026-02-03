@@ -294,124 +294,183 @@ if not df_clima.empty:
         if st.session_state['custos']: st.dataframe(pd.DataFrame(st.session_state['custos']), use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # ABA 6: MAPA (COCKPIT MIP - MONITORAMENTO INTELIGENTE DE PRECISÃO)
+    # ABA 6: MAPA (MONITORAMENTO VISUAL STYLE SYNGENTA PROTECT)
     with tabs[5]:
         st.markdown('<div class="app-card" style="padding:0px; overflow:hidden;">', unsafe_allow_html=True)
-        
-        # --- 1. CÉREBRO DE INTELIGÊNCIA FENOLÓGICA ---
-        CATALOGO_INTELIGENTE = {
+
+        # --- 1. BANCO DE IMAGENS (CATÁLOGO VISUAL) ---
+        # Links de imagens reais para identificação visual no campo
+        DB_IMAGENS_MIP = {
             "Soja": {
-                "Vegetativo": {
-                    "Pragas": ["Lagarta-do-cartucho (S. frugiperda)", "Lagarta-elasmo", "Ácaro-rajado", "Tamanduá-da-soja"],
-                    "Doencas": ["Damping-off (Rhizoctonia/Pythium)", "Septoriose (Mancha-parda)", "Míldio", "Mancha-alvo"]
-                },
-                "Reprodutivo": {
-                    "Pragas": ["Percevejo-marrom (E. heros)", "Percevejo-verde", "Lagarta-falsa-medideira", "Helicoverpa armigera"],
-                    "Doencas": ["Ferrugem Asiática (P. pachyrhizi)", "Antracnose", "Mancha-púrpura", "Podridão-de-grãos"]
-                }
+                "Lagarta-do-cartucho": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Spodoptera_frugiperda_back.jpg/320px-Spodoptera_frugiperda_back.jpg",
+                "Percevejo-marrom": "https://live.staticflickr.com/65535/49086326938_5f470375e8_w.jpg", # Exemplo
+                "Ferrugem Asiática": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Phakopsora_pachyrhizi_on_Soybean_02.jpg/320px-Phakopsora_pachyrhizi_on_Soybean_02.jpg",
+                "Antracnose": "https://content.eol.org/data/media/7f/32/a6/542.1465431668.jpg" # Exemplo genérico
             },
             "Milho": {
-                "Vegetativo": {
-                    "Pragas": ["Cigarrinha (D. maidis)", "Percevejo-barriga-verde", "Lagarta-do-cartucho", "Pulgão"],
-                    "Doencas": ["Enfezamento (Pálido/Vermelho)", "Mancha-branca", "Podridão-do-colmo"]
-                },
-                "Reprodutivo": {
-                    "Pragas": ["Lagarta-da-espiga", "Mosca-do-estigma", "Percevejo-marrom"],
-                    "Doencas": ["Ferrugem Polissora", "Cercosporiose", "Diplodia (Grãos ardidos)"]
-                }
+                "Cigarrinha-do-milho": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Dalbulus_maidis.jpg/320px-Dalbulus_maidis.jpg",
+                "Lagarta-do-cartucho": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Spodoptera_frugiperda_back.jpg/320px-Spodoptera_frugiperda_back.jpg",
+                "Enfezamento": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Corn_stunt_spiroplasma.jpg/320px-Corn_stunt_spiroplasma.jpg" # Exemplo genérico
             }
         }
-
-        # Lógica de Seleção
-        fase_tipo = "Reprodutivo" if "R" in str(fase_sel) or "Flor" in str(fase_sel) or "Grão" in str(fase_sel) else "Vegetativo"
-        cultura_atual = str(cult_sel).capitalize()
         
-        try:
-            opcoes_mip = CATALOGO_INTELIGENTE[cultura_atual][fase_tipo]
-        except KeyError:
-            opcoes_mip = {
-                "Pragas": ["Lagarta", "Percevejo", "Ácaro", "Coleóptero"],
-                "Doencas": ["Fungo foliar", "Fungo de solo", "Bacteriose", "Virose"]
-            }
+        # Define a cultura atual e carrega as imagens correspondentes
+        cultura_atual = str(cult_sel).capitalize()
+        # Se a cultura não tiver imagens, usa um placeholder
+        imagens_cultura = DB_IMAGENS_MIP.get(cultura_atual, {})
 
-        # --- 2. LAYOUT SPLIT-VIEW ---
-        col_mapa, col_painel = st.columns([3, 1.3], gap="small")
+        # --- 2. LAYOUT DO MONITORAMENTO ---
+        # Cabeçalho de Ação
+        c_act1, c_act2 = st.columns([2, 1])
+        with c_act1:
+            st.markdown(f"### 🛡️ Monitoramento: {cultura_atual}")
+            st.caption("Identificação Visual e Georreferenciamento")
+        with c_act2:
+            # Botão de Finalizar que leva para a Tabela
+            if st.button("🏁 Finalizar Talhão", type="secondary", use_container_width=True):
+                st.session_state['ver_tabela_final'] = True
+                st.rerun()
 
-        # MAPA (ESQUERDA)
-        with col_mapa:
-            m = folium.Map(
-                location=[st.session_state['loc_lat'], st.session_state['loc_lon']], 
-                zoom_start=17,
-                tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-                attr='Esri',
-                name='Satélite'
-            )
-            folium.TileLayer('cartodbpositron', name='Híbrido').add_to(m)
+        # --- 3. O MAPA (SATÉLITE PURO - SEM CARTOGRAFIA BRANCA) ---
+        # Aqui usamos o Esri World Imagery que é o mais próximo do Google Earth
+        m = folium.Map(
+            location=[st.session_state['loc_lat'], st.session_state['loc_lon']], 
+            zoom_start=18,
+            tiles=None, # Remove tiles padrão
+            control_scale=True
+        )
+        
+        # Adiciona APENAS Satélite HD
+        folium.TileLayer(
+            tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+            attr='Esri',
+            name='Satélite HD',
+            overlay=False,
+            control=True
+        ).add_to(m)
 
-            for p in st.session_state['pontos_mapa']:
-                cor_p = '#dc2626' if p['Nivel'] == 'Crítico' else '#f59e0b'
-                folium.Circle([p['lat'], p['lon']], radius=30, color=cor_p, fill=True, fill_opacity=0.2, stroke=False).add_to(m)
-                icone = "🐛" if "Praga" in p['Tipo'] else "🍄"
-                folium.Marker([p['lat'], p['lon']], popup=f"<b>{p['Agente']}</b><br>{p['Nivel']}", icon=folium.DivIcon(html=f"<div style='font-size:18px; text-shadow: 0 0 3px white;'>{icone}</div>")).add_to(m)
+        # Adiciona Rótulos (Ruas/Nomes) apenas como transparência
+        folium.TileLayer(
+            tiles='https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',
+            attr='Esri Labels',
+            name='Rótulos',
+            overlay=True
+        ).add_to(m)
 
-            LocateControl(auto_start=True).add_to(m)
+        # Renderiza os pontos já monitorados
+        pontos_sessao = st.session_state.get('pontos_mapa', [])
+        
+        # Linha do Caminhamento (Trajeto)
+        if len(pontos_sessao) > 1:
+            locs = [[p['lat'], p['lon']] for p in pontos_sessao]
+            folium.PolyLine(locs, color="yellow", weight=3, opacity=0.7, dash_array='5, 10', tooltip="Caminhamento").add_to(m)
+
+        for p in pontos_sessao:
+            # Ícone personalizado baseado no tipo
+            icon_color = "red" if p['Severidade'] == "Alto" else "orange" if p['Severidade'] == "Médio" else "green"
+            folium.Marker(
+                [p['lat'], p['lon']],
+                popup=f"<b>{p['Praga']}</b><br>Nível: {p['Severidade']}",
+                icon=folium.Icon(color=icon_color, icon="bug", prefix="fa")
+            ).add_to(m)
+
+        # Botão de GPS (Aquele alvo para clicar e achar a pessoa)
+        LocateControl(
+            auto_start=True,
+            drawCircle=True,
+            showCompass=True,
+            strings={"title": "Onde estou agora"}
+        ).add_to(m)
+
+        # Captura do Clique/Posição
+        map_data = st_folium(m, height=450, returned_objects=["last_clicked"])
+
+        st.divider()
+
+        # --- 4. ÁREA DE IDENTIFICAÇÃO (PAINEL INFERIOR) ---
+        
+        # Se a pessoa clicou no mapa (Simulando o "Marcar Aqui")
+        if map_data and map_data["last_clicked"]:
+            lat_f = map_data["last_clicked"]["lat"]
+            lon_f = map_data["last_clicked"]["lng"]
             
-            # --- CORREÇÃO AQUI (REMOVIDO MARGIN=0) ---
-            map_data = st_folium(m, height=550, returned_objects=["last_clicked"])
-
-        # PAINEL (DIREITA)
-        with col_painel:
-            st.markdown(f"""
-            <div style="background-color:#f8fafc; height:550px; padding:15px; border-left:1px solid #e2e8f0;">
-                <div style="color:#064e3b; font-weight:800; font-size:0.9rem; margin-bottom:5px;">🛰️ INSPEÇÃO DE CAMPO</div>
-                <div style="font-size:0.75rem; color:#64748b; margin-bottom:15px;">
-                    Cultura: <b>{cultura_atual}</b> | Fase: <b>{fase_tipo}</b>
-                </div>
-            """, unsafe_allow_html=True)
-
-            if map_data and map_data["last_clicked"]:
-                lat_f, lon_f = map_data["last_clicked"]["lat"], map_data["last_clicked"]["lng"]
-                st.info(f"📍 Ponto Selecionado")
+            st.markdown(f"#### 📍 Identificar Ocorrência")
+            
+            with st.form("form_visual_mip"):
+                # Coluna 1: Seleção do Problema
+                c_sel, c_img = st.columns([1.5, 1])
                 
-                with st.form("form_mip_pro"):
-                    target = st.radio("Alvo", ["🐛 Praga", "🍄 Doença", "🌿 Daninha"], horizontal=True)
+                with c_sel:
+                    tipo_problema = st.radio("Tipo", ["Praga", "Doença", "Daninha"], horizontal=True)
                     
-                    if "Praga" in target: lista_agentes = opcoes_mip["Pragas"]
-                    elif "Doença" in target: lista_agentes = opcoes_mip["Doencas"]
-                    else: lista_agentes = ["Amargoso", "Buva", "Corda-de-viola", "Leiteiro"]
+                    # Lista de Opções baseada na cultura
+                    opcoes = list(imagens_cultura.keys()) if imagens_cultura else ["Outro"]
+                    praga_selecionada = st.selectbox("Selecione o Agente:", opcoes + ["Outro..."])
                     
-                    agente_sel = st.selectbox("Identificação", lista_agentes)
-                    
-                    c_n1, c_n2 = st.columns(2)
-                    with c_n1: dano = st.select_slider("Severidade", ["Leve", "Médio", "Crítico"], value="Médio")
-                    with c_n2: qtd = st.number_input("Qtd/m²", min_value=0.0, step=1.0)
-                    
-                    obs_geo = st.text_input("Nota", placeholder="Obs. tática...")
-                    
-                    st.markdown("<br>", unsafe_allow_html=True)
-                    if st.form_submit_button("💾 REGISTRAR", type="primary", use_container_width=True):
-                        st.session_state['pontos_mapa'].append({
-                            "Data": date.today().strftime("%d/%m"),
-                            "Tipo": target, "Agente": agente_sel, "Nivel": dano, "Qtd": qtd, "lat": lat_f, "lon": lon_f
-                        })
-                        st.success("✅ Salvo!")
-                        st.rerun()
-            else:
-                st.markdown("""
-                <div style="text-align:center; padding:40px 10px; color:#94a3b8; border:2px dashed #cbd5e1; border-radius:10px;">
-                    <div style="font-size:2rem; margin-bottom:10px;">👆</div>
-                    <b>Toque no mapa</b><br>para abrir a ficha de vistoria neste local.
+                    nivel = st.select_slider("Severidade (Visual)", options=["Baixo", "Médio", "Alto"], value="Médio")
+
+                # Coluna 2: FOTO PARA CONFARAÇÃO (O PULO DO GATO)
+                with c_img:
+                    url_img = imagens_cultura.get(praga_selecionada)
+                    if url_img:
+                        st.image(url_img, caption="Referência Visual", width=150)
+                    else:
+                        st.markdown("<div style='height:100px; background:#f1f5f9; display:flex; align-items:center; justify-content:center; border-radius:8px; color:#94a3b8;'>Sem Imagem</div>", unsafe_allow_html=True)
+
+                # Botão Salvar
+                if st.form_submit_button("✅ CONFIRMAR MONITORAMENTO", type="primary", use_container_width=True):
+                    novo_ponto = {
+                        "Data": date.today().strftime("%d/%m/%Y"),
+                        "Hora": datetime.now().strftime("%H:%M"),
+                        "Cultura": cultura_atual,
+                        "Praga": praga_selecionada,
+                        "Tipo": tipo_problema,
+                        "Severidade": nivel,
+                        "lat": lat_f,
+                        "lon": lon_f
+                    }
+                    st.session_state['pontos_mapa'].append(novo_ponto)
+                    st.success("Ponto Registrado!")
+                    st.rerun()
+        
+        else:
+            st.info("👆 Toque no mapa exatamente onde você encontrou o problema para abrir a ficha de identificação.")
+
+        # --- 5. TABELA PROFISSIONAL (RELATÓRIO FINAL) ---
+        # Aparece em um expander ou se clicar em Finalizar
+        mostrar_tabela = st.session_state.get('ver_tabela_final', False)
+        
+        if st.session_state['pontos_mapa']:
+            with st.expander("📋 RELATÓRIO DE MONITORAMENTO (TABELA)", expanded=mostrar_tabela):
+                df = pd.DataFrame(st.session_state['pontos_mapa'])
+                
+                # Cálculo simples de estatística
+                total = len(df)
+                criticos = len(df[df['Severidade']=='Alto'])
+                
+                st.markdown(f"""
+                <div style="display:flex; gap:20px; margin-bottom:10px;">
+                    <div style="background:#f0fdf4; padding:10px; border-radius:8px;"><b>Total Pontos:</b> {total}</div>
+                    <div style="background:#fef2f2; padding:10px; border-radius:8px; color:#dc2626;"><b>Pontos Críticos:</b> {criticos}</div>
                 </div>
                 """, unsafe_allow_html=True)
                 
-                if st.session_state['pontos_mapa']:
-                    st.markdown("---")
-                    st.markdown(f"<b>📊 Hoje:</b> {len(st.session_state['pontos_mapa'])} ocorrências.")
-                    if st.button("Limpar Mapa", use_container_width=True):
+                # Tabela Limpa
+                st.dataframe(
+                    df[['Hora', 'Praga', 'Tipo', 'Severidade']], 
+                    use_container_width=True,
+                    hide_index=True
+                )
+                
+                c_b1, c_b2 = st.columns(2)
+                with c_b1:
+                    if st.button("📥 Baixar Excel"):
+                        st.toast("Download iniciado...")
+                with c_b2:
+                    if st.button("🗑️ Limpar Sessão"):
                         st.session_state['pontos_mapa'] = []
+                        st.session_state['ver_tabela_final'] = False
                         st.rerun()
-
-            st.markdown('</div>', unsafe_allow_html=True)
 
         st.markdown('</div>', unsafe_allow_html=True)
 
