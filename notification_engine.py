@@ -25,7 +25,7 @@ class NotificationSystem:
         
         # 2. Sua Senha de App (Gerada lá na segurança do Google)
         # Não é a senha que você usa para entrar no e-mail! É a de 16 letras.
-        SENHA_APP = "ikkv obvi xzle gzvf"  
+        SENHA_APP = "rqyu bydy erpi oxiu"  
         
         # --- FIM DA CONFIGURAÇÃO ---
 
