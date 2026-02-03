@@ -123,8 +123,7 @@ if not df_clima.empty:
     with c4: st.markdown(AgroBrain.gerar_cartao_kpi("☀️ GDA", f"{gda_acum:.0f}", "°GD", f"Ciclo: {dias}d", "#1f2937"), unsafe_allow_html=True)
 
     # --- 7. ABAS DE CONTEÚDO ---
-    tabs = st.tabs(["🧬 TÉCNICO", "☁️ CLIMA", "📡 RADAR", "👁️ IA", "💰 GESTÃO", "🗺️ MAPA", "📄 LAUDO"])
-
+    tabs = st.tabs(["🧬 TÉCNICO", "☁️ CLIMA", "📡 RADAR", "👁️ IA", "💰 GESTÃO", "🗺️ MAPA", "📄 LAUDO", "🔔 ALERTAS"])
     # ABA 1: TÉCNICO (SINGLE PASS - SEM DUPLICAÇÃO)
     with tabs[0]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
@@ -251,4 +250,50 @@ if not df_clima.empty:
             diag = AgroBrain.get_info_segura(dados_fase, ['desc', 'diagnostico'])
             man = AgroBrain.get_info_segura(dados_fase, ['manejo'])
             st.markdown(f"<div style='background:white; color:black; padding:20px;'><h1>LAUDO</h1><p><b>{cult_sel}</b></p><p>{diag}</p><p>{man}</p><p>{obs}</p></div>", unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+# ABA 8: NOTIFICAÇÕES
+    with tabs[7]:
+        st.markdown('<div class="app-card">', unsafe_allow_html=True)
+        st.markdown("### 🔔 Central de Notificações")
+        st.markdown("Receba análises diárias de clima e manejo agronômico direto no seu e-mail.")
+        
+        with st.form("form_notificacao"):
+            col_n1, col_n2 = st.columns(2)
+            nome_user = col_n1.text_input("Seu Nome")
+            email_user = col_n2.text_input("Seu E-mail")
+            
+            # Pega as culturas do banco de dados
+            opcoes_culturas = sorted(list(BANCO_MASTER.keys())) if BANCO_MASTER else []
+            culturas_subs = st.multiselect("Quais culturas você quer monitorar?", options=opcoes_culturas, default=[cult_sel] if cult_sel in opcoes_culturas else None)
+            
+            c_btn1, c_btn2 = st.columns([1,3])
+            salvar = c_btn1.form_submit_button("💾 Salvar Assinatura")
+            
+            if salvar:
+                if nome_user and email_user and culturas_subs:
+                    NotificationSystem.salvar_assinatura(nome_user, email_user, culturas_subs)
+                    st.success(f"✅ Perfeito, {nome_user}! Você receberá relatórios sobre: {', '.join(culturas_subs)}.")
+                else:
+                    st.error("Preencha todos os campos.")
+
+        st.divider()
+        st.markdown("#### 🚀 Teste de Envio Instantâneo")
+        st.caption("Use este botão para testar se o sistema está funcionando agora mesmo.")
+        
+        if st.button("📧 Enviar Relatório Agora"):
+            if not email_user:
+                st.warning("Preencha o e-mail acima primeiro.")
+            else:
+                with st.spinner("Compilando dados climáticos e agronômicos..."):
+                    # SIMULAÇÃO DA INTELIGÊNCIA (Aqui entraria seu código de clima real)
+                    dados_simulados = {}
+                    for c in culturas_subs:
+                        dados_simulados[c] = f"Previsão de 15mm de chuva. Fase fenológica requer atenção com fungos. Delta T favorável pela manhã."
+                    
+                    sucesso, msg = NotificationSystem.enviar_email_agora(nome_user, email_user, culturas_subs, dados_simulados)
+                    
+                    if sucesso: st.balloons(); st.success(msg)
+                    else: st.error(msg)
+                    
         st.markdown('</div>', unsafe_allow_html=True)
