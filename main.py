@@ -1,5 +1,5 @@
 # ARQUIVO: main.py
-# SISTEMA: AGRO SDI (Visual Restaurado + Mercado Real)
+# SISTEMA: AGRO SDI (Layout Ajustado + Preços BRL)
 
 import streamlit as st
 import pandas as pd
@@ -19,15 +19,15 @@ try:
     from styles import load_css
     from agro_utils import AgroBrain
     from notification_engine import NotificationSystem
-    import market_engine # NOVO IMPORT
+    import market_engine 
 except ImportError as e:
     st.error(f"Erro de Importação: {e.name}")
     st.stop()
 
 st.set_page_config(page_title="Agro SDI | Enterprise", page_icon="🛰️", layout="wide")
-load_css() # Carrega o CSS Restaurado
+load_css() 
 
-# Inicialização de Variáveis de Sessão (Mantido igual)
+# Inicialização de Variáveis
 if 'loc_lat' not in st.session_state: st.session_state['loc_lat'] = -13.414
 if 'loc_lon' not in st.session_state: st.session_state['loc_lon'] = -41.285
 if 'pontos_mapa' not in st.session_state: st.session_state['pontos_mapa'] = []
@@ -38,7 +38,7 @@ BANCO_MASTER = get_database()
 url_w = st.query_params.get("w_key", None)
 url_g = st.query_params.get("g_key", None)
 
-# --- TELA DE LOGIN (Mantida) ---
+# --- LOGIN (Mantido) ---
 if not url_w:
     st.markdown("<br><br>", unsafe_allow_html=True)
     c1, c2, c3 = st.columns([1, 1.5, 1])
@@ -58,30 +58,31 @@ if not url_w:
     st.stop()
 
 # ==============================================================================
-# 🟢 1. HEADER (TOPO DA PÁGINA)
+# 🟢 1. HEADER (TOPO LIMPO)
 # ==============================================================================
 st.markdown("""
-<div class="brand-container">
+<div class="brand-container" style="padding-bottom: 0px; margin-bottom: 0px;">
     <div style="display:flex; justify-content:space-between; align-items:flex-end;">
         <div>
             <h1 class="brand-title">AGRO <span class="brand-accent">SDI</span></h1>
             <div class="brand-subtitle">SISTEMA DE DECISÃO INTEGRADA | v23.0</div>
         </div>
         <div style="text-align:right; font-size:0.85rem; opacity:0.9;">
-            <b>STATUS:</b> ONLINE 🟢
+            <span style="background:#dcfce7; color:#166534; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 0.7rem;">ONLINE 🟢</span>
         </div>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
 # ==============================================================================
-# 🟢 2. TICKER DE MERCADO (COTAÇÕES REAIS - ONDE FICAVA O ESPAÇO EM BRANCO)
+# 🟢 2. TICKER DE MERCADO (CALCULADO E POSICIONADO)
 # ==============================================================================
-# Busca os dados reais do Yahoo Finance
+# Busca os dados reais convertidos para BRL
 dados_mercado = market_engine.MarketData.get_ticker_real()
 
+# Nota: margin-top: -10px puxa o ticker para cima para cobrir o buraco branco
 st.markdown(f"""
-<div class="ticker-wrap">
+<div class="ticker-wrap" style="margin-top: -10px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
     <div class="ticker-move">
         <div class="ticker-item">{dados_mercado}</div>
     </div>
@@ -89,7 +90,7 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # ==============================================================================
-# 🟢 3. FILTROS E CONFIGURAÇÃO
+# 🟢 3. FILTROS E CONTEÚDO (Visual Original Preservado)
 # ==============================================================================
 st.markdown('<div class="app-card">', unsafe_allow_html=True)
 c1, c2, c3, c4 = st.columns([2, 2, 1.5, 1])
@@ -138,7 +139,7 @@ if not df_clima.empty:
     with c3: st.markdown(AgroBrain.gerar_cartao_kpi("💨 VPD", f"{vpd:.2f}", "kPa", v_st, v_cor), unsafe_allow_html=True)
     with c4: st.markdown(AgroBrain.gerar_cartao_kpi("☀️ GDA", f"{gda_acum:.0f}", "°GD", f"Ciclo: {dias}d", "#1f2937"), unsafe_allow_html=True)
 
-    # --- ABAS (Visual Original Restaurado) ---
+    # --- ABAS ---
     tabs = st.tabs(["🧬 TÉCNICO", "☁️ CLIMA", "📡 RADAR", "👁️ IA", "💰 GESTÃO", "🗺️ MAPA", "📄 LAUDO", "🔔 ALERTAS"])
 
     # ABA 1: TÉCNICO
@@ -185,10 +186,9 @@ if not df_clima.empty:
         AgroBrain.render_protocolo_quimico(dados_fase.get('quimica')) 
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # ABA 2: CLIMA (Com a sua lógica de 24h)
+    # ABA 2: CLIMA
     with tabs[1]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
-        # BLOCO 1: VISÃO MACRO (SEMANAL)
         st.markdown("### 📅 Tendência Semanal (Balanço Hídrico)")
         fig = go.Figure()
         fig.add_trace(go.Bar(x=df_clima['Data'], y=df_clima['Chuva'], name='Chuva Prevista (mm)', marker_color='#3b82f6'))
@@ -198,7 +198,6 @@ if not df_clima.empty:
         
         st.divider()
 
-        # BLOCO 2: VISÃO MICRO (24 HORAS)
         df_hora = WeatherConn.get_hourly_forecast(url_w, st.session_state['loc_lat'], st.session_state['loc_lon'])
         if not df_hora.empty:
             st.markdown("### 🕒 Detalhe Horário (Próximas 24h)")
@@ -303,7 +302,7 @@ if not df_clima.empty:
                 with st.spinner("Enviando..."):
                     dados_simulados = {}
                     for c in culturas_subs:
-                        dados_simulados[c] = f"Temp: {temp}°C | Chuva: {hoje['Chuva']}mm | Delta T: {delta_t}°C. Fase reprodutiva requer atenção com fungicidas."
+                        dados_simulados[c] = f"Temp: {temp:.1f}°C | Chuva: {hoje['Chuva']}mm | Delta T: {delta_t:.1f}°C. Fase reprodutiva."
                     sucesso, msg = NotificationSystem.enviar_email_agora(nome_user, email_user, culturas_subs, dados_simulados)
                     if sucesso: st.success(msg)
                     else: st.error(msg)
