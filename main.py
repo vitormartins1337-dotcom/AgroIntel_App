@@ -1,5 +1,5 @@
 # ARQUIVO: main.py
-# SISTEMA: AGRO SDI (Layout Ajustado + Preços BRL)
+# VERSÃO: V-MASTER (Excelência Visual e Funcional)
 
 import streamlit as st
 import pandas as pd
@@ -12,7 +12,7 @@ from PIL import Image
 import google.generativeai as genai
 import os
 
-# --- 1. IMPORTS E SETUP ---
+# --- 1. SETUP DO SISTEMA ---
 try:
     from data_engine import get_database
     from calc_engine import AgroPhysics, WeatherConn
@@ -21,13 +21,13 @@ try:
     from notification_engine import NotificationSystem
     import market_engine 
 except ImportError as e:
-    st.error(f"Erro de Importação: {e.name}")
+    st.error(f"⚠️ Erro Crítico: {e.name} não carregado.")
     st.stop()
 
-st.set_page_config(page_title="Agro SDI | Enterprise", page_icon="🛰️", layout="wide")
-load_css() 
+st.set_page_config(page_title="Agro SDI", page_icon="🌱", layout="wide")
+load_css()
 
-# Inicialização de Variáveis
+# Variáveis Globais
 if 'loc_lat' not in st.session_state: st.session_state['loc_lat'] = -13.414
 if 'loc_lon' not in st.session_state: st.session_state['loc_lon'] = -41.285
 if 'pontos_mapa' not in st.session_state: st.session_state['pontos_mapa'] = []
@@ -38,19 +38,19 @@ BANCO_MASTER = get_database()
 url_w = st.query_params.get("w_key", None)
 url_g = st.query_params.get("g_key", None)
 
-# --- LOGIN (Mantido) ---
+# --- LOGIN ---
 if not url_w:
     st.markdown("<br><br>", unsafe_allow_html=True)
     c1, c2, c3 = st.columns([1, 1.5, 1])
     with c2:
         st.markdown("""
         <div class="app-card" style="text-align:center; padding:40px;">
-            <h1 style="color:#064e3b; font-family:'Montserrat'; font-weight:900; font-size:3rem; margin:0;">AGRO SDI</h1>
-            <p style="text-transform:uppercase; color:#6b7280; font-weight:600; letter-spacing:2px; margin-top:5px;">Enterprise Portal</p>
+            <h1 style="color:#064e3b; margin:0;">AGRO SDI</h1>
+            <p style="color:#6b7280; letter-spacing:2px; font-size:0.8rem;">ENTERPRISE ACCESS</p>
         </div>""", unsafe_allow_html=True)
         kw = st.text_input("CHAVE OPENWEATHER", type="password")
         kg = st.text_input("CHAVE GEMINI AI", type="password")
-        if st.button("ACESSAR", type="primary", use_container_width=True):
+        if st.button("ACESSAR SISTEMA", type="primary", use_container_width=True):
             if kw and kg: 
                 st.query_params["w_key"] = kw
                 st.query_params["g_key"] = kg
@@ -58,39 +58,35 @@ if not url_w:
     st.stop()
 
 # ==============================================================================
-# 🟢 1. HEADER (TOPO LIMPO)
+# 💎 HEADER MASTER (CAPA + TICKER INTEGRADOS)
 # ==============================================================================
-st.markdown("""
-<div class="brand-container" style="padding-bottom: 0px; margin-bottom: 0px;">
-    <div style="display:flex; justify-content:space-between; align-items:flex-end;">
-        <div>
-            <h1 class="brand-title">AGRO <span class="brand-accent">SDI</span></h1>
-            <div class="brand-subtitle">SISTEMA DE DECISÃO INTEGRADA | v23.0</div>
-        </div>
-        <div style="text-align:right; font-size:0.85rem; opacity:0.9;">
-            <span style="background:#dcfce7; color:#166534; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 0.7rem;">ONLINE 🟢</span>
-        </div>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+# Pega dados do mercado (agora sem NaN)
+ticker_html = market_engine.MarketData.get_ticker_real()
 
-# ==============================================================================
-# 🟢 2. TICKER DE MERCADO (CALCULADO E POSICIONADO)
-# ==============================================================================
-# Busca os dados reais convertidos para BRL
-dados_mercado = market_engine.MarketData.get_ticker_real()
-
-# Nota: margin-top: -10px puxa o ticker para cima para cobrir o buraco branco
 st.markdown(f"""
-<div class="ticker-wrap" style="margin-top: -10px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
-    <div class="ticker-move">
-        <div class="ticker-item">{dados_mercado}</div>
+<div class="custom-header">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+            <div class="brand-main">AGRO <span style="color:#34d399;">SDI</span></div>
+            <div class="brand-sub">SISTEMA DE DECISÃO INTEGRADA</div>
+        </div>
+        <div style="text-align:right;">
+            <span style="background:rgba(255,255,255,0.2); padding:5px 10px; border-radius:4px; font-size:0.7rem; font-weight:bold;">
+                ONLINE 🟢
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="ticker-container">
+    <div class="ticker-text">
+        {ticker_html}
     </div>
 </div>
 """, unsafe_allow_html=True)
 
 # ==============================================================================
-# 🟢 3. FILTROS E CONTEÚDO (Visual Original Preservado)
+# 💎 CONTEÚDO PRINCIPAL
 # ==============================================================================
 st.markdown('<div class="app-card">', unsafe_allow_html=True)
 c1, c2, c3, c4 = st.columns([2, 2, 1.5, 1])
@@ -107,7 +103,7 @@ with c2:
         vars_disp = list(BANCO_MASTER[cult_sel].get('vars', {}).keys())
         fases_disp = list(BANCO_MASTER[cult_sel].get('fases', {}).keys())
         var_sel = st.selectbox("Genética", vars_disp)
-    else: st.error("Banco vazio."); st.stop()
+    else: st.error("Erro banco."); st.stop()
 with c3:
     st.markdown("### 📊 Fase")
     fase_sel = st.selectbox("Estádio", fases_disp, label_visibility="collapsed")
@@ -161,10 +157,8 @@ if not df_clima.empty:
         st.markdown("<br>", unsafe_allow_html=True)
         c_i1, c_i2, c_i3 = st.columns([1,2,1])
         with c_i2:
-            if img_path:
-                st.image(img_path, caption=cult_sel, use_container_width=True)
-            else:
-                st.image("https://images.unsplash.com/photo-1625246333195-58197bd47d26?q=80&w=1000&auto=format&fit=crop", caption="Imagem Ilustrativa", use_container_width=True)
+            if img_path: st.image(img_path, caption=cult_sel, use_container_width=True)
+            else: st.image("https://images.unsplash.com/photo-1625246333195-58197bd47d26?q=80&w=1000&auto=format&fit=crop", caption="Imagem Ilustrativa", use_container_width=True)
 
         st.divider()
         c_t1, c_t2 = st.columns(2)
@@ -191,7 +185,7 @@ if not df_clima.empty:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         st.markdown("### 📅 Tendência Semanal (Balanço Hídrico)")
         fig = go.Figure()
-        fig.add_trace(go.Bar(x=df_clima['Data'], y=df_clima['Chuva'], name='Chuva Prevista (mm)', marker_color='#3b82f6'))
+        fig.add_trace(go.Bar(x=df_clima['Data'], y=df_clima['Chuva'], name='Chuva (mm)', marker_color='#3b82f6'))
         fig.add_trace(go.Scatter(x=df_clima['Data'], y=df_clima['ETc'], name='Consumo (ETc)', line=dict(color='#ef4444', width=3)))
         fig.update_layout(height=320, margin=dict(l=20, r=20, t=30, b=20), legend=dict(orientation="h", y=1.1))
         st.plotly_chart(fig, use_container_width=True)
@@ -202,7 +196,7 @@ if not df_clima.empty:
         if not df_hora.empty:
             st.markdown("### 🕒 Detalhe Horário (Próximas 24h)")
             fig_h = go.Figure()
-            fig_h.add_trace(go.Scatter(x=df_hora['HoraSimples'], y=df_hora['Temp'], name='Temperatura', mode='lines+markers+text', text=[f"{t:.0f}°" for t in df_hora['Temp']], textposition="top center", line=dict(color='#f97316', width=3), fill='tozeroy', fillcolor='rgba(249, 115, 22, 0.1)'))
+            fig_h.add_trace(go.Scatter(x=df_hora['HoraSimples'], y=df_hora['Temp'], name='Temp', mode='lines+markers+text', text=[f"{t:.0f}°" for t in df_hora['Temp']], textposition="top center", line=dict(color='#f97316', width=3), fill='tozeroy', fillcolor='rgba(249, 115, 22, 0.1)'))
             fig_h.update_layout(title="Variação Térmica", height=250, margin=dict(l=20, r=20, t=40, b=20), yaxis=dict(showgrid=False))
             st.plotly_chart(fig_h, use_container_width=True)
 
