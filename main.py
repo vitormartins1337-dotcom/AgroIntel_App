@@ -180,61 +180,73 @@ if not df_clima.empty:
         
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # ABA 2: CLIMA (ATUALIZADA COM 24H)
+    # ABA 2: CLIMA (ORDEM CORRIGIDA: SEMANAL NO TOPO)
     with tabs[1]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         
-        # 1. Busca os dados de 24h
+        # --- BLOCO 1: VISÃO MACRO (SEMANAL) - AGORA NO TOPO ---
+        st.markdown("### 📅 Tendência Semanal (Balanço Hídrico)")
+        st.caption("Acumulado de Chuva vs. Demanda de Água da Planta (ETc)")
+        
+        fig = go.Figure()
+        # Chuva (Barras Azuis)
+        fig.add_trace(go.Bar(
+            x=df_clima['Data'], 
+            y=df_clima['Chuva'], 
+            name='Chuva Prevista (mm)', 
+            marker_color='#3b82f6',
+            text=df_clima['Chuva'],
+            textposition='auto'
+        ))
+        # ETc (Linha Vermelha)
+        fig.add_trace(go.Scatter(
+            x=df_clima['Data'], 
+            y=df_clima['ETc'], 
+            name='Consumo (ETc)', 
+            line=dict(color='#ef4444', width=3),
+            mode='lines+markers'
+        ))
+        
+        fig.update_layout(height=320, margin=dict(l=20, r=20, t=30, b=20), legend=dict(orientation="h", y=1.1))
+        st.plotly_chart(fig, use_container_width=True)
+        
+        st.divider()
+
+        # --- BLOCO 2: VISÃO MICRO (24 HORAS) ---
         df_hora = WeatherConn.get_hourly_forecast(url_w, st.session_state['loc_lat'], st.session_state['loc_lon'])
         
         if not df_hora.empty:
-            st.markdown("### 🕒 Evolução 24 Horas (Detalhada)")
-            st.caption("Planeje suas operações observando a variação de temperatura e janelas de pulverização.")
-
-            # GRÁFICO 1: TEMPERATURA x CHUVA
-            fig_h = go.Figure()
+            st.markdown("### 🕒 Detalhe Horário (Próximas 24h)")
             
-            # Barras de Chuva (Eixo Y secundário ou fundo)
-            fig_h.add_trace(go.Bar(
-                x=df_hora['HoraSimples'], 
-                y=df_hora['Chuva'], 
-                name='Chuva (mm)', 
-                marker_color='#60a5fa', 
-                opacity=0.6,
-                yaxis='y2'
-            ))
-
-            # Linha de Temperatura
+            # GRÁFICO DE TEMPERATURA
+            fig_h = go.Figure()
             fig_h.add_trace(go.Scatter(
                 x=df_hora['HoraSimples'], 
                 y=df_hora['Temp'], 
-                name='Temp (°C)', 
+                name='Temperatura', 
                 mode='lines+markers+text',
                 text=[f"{t:.0f}°" for t in df_hora['Temp']],
                 textposition="top center",
-                line=dict(color='#f97316', width=3)
+                line=dict(color='#f97316', width=3),
+                fill='tozeroy',
+                fillcolor='rgba(249, 115, 22, 0.1)'
             ))
-
-            # Layout Combo (Dois eixos Y)
             fig_h.update_layout(
-                title="Termometria e Precipitação (Próx. 24h)",
-                height=350,
-                yaxis=dict(title="Temperatura (°C)", side="left", showgrid=False),
-                yaxis2=dict(title="Chuva (mm)", side="right", overlaying="y", showgrid=True),
-                legend=dict(orientation="h", y=1.1),
-                margin=dict(l=20, r=20, t=40, b=20)
+                title="Variação Térmica",
+                height=250,
+                margin=dict(l=20, r=20, t=40, b=20),
+                yaxis=dict(showgrid=False)
             )
             st.plotly_chart(fig_h, use_container_width=True)
 
-            # GRÁFICO 2: JANELA DE PULVERIZAÇÃO (DELTA T)
+            # GRÁFICO DE DELTA T (PULVERIZAÇÃO)
             st.markdown("#### 🚜 Janela de Aplicação (Delta T)")
             
-            # Criando cores dinâmicas para o Delta T
             cores_dt = []
             for dt in df_hora['Delta T']:
-                if 2 <= dt <= 8: cores_dt.append("#16a34a") # Verde (Ideal)
-                elif 8 < dt <= 10: cores_dt.append("#ca8a04") # Amarelo (Atenção)
-                else: cores_dt.append("#dc2626") # Vermelho (Pare)
+                if 2 <= dt <= 8: cores_dt.append("#16a34a") # Verde
+                elif 8 < dt <= 10: cores_dt.append("#ca8a04") # Amarelo
+                else: cores_dt.append("#dc2626") # Vermelho
 
             fig_dt = go.Figure()
             fig_dt.add_trace(go.Bar(
@@ -242,35 +254,20 @@ if not df_clima.empty:
                 y=df_hora['Delta T'],
                 marker_color=cores_dt,
                 text=df_hora['Delta T'],
-                textposition='auto',
-                name='Delta T'
+                textposition='auto'
             ))
+            # Faixa ideal
+            fig_dt.add_hrect(y0=2, y1=8, line_width=0, fillcolor="green", opacity=0.1, annotation_text="Ideal")
             
-            # Adiciona linhas de referência (Ideal entre 2 e 8)
-            fig_dt.add_hrect(y0=2, y1=8, line_width=0, fillcolor="green", opacity=0.1, annotation_text="Janela Ideal")
-            
-            fig_dt.update_layout(
-                height=250,
-                title="Variação do Delta T (Alvo: 2 a 8°C)",
-                yaxis=dict(title="Delta T (°C)"),
-                margin=dict(l=20, r=20, t=30, b=20)
-            )
+            fig_dt.update_layout(height=200, margin=dict(l=20, r=20, t=20, b=20))
             st.plotly_chart(fig_dt, use_container_width=True)
-            
-            st.markdown("---")
 
-        # 2. Mantém o gráfico diário (Balanço Hídrico) logo abaixo
-        st.markdown("### 📅 Tendência Semanal")
-        fig = go.Figure()
-        fig.add_trace(go.Bar(x=df_clima['Data'], y=df_clima['Chuva'], name='Chuva Acumulada', marker_color='#3b82f6'))
-        fig.add_trace(go.Scatter(x=df_clima['Data'], y=df_clima['ETc'], name='Consumo Hídrico (ETc)', line=dict(color='#ef4444')))
-        fig.update_layout(height=300, margin=dict(l=20, r=20, t=40, b=20))
-        st.plotly_chart(fig, use_container_width=True)
-        
-        # Análise de Risco (mantive igual)
+        # --- BLOCO 3: CONCLUSÃO ---
+        st.markdown("---")
         status_ap, cor_ap, alertas = AgroBrain.analisar_risco_aplicacao(temp, umid, delta_t)
-        st.markdown(f"**Condição Atual:** <span style='color:{cor_ap}'>{status_ap}</span>", unsafe_allow_html=True)
-        for t, d in alertas: st.error(f"{t}: {d}")
+        st.markdown(f"**Condição Atual de Campo:** <span style='color:{cor_ap}; font-weight:bold; font-size:1.1rem'>{status_ap}</span>", unsafe_allow_html=True)
+        if alertas:
+            for t, d in alertas: st.error(f"{t}: {d}")
         
         st.markdown('</div>', unsafe_allow_html=True)
 
