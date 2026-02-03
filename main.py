@@ -1,6 +1,5 @@
 # ARQUIVO: main.py
-# SISTEMA: AGRO SDI (Sistema de Decisão Integrada)
-# VERSÃO: V21 - FINAL STABLE (Clean Code)
+# SISTEMA: AGRO SDI (Visual Restaurado + Mercado Real)
 
 import streamlit as st
 import pandas as pd
@@ -11,24 +10,24 @@ from folium.plugins import LocateControl, Fullscreen, Draw
 from streamlit_folium import st_folium
 from PIL import Image
 import google.generativeai as genai
-import os  # <--- OBRIGATÓRIO PARA AS IMAGENS FUNCIONAREM
-from notification_engine import NotificationSystem
+import os
 
-# --- 1. IMPORTAÇÃO DOS MOTORES ---
+# --- 1. IMPORTS E SETUP ---
 try:
     from data_engine import get_database
     from calc_engine import AgroPhysics, WeatherConn
     from styles import load_css
     from agro_utils import AgroBrain
+    from notification_engine import NotificationSystem
+    import market_engine # NOVO IMPORT
 except ImportError as e:
-    st.error(f"🚨 FALHA CRÍTICA: Módulo {e.name} não encontrado.")
+    st.error(f"Erro de Importação: {e.name}")
     st.stop()
 
-# --- 2. CONFIGURAÇÃO ---
 st.set_page_config(page_title="Agro SDI | Enterprise", page_icon="🛰️", layout="wide")
-load_css()
+load_css() # Carrega o CSS Restaurado
 
-# Estado da Sessão
+# Inicialização de Variáveis de Sessão (Mantido igual)
 if 'loc_lat' not in st.session_state: st.session_state['loc_lat'] = -13.414
 if 'loc_lon' not in st.session_state: st.session_state['loc_lon'] = -41.285
 if 'pontos_mapa' not in st.session_state: st.session_state['pontos_mapa'] = []
@@ -39,7 +38,7 @@ BANCO_MASTER = get_database()
 url_w = st.query_params.get("w_key", None)
 url_g = st.query_params.get("g_key", None)
 
-# --- 3. LOGIN ---
+# --- TELA DE LOGIN (Mantida) ---
 if not url_w:
     st.markdown("<br><br>", unsafe_allow_html=True)
     c1, c2, c3 = st.columns([1, 1.5, 1])
@@ -58,32 +57,40 @@ if not url_w:
                 st.rerun()
     st.stop()
 
-# --- 4. HEADER ENTERPRISE COM TICKER DE MERCADO ---
-# Barra de Commodities (Simulação Visual para preencher espaço branco)
+# ==============================================================================
+# 🟢 1. HEADER (TOPO DA PÁGINA)
+# ==============================================================================
 st.markdown("""
-<div style="background-color: #0f172a; color: #e2e8f0; padding: 8px 15px; font-size: 0.8rem; font-family: monospace; border-bottom: 2px solid #10b981; margin-bottom: 15px; border-radius: 4px;">
-    <span style="color:#10b981; font-weight:bold;">MARKET TICKER:</span> &nbsp; 
-    🌱 SOJA: R$ 132,50 <span style="color:#10b981;">▲ 0.5%</span> &nbsp;|&nbsp; 
-    🌽 MILHO: R$ 58,20 <span style="color:#ef4444;">▼ 0.2%</span> &nbsp;|&nbsp; 
-    ☕ CAFÉ: R$ 1.150,00 <span style="color:#10b981;">▲ 1.2%</span> &nbsp;|&nbsp; 
-    💵 USD: R$ 5,75 <span style="color:#fbbf24;">● 0.0%</span> &nbsp;|&nbsp; 
-    📍 BASE: CHAPADA DIAMANTINA - BA
-</div>
-
-<div class="brand-container" style="margin-bottom: 10px;">
+<div class="brand-container">
     <div style="display:flex; justify-content:space-between; align-items:flex-end;">
         <div>
             <h1 class="brand-title">AGRO <span class="brand-accent">SDI</span></h1>
-            <div class="brand-subtitle">SISTEMA DE DECISÃO INTEGRADA | v22.0 ENTERPRISE</div>
+            <div class="brand-subtitle">SISTEMA DE DECISÃO INTEGRADA | v23.0</div>
         </div>
         <div style="text-align:right; font-size:0.85rem; opacity:0.9;">
-            <span style="background:#dcfce7; color:#166534; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 0.7rem;">SISTEMA ONLINE 🟢</span>
+            <b>STATUS:</b> ONLINE 🟢
         </div>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-# --- 5. FILTROS ---
+# ==============================================================================
+# 🟢 2. TICKER DE MERCADO (COTAÇÕES REAIS - ONDE FICAVA O ESPAÇO EM BRANCO)
+# ==============================================================================
+# Busca os dados reais do Yahoo Finance
+dados_mercado = market_engine.MarketData.get_ticker_real()
+
+st.markdown(f"""
+<div class="ticker-wrap">
+    <div class="ticker-move">
+        <div class="ticker-item">{dados_mercado}</div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+# ==============================================================================
+# 🟢 3. FILTROS E CONFIGURAÇÃO
+# ==============================================================================
 st.markdown('<div class="app-card">', unsafe_allow_html=True)
 c1, c2, c3, c4 = st.columns([2, 2, 1.5, 1])
 with c1:
@@ -109,7 +116,7 @@ with c4:
     dias = (date.today() - st.session_state['d_plantio']).days
 st.markdown('</div>', unsafe_allow_html=True)
 
-# --- 6. PROCESSAMENTO ---
+# --- PROCESSAMENTO ---
 info = BANCO_MASTER[cult_sel]['vars'][var_sel]
 dados_fase = BANCO_MASTER[cult_sel]['fases'][fase_sel]
 df_clima = WeatherConn.get_forecast_dataframe(url_w, st.session_state['loc_lat'], st.session_state['loc_lon'], info.get('kc', 1.0), BANCO_MASTER[cult_sel].get('t_base', 10))
@@ -121,7 +128,6 @@ if not df_clima.empty:
     temp, umid, delta_t = hoje['Temp'], hoje['Umid'], hoje['Delta T']
     vpd = AgroBrain.calcular_vpd(temp, umid)
     
-    # Cores KPI
     t_st, t_cor = ("Ótima ✅", "#16a34a") if 18 <= temp <= 32 else ("Crítica 🔥", "#dc2626")
     d_st, d_cor = ("APTO ✅", "#16a34a") if 2 <= delta_t <= 8 else ("PARE 🛑", "#dc2626")
     v_st, v_cor = ("Ideal 💧", "#2563eb") if 0.5 <= vpd <= 1.5 else ("Estresse 🌵", "#dc2626")
@@ -132,23 +138,16 @@ if not df_clima.empty:
     with c3: st.markdown(AgroBrain.gerar_cartao_kpi("💨 VPD", f"{vpd:.2f}", "kPa", v_st, v_cor), unsafe_allow_html=True)
     with c4: st.markdown(AgroBrain.gerar_cartao_kpi("☀️ GDA", f"{gda_acum:.0f}", "°GD", f"Ciclo: {dias}d", "#1f2937"), unsafe_allow_html=True)
 
-    # --- 7. ABAS DE CONTEÚDO ---
+    # --- ABAS (Visual Original Restaurado) ---
     tabs = st.tabs(["🧬 TÉCNICO", "☁️ CLIMA", "📡 RADAR", "👁️ IA", "💰 GESTÃO", "🗺️ MAPA", "📄 LAUDO", "🔔 ALERTAS"])
-    # ABA 1: TÉCNICO (SINGLE PASS - SEM DUPLICAÇÃO)
+
+    # ABA 1: TÉCNICO
     with tabs[0]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         st.progress(progresso)
 
-        # Imagens Inteligentes
         nome_cultura = str(cult_sel).lower()
-        mapa_img = {
-            "soja": "soja", "milho": "milho", "algodão": "algodao", "algodao": "algodao",
-            "café": "cafe", "cafe": "cafe", "feijão": "feijao", "feijao": "feijao",
-            "trigo": "trigo", "tomate": "tomate", "batata": "batata", "uva": "uva",
-            "banana": "banana", "citros": "citros", "manga": "manga"
-        }
-        
-        # Tenta achar o nome do arquivo
+        mapa_img = {"soja": "soja", "milho": "milho", "algodão": "algodao", "algodao": "algodao", "café": "cafe", "cafe": "cafe", "feijão": "feijao", "feijao": "feijao", "trigo": "trigo", "tomate": "tomate", "batata": "batata", "uva": "uva", "banana": "banana", "citros": "citros", "manga": "manga"}
         arquivo_base = next((v for k, v in mapa_img.items() if k in nome_cultura), None)
         img_path = None
         
@@ -167,8 +166,6 @@ if not df_clima.empty:
                 st.image("https://images.unsplash.com/photo-1625246333195-58197bd47d26?q=80&w=1000&auto=format&fit=crop", caption="Imagem Ilustrativa", use_container_width=True)
 
         st.divider()
-
-        # Detalhes Técnicos
         c_t1, c_t2 = st.columns(2)
         with c_t1:
             st.markdown('<div class="section-title">🧬 GENÉTICA</div>', unsafe_allow_html=True)
@@ -185,100 +182,44 @@ if not df_clima.empty:
         st.warning(f"🎯 **Ação:** {manejo_txt}")
 
         st.markdown("### 🧪 Protocolo de Defesa")
-        # ESTA LINHA SÓ PODE APARECER UMA VEZ NO CÓDIGO INTEIRO
         AgroBrain.render_protocolo_quimico(dados_fase.get('quimica')) 
-        
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # ABA 2: CLIMA (ORDEM CORRIGIDA: SEMANAL NO TOPO)
+    # ABA 2: CLIMA (Com a sua lógica de 24h)
     with tabs[1]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
-        
-        # --- BLOCO 1: VISÃO MACRO (SEMANAL) - AGORA NO TOPO ---
+        # BLOCO 1: VISÃO MACRO (SEMANAL)
         st.markdown("### 📅 Tendência Semanal (Balanço Hídrico)")
-        st.caption("Acumulado de Chuva vs. Demanda de Água da Planta (ETc)")
-        
         fig = go.Figure()
-        # Chuva (Barras Azuis)
-        fig.add_trace(go.Bar(
-            x=df_clima['Data'], 
-            y=df_clima['Chuva'], 
-            name='Chuva Prevista (mm)', 
-            marker_color='#3b82f6',
-            text=df_clima['Chuva'],
-            textposition='auto'
-        ))
-        # ETc (Linha Vermelha)
-        fig.add_trace(go.Scatter(
-            x=df_clima['Data'], 
-            y=df_clima['ETc'], 
-            name='Consumo (ETc)', 
-            line=dict(color='#ef4444', width=3),
-            mode='lines+markers'
-        ))
-        
+        fig.add_trace(go.Bar(x=df_clima['Data'], y=df_clima['Chuva'], name='Chuva Prevista (mm)', marker_color='#3b82f6'))
+        fig.add_trace(go.Scatter(x=df_clima['Data'], y=df_clima['ETc'], name='Consumo (ETc)', line=dict(color='#ef4444', width=3)))
         fig.update_layout(height=320, margin=dict(l=20, r=20, t=30, b=20), legend=dict(orientation="h", y=1.1))
         st.plotly_chart(fig, use_container_width=True)
         
         st.divider()
 
-        # --- BLOCO 2: VISÃO MICRO (24 HORAS) ---
+        # BLOCO 2: VISÃO MICRO (24 HORAS)
         df_hora = WeatherConn.get_hourly_forecast(url_w, st.session_state['loc_lat'], st.session_state['loc_lon'])
-        
         if not df_hora.empty:
             st.markdown("### 🕒 Detalhe Horário (Próximas 24h)")
-            
-            # GRÁFICO DE TEMPERATURA
             fig_h = go.Figure()
-            fig_h.add_trace(go.Scatter(
-                x=df_hora['HoraSimples'], 
-                y=df_hora['Temp'], 
-                name='Temperatura', 
-                mode='lines+markers+text',
-                text=[f"{t:.0f}°" for t in df_hora['Temp']],
-                textposition="top center",
-                line=dict(color='#f97316', width=3),
-                fill='tozeroy',
-                fillcolor='rgba(249, 115, 22, 0.1)'
-            ))
-            fig_h.update_layout(
-                title="Variação Térmica",
-                height=250,
-                margin=dict(l=20, r=20, t=40, b=20),
-                yaxis=dict(showgrid=False)
-            )
+            fig_h.add_trace(go.Scatter(x=df_hora['HoraSimples'], y=df_hora['Temp'], name='Temperatura', mode='lines+markers+text', text=[f"{t:.0f}°" for t in df_hora['Temp']], textposition="top center", line=dict(color='#f97316', width=3), fill='tozeroy', fillcolor='rgba(249, 115, 22, 0.1)'))
+            fig_h.update_layout(title="Variação Térmica", height=250, margin=dict(l=20, r=20, t=40, b=20), yaxis=dict(showgrid=False))
             st.plotly_chart(fig_h, use_container_width=True)
 
-            # GRÁFICO DE DELTA T (PULVERIZAÇÃO)
             st.markdown("#### 🚜 Janela de Aplicação (Delta T)")
-            
-            cores_dt = []
-            for dt in df_hora['Delta T']:
-                if 2 <= dt <= 8: cores_dt.append("#16a34a") # Verde
-                elif 8 < dt <= 10: cores_dt.append("#ca8a04") # Amarelo
-                else: cores_dt.append("#dc2626") # Vermelho
-
+            cores_dt = ["#16a34a" if 2 <= dt <= 8 else "#ca8a04" if 8 < dt <= 10 else "#dc2626" for dt in df_hora['Delta T']]
             fig_dt = go.Figure()
-            fig_dt.add_trace(go.Bar(
-                x=df_hora['HoraSimples'],
-                y=df_hora['Delta T'],
-                marker_color=cores_dt,
-                text=df_hora['Delta T'],
-                textposition='auto'
-            ))
-            # Faixa ideal
+            fig_dt.add_trace(go.Bar(x=df_hora['HoraSimples'], y=df_hora['Delta T'], marker_color=cores_dt, text=df_hora['Delta T'], textposition='auto'))
             fig_dt.add_hrect(y0=2, y1=8, line_width=0, fillcolor="green", opacity=0.1, annotation_text="Ideal")
-            
             fig_dt.update_layout(height=200, margin=dict(l=20, r=20, t=20, b=20))
             st.plotly_chart(fig_dt, use_container_width=True)
 
-        # --- BLOCO 3: CONCLUSÃO ---
         st.markdown("---")
         status_ap, cor_ap, alertas = AgroBrain.analisar_risco_aplicacao(temp, umid, delta_t)
-        st.markdown(f"**Condição Atual de Campo:** <span style='color:{cor_ap}; font-weight:bold; font-size:1.1rem'>{status_ap}</span>", unsafe_allow_html=True)
+        st.markdown(f"**Condição Atual:** <span style='color:{cor_ap}; font-weight:bold; font-size:1.1rem'>{status_ap}</span>", unsafe_allow_html=True)
         if alertas:
             for t, d in alertas: st.error(f"{t}: {d}")
-        
         st.markdown('</div>', unsafe_allow_html=True)
 
     # ABA 3: RADAR
@@ -341,48 +282,29 @@ if not df_clima.empty:
             st.markdown(f"<div style='background:white; color:black; padding:20px;'><h1>LAUDO</h1><p><b>{cult_sel}</b></p><p>{diag}</p><p>{man}</p><p>{obs}</p></div>", unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-# ABA 8: NOTIFICAÇÕES
+    # ABA 8: ALERTAS
     with tabs[7]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         st.markdown("### 🔔 Central de Notificações")
-        st.markdown("Receba análises diárias de clima e manejo agronômico direto no seu e-mail.")
-        
         with st.form("form_notificacao"):
             col_n1, col_n2 = st.columns(2)
             nome_user = col_n1.text_input("Seu Nome")
             email_user = col_n2.text_input("Seu E-mail")
-            
-            # Pega as culturas do banco de dados
             opcoes_culturas = sorted(list(BANCO_MASTER.keys())) if BANCO_MASTER else []
-            culturas_subs = st.multiselect("Quais culturas você quer monitorar?", options=opcoes_culturas, default=[cult_sel] if cult_sel in opcoes_culturas else None)
-            
-            c_btn1, c_btn2 = st.columns([1,3])
-            salvar = c_btn1.form_submit_button("💾 Salvar Assinatura")
-            
-            if salvar:
-                if nome_user and email_user and culturas_subs:
-                    NotificationSystem.salvar_assinatura(nome_user, email_user, culturas_subs)
-                    st.success(f"✅ Perfeito, {nome_user}! Você receberá relatórios sobre: {', '.join(culturas_subs)}.")
-                else:
-                    st.error("Preencha todos os campos.")
-
-        st.divider()
-        st.markdown("#### 🚀 Teste de Envio Instantâneo")
-        st.caption("Use este botão para testar se o sistema está funcionando agora mesmo.")
+            culturas_subs = st.multiselect("Culturas", options=opcoes_culturas, default=[cult_sel] if cult_sel in opcoes_culturas else None)
+            if st.form_submit_button("Salvar Assinatura"):
+                NotificationSystem.salvar_assinatura(nome_user, email_user, culturas_subs)
+                st.success("Cadastrado com sucesso!")
         
+        st.divider()
         if st.button("📧 Enviar Relatório Agora"):
-            if not email_user:
-                st.warning("Preencha o e-mail acima primeiro.")
+            if not email_user: st.warning("Preencha o e-mail.")
             else:
-                with st.spinner("Compilando dados climáticos e agronômicos..."):
-                    # SIMULAÇÃO DA INTELIGÊNCIA (Aqui entraria seu código de clima real)
+                with st.spinner("Enviando..."):
                     dados_simulados = {}
                     for c in culturas_subs:
-                        dados_simulados[c] = f"Previsão de 15mm de chuva. Fase fenológica requer atenção com fungos. Delta T favorável pela manhã."
-                    
+                        dados_simulados[c] = f"Temp: {temp}°C | Chuva: {hoje['Chuva']}mm | Delta T: {delta_t}°C. Fase reprodutiva requer atenção com fungicidas."
                     sucesso, msg = NotificationSystem.enviar_email_agora(nome_user, email_user, culturas_subs, dados_simulados)
-                    
-                    if sucesso: st.balloons(); st.success(msg)
+                    if sucesso: st.success(msg)
                     else: st.error(msg)
-                    
         st.markdown('</div>', unsafe_allow_html=True)
