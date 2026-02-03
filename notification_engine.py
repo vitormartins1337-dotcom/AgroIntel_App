@@ -1,60 +1,88 @@
 # ARQUIVO: notification_engine.py
-# FUNÇÃO: Gerenciar assinaturas e enviar e-mails HTML profissionais
+# VERSÃO: V-DIRECT (Sem travas de segurança)
 
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import json
 import os
-from datetime import datetime
-import streamlit as st
+from datetime import datetime, date
 
-# Arquivo para salvar os e-mails cadastrados (Simulação de Banco de Dados)
 DB_EMAILS = "user_subscriptions.json"
 
 class NotificationSystem:
     
-@staticmethod
+    @staticmethod
+    def salvar_assinatura(nome, email, culturas):
+        novo_dado = {
+            "nome": nome,
+            "email": email,
+            "culturas": culturas,
+            "data_cadastro": str(datetime.now())
+        }
+        dados = []
+        if os.path.exists(DB_EMAILS):
+            try:
+                with open(DB_EMAILS, "r") as f:
+                    dados = json.load(f)
+            except: pass
+        dados = [d for d in dados if d['email'] != email]
+        dados.append(novo_dado)
+        with open(DB_EMAILS, "w") as f:
+            json.dump(dados, f, indent=4)
+        return True
+
+    @staticmethod
+    def gerar_html_email(nome, relatorios_cultura):
+        html_content = f"""
+        <html>
+        <body style="font-family: Arial, sans-serif; color: #333;">
+            <div style="background-color: #064e3b; color: white; padding: 20px;">
+                <h1 style="margin: 0;">AGRO SDI</h1>
+            </div>
+            <div style="padding: 20px;">
+                <p>Olá, <strong>{nome}</strong>!</p>
+                <hr>
+        """
+        for cultura, texto in relatorios_cultura.items():
+            html_content += f"""
+            <div style="margin-bottom: 15px; background-color: #f0fdf4; padding: 10px; border-left: 5px solid #16a34a;">
+                <h3 style="margin:0; color: #166534;">{cultura}</h3>
+                <p>{texto}</p>
+            </div>
+            """
+        html_content += "</div></body></html>"
+        return html_content
+
+    @staticmethod
     def enviar_email_agora(nome, email_destinatario, culturas_selecionadas, weather_data_simulado):
-        """
-        Envia o e-mail usando SMTP do Gmail.
-        """
-        # --- ÁREA DE CONFIGURAÇÃO (PREENCHA COM SEUS DADOS REAIS) ---
-        # 1. Seu E-mail do Gmail (Obrigatório)
-        EMAIL_REMETENTE = "vitormartins1337@gmail.com" 
         
-        # 2. Sua Senha de App (Gerada lá na segurança do Google)
-        # Não é a senha que você usa para entrar no e-mail! É a de 16 letras.
-        SENHA_APP = "rqyu bydy erpi oxiu"  
-        
-        # --- FIM DA CONFIGURAÇÃO ---
+        # --- PREENCHA AQUI E SALVE O ARQUIVO ---
+        MEU_EMAIL = "vitormartins1337@gmail.com"  
+        MINHA_SENHA = "ikkv obvi xzle gzvf"
+        # ---------------------------------------
+
+        # Verifica se você esqueceu de preencher (só pra avisar no log)
+        if "SEU_EMAIL" in MEU_EMAIL or "SUA SENHA" in MINHA_SENHA:
+            return False, "⚠️ Erro: Você precisa editar o arquivo notification_engine.py e colocar seu email real nas linhas 58 e 59."
 
         try:
-            # Montando o cabeçalho do e-mail
             msg = MIMEMultipart()
-            msg['From'] = f"Agro SDI System <{EMAIL_REMETENTE}>"
+            msg['From'] = f"Agro SDI <{MEU_EMAIL}>"
             msg['To'] = email_destinatario
-            msg['Subject'] = f"📊 Relatório Agro SDI: {datetime.now().strftime('%d/%m')}"
+            msg['Subject'] = f"Agro SDI: Relatório {date.today().strftime('%d/%m')}"
 
-            # Gera o conteúdo HTML
-            corpo_email = NotificationSystem.gerar_html_email(nome, weather_data_simulado)
-            msg.attach(MIMEText(corpo_email, 'html'))
+            corpo = NotificationSystem.gerar_html_email(nome, weather_data_simulado)
+            msg.attach(MIMEText(corpo, 'html'))
 
-            # Conectando ao Servidor do Google (SMTP)
+            # Conexão
             server = smtplib.SMTP('smtp.gmail.com', 587)
             server.starttls()
-            
-            # Aqui ele faz o login
-            server.login(EMAIL_REMETENTE, SENHA_APP)
-            
-            # Aqui ele envia
-            text = msg.as_string()
-            server.sendmail(EMAIL_REMETENTE, email_destinatario, text)
+            server.login(MEU_EMAIL, MINHA_SENHA)
+            server.sendmail(MEU_EMAIL, email_destinatario, msg.as_string())
             server.quit()
             
             return True, f"✅ E-mail enviado com sucesso para {email_destinatario}!"
             
-        except smtplib.SMTPAuthenticationError:
-            return False, "❌ Erro de Login: Verifique se a 'Senha de App' está correta e se a verificação em 2 etapas está ativa no Gmail."
         except Exception as e:
-            return False, f"❌ Erro no envio: {str(e)}"
+            return False, f"❌ Erro Técnico: {str(e)}"
