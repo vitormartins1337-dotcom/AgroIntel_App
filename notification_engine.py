@@ -57,32 +57,31 @@ class NotificationSystem:
     @staticmethod
     def enviar_email_agora(nome, email_destinatario, culturas_selecionadas, weather_data_simulado):
         
-        # --- PREENCHA AQUI E SALVE O ARQUIVO ---
-        MEU_EMAIL = "vitormartins1337@gmail.com"  
-        MINHA_SENHA = "ikkv obvi xzle gzvf"
-        # ---------------------------------------
-
-        # Verifica se você esqueceu de preencher (só pra avisar no log)
-        if "SEU_EMAIL" in MEU_EMAIL or "SUA SENHA" in MINHA_SENHA:
-            return False, "⚠️ Erro: Você precisa editar o arquivo notification_engine.py e colocar seu email real nas linhas 58 e 59."
+        # --- AQUI ESTÁ A MUDANÇA: LENDO DOS SEGREDOS (st.secrets) ---
+        try:
+            MEU_EMAIL = st.secrets["email"]["usuario"]
+            MINHA_SENHA = st.secrets["email"]["senha"]
+        except FileNotFoundError:
+            return False, "❌ Erro: Segredos não configurados no Streamlit Cloud (Settings -> Secrets)."
+        # -----------------------------------------------------------
 
         try:
             msg = MIMEMultipart()
             msg['From'] = f"Agro SDI <{MEU_EMAIL}>"
             msg['To'] = email_destinatario
-            msg['Subject'] = f"Agro SDI: Relatório {date.today().strftime('%d/%m')}"
+            msg['Subject'] = f"Relatório Agro SDI: {date.today().strftime('%d/%m')}"
 
             corpo = NotificationSystem.gerar_html_email(nome, weather_data_simulado)
             msg.attach(MIMEText(corpo, 'html'))
 
-            # Conexão
+            # Conexão SMTP
             server = smtplib.SMTP('smtp.gmail.com', 587)
             server.starttls()
             server.login(MEU_EMAIL, MINHA_SENHA)
             server.sendmail(MEU_EMAIL, email_destinatario, msg.as_string())
             server.quit()
             
-            return True, f"✅ E-mail enviado com sucesso para {email_destinatario}!"
+            return True, f"✅ Sucesso! Enviado para {email_destinatario}"
             
         except Exception as e:
             return False, f"❌ Erro Técnico: {str(e)}"
