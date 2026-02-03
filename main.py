@@ -294,143 +294,137 @@ if not df_clima.empty:
         if st.session_state['custos']: st.dataframe(pd.DataFrame(st.session_state['custos']), use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # ABA 6: MAPA (MONITORAMENTO DE PRAGAS & DOENÇAS - MIP)
+    # ABA 6: MAPA MIP (SISTEMA DE PRECISÃO COM BANCO DE DADOS TÉCNICO)
     with tabs[5]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         
-        # Título Profissional
-        c_head1, c_head2 = st.columns([3,1])
-        with c_head1:
-            st.markdown("### 🛰️ Monitoramento Geoespacial (MIP)")
-            st.caption("Manejo Integrado de Pragas e Doenças com Georreferenciamento.")
-        with c_head2:
-            st.markdown("<div style='text-align:right; color:#64748b; font-size:0.8rem;'><b>DATUM:</b> WGS84</div>", unsafe_allow_html=True)
+        # --- 1. CONFIGURAÇÃO E BANCO DE DADOS MIP ---
+        # Este catálogo define as pragas específicas por cultura
+        CATALOGO_MIP = {
+            "Soja": {
+                "Pragas": ["Lagarta-do-cartucho (S. frugiperda)", "Percevejo-marrom (E. heros)", "Lagarta-falsa-medideira", "Ácaro-rajado", "Mosca-branca"],
+                "Doencas": ["Ferrugem Asiática (P. pachyrhizi)", "Antracnose", "Mofo-branco", "Mancha-alvo", "Damping-off"]
+            },
+            "Milho": {
+                "Pragas": ["Cigarrinha-do-milho (D. maidis)", "Lagarta-do-cartucho", "Percevejo-barriga-verde", "Pulgão-do-milho"],
+                "Doencas": ["Enfezamento Pálido/Vermelho", "Ferrugem Polissora", "Mancha-branca", "Cercosporiose"]
+            },
+            "Café": {
+                "Pragas": ["Broca-do-café (H. hampei)", "Bicho-mineiro (L. coffeella)", "Ácaro-vermelho", "Cigarra-do-café"],
+                "Doencas": ["Ferrugem-do-cafeeiro (H. vastatrix)", "Cercosporiose", "Mancha-de-Phoma", "Rosellinia"]
+            },
+            "Algodão": {
+                "Pragas": ["Bicudo-do-algodoeiro", "Lagarta-das-maçãs", "Pulgão-do-algodoeiro", "Ácaro-rajado"],
+                "Doencas": ["Ramulária", "Mancha-angular", "Murcha-de-Fusarium", "Nematoides"]
+            }
+        }
 
-        # Layout: Coluna de Controle (Esq) e Mapa (Dir)
-        c1, c2 = st.columns([1.2, 3])
+        # Identifica a cultura selecionada no filtro principal (cult_sel)
+        # Se não achar, usa uma lista genérica
+        cultura_atual = str(cult_sel).capitalize()
+        dados_mip = CATALOGO_MIP.get(cultura_atual, {
+            "Pragas": ["Lagarta não identificada", "Percevejo não identificado", "Ácaros", "Tripes"],
+            "Doencas": ["Fungo foliar", "Bacteriose", "Vírus", "Murcha"]
+        })
+
+        st.markdown(f"### 🛰️ Monitoramento de Precisão: <span style='color:#166534'>{cultura_atual}</span>", unsafe_allow_html=True)
+        st.caption("Toque no mapa na localização exata da ocorrência para abrir o diagnóstico.")
+
+        # Layout Otimizado para Mobile (Mapa em Cima, Form em Baixo)
+        # MAPA OCUPA 100% DA LARGURA AGORA
         
-        # --- COLUNA 1: FORMULÁRIO DE CAMPO ---
-        with c1:
-            st.markdown('<div style="background:#f8fafc; padding:15px; border-radius:8px; border:1px solid #e2e8f0;">', unsafe_allow_html=True)
-            st.markdown("#### 📝 Registrar Ocorrência")
+        m = folium.Map(
+            location=[st.session_state['loc_lat'], st.session_state['loc_lon']], 
+            zoom_start=18, # Zoom bem próximo para ver o talhão
+            tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+            attr='Esri',
+            name='Satélite HD'
+        )
+        folium.TileLayer('cartodbpositron', name='Mapa Vetorial').add_to(m)
+
+        # Renderiza os pontos já salvos
+        for p in st.session_state['pontos_mapa']:
+            # Cores baseadas na severidade
+            cor = '#ef4444' if p['Severidade'] == 'Crítico' else '#f97316' if p['Severidade'] == 'Alerta' else '#eab308'
+            raio = 40 if p['Severidade'] == 'Crítico' else 25
             
-            # Inputs do Agrônomo
-            tipo_prob = st.selectbox("Tipo", ["🐛 Praga", "🍄 Doença", "🌿 Daninha", "⚠️ Outro"], label_visibility="collapsed")
-            nome_prob = st.text_input("Nome Técnico", placeholder="Ex: Lagarta do Cartucho")
-            severidade = st.select_slider("Nível de Dano (NDE)", options=["Leve", "Moderado", "Severo"], value="Moderado")
-            obs_prob = st.text_area("Observação", height=68, placeholder="Ex: 3 lagartas por metro...")
+            # Círculo de calor
+            folium.Circle(
+                location=[p['lat'], p['lon']], radius=raio,
+                color=cor, fill=True, fill_color=cor, fill_opacity=0.3, stroke=False
+            ).add_to(m)
             
-            # Coordenadas (Pega do clique ou manual)
-            lat_f, lon_f = st.session_state.get('last', (st.session_state['loc_lat'], st.session_state['loc_lon']))
-            st.caption(f"📍 GPS Alvo: {lat_f:.5f}, {lon_f:.5f}")
+            # Ícone técnico
+            icone = "🐛" if "Praga" in p['Categoria'] else "🍄" if "Doença" in p['Categoria'] else "🌿"
+            folium.Marker(
+                [p['lat'], p['lon']],
+                popup=f"<b>{p['Nome']}</b><br>{p['Severidade']}",
+                icon=folium.DivIcon(html=f"<div style='font-size:20px;'>{icone}</div>")
+            ).add_to(m)
+
+        # Botão de GPS Ativo (Rastreio)
+        LocateControl(auto_start=True, strings={"title": "Minha Posição"}).add_to(m)
+        out = st_folium(m, height=450, returned_objects=["last_clicked"])
+
+        st.divider()
+
+        # --- LÓGICA DE CADASTRO (SÓ APARECE SE CLICAR OU TIVER POSIÇÃO) ---
+        # Se clicou no mapa, usa a coordenada do clique. Se não, usa a última conhecida.
+        lat_f = out["last_clicked"]["lat"] if out["last_clicked"] else st.session_state['loc_lat']
+        lon_f = out["last_clicked"]["lng"] if out["last_clicked"] else st.session_state['loc_lon']
+
+        if out["last_clicked"]:
+            st.markdown(f"#### 📍 Novo Apontamento em: {lat_f:.5f}, {lon_f:.5f}")
             
-            # Botão de Ação
-            if st.button("🔴 GRAVAR PONTO", type="primary", use_container_width=True):
-                if nome_prob:
-                    # Estrutura de Dados Enterprise
-                    nova_ocorrencia = {
+            with st.form("form_mip_profissional"):
+                c_form1, c_form2 = st.columns(2)
+                
+                with c_form1:
+                    categoria = st.radio("Categoria", ["🐛 Praga", "🍄 Doença", "🌿 Daninha"], horizontal=True)
+                    
+                    # LISTA DINÂMICA: Mostra as pragas REAIS da cultura selecionada
+                    if "Praga" in categoria:
+                        opcoes = dados_mip["Pragas"] + ["Outra..."]
+                    elif "Doença" in categoria:
+                        opcoes = dados_mip["Doencas"] + ["Outra..."]
+                    else:
+                        opcoes = ["Buva", "Amargoso", "Trapoeraba", "Outra..."]
+                        
+                    agente = st.selectbox("Agente Causal (Identificação)", options=opcoes)
+
+                with c_form2:
+                    nivel = st.select_slider("Nível de Dano Econômico (NDE)", 
+                                           options=["Monitorar", "Alerta", "Crítico"], 
+                                           value="Alerta")
+                    
+                    contagem = st.number_input("Contagem (nº por metro/planta)", min_value=0.0, step=0.1)
+
+                obs = st.text_input("Nota de Campo", placeholder="Ex: Foco inicial na bordadura...")
+                
+                # Botão de Salvar Grande
+                if st.form_submit_button("✅ CONFIRMAR OCORRÊNCIA", type="primary", use_container_width=True):
+                    novo_ponto = {
                         "Data": date.today().strftime("%d/%m/%Y"),
-                        "Tipo": tipo_prob,
-                        "Nome": nome_prob,
-                        "Severidade": severidade,
-                        "Obs": obs_prob,
+                        "Cultura": cultura_atual,
+                        "Categoria": categoria,
+                        "Nome": agente,
+                        "Severidade": nivel,
+                        "Contagem": contagem,
+                        "Obs": obs,
                         "lat": lat_f,
                         "lon": lon_f
                     }
-                    st.session_state['pontos_mapa'].append(nova_ocorrencia)
-                    st.success("Salvo no Histórico!")
+                    st.session_state['pontos_mapa'].append(novo_ponto)
+                    st.success(f"Ocorrência de {agente} registrada com sucesso!")
                     st.rerun()
-                else:
-                    st.warning("Informe o nome do problema.")
-            st.markdown('</div>', unsafe_allow_html=True)
 
-            # Legenda Rápida
-            st.markdown("""
-            <div style="margin-top:10px; font-size:0.75rem; color:#64748b;">
-                <b>Legenda de Risco:</b><br>
-                🟡 Leve (Monitorar)<br>
-                🟠 Moderado (Alerta)<br>
-                🔴 Severo (Controle Imediato)
-            </div>
-            """, unsafe_allow_html=True)
-
-        # --- COLUNA 2: MAPA INTERATIVO ---
-        with c2:
-            # Configuração do Mapa Base (Satélite)
-            m = folium.Map(
-                location=[st.session_state['loc_lat'], st.session_state['loc_lon']], 
-                zoom_start=16,
-                tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-                attr='Esri',
-                name='Satélite HD'
-            )
-            
-            # Adiciona camadas úteis
-            folium.TileLayer('cartodbpositron', name='Mapa Clean').add_to(m)
-            
-            # Renderiza os Pontos Salvos com Inteligência Visual
-            cores_sev = {'Leve': '#facc15', 'Moderado': '#f97316', 'Severo': '#dc2626'}
-            raios_sev = {'Leve': 15, 'Moderado': 30, 'Severo': 50}
-            
-            for p in st.session_state['pontos_mapa']:
-                # Define cor baseada na gravidade
-                cor = cores_sev.get(p.get('Severidade', 'Leve'), '#3b82f6')
-                raio = raios_sev.get(p.get('Severidade', 'Leve'), 20)
-                
-                # Círculo de Infestação (Visualização de Área)
-                folium.Circle(
-                    location=[p['lat'], p['lon']],
-                    radius=raio, # Metros
-                    color=cor,
-                    fill=True,
-                    fill_color=cor,
-                    fill_opacity=0.4,
-                    popup=f"<b>{p['Tipo']}</b><br>{p['Nome']}<br>Nível: {p['Severidade']}"
-                ).add_to(m)
-                
-                # Marcador Central
-                folium.CircleMarker(
-                    location=[p['lat'], p['lon']],
-                    radius=3,
-                    color='white',
-                    fill=True,
-                    fill_color='black',
-                    fill_opacity=1.0
-                ).add_to(m)
-
-            # Controles de GPS
-            LocateControl(auto_start=False).add_to(m)
-            Draw(export=True).add_to(m)
-            folium.LayerControl().add_to(m)
-            folium.plugins.Fullscreen().add_to(m)
-
-            # Renderiza o mapa e captura cliques
-            out = st_folium(m, height=500, returned_objects=["last_clicked"])
-            
-            # Atualiza o GPS do clique para o formulário
-            if out["last_clicked"]: 
-                st.session_state['last'] = (out["last_clicked"]["lat"], out["last_clicked"]["lng"])
-
-        st.divider()
-        
-        # --- TABELA DE HISTÓRICO (LEVANTAMENTO DE ÁREA) ---
+        # --- TABELA RESUMO ---
         if st.session_state['pontos_mapa']:
-            st.markdown("#### 📋 Histórico de Levantamento")
-            df_mapa = pd.DataFrame(st.session_state['pontos_mapa'])
-            
-            # Mostra tabela estilizada
-            st.dataframe(
-                df_mapa[['Data', 'Tipo', 'Nome', 'Severidade', 'Obs']], 
-                use_container_width=True,
-                hide_index=True
-            )
-            
-            # Botão para limpar mapa (Gestão)
-            if st.button("🗑️ Limpar Mapa", key="btn_limpar_mapa"):
-                st.session_state['pontos_mapa'] = []
-                st.rerun()
-        else:
-            st.info("Nenhuma ocorrência registrada nesta área.")
+            with st.expander("📋 Ver Caderno de Campo Digital"):
+                st.dataframe(pd.DataFrame(st.session_state['pontos_mapa']).drop(columns=['lat', 'lon']), use_container_width=True)
+                if st.button("Limpar Histórico"):
+                    st.session_state['pontos_mapa'] = []
+                    st.rerun()
 
         st.markdown('</div>', unsafe_allow_html=True)
 
