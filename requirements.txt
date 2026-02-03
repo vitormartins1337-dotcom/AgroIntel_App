@@ -6,3 +6,4 @@ folium
 streamlit-folium
 google-generativeai
 Pillow
+yfinance
