@@ -1,6 +1,7 @@
 # ARQUIVO: notification_engine.py
-# VERSÃO: V-DIRECT (Sem travas de segurança)
+# VERSÃO: V-SECRETS (Com importação correta do Streamlit)
 
+import streamlit as st  # <--- ESSA LINHA ERA A QUE FALTAVA!
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -36,19 +37,18 @@ class NotificationSystem:
     def gerar_html_email(nome, relatorios_cultura):
         html_content = f"""
         <html>
-        <body style="font-family: Arial, sans-serif; color: #333;">
+        <body style="font-family: Arial, sans-serif;">
             <div style="background-color: #064e3b; color: white; padding: 20px;">
-                <h1 style="margin: 0;">AGRO SDI</h1>
+                <h2 style="margin: 0;">Agro SDI | Boletim</h2>
             </div>
-            <div style="padding: 20px;">
+            <div style="padding: 20px; border: 1px solid #ddd;">
                 <p>Olá, <strong>{nome}</strong>!</p>
                 <hr>
         """
         for cultura, texto in relatorios_cultura.items():
             html_content += f"""
-            <div style="margin-bottom: 15px; background-color: #f0fdf4; padding: 10px; border-left: 5px solid #16a34a;">
-                <h3 style="margin:0; color: #166534;">{cultura}</h3>
-                <p>{texto}</p>
+            <div style="margin-bottom: 10px; background-color: #f0fdf4; padding: 10px; border-left: 5px solid #16a34a;">
+                <b>🌱 {cultura}</b><br>{texto}
             </div>
             """
         html_content += "</div></body></html>"
@@ -57,13 +57,12 @@ class NotificationSystem:
     @staticmethod
     def enviar_email_agora(nome, email_destinatario, culturas_selecionadas, weather_data_simulado):
         
-        # --- AQUI ESTÁ A MUDANÇA: LENDO DOS SEGREDOS (st.secrets) ---
+        # Leitura Segura das Credenciais (Secrets)
         try:
             MEU_EMAIL = st.secrets["email"]["usuario"]
             MINHA_SENHA = st.secrets["email"]["senha"]
-        except FileNotFoundError:
-            return False, "❌ Erro: Segredos não configurados no Streamlit Cloud (Settings -> Secrets)."
-        # -----------------------------------------------------------
+        except Exception:
+            return False, "❌ Erro: Segredos não encontrados. Verifique o painel do Streamlit Cloud."
 
         try:
             msg = MIMEMultipart()
@@ -83,5 +82,7 @@ class NotificationSystem:
             
             return True, f"✅ Sucesso! Enviado para {email_destinatario}"
             
+        except smtplib.SMTPAuthenticationError:
+            return False, "❌ Erro de Login: Senha ou E-mail incorretos nos Secrets."
         except Exception as e:
             return False, f"❌ Erro Técnico: {str(e)}"
