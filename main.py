@@ -58,16 +58,26 @@ if not url_w:
                 st.rerun()
     st.stop()
 
-# --- 4. HEADER ---
+# --- 4. HEADER ENTERPRISE COM TICKER DE MERCADO ---
+# Barra de Commodities (Simulação Visual para preencher espaço branco)
 st.markdown("""
-<div class="brand-container">
+<div style="background-color: #0f172a; color: #e2e8f0; padding: 8px 15px; font-size: 0.8rem; font-family: monospace; border-bottom: 2px solid #10b981; margin-bottom: 15px; border-radius: 4px;">
+    <span style="color:#10b981; font-weight:bold;">MARKET TICKER:</span> &nbsp; 
+    🌱 SOJA: R$ 132,50 <span style="color:#10b981;">▲ 0.5%</span> &nbsp;|&nbsp; 
+    🌽 MILHO: R$ 58,20 <span style="color:#ef4444;">▼ 0.2%</span> &nbsp;|&nbsp; 
+    ☕ CAFÉ: R$ 1.150,00 <span style="color:#10b981;">▲ 1.2%</span> &nbsp;|&nbsp; 
+    💵 USD: R$ 5,75 <span style="color:#fbbf24;">● 0.0%</span> &nbsp;|&nbsp; 
+    📍 BASE: CHAPADA DIAMANTINA - BA
+</div>
+
+<div class="brand-container" style="margin-bottom: 10px;">
     <div style="display:flex; justify-content:space-between; align-items:flex-end;">
         <div>
             <h1 class="brand-title">AGRO <span class="brand-accent">SDI</span></h1>
-            <div class="brand-subtitle">SISTEMA DE DECISÃO INTEGRADA | v21.0</div>
+            <div class="brand-subtitle">SISTEMA DE DECISÃO INTEGRADA | v22.0 ENTERPRISE</div>
         </div>
         <div style="text-align:right; font-size:0.85rem; opacity:0.9;">
-            <b>STATUS:</b> ONLINE 🟢
+            <span style="background:#dcfce7; color:#166534; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 0.7rem;">SISTEMA ONLINE 🟢</span>
         </div>
     </div>
 </div>
