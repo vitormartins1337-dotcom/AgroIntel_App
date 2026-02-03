@@ -142,24 +142,46 @@ def load_css():
                 letter-spacing: 0.5px;
             }
 
-            /* 7. ABAS (TABS) - VOLTANDO AO ORIGINAL BONITO DO STREAMLIT */
-            /* Removi o código que deformava. Agora vai ficar o padrão bonito + ajustes finos */
+            /* ============================================================
+               7. ABAS PREMIUM (ESTILO BOTÃO DE APLICATIVO)
+               ============================================================ */
+            
+            /* Container da lista de abas (o fundo onde elas ficam) */
             .stTabs [data-baseweb="tab-list"] {
-                gap: 8px;
-                border-bottom: 1px solid #e2e8f0;
+                gap: 10px; /* Espaço entre cada aba */
+                background-color: transparent;
+                padding-bottom: 10px;
+                padding-top: 10px;
+                border-bottom: none; /* Remove a linha feia de baixo */
             }
+
+            /* Estilo da Aba DESATIVADA (Normal) */
             .stTabs [data-baseweb="tab"] {
-                height: 50px;
-                white-space: pre-wrap;
-                border-radius: 8px 8px 0 0;
+                height: 50px; /* Altura boa para o dedo no celular */
+                background-color: #ffffff;
+                border: 1px solid #e2e8f0;
+                border-radius: 10px; /* Cantos arredondados modernos */
+                box-shadow: 0 2px 4px rgba(0,0,0,0.03); /* Sombra leve */
                 padding: 0 20px;
                 font-weight: 600;
-                color: #475569;
+                color: #64748b; /* Cinza profissional */
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Animação suave */
             }
+
+            /* Efeito quando passa o mouse (Hover) */
+            .stTabs [data-baseweb="tab"]:hover {
+                color: #064e3b;
+                border-color: #10b981;
+                background-color: #f0fdf4; /* Fundo verde bem clarinho */
+                transform: translateY(-2px); /* Sobe um pouquinho */
+            }
+
+            /* Estilo da Aba ATIVA (Selecionada) - O Padrão Ouro */
             .stTabs [aria-selected="true"] {
-                background-color: white !important;
-                color: #064e3b !important;
-                border-bottom: 3px solid #064e3b;
+                background: linear-gradient(135deg, #064e3b 0%, #059669 100%) !important; /* Degradê Verde */
+                color: white !important; /* Texto Branco */
+                border: none !important;
+                font-weight: 800 !important;
+                box-shadow: 0 4px 12px rgba(6, 78, 59, 0.4) !important; /* Sombra Verde Brilhante */
+                transform: scale(1.05) !important; /* Fica um pouco maior que as outras */
             }
-        </style>
-    """, unsafe_allow_html=True)
