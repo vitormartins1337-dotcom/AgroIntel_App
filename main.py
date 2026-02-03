@@ -1,5 +1,6 @@
 # ARQUIVO: main.py
-# SISTEMA: AGRO SDI (Visual Restaurado + Funcionalidade Master)
+# SISTEMA: AGRO SDI | ENTERPRISE GOLD MASTER
+# VERSÃO: V24 (Layout Blindado + Status Pulse)
 
 import streamlit as st
 import pandas as pd
@@ -12,7 +13,7 @@ from PIL import Image
 import google.generativeai as genai
 import os
 
-# --- 1. SETUP & IMPORTS ---
+# --- 1. SETUP ---
 try:
     from data_engine import get_database
     from calc_engine import AgroPhysics, WeatherConn
@@ -21,13 +22,13 @@ try:
     from notification_engine import NotificationSystem
     import market_engine 
 except ImportError as e:
-    st.error(f"⚠️ Erro de Sistema: {e.name}")
+    st.error(f"⚠️ Erro de Inicialização: {e.name}")
     st.stop()
 
-st.set_page_config(page_title="Agro SDI | Enterprise", page_icon="🌱", layout="wide")
-load_css() # Aplica o CSS Premium
+st.set_page_config(page_title="Agro SDI", page_icon="🌱", layout="wide")
+load_css() # Carrega o CSS com a correção do 'nowrap'
 
-# --- 2. VARIÁVEIS DE SESSÃO ---
+# --- 2. DADOS E VARIÁVEIS ---
 if 'loc_lat' not in st.session_state: st.session_state['loc_lat'] = -13.414
 if 'loc_lon' not in st.session_state: st.session_state['loc_lon'] = -41.285
 if 'pontos_mapa' not in st.session_state: st.session_state['pontos_mapa'] = []
@@ -38,19 +39,19 @@ BANCO_MASTER = get_database()
 url_w = st.query_params.get("w_key", None)
 url_g = st.query_params.get("g_key", None)
 
-# --- 3. LOGIN (Se necessário) ---
+# --- 3. LOGIN ---
 if not url_w:
     st.markdown("<br><br>", unsafe_allow_html=True)
     c1, c2, c3 = st.columns([1, 1.5, 1])
     with c2:
         st.markdown("""
         <div class="app-card" style="text-align:center; padding:40px;">
-            <h1 style="color:#064e3b; margin:0; font-size: 2.5rem;">AGRO SDI</h1>
-            <p style="color:#6b7280; letter-spacing:2px; font-size:0.8rem; margin-top:10px;">ENTERPRISE PORTAL</p>
+            <h1 style="color:#064e3b; margin:0; font-size: 2.2rem; font-family:'Helvetica Neue';">AGRO SDI</h1>
+            <p style="color:#6b7280; letter-spacing:2px; font-size:0.7rem; margin-top:10px; font-weight:bold;">ENTERPRISE PORTAL</p>
         </div>""", unsafe_allow_html=True)
         kw = st.text_input("CHAVE OPENWEATHER", type="password")
         kg = st.text_input("CHAVE GEMINI AI", type="password")
-        if st.button("ENTRAR NO SISTEMA", type="primary", use_container_width=True):
+        if st.button("ACESSAR SISTEMA", type="primary", use_container_width=True):
             if kw and kg: 
                 st.query_params["w_key"] = kw
                 st.query_params["g_key"] = kg
@@ -58,72 +59,65 @@ if not url_w:
     st.stop()
 
 # ==============================================================================
-# 💎 HEADER & TICKER (Design Separado e Limpo)
+# 💎 HEADER MASTER (Capa + Status Indestrutível + Ticker)
 # ==============================================================================
 
-# Busca dados do Mercado (Sem NaN)
+# Busca Cotações (Já convertidas e sem NaN)
 ticker_html = market_engine.MarketData.get_ticker_real()
 
 st.markdown(f"""
 <div class="header-wrapper">
-    <div style="background: linear-gradient(135deg, #064e3b 0%, #065f46 100%); padding: 25px 20px; color: white; display: flex; justify-content: space-between; align-items: center;">
-        <div>
-            <h1 style="margin: 0; font-family: 'Helvetica Neue', sans-serif; font-weight: 800; font-size: 1.8rem; letter-spacing: -1px;">
-                AGRO <span style="color: #34d399;">SDI</span>
-            </h1>
-            <div style="font-size: 0.75rem; letter-spacing: 3px; opacity: 0.8; margin-top: 5px; font-weight: 600;">
-                SISTEMA DE DECISÃO INTEGRADA
-            </div>
-        </div>
-        <div>
-            <span style="background: rgba(255,255,255,0.15); color: #d1fae5; padding: 6px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; border: 1px solid rgba(255,255,255,0.2);">
-                ONLINE 🟢
-            </span>
-        </div>
+    <div>
+        <h1 class="brand-main">AGRO <span style="color: #34d399;">SDI</span></h1>
+        <div class="brand-sub">SISTEMA DE DECISÃO INTEGRADA</div>
     </div>
     
-    <div class="ticker-wrap">
-        <div class="ticker-move">
-            <div class="ticker-item">{ticker_html}</div>
-        </div>
+    <div class="status-badge">
+        <span class="status-dot"></span> ONLINE
+    </div>
+</div>
+
+<div class="ticker-container">
+    <div class="ticker-text">
+        {ticker_html}
     </div>
 </div>
 """, unsafe_allow_html=True)
 
 # ==============================================================================
-# 💎 FILTROS INTELIGENTES (Dentro de um Card Bonito)
+# 💎 PAINEL DE CONTROLE
 # ==============================================================================
 st.markdown('<div class="app-card">', unsafe_allow_html=True)
 c1, c2, c3, c4 = st.columns([2, 2, 1.5, 1])
 
 with c1:
-    st.markdown('<div style="color:#64748b; font-size:0.8rem; font-weight:bold; margin-bottom:5px;">📍 UNIDADE PRODUTIVA</div>', unsafe_allow_html=True)
-    city = st.text_input("GPS Busca", placeholder="Digite a Fazenda...", label_visibility="collapsed")
-    if st.button("📡 Sincronizar Satélite", use_container_width=True) and city:
+    st.markdown('<div style="color:#64748b; font-size:0.75rem; font-weight:800; margin-bottom:5px; text-transform:uppercase;">📍 Unidade Produtiva</div>', unsafe_allow_html=True)
+    city = st.text_input("GPS", placeholder="Buscar Fazenda...", label_visibility="collapsed")
+    if st.button("📡 Sincronizar", use_container_width=True) and city:
         lat, lon = WeatherConn.get_coords(city, url_w)
         if lat: st.session_state['loc_lat'], st.session_state['loc_lon'] = lat, lon; st.rerun()
 
 with c2:
-    st.markdown('<div style="color:#64748b; font-size:0.8rem; font-weight:bold; margin-bottom:5px;">🚜 CULTURA</div>', unsafe_allow_html=True)
+    st.markdown('<div style="color:#64748b; font-size:0.75rem; font-weight:800; margin-bottom:5px; text-transform:uppercase;">🚜 Cultura</div>', unsafe_allow_html=True)
     if BANCO_MASTER:
         cult_sel = st.selectbox("Cultura", sorted(list(BANCO_MASTER.keys())), label_visibility="collapsed")
         vars_disp = list(BANCO_MASTER[cult_sel].get('vars', {}).keys())
         fases_disp = list(BANCO_MASTER[cult_sel].get('fases', {}).keys())
         var_sel = st.selectbox("Genética", vars_disp)
-    else: st.error("Banco de dados offline."); st.stop()
+    else: st.error("Banco Offline."); st.stop()
 
 with c3:
-    st.markdown('<div style="color:#64748b; font-size:0.8rem; font-weight:bold; margin-bottom:5px;">📊 ESTÁDIO</div>', unsafe_allow_html=True)
-    fase_sel = st.selectbox("Estádio", fases_disp, label_visibility="collapsed")
+    st.markdown('<div style="color:#64748b; font-size:0.75rem; font-weight:800; margin-bottom:5px; text-transform:uppercase;">📊 Estádio</div>', unsafe_allow_html=True)
+    fase_sel = st.selectbox("Fase", fases_disp, label_visibility="collapsed")
 
 with c4:
-    st.markdown('<div style="color:#64748b; font-size:0.8rem; font-weight:bold; margin-bottom:5px;">📆 PLANTIO</div>', unsafe_allow_html=True)
+    st.markdown('<div style="color:#64748b; font-size:0.75rem; font-weight:800; margin-bottom:5px; text-transform:uppercase;">📆 Safra</div>', unsafe_allow_html=True)
     st.session_state['d_plantio'] = st.date_input("Plantio", st.session_state['d_plantio'], label_visibility="collapsed")
     dias = (date.today() - st.session_state['d_plantio']).days
 
 st.markdown('</div>', unsafe_allow_html=True)
 
-# --- PROCESSAMENTO DE DADOS ---
+# --- PROCESSAMENTO ---
 info = BANCO_MASTER[cult_sel]['vars'][var_sel]
 dados_fase = BANCO_MASTER[cult_sel]['fases'][fase_sel]
 df_clima = WeatherConn.get_forecast_dataframe(url_w, st.session_state['loc_lat'], st.session_state['loc_lon'], info.get('kc', 1.0), BANCO_MASTER[cult_sel].get('t_base', 10))
@@ -135,21 +129,18 @@ if not df_clima.empty:
     temp, umid, delta_t = hoje['Temp'], hoje['Umid'], hoje['Delta T']
     vpd = AgroBrain.calcular_vpd(temp, umid)
     
-    # Cores KPI
     t_st, t_cor = ("Ótima ✅", "#16a34a") if 18 <= temp <= 32 else ("Crítica 🔥", "#dc2626")
     d_st, d_cor = ("APTO ✅", "#16a34a") if 2 <= delta_t <= 8 else ("PARE 🛑", "#dc2626")
     v_st, v_cor = ("Ideal 💧", "#2563eb") if 0.5 <= vpd <= 1.5 else ("Estresse 🌵", "#dc2626")
 
-    # --- KPI CARDS (COM EFEITO HOVER RESTAURADO) ---
+    # KPI CARDS
     c1, c2, c3, c4 = st.columns(4)
     with c1: st.markdown(AgroBrain.gerar_cartao_kpi("🌡️ Temperatura", f"{temp:.1f}", "°C", t_st, t_cor), unsafe_allow_html=True)
     with c2: st.markdown(AgroBrain.gerar_cartao_kpi("🛡️ Delta T", f"{delta_t}", "°C", d_st, d_cor), unsafe_allow_html=True)
     with c3: st.markdown(AgroBrain.gerar_cartao_kpi("💨 VPD (Pressão)", f"{vpd:.2f}", "kPa", v_st, v_cor), unsafe_allow_html=True)
     with c4: st.markdown(AgroBrain.gerar_cartao_kpi("☀️ GDA Acumulado", f"{gda_acum:.0f}", "°GD", f"Ciclo: {dias}d", "#1e293b"), unsafe_allow_html=True)
 
-    # ==============================================================================
-    # 💎 ABAS DE CONTEÚDO (LAYOUT ORIGINAL E LIMPO)
-    # ==============================================================================
+    # --- ABAS DE CONTEÚDO ---
     st.markdown("<br>", unsafe_allow_html=True)
     tabs = st.tabs(["🧬 TÉCNICO", "☁️ CLIMA", "📡 RADAR", "👁️ IA", "💰 GESTÃO", "🗺️ MAPA", "📄 LAUDO", "🔔 ALERTAS"])
 
@@ -159,7 +150,6 @@ if not df_clima.empty:
         st.caption(f"Evolução do Ciclo Fenológico ({progresso*100:.1f}%)")
         st.progress(progresso)
 
-        # Imagem Inteligente
         nome_cultura = str(cult_sel).lower()
         mapa_img = {"soja": "soja", "milho": "milho", "algodão": "algodao", "algodao": "algodao", "café": "cafe", "cafe": "cafe", "feijão": "feijao", "feijao": "feijao", "trigo": "trigo", "tomate": "tomate", "batata": "batata", "uva": "uva", "banana": "banana", "citros": "citros", "manga": "manga"}
         arquivo_base = next((v for k, v in mapa_img.items() if k in nome_cultura), None)
@@ -173,7 +163,7 @@ if not df_clima.empty:
         st.markdown("<br>", unsafe_allow_html=True)
         c_i1, c_i2, c_i3 = st.columns([1,2,1])
         with c_i2:
-            if img_path: st.image(img_path, caption=f"Estádio: {fase_sel}", use_container_width=True)
+            if img_path: st.image(img_path, caption=f"Fenologia: {fase_sel}", use_container_width=True)
             else: st.image("https://images.unsplash.com/photo-1625246333195-58197bd47d26?q=80&w=1000&auto=format&fit=crop", caption="Imagem Ilustrativa", use_container_width=True)
 
         st.divider()
@@ -196,7 +186,7 @@ if not df_clima.empty:
         AgroBrain.render_protocolo_quimico(dados_fase.get('quimica')) 
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # ABA 2: CLIMA (Visual 24h + Semanal)
+    # ABA 2: CLIMA (24H + Semanal)
     with tabs[1]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         st.markdown("### 📅 Tendência Semanal")
@@ -287,7 +277,7 @@ if not df_clima.empty:
             st.markdown(f"<div style='background:white; color:black; padding:20px; border:1px solid #ccc;'><h1>RECEITUÁRIO</h1><p><b>{cult_sel}</b></p><p>DIAGNÓSTICO: {diag}</p><p>PRESCRIÇÃO: {man}</p><p>NOTAS: {obs}</p></div>", unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # ABA 8: NOTIFICAÇÕES
+    # ABA 8: ALERTAS
     with tabs[7]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         st.markdown("### 🔔 Configurar Alertas")
