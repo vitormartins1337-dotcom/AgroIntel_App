@@ -299,7 +299,6 @@ if not df_clima.empty:
         st.markdown('<div class="app-card" style="padding:0px; overflow:hidden;">', unsafe_allow_html=True)
         
         # --- 1. CÉREBRO DE INTELIGÊNCIA FENOLÓGICA ---
-        # O sistema cruza a CULTURA (cult_sel) com a FASE (fase_sel) para sugerir o problema exato.
         CATALOGO_INTELIGENTE = {
             "Soja": {
                 "Vegetativo": {
@@ -320,29 +319,25 @@ if not df_clima.empty:
                     "Pragas": ["Lagarta-da-espiga", "Mosca-do-estigma", "Percevejo-marrom"],
                     "Doencas": ["Ferrugem Polissora", "Cercosporiose", "Diplodia (Grãos ardidos)"]
                 }
-            },
-            # Adicione outras culturas conforme necessário (Café, Algodão, etc)
+            }
         }
 
-        # Lógica de Seleção Automática
+        # Lógica de Seleção
         fase_tipo = "Reprodutivo" if "R" in str(fase_sel) or "Flor" in str(fase_sel) or "Grão" in str(fase_sel) else "Vegetativo"
         cultura_atual = str(cult_sel).capitalize()
         
-        # Busca as opções exatas para o momento atual
         try:
             opcoes_mip = CATALOGO_INTELIGENTE[cultura_atual][fase_tipo]
         except KeyError:
-            # Fallback genérico se a cultura não estiver mapeada detalhadamente ainda
             opcoes_mip = {
-                "Pragas": ["Lagarta desfolhadora", "Percevejo sugador", "Ácaro", "Coleóptero"],
+                "Pragas": ["Lagarta", "Percevejo", "Ácaro", "Coleóptero"],
                 "Doencas": ["Fungo foliar", "Fungo de solo", "Bacteriose", "Virose"]
             }
 
-        # --- 2. LAYOUT SPLIT-VIEW (MAPA E CONTROLE LADO A LADO) ---
-        # Essa divisão 3 para 1 é o padrão de softwares GIS profissionais
+        # --- 2. LAYOUT SPLIT-VIEW ---
         col_mapa, col_painel = st.columns([3, 1.3], gap="small")
 
-        # --- LADO ESQUERDO: O MAPA ---
+        # MAPA (ESQUERDA)
         with col_mapa:
             m = folium.Map(
                 location=[st.session_state['loc_lat'], st.session_state['loc_lon']], 
@@ -351,30 +346,20 @@ if not df_clima.empty:
                 attr='Esri',
                 name='Satélite'
             )
-            # Adiciona camada híbrida para ver nomes de estradas/fazendas
             folium.TileLayer('cartodbpositron', name='Híbrido').add_to(m)
 
-            # Renderiza pontos existentes
             for p in st.session_state['pontos_mapa']:
                 cor_p = '#dc2626' if p['Nivel'] == 'Crítico' else '#f59e0b'
-                # Área de influência
-                folium.Circle(
-                    [p['lat'], p['lon']], radius=30, color=cor_p, fill=True, fill_opacity=0.2, stroke=False
-                ).add_to(m)
-                # Ícone do problema
+                folium.Circle([p['lat'], p['lon']], radius=30, color=cor_p, fill=True, fill_opacity=0.2, stroke=False).add_to(m)
                 icone = "🐛" if "Praga" in p['Tipo'] else "🍄"
-                folium.Marker(
-                    [p['lat'], p['lon']], 
-                    popup=f"<b>{p['Agente']}</b><br>{p['Nivel']}",
-                    icon=folium.DivIcon(html=f"<div style='font-size:18px; text-shadow: 0 0 3px white;'>{icone}</div>")
-                ).add_to(m)
+                folium.Marker([p['lat'], p['lon']], popup=f"<b>{p['Agente']}</b><br>{p['Nivel']}", icon=folium.DivIcon(html=f"<div style='font-size:18px; text-shadow: 0 0 3px white;'>{icone}</div>")).add_to(m)
 
             LocateControl(auto_start=True).add_to(m)
             
-            # O MAPA AGORA É CAPTURADO AQUI
-            map_data = st_folium(m, height=550, margin=0, returned_objects=["last_clicked"])
+            # --- CORREÇÃO AQUI (REMOVIDO MARGIN=0) ---
+            map_data = st_folium(m, height=550, returned_objects=["last_clicked"])
 
-        # --- LADO DIREITO: O PAINEL DE COMANDO (INTEGRADO) ---
+        # PAINEL (DIREITA)
         with col_painel:
             st.markdown(f"""
             <div style="background-color:#f8fafc; height:550px; padding:15px; border-left:1px solid #e2e8f0;">
@@ -384,48 +369,33 @@ if not df_clima.empty:
                 </div>
             """, unsafe_allow_html=True)
 
-            # Lógica de Coordenadas: Se clicou, pega o clique. Se não, pega o GPS da fazenda.
             if map_data and map_data["last_clicked"]:
                 lat_f, lon_f = map_data["last_clicked"]["lat"], map_data["last_clicked"]["lng"]
                 st.info(f"📍 Ponto Selecionado")
                 
-                # FORMULÁRIO COMPACTO E PROFISSIONAL
                 with st.form("form_mip_pro"):
                     target = st.radio("Alvo", ["🐛 Praga", "🍄 Doença", "🌿 Daninha"], horizontal=True)
                     
-                    # O "Pulo do Gato": As opções mudam conforme o alvo
-                    if "Praga" in target:
-                        lista_agentes = options=opcoes_mip["Pragas"]
-                    elif "Doença" in target:
-                        lista_agentes = options=opcoes_mip["Doencas"]
-                    else:
-                        lista_agentes = ["Amargoso", "Buva", "Corda-de-viola", "Leiteiro"]
+                    if "Praga" in target: lista_agentes = opcoes_mip["Pragas"]
+                    elif "Doença" in target: lista_agentes = opcoes_mip["Doencas"]
+                    else: lista_agentes = ["Amargoso", "Buva", "Corda-de-viola", "Leiteiro"]
                     
                     agente_sel = st.selectbox("Identificação", lista_agentes)
                     
                     c_n1, c_n2 = st.columns(2)
-                    with c_n1: 
-                        dano = st.select_slider("Severidade", ["Leve", "Médio", "Crítico"], value="Médio")
-                    with c_n2:
-                        qtd = st.number_input("Qtd/m²", min_value=0.0, step=1.0)
+                    with c_n1: dano = st.select_slider("Severidade", ["Leve", "Médio", "Crítico"], value="Médio")
+                    with c_n2: qtd = st.number_input("Qtd/m²", min_value=0.0, step=1.0)
                     
                     obs_geo = st.text_input("Nota", placeholder="Obs. tática...")
                     
                     st.markdown("<br>", unsafe_allow_html=True)
-                    if st.form_submit_button("💾 REGISTRAR OCORRÊNCIA", type="primary", use_container_width=True):
-                        # Salva
+                    if st.form_submit_button("💾 REGISTRAR", type="primary", use_container_width=True):
                         st.session_state['pontos_mapa'].append({
                             "Data": date.today().strftime("%d/%m"),
-                            "Tipo": target,
-                            "Agente": agente_sel,
-                            "Nivel": dano,
-                            "Qtd": qtd,
-                            "lat": lat_f,
-                            "lon": lon_f
+                            "Tipo": target, "Agente": agente_sel, "Nivel": dano, "Qtd": qtd, "lat": lat_f, "lon": lon_f
                         })
                         st.success("✅ Salvo!")
                         st.rerun()
-
             else:
                 st.markdown("""
                 <div style="text-align:center; padding:40px 10px; color:#94a3b8; border:2px dashed #cbd5e1; border-radius:10px;">
@@ -434,7 +404,6 @@ if not df_clima.empty:
                 </div>
                 """, unsafe_allow_html=True)
                 
-                # Mostra o resumo rápido se houver pontos
                 if st.session_state['pontos_mapa']:
                     st.markdown("---")
                     st.markdown(f"<b>📊 Hoje:</b> {len(st.session_state['pontos_mapa'])} ocorrências.")
