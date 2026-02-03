@@ -1,127 +1,165 @@
 # ARQUIVO: styles.py
-# VERSÃO: V-MASTER-GOLD (Trava de Quebra de Linha + Animação Pulse)
+# VERSÃO: V-RESTORATION (Cards Flutuantes + Abas Originais + Ticker Seguro)
 
 import streamlit as st
 
 def load_css():
     st.markdown("""
         <style>
-            /* 1. CONFIGURAÇÃO GERAL (Remove espaços desnecessários) */
+            /* 1. AJUSTES GERAIS (Para o Header colar no topo) */
             .block-container {
-                padding-top: 1rem !important;
+                padding-top: 0rem !important; /* Cola no teto */
                 padding-bottom: 3rem !important;
                 max-width: 100% !important;
             }
             header[data-testid="stHeader"] { display: none; }
 
-            /* 2. O HEADER PREMIUM (CAPA) */
+            /* 2. O HEADER VERDE (CAPA) */
             .header-wrapper {
-                background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
-                padding: 20px 15px;
+                background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+                padding: 20px 20px;
                 color: white;
-                border-radius: 0px; /* Reto embaixo para colar no ticker */
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                box-shadow: 0 4px 10px rgba(0,0,0,0.2);
                 position: relative;
-                z-index: 10; /* Fica acima do ticker */
+                z-index: 99;
             }
 
-            .brand-main {
-                font-family: 'Helvetica Neue', sans-serif;
-                font-weight: 900;
-                font-size: 1.8rem;
-                line-height: 1;
-                letter-spacing: -1px;
-                margin: 0;
-            }
-
-            .brand-sub {
-                font-family: 'Segoe UI', sans-serif;
-                font-size: 0.7rem;
-                text-transform: uppercase;
-                letter-spacing: 2px;
-                opacity: 0.85;
-                margin-top: 4px;
-                font-weight: 600;
-            }
-
-            /* 3. O STATUS "ONLINE" (CORREÇÃO DA QUEBRA DE LINHA) */
+            /* 3. O STATUS ONLINE (CORRIGIDO) */
             .status-badge {
-                background: rgba(255, 255, 255, 0.15);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                padding: 6px 12px;
-                border-radius: 30px;
-                font-size: 0.7rem;
-                font-weight: 800;
+                background: rgba(255, 255, 255, 0.2);
+                border: 1px solid rgba(167, 243, 208, 0.3);
                 color: #d1fae5;
-                
-                /* O SEGREDO DO PADRÃO OURO: */
-                white-space: nowrap; /* Proíbe quebrar linha */
+                padding: 5px 12px;
+                border-radius: 20px;
+                font-size: 0.75rem;
+                font-weight: 800;
+                letter-spacing: 1px;
                 display: flex;
                 align-items: center;
-                gap: 6px;
+                gap: 8px;
+                white-space: nowrap; /* Trava a quebra de linha */
             }
-
-            /* Animação da Bolinha (Pulso) */
-            @keyframes pulse-green {
-                0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7); }
-                70% { box-shadow: 0 0 0 6px rgba(74, 222, 128, 0); }
-                100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
-            }
+            
             .status-dot {
                 width: 8px;
                 height: 8px;
-                background-color: #4ade80; /* Verde neon */
+                background-color: #34d399;
                 border-radius: 50%;
-                display: inline-block;
+                box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7);
                 animation: pulse-green 2s infinite;
             }
+            
+            @keyframes pulse-green {
+                0% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7); }
+                70% { box-shadow: 0 0 0 6px rgba(52, 211, 153, 0); }
+                100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+            }
 
-            /* 4. O TICKER (LETREIRO) INTEGRADO */
+            /* 4. O TICKER (LETREIRO) - AGORA EMBAIXO DO HEADER */
             .ticker-container {
-                background-color: #0f172a; /* Preto azulado premium */
+                background-color: #0f172a;
                 width: 100%;
+                height: 40px;
                 overflow: hidden;
                 white-space: nowrap;
-                height: 40px;
                 display: flex;
                 align-items: center;
-                margin-bottom: 25px; /* Espaço para o conteúdo de baixo */
-                border-bottom: 4px solid #10b981; /* Linha de acabamento */
-                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+                border-bottom: 4px solid #10b981;
+                margin-bottom: 25px;
             }
             
             .ticker-text {
                 display: inline-block;
                 color: #e2e8f0;
-                font-family: 'Consolas', 'Monaco', monospace; /* Fonte técnica */
-                font-size: 0.85rem;
-                animation: marquee 45s linear infinite; /* Mais lento e suave */
-                padding-left: 100%; /* Começa fora da tela */
+                font-family: 'Consolas', monospace;
+                font-size: 0.9rem;
+                padding-left: 100%;
+                animation: marquee 40s linear infinite;
             }
-
+            
             @keyframes marquee {
                 0% { transform: translateX(0); }
                 100% { transform: translateX(-100%); }
             }
 
-            /* 5. CARTÕES E INTERFACE GERAL */
+            /* 5. OS CARDS (ESTILO PADRÃO OURO RESTAURADO) */
+            /* Esse é o código que faz o efeito "Balãozinho" e Sombra */
             .app-card {
-                background: white;
-                padding: 20px;
-                border-radius: 12px;
+                background-color: white;
+                padding: 25px;
+                border-radius: 15px;
                 border: 1px solid #f1f5f9;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+                margin-bottom: 20px;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            
+            .app-card:hover {
+                transform: translateY(-5px); /* O efeito de elevar */
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+                border-color: #34d399;
+            }
+
+            /* 6. KPI BOXES (OS DADOS COLORIDOS) */
+            /* Restaurei o visual robusto dos números */
+            .kpi-box {
+                background: white;
+                border-radius: 12px;
+                border: 1px solid #e2e8f0;
+                text-align: center;
+                overflow: hidden;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-                margin-bottom: 15px;
                 transition: transform 0.2s;
             }
-            .app-card:active { transform: scale(0.99); } /* Efeito de toque no celular */
+            .kpi-box:hover {
+                transform: scale(1.02);
+                border-color: #cbd5e1;
+            }
+            .kpi-header {
+                background: #f8fafc;
+                color: #64748b;
+                font-size: 0.75rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                padding: 8px;
+                border-bottom: 1px solid #f1f5f9;
+            }
+            .kpi-value {
+                font-size: 1.8rem;
+                font-weight: 800;
+                color: #1e293b;
+                padding: 15px 0;
+            }
+            .kpi-unit { font-size: 0.9rem; color: #94a3b8; font-weight: 500; }
+            .kpi-footer {
+                color: white;
+                font-size: 0.7rem;
+                font-weight: 700;
+                padding: 5px;
+                letter-spacing: 0.5px;
+            }
 
-            /* Abas Limpas */
-            .stTabs [data-baseweb="tab-list"] { border-bottom: 1px solid #e2e8f0; gap: 5px; }
-            .stTabs [data-baseweb="tab"] { border-radius: 6px; border: none; background: #f8fafc; font-size: 0.8rem; }
-            .stTabs [aria-selected="true"] { background-color: #064e3b !important; color: white !important; font-weight: bold; }
+            /* 7. ABAS (TABS) - VOLTANDO AO ORIGINAL BONITO DO STREAMLIT */
+            /* Removi o código que deformava. Agora vai ficar o padrão bonito + ajustes finos */
+            .stTabs [data-baseweb="tab-list"] {
+                gap: 8px;
+                border-bottom: 1px solid #e2e8f0;
+            }
+            .stTabs [data-baseweb="tab"] {
+                height: 50px;
+                white-space: pre-wrap;
+                border-radius: 8px 8px 0 0;
+                padding: 0 20px;
+                font-weight: 600;
+                color: #475569;
+            }
+            .stTabs [aria-selected="true"] {
+                background-color: white !important;
+                color: #064e3b !important;
+                border-bottom: 3px solid #064e3b;
+            }
         </style>
     """, unsafe_allow_html=True)
