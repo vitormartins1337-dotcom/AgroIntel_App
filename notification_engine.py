@@ -95,7 +95,7 @@ class NotificationSystem:
         # CONFIGURAÇÕES DE ENVIO (Idealmente use st.secrets para isso)
         # Substitua pelos seus dados REAIS para testar
         EMAIL_REMETENTE = "vitormartins1337@gmail" 
-        SENHA_APP = "rqyubydyerpioxiu"  
+        SENHA_APP = "ikkv obvi xzle gzvf"  
         
         if "seu_email" in EMAIL_REMETENTE:
             return False, "Configure o e-mail e senha no arquivo notification_engine.py"
