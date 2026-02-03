@@ -215,16 +215,60 @@ if not df_clima.empty:
             st.plotly_chart(fig_dt, use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # ABA 3
+    # ABA 3: RADAR (VISUAL MASTER - CARDS FLUTUANTES)
     with tabs[2]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
+        st.markdown("### 📡 Monitoramento Regional (Satélite)")
+        st.caption("Dados em tempo real das estações meteorológicas vizinhas.")
+        
         df_r = WeatherConn.get_radar_simulation(url_w, st.session_state['loc_lat'], st.session_state['loc_lon'])
+        
         if not df_r.empty:
             cols = st.columns(4)
             for i, r in df_r.iterrows():
+                # Lógica de Cores Profissionais
+                if r['Chuva'] == "Sim":
+                    cor_fundo = "#fef2f2" # Vermelho bem claro
+                    cor_borda = "#fca5a5" # Vermelho suave
+                    icon = "🌧️"
+                    texto_chuva = "Chuva"
+                    cor_texto = "#991b1b" # Vermelho escuro (para leitura)
+                else:
+                    cor_fundo = "#f0fdf4" # Verde bem claro
+                    cor_borda = "#86efac" # Verde suave
+                    icon = "☀️"
+                    texto_chuva = "Limpo"
+                    cor_texto = "#166534" # Verde escuro (para leitura)
+
+                # HTML DO CARD FLUTUANTE
+                html_radar = f"""
+                <div style="
+                    background-color: {cor_fundo};
+                    border: 1px solid {cor_borda};
+                    border-radius: 12px;
+                    padding: 15px;
+                    text-align: center;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+                    transition: transform 0.2s;
+                    height: 100%;
+                ">
+                    <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #64748b; margin-bottom: 5px;">
+                        📍 {r['Direcao']}
+                    </div>
+                    <div style="font-size: 2.2rem; font-weight: 800; color: #0f172a; line-height: 1;">
+                        {r['Temp']:.0f}°
+                    </div>
+                    <div style="margin-top: 8px; font-size: 0.9rem; font-weight: 700; color: {cor_texto}; background: rgba(255,255,255,0.5); padding: 4px; border-radius: 6px;">
+                        {icon} {texto_chuva}
+                    </div>
+                </div>
+                """
+                
                 with cols[i]:
-                    bg = "#fee2e2" if r['Chuva']=="Sim" else "#ecfdf5"
-                    st.markdown(f"<div style='background:{bg}; padding:15px; border-radius:8px; text-align:center;'><b>{r['Direcao']}</b><br><span style='font-size:1.5rem'>{r['Temp']:.0f}°</span><br>{r['Chuva']}</div>", unsafe_allow_html=True)
+                    st.markdown(html_radar, unsafe_allow_html=True)
+        else:
+            st.info("📡 Sincronizando satélites vizinhos... Aguarde um momento.")
+
         st.markdown('</div>', unsafe_allow_html=True)
 
     # ABA 4
