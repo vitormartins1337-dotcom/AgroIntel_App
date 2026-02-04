@@ -312,7 +312,7 @@ if not df_clima.empty:
         st.markdown('</div>', unsafe_allow_html=True)
 
                                 
-                    # 5. GESTÃO (SIMULADOR DE NEGÓCIO - CORRIGIDO E PRÁTICO)
+    # 5. GESTÃO (SIMULADOR DE NEGÓCIO - CORRIGIDO E PRÁTICO)
     with tabs[4]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         
