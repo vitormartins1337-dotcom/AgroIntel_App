@@ -311,140 +311,95 @@ if not df_clima.empty:
             st.info("👆 Toque no mapa para identificar uma ocorrência.")
         st.markdown('</div>', unsafe_allow_html=True)
 
-                        # 5. GESTÃO (RADAR COMERCIAL DE PRECISÃO - CALIBRADO)
+                                # 5. GESTÃO (INTELIGÊNCIA DE MERCADO - BUSCA AUTOMÁTICA)
     with tabs[4]:
+        from duckduckgo_search import DDGS
+        
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         
-        # --- 1. BANCO DE DADOS DE MERCADO (CALIBRADO HOJE) ---
-        # Commodities: Usam Ticker da Bolsa (Automático)
-        # Hortifruti: Usam Preço Base CEASA (Médio Nacional Atualizado)
-        MERCADO_FISICO = {
-            "Soja":    {"tipo": "commodity", "ref": "ZS=F", "unidade": "Saca 60kg", "base": 128.00},
-            "Milho":   {"tipo": "commodity", "ref": "ZC=F", "unidade": "Saca 60kg", "base": 58.00},
-            "Café":    {"tipo": "commodity", "ref": "KC=F", "unidade": "Saca 60kg", "base": 1150.00},
-            "Algodão": {"tipo": "commodity", "ref": "CT=F", "unidade": "@ Arroba",  "base": 145.00},
-            
-            # HORTIFRUTI (PREÇOS REAIS MÉDIA CEASA - FEVEREIRO)
-            "Citros":  {"tipo": "horti", "unidade": "Cx 40kg", "base": 45.00},  # Laranja Pera
-            "Tomate":  {"tipo": "horti", "unidade": "Cx 20kg", "base": 70.00},  # ~3,50/kg
-            "Cebola":  {"tipo": "horti", "unidade": "Saca 20kg", "base": 50.00}, # ~2,50/kg
-            "Batata":  {"tipo": "horti", "unidade": "Saca 50kg", "base": 130.00}, # ~2,60/kg
-            "Mirtilo": {"tipo": "horti", "unidade": "Kg",      "base": 45.00},
-            "Uva":     {"tipo": "horti", "unidade": "Kg",      "base": 9.50},
-            "Banana":  {"tipo": "horti", "unidade": "Cx 20kg", "base": 60.00},  # ~3,00/kg
-        }
-
-        # Praças de Negociação (Ágio/Deságio Regional)
-        PRACAS = {
-            "Sul/Sudeste (Ref. SP/PR)": 1.00,
-            "Centro-Oeste (Ref. MT/GO)": 0.88,
-            "Nordeste (Ref. BA/PE)": 0.95,
-            "Norte (Ref. PA/TO)": 0.92
-        }
-
-        # Carrega dados da cultura atual
-        dados_mercado = MERCADO_FISICO.get(cult_sel, {"tipo": "horti", "unidade": "Unid", "base": 10.00})
+        # --- 1. CABEÇALHO INTELIGENTE ---
+        # O sistema já sabe a cultura e a cidade (definida no filtro lateral/topo)
+        # Se não tiver cidade definida, usa uma genérica
+        local_busca = city if city else "Brasil"
         
-        # Cabeçalho
-        c_head1, c_head2 = st.columns([2, 1])
-        with c_head1:
-            st.markdown(f"### 💰 Radar Comercial: **{cult_sel}**")
-            st.caption(f"Referência de Preço: {dados_mercado['unidade']}")
-        
-        with c_head2:
-            regiao_sel = st.selectbox("📍 Sua Região:", list(PRACAS.keys()))
+        st.markdown(f"### 🤖 Radar de Preços: **{cult_sel}**")
+        st.caption(f"Monitorando oportunidades comerciais em: **{local_busca}** e região.")
 
-        st.divider()
-
-        # --- 2. CÁLCULO DE PREÇO (PRECISÃO HÍBRIDA) ---
+        # --- 2. MOTOR DE BUSCA (A MÁGICA ACONTECE AQUI) ---
+        # Não pede nada pro usuário. O Python vai na internet buscar agora.
         
-        preco_sugerido = 0.0
-        fonte_dados = ""
-        
-        # A) Se for Commodity (Bolsa) -> Pega do Yahoo Finance
-        if dados_mercado["tipo"] == "commodity":
+        @st.cache_data(ttl=600) # Guarda a busca por 10 min para não ficar lento
+        def buscar_oportunidades(cultura, local):
+            results = []
             try:
-                import yfinance as yf
-                usd = yf.download("BRL=X", period="1d", progress=False)['Close'].iloc[-1]
-                ticker = yf.download(dados_mercado["ref"], period="1d", progress=False)['Close'].iloc[-1]
-                
-                # Conversões
-                if cult_sel == "Soja" or cult_sel == "Milho": fator = (1/100) * 2.20462 * usd
-                elif cult_sel == "Café": fator = (1/100) * 132.277 * usd
-                else: fator = 1.0
-                
-                preco_base_calculado = ticker * fator
-                preco_sugerido = preco_base_calculado * PRACAS[regiao_sel]
-                fonte_dados = "Bolsa (Tempo Real)"
-            except:
-                preco_sugerido = dados_mercado["base"] * PRACAS[regiao_sel] # Fallback
-                fonte_dados = "Média Histórica (Offline)"
+                with DDGS() as ddgs:
+                    # Estratégia 1: Preço Local Específico
+                    query1 = f"preço {cultura} hoje em {local} cotação atual"
+                    for r in ddgs.text(query1, region='br-pt', max_results=3):
+                        r['tipo'] = '📍 Local'
+                        results.append(r)
+                    
+                    # Estratégia 2: Cotação Geral / Ceasa do Estado
+                    query2 = f"cotação {cultura} ceasa atacado mercado do produtor"
+                    for r in ddgs.text(query2, region='br-pt', max_results=2):
+                        r['tipo'] = '🚛 Regional'
+                        results.append(r)
+            except Exception as e:
+                return []
+            return results
 
-        # B) Se for Horti (Ceasa) -> Usa Base Atualizada
-        else:
-            # Pega o preço base do nosso DB e ajusta pela região
-            preco_sugerido = dados_mercado["base"] * PRACAS[regiao_sel]
-            fonte_dados = "Média CEASA (Estimada)"
-
-        # --- 3. INTERFACE DE AJUSTE FINO (GESTAO REAL) ---
-        # Aqui o produtor tem o poder. O sistema sugere, ele confirma.
-        
-        st.markdown(f"#### 🏷️ Precificação ({dados_mercado['unidade']})")
-        
-        c_p1, c_p2, c_p3 = st.columns([1.5, 1.5, 1])
-        
-        with c_p1:
-            # O sistema sugere, mas o usuário pode digitar por cima (Isso é profissional!)
-            preco_final = st.number_input(
-                "Preço de Venda (R$)", 
-                value=float(f"{preco_sugerido:.2f}"), 
-                step=0.50,
-                help="Ajuste conforme o preço exato que você negociou hoje."
-            )
-        
-        with c_p2:
-            # Cálculo unitário (Ex: se a caixa é 20kg, quanto é o kg?)
-            if "Cx" in dados_mercado['unidade'] or "Saca" in dados_mercado['unidade']:
-                # Tenta extrair o peso da string (ex: "Saca 60kg" -> 60)
-                import re
-                nums = re.findall(r'\d+', dados_mercado['unidade'])
-                if nums:
-                    peso = int(nums[0])
-                    preco_kg = preco_final / peso
-                    st.metric("Preço por KG", f"R$ {preco_kg:.2f}/kg")
-                else:
-                    st.metric("Fonte", fonte_dados)
-            else:
-                 st.metric("Fonte", fonte_dados)
-
-        with c_p3:
-            # BOTÃO GOOGLE CHECK (INTELIGÊNCIA EXTERNA)
-            # Cria um link dinâmico para o produtor conferir no Google
-            link_busca = f"https://www.google.com/search?q=preço+{cult_sel}+hoje+ceasa"
-            st.link_button("🔍 Conferir no Google", link_busca)
+        # Executa a busca automática
+        with st.spinner(f"📡 Varrendo o mercado em busca de preços para {cult_sel} em {local_busca}..."):
+            oportunidades = buscar_oportunidades(cult_sel, local_busca)
 
         st.divider()
 
-        # --- 4. SIMULADOR DE FATURAMENTO ---
-        if preco_final > 0:
-            st.markdown("#### 📊 Resultado da Venda")
+        if oportunidades:
+            st.markdown(f"#### 📢 Cotações Encontradas ({len(oportunidades)})")
             
-            c_qtd, c_fat = st.columns(2)
-            with c_qtd:
-                qtd_venda = st.number_input(f"Quantidade para Venda ({dados_mercado['unidade']})", min_value=1.0, value=100.0)
-            
-            with c_fat:
-                total_venda = qtd_venda * preco_final
+            # Exibe os resultados em Cards Profissionais (Clicáveis)
+            for item in oportunidades:
+                titulo = item.get('title', 'Sem título')
+                link = item.get('href', '#')
+                resumo = item.get('body', 'Clique para ver detalhes do preço...')
+                tag = item.get('tipo', 'Geral')
+                
+                # Visual de Card "Notícias Agrícolas"
                 st.markdown(f"""
-                <div style="background:#f0fdf4; border:1px solid #16a34a; border-radius:10px; padding:15px; text-align:center;">
-                    <div style="font-size:0.8rem; font-weight:bold; color:#166534;">RECEITA TOTAL PREVISTA</div>
-                    <div style="font-size:1.8rem; font-weight:900; color:#166534;">R$ {total_venda:,.2f}</div>
+                <div style="
+                    background: #ffffff; 
+                    border-left: 5px solid {'#16a34a' if tag == '📍 Local' else '#3b82f6'};
+                    padding: 15px; 
+                    border-radius: 8px; 
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                    margin-bottom: 15px;
+                    transition: transform 0.2s;
+                ">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                        <span style="font-size:0.7rem; font-weight:bold; background:#f1f5f9; padding:2px 8px; border-radius:4px; color:#64748b;">{tag.upper()}</span>
+                        <a href="{link}" target="_blank" style="text-decoration:none; color:#3b82f6; font-size:0.8rem; font-weight:bold;">🔗 ABRIR FONTE</a>
+                    </div>
+                    <div style="font-size:1rem; font-weight:800; color:#0f172a; margin-bottom:5px;">
+                        {titulo}
+                    </div>
+                    <div style="font-size:0.85rem; color:#475569; line-height:1.4;">
+                        {resumo} ...
+                    </div>
                 </div>
                 """, unsafe_allow_html=True)
+                
+            # --- 3. ANÁLISE COMPARATIVA AUTOMÁTICA ---
+            # O sistema tenta extrair números do texto (Básico de Inteligência)
+            st.info("💡 **Dica de Negócio:** Clique em 'Abrir Fonte' para confirmar a data da cotação. Preços de internet podem variar do balcão físico.")
+
+        else:
+            # Fallback se a busca falhar ou não achar nada
+            st.warning(f"O sistema não encontrou cotações online recentes para {cult_sel} especificamente em {local_busca}.")
+            st.markdown("Isso acontece quando a cidade é pequena ou não tem publicações recentes na internet.")
             
-            # Análise de Cenário
-            st.markdown("<br>", unsafe_allow_html=True)
-            st.info(f"💡 **Inteligência de Mercado:** O preço de **R$ {preco_final:.2f}** está alinhado com a média regional. Para culturas como {cult_sel}, lembre-se de descontar cerca de 10% a 15% referente a frete e comissões se vender via atravessador.")
+            # Botão de Busca Manual Google
+            url_google = f"https://www.google.com/search?q=preço+{cult_sel}+{local_busca}+compradores"
+            st.link_button(f"🔍 Tentar Busca Profunda no Google", url_google, type="primary", use_container_width=True)
 
         st.markdown('</div>', unsafe_allow_html=True)
 
