@@ -312,131 +312,142 @@ if not df_clima.empty:
         st.markdown('</div>', unsafe_allow_html=True)
 
                                 
-                    # 5. GESTÃO (SIMULADOR DE VIABILIDADE ECONÔMICA)
+                    # 5. GESTÃO (SIMULADOR DE NEGÓCIO - CORRIGIDO E PRÁTICO)
     with tabs[4]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         
-        # --- 1. CÉREBRO AGRONÔMICO (DADOS DE REFERÊNCIA) ---
-        # Aqui está a inteligência. O sistema sabe a média de produção por nível tecnológico.
-        AGRO_INTELLIGENCE = {
-            "Soja":    {"unidade": "ha", "prod": [50, 65, 85], "medida": "Sacas", "preco": 128.00, "custo_perc": 0.65}, # Custo 65% da receita
-            "Milho":   {"unidade": "ha", "prod": [100, 140, 180], "medida": "Sacas", "preco": 58.00, "custo_perc": 0.70},
-            "Café":    {"unidade": "ha", "prod": [25, 35, 55], "medida": "Sacas", "preco": 1150.00, "custo_perc": 0.60},
-            "Algodão": {"unidade": "ha", "prod": [250, 320, 400], "medida": "@", "preco": 145.00, "custo_perc": 0.75},
+        # --- 1. BANCO DE DADOS INTELIGENTE (CORRIGIDO) ---
+        # input_type: 'area' (Hectares) ou 'planta' (Pés/Unidades)
+        # prod_factors: [Baixa Tec, Média Tec, Alta Tec] -> Quanto rende por unidade de entrada
+        
+        AGRO_PLAN = {
+            # GRÃOS (Extensivos -> Hectares)
+            "Soja":      {"input": "area", "label": "Hectares", "prod": [50, 65, 85],   "medida_final": "Sacas", "preco": 128.00},
+            "Milho":     {"input": "area", "label": "Hectares", "prod": [100, 140, 180], "medida_final": "Sacas", "preco": 58.00},
+            "Algodão":   {"input": "area", "label": "Hectares", "prod": [250, 320, 400], "medida_final": "@",     "preco": 145.00},
+            "Trigo":     {"input": "area", "label": "Hectares", "prod": [40, 60, 80],    "medida_final": "Sacas", "preco": 85.00},
             
-            # Fruticultura / Perenes (Cálculo por PLANTA/PÉ) - Ideal para pequenos/médios
-            "Citros":  {"unidade": "pé", "prod": [2.0, 3.5, 5.0], "medida": "Cx 40kg", "preco": 45.00, "custo_perc": 0.40},
-            "Mirtilo": {"unidade": "pé", "prod": [1.5, 3.0, 5.0], "medida": "Kg", "preco": 45.00, "custo_perc": 0.50},
-            "Uva":     {"unidade": "pé", "prod": [8.0, 12.0, 20.0], "medida": "Kg", "preco": 9.00, "custo_perc": 0.55},
-            "Tomate":  {"unidade": "pé", "prod": [4.0, 7.0, 10.0], "medida": "Cx 20kg", "preco": 70.00, "custo_perc": 0.60},
-            "Banana":  {"unidade": "pé", "prod": [15, 25, 40], "medida": "Kg", "preco": 3.00, "custo_perc": 0.40},
+            # PERENES E FRUTAS (Intensivos -> Pés/Plantas)
+            # Café: Pede PÉS -> Entrega SACAS (Conversão automática: ~0.01 a 0.02 sacas/pé)
+            "Café":      {"input": "planta", "label": "Pés/Plantas", "prod": [0.010, 0.015, 0.025], "medida_final": "Sacas (60kg)", "preco": 1150.00},
+            
+            # Frutas Pequenas: Pede PÉS -> Entrega KG
+            "Framboesa": {"input": "planta", "label": "Pés/Mudas",   "prod": [0.5, 1.2, 2.5],    "medida_final": "Kg",      "preco": 60.00}, # Alto valor
+            "Mirtilo":   {"input": "planta", "label": "Pés/Mudas",   "prod": [1.0, 2.5, 4.0],    "medida_final": "Kg",      "preco": 45.00},
+            "Uva":       {"input": "planta", "label": "Pés/Videiras","prod": [8.0, 15.0, 25.0],  "medida_final": "Kg",      "preco": 9.50},
+            
+            # Frutas Grandes: Pede PÉS -> Entrega CAIXAS/KG
+            "Citros":    {"input": "planta", "label": "Árvores",     "prod": [2.0, 3.5, 5.0],    "medida_final": "Cx 40.8kg", "preco": 45.00},
+            "Tomate":    {"input": "planta", "label": "Pés",         "prod": [4.0, 7.0, 10.0],   "medida_final": "Cx 20kg",   "preco": 70.00},
+            "Banana":    {"input": "planta", "label": "Touceiras",   "prod": [15.0, 30.0, 50.0], "medida_final": "Kg",        "preco": 3.00},
         }
 
-        # Carrega inteligência da cultura selecionada
-        # Se não tiver, usa padrão genérico
-        ref = AGRO_INTELLIGENCE.get(cult_sel, {"unidade": "ha", "prod": [1, 2, 3], "medida": "Unid", "preco": 10.0, "custo_perc": 0.5})
+        # Carrega dados ou usa genérico se a cultura não estiver na lista
+        dados = AGRO_PLAN.get(cult_sel, {"input": "area", "label": "Unidades", "prod": [1, 1, 1], "medida_final": "Unid", "preco": 1.0})
 
-        st.markdown(f"### 📈 Simulador de Viabilidade: **{cult_sel}**")
-        st.caption("Planejamento financeiro baseado no seu nível tecnológico.")
+        st.markdown(f"### 📊 Calculadora de Potencial: **{cult_sel}**")
+        st.caption("Estimativa de colheita baseada no seu volume de plantio.")
 
-        # --- 2. INPUTS SIMPLIFICADOS (O USUÁRIO SÓ INFORMA O BÁSICO) ---
+        # --- 2. INPUT INTUITIVO (Pergunta o que faz sentido) ---
         
-        c_in1, c_in2 = st.columns([1, 2])
+        c_i1, c_i2, c_i3 = st.columns([1.2, 1.5, 1])
         
-        with c_in1:
-            # Pergunta 1: Quanto você tem?
-            txt_label = "Área Total (Hectares)" if ref["unidade"] == "ha" else "Nº de Plantas/Pés"
-            qtd = st.number_input(txt_label, min_value=1.0, value=100.0 if ref["unidade"] == "pé" else 50.0, step=1.0)
-
-        with c_in2:
-            # Pergunta 2: Qual seu nível de tecnologia? (Isso muda a produtividade automaticamente)
-            nivel_tec = st.select_slider(
-                "Nível Tecnológico / Manejo", 
-                options=["Baixo (Tradicional)", "Médio (Tecnificado)", "Alto (Precisão)"],
-                value="Médio (Tecnificado)"
+        with c_i1:
+            # Pergunta Dinâmica: "Quantos Pés?" ou "Quantos Hectares?"
+            qtd_input = st.number_input(
+                f"Quantos {dados['label']} você tem?", 
+                min_value=1.0, 
+                value=1000.0 if dados['input'] == 'planta' else 50.0, 
+                step=1.0 if dados['input'] == 'planta' else 0.5,
+                help="Quantidade total plantada."
             )
-            
-            # Define o índice da lista de produtividade (0, 1 ou 2)
-            idx_tec = 0 if "Baixo" in nivel_tec else 1 if "Médio" in nivel_tec else 2
-            prod_estimada = ref["prod"][idx_tec]
+
+        with c_i2:
+            # Nível Tecnológico (Define a produtividade unitária)
+            tec = st.select_slider(
+                "Nível Tecnológico", 
+                options=["Baixo (Simples)", "Médio (Padrão)", "Alto (Intensivo)"],
+                value="Médio (Padrão)"
+            )
+            # Pega o índice 0, 1 ou 2
+            idx = 0 if "Baixo" in tec else 1 if "Médio" in tec else 2
+            fator_prod = dados['prod'][idx]
+
+        with c_i3:
+            # Mostra o fator usado para educação do usuário
+            st.metric(f"Rendimento Esp.", f"{fator_prod:.3f}", f"{dados['medida_final']}/{dados['label'][:-1]}")
 
         st.divider()
 
-        # --- 3. O CÁLCULO MÁGICO (MOTOR FINANCEIRO) ---
+        # --- 3. RESULTADO DIRETO (POTENCIAL BRUTO) ---
+        # O usuário pediu "Dado bruto aproximado"
         
-        # Produção Total
-        total_colheita = qtd * prod_estimada
-        
-        # Receita Bruta (Entrada de Dinheiro)
-        receita_bruta = total_colheita * ref["preco"]
-        
-        # Custo Estimado (Baseado na margem setorial)
-        custo_operacional = receita_bruta * ref["custo_perc"]
-        
-        # Lucro (O que sobra)
-        lucro_estimado = receita_bruta - custo_operacional
-        margem_lucro = (lucro_estimado / receita_bruta) * 100
+        producao_potencial = qtd_input * fator_prod
+        receita_bruta = producao_potencial * dados['preco']
 
-        # --- 4. APRESENTAÇÃO DE RESULTADOS (VISUAL ESTRATÉGICO) ---
-        
-        col_res1, col_res2, col_res3 = st.columns(3)
+        col_res1, col_res2 = st.columns(2)
         
         with col_res1:
-            # CARTÃO PRODUÇÃO
+            # BALÃO DE PRODUÇÃO (O que importa pro produtor)
             st.markdown(f"""
-            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:15px; text-align:center;">
-                <div style="color:#64748b; font-size:0.75rem; font-weight:bold;">EXPECTATIVA DE COLHEITA</div>
-                <div style="color:#0f172a; font-size:1.8rem; font-weight:800;">{total_colheita:,.0f}</div>
-                <div style="background:#e2e8f0; color:#475569; font-size:0.7rem; padding:2px; border-radius:4px; margin-top:5px;">
-                    {prod_estimada} {ref['medida']} por {ref['unidade']}
+            <div style="
+                background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); 
+                border: 1px solid #bae6fd; 
+                border-radius: 12px; 
+                padding: 20px; 
+                text-align: center;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            ">
+                <div style="color:#0284c7; font-size:0.8rem; font-weight:bold; letter-spacing:1px;">POTENCIAL PRODUTIVO</div>
+                <div style="color:#0369a1; font-size:2.2rem; font-weight:900; line-height:1.2;">
+                    {producao_potencial:,.1f}
+                </div>
+                <div style="background:#0ea5e9; color:white; font-size:0.8rem; font-weight:bold; padding:4px 10px; border-radius:15px; display:inline-block; margin-top:5px;">
+                    {dados['medida_final'].upper()} TOTAIS
                 </div>
             </div>
             """, unsafe_allow_html=True)
 
         with col_res2:
-            # CARTÃO CUSTO (ALERTA)
+            # BALÃO FINANCEIRO (Estimativa Bruta)
             st.markdown(f"""
-            <div style="background:#fff1f2; border:1px solid #fda4af; border-radius:10px; padding:15px; text-align:center;">
-                <div style="color:#9f1239; font-size:0.75rem; font-weight:bold;">CUSTO ESTIMADO</div>
-                <div style="color:#be123c; font-size:1.4rem; font-weight:800;">R$ {custo_operacional/1000:,.1f} k</div>
-                <div style="color:#9f1239; font-size:0.7rem; margin-top:5px;">
-                    ~{ref['custo_perc']*100:.0f}% da Receita
+            <div style="
+                background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); 
+                border: 1px solid #86efac; 
+                border-radius: 12px; 
+                padding: 20px; 
+                text-align: center;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            ">
+                <div style="color:#16a34a; font-size:0.8rem; font-weight:bold; letter-spacing:1px;">VALOR BRUTO ESTIMADO</div>
+                <div style="color:#15803d; font-size:2.2rem; font-weight:900; line-height:1.2;">
+                    R$ {receita_bruta/1000:,.1f} k
+                </div>
+                <div style="color:#166534; font-size:0.8rem; margin-top:10px;">
+                    Baseado em R$ {dados['preco']:.2f} / {dados['medida_final']}
                 </div>
             </div>
             """, unsafe_allow_html=True)
 
-        with col_res3:
-            # CARTÃO LUCRO (SUCESSO)
-            st.markdown(f"""
-            <div style="background:#f0fdf4; border:1px solid #86efac; border-radius:10px; padding:15px; text-align:center;">
-                <div style="color:#166534; font-size:0.75rem; font-weight:bold;">LUCRO LÍQUIDO</div>
-                <div style="color:#16a34a; font-size:1.4rem; font-weight:800;">R$ {lucro_estimado/1000:,.1f} k</div>
-                <div style="color:#15803d; font-size:0.7rem; margin-top:5px;">
-                    Margem: {margem_lucro:.1f}%
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+        st.caption("Nota: Este cálculo considera o **Potencial Produtivo** da planta. Fatores climáticos, pragas e manejo podem alterar o resultado real.")
 
-        # --- 5. FERRAMENTAS DE MERCADO (O "BUSCADOR") ---
+        # --- 4. LINKS DE AÇÃO RÁPIDA (GOOGLE) ---
         st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("#### 🔎 Inteligência Comercial")
-        st.caption(f"Preço base utilizado: R$ {ref['preco']:.2f} / {ref['medida']}. Pesquise compradores reais abaixo:")
+        st.markdown("#### 🌍 Inteligência de Mercado")
         
-        c_b1, c_b2 = st.columns(2)
-        with c_b1:
-            # Botão Inteligente 1: Busca Preço no Google
-            link_preco = f"https://www.google.com/search?q=preço+{cult_sel}+hoje+cotacao"
-            st.link_button(f"💰 Ver Cotação Atual ({cult_sel})", link_preco, use_container_width=True)
+        c_btn1, c_btn2 = st.columns(2)
+        local_user = city if city else "na minha região"
+        
+        with c_btn1:
+            # Botão 1: Buscar Compradores
+            termos_busca = f"compradores de {cult_sel} {local_user} atacado"
+            st.link_button(f"🤝 Quem compra {cult_sel}?", f"https://www.google.com/search?q={termos_busca}", use_container_width=True)
             
-        with c_b2:
-            # Botão Inteligente 2: Busca Compradores na Região
-            # Se tiver cidade definida, busca lá. Se não, busca geral.
-            local_busca = city if city else "na minha região"
-            link_comprador = f"https://www.google.com/search?q=compradores+de+{cult_sel}+{local_busca}"
-            st.link_button(f"🤝 Encontrar Compradores", link_comprador, use_container_width=True)
-
-        st.info("💡 **Dica Profissional:** O Lucro real depende do seu controle de custos. Use a Aba **Alertas** para monitorar riscos climáticos que podem causar quebra de safra.")
-        
+        with c_btn2:
+            # Botão 2: Buscar Preço
+            termos_preco = f"preço kg {cult_sel} hoje {local_user} ceasa"
+            st.link_button(f"💰 Cotação Hoje no Google", f"https://www.google.com/search?q={termos_preco}", use_container_width=True)
+            
         st.markdown('</div>', unsafe_allow_html=True)
 
     # 6. ALERTAS (CENTRAL DE CONFIGURAÇÃO)
