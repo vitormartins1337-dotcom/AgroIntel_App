@@ -532,11 +532,10 @@ if not df_clima.empty:
         st.markdown('</div>', unsafe_allow_html=True)
     
     
-    # 2. CLIMA (ATUALIZADO - TABELA DE DECISÃO OPERACIONAL)
-    with tabs[1]:
+    # 3. CLIMA (CORRIGIDO E BLINDADO)
+    with tabs[2]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         
-        # Cabeçalho com Carimbo de Tempo (Gera confiança no dado)
         c_clim1, c_clim2 = st.columns([3, 1])
         with c_clim1:
             st.markdown("### 📅 Planejamento Climático")
@@ -544,7 +543,7 @@ if not df_clima.empty:
             hora_att = datetime.now().strftime("%H:%M")
             st.markdown(f"<div style='text-align:right; font-size:0.7rem; color:#64748b; margin-top:5px;'>🔄 Atualizado às: <b>{hora_att}</b></div>", unsafe_allow_html=True)
 
-        # GRÁFICO 1: TENDÊNCIA SEMANAL (MANTIDO POIS É BOM PARA VISÃO GERAL)
+        # Gráfico Semanal (Mantido)
         fig = go.Figure()
         fig.add_trace(go.Bar(x=df_clima['Data'], y=df_clima['Chuva'], name='Chuva (mm)', marker_color='#3b82f6'))
         fig.add_trace(go.Scatter(x=df_clima['Data'], y=df_clima['ETc'], name='Consumo (ETc)', line=dict(color='#ef4444', width=3)))
@@ -553,71 +552,71 @@ if not df_clima.empty:
         
         st.divider()
         
-        # --- NOVO DETALHE HORÁRIO (TABELA DE DECISÃO) ---
-        # Substitui o gráfico de linha confuso por dados acionáveis
-        
+        # --- TABELA DE DETALHE HORÁRIO (CORREÇÃO DO ERRO) ---
         df_hora = WeatherConn.get_hourly_forecast(url_w, st.session_state['loc_lat'], st.session_state['loc_lon'])
         
         if not df_hora.empty:
             st.markdown("### 🕒 Detalhe Operacional (Próximas 24h)")
             st.caption("Analise as janelas de aplicação baseadas no Delta T.")
 
-            # Preparando os dados para ficarem bonitos na tabela
-            # Vamos criar uma coluna visual de "Status" baseada no Delta T
+            # 1. Cria a coluna de Condição (Semáforo)
             def get_status_deltat(dt):
                 if 2 <= dt <= 8: return "✅ IDEAL"
                 elif 8 < dt <= 10: return "⚠️ ATENÇÃO"
                 else: return "🚫 PARE"
 
-            df_hora['Condição'] = df_hora['Delta T'].apply(get_status_deltat)
-            
-            # Seleciona e renomeia colunas para ficar profissional
-            df_view = df_hora[['HoraSimples', 'Temp', 'Chuva', 'Umid', 'Vento', 'Delta T', 'Condição']].copy()
-            df_view.columns = ['Hora', 'Temp (°C)', 'Chuva (mm)', 'Umid (%)', 'Vento (km/h)', 'Delta T', 'Status']
+            # Garante que a coluna Delta T existe antes de aplicar
+            if 'Delta T' in df_hora.columns:
+                df_hora['Condição'] = df_hora['Delta T'].apply(get_status_deltat)
+            else:
+                df_hora['Condição'] = "---"
 
-            # EXIBIÇÃO: DATA FRAME INTERATIVO (STYLE "BLOOMBERG")
+            # 2. Seleção de Colunas Segura (Evita o KeyError)
+            # Lista de colunas que QUEREMOS mostrar
+            cols_desejadas = ['HoraSimples', 'Temp', 'Chuva', 'Umid', 'Vento', 'Delta T', 'Condição']
+            
+            # Filtra apenas as que REALMENTE EXISTEM no dataframe
+            cols_finais = [c for c in cols_desejadas if c in df_hora.columns]
+            
+            # Cria a tabela de visualização apenas com o que existe
+            df_view = df_hora[cols_finais].copy()
+            
+            # Renomeia para ficar bonito (se a coluna existir)
+            mapa_nomes = {
+                'HoraSimples': 'Horário',
+                'Temp': 'Temp (°C)',
+                'Chuva': 'Chuva (mm)',
+                'Umid': 'Umid (%)',
+                'Vento': 'Vento (km/h)',
+                'Delta T': 'Delta T',
+                'Condição': 'Status'
+            }
+            df_view.rename(columns=mapa_nomes, inplace=True)
+
+            # 3. Exibição da Tabela
             st.dataframe(
                 df_view,
                 use_container_width=True,
                 hide_index=True,
                 column_config={
-                    "Hora": st.column_config.TextColumn("Horário", help="Horário da previsão"),
+                    "Horário": st.column_config.TextColumn("Horário"),
                     "Temp (°C)": st.column_config.ProgressColumn(
-                        "Temperatura", 
-                        format="%.1f°", 
-                        min_value=10, 
-                        max_value=45,
-                        help="Barra de calor"
+                        "Temperatura", format="%.1f°", min_value=0, max_value=45
                     ),
-                    "Chuva (mm)": st.column_config.NumberColumn(
-                        "Chuva", 
-                        format="%.1f mm"
-                    ),
-                    "Umid (%)": st.column_config.NumberColumn(
-                        "Umidade",
-                        format="%d%%"
-                    ),
-                    "Delta T": st.column_config.NumberColumn(
-                        "Delta T",
-                        format="%.1f",
-                        help="Indicador de qualidade para pulverização (Ideal: 2 a 8)"
-                    ),
-                    "Status": st.column_config.TextColumn(
-                        "Janela de Aplicação",
-                        help="Recomendação técnica"
-                    )
+                    "Chuva (mm)": st.column_config.NumberColumn("Chuva", format="%.1f mm"),
+                    "Umid (%)": st.column_config.NumberColumn("Umidade", format="%d%%"),
+                    "Delta T": st.column_config.NumberColumn("Delta T", format="%.1f", help="Ideal: 2 a 8"),
+                    "Status": st.column_config.TextColumn("Janela Aplicação")
                 }
             )
             
-            # Legenda Técnica Rápida
+            # Legenda
             c_leg1, c_leg2 = st.columns(2)
-            with c_leg1:
-                st.info("💧 **Chuva:** Acumulado previsto na hora.")
-            with c_leg2:
-                st.warning("🛡️ **Delta T:** Ideal entre 2 e 8 para evitar deriva ou evaporação.")
+            with c_leg1: st.info("💧 **Chuva:** Acumulado previsto na hora.")
+            with c_leg2: st.warning("🛡️ **Delta T:** Ideal entre 2 e 8.")
 
         else:
-            st.error("⚠️ Não foi possível carregar a previsão horária. Verifique sua conexão.")
+            st.error("⚠️ Previsão horária indisponível no momento.")
             
         st.markdown('</div>', unsafe_allow_html=True)
 
