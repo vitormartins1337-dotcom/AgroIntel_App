@@ -646,74 +646,225 @@ if not df_clima.empty:
                 with cols[i]: st.markdown(html_radar, unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # 5. MAPA (MIP SYNGENTA STYLE)
+    # 5. MAPA (MIP SYNGENTA STYLE - COM MODAL FLUTUANTE)
     with tabs[4]:
-        # Carrega histórico
+        import json
+        import base64
+        from io import BytesIO
+
+        # --- 1. CONFIGURAÇÃO E BANCO DE DADOS ---
         DB_FILE = "monitoramento_campo.json"
-        def carregar_dados_mip():
+        
+        # Banco de Imagens (Simulando App Nativo)
+        DB_IMAGENS_MIP = {
+            "Soja": {
+                "Lagarta-do-cartucho": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Spodoptera_frugiperda_back.jpg/320px-Spodoptera_frugiperda_back.jpg",
+                "Percevejo-marrom": "https://live.staticflickr.com/65535/49086326938_5f470375e8_w.jpg",
+                "Ferrugem Asiática": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Phakopsora_pachyrhizi_on_Soybean_02.jpg/320px-Phakopsora_pachyrhizi_on_Soybean_02.jpg",
+                "Antracnose": "https://content.eol.org/data/media/7f/32/a6/542.1465431668.jpg",
+                "Mofo-branco": "https://www.agrolink.com.br/upload/problemas/Sclerotinia_sclerotiorum81.jpg"
+            },
+            "Milho": {
+                "Cigarrinha": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Dalbulus_maidis.jpg/320px-Dalbulus_maidis.jpg",
+                "Lagarta-do-cartucho": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Spodoptera_frugiperda_back.jpg/320px-Spodoptera_frugiperda_back.jpg",
+                "Pulgão": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Rhopalosiphum_maidis.jpg/320px-Rhopalosiphum_maidis.jpg"
+            },
+            # Fallback para outras culturas
+            "Geral": {
+                "Praga Genérica": "https://via.placeholder.com/300x200.png?text=Praga+Detectada",
+                "Doença Genérica": "https://via.placeholder.com/300x200.png?text=Doen%C3%A7a+Detectada"
+            }
+        }
+
+        # Funções de Banco de Dados
+        def carregar_dados():
             if os.path.exists(DB_FILE):
                 with open(DB_FILE, "r") as f: return json.load(f)
             return []
-        def salvar_dados_mip(novo):
-            d = carregar_dados_mip()
+
+        def salvar_dado(novo):
+            d = carregar_dados()
             d.append(novo)
             with open(DB_FILE, "w") as f: json.dump(d, f)
             return d
 
-        historico_real = carregar_dados_mip()
-        DB_IMAGENS = {
-            "Lagarta-do-cartucho": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Spodoptera_frugiperda_back.jpg/320px-Spodoptera_frugiperda_back.jpg",
-            "Percevejo-marrom": "https://live.staticflickr.com/65535/49086326938_5f470375e8_w.jpg",
-            "Ferrugem Asiática": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Phakopsora_pachyrhizi_on_Soybean_02.jpg/320px-Phakopsora_pachyrhizi_on_Soybean_02.jpg",
-            "Cigarrinha-do-milho": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Dalbulus_maidis.jpg/320px-Dalbulus_maidis.jpg"
-        }
+        # Carrega dados
+        historico = carregar_dados()
+        cultura_atual = str(cult_sel)
+        imgs_cultura = DB_IMAGENS_MIP.get(cultura_atual, DB_IMAGENS_MIP["Geral"])
 
-        st.markdown('<div class="app-card" style="padding:0px; overflow:hidden;">', unsafe_allow_html=True)
-        c_h1, c_h2 = st.columns([3, 1])
-        with c_h1:
-            st.markdown(f"### 🎯 MIP: **{cult_sel}**")
-            st.caption(f"Pontos Coletados: {len(historico_real)}")
-        with c_h2: st.button("🔄 Sync", use_container_width=True)
+        # --- 2. MODAL FLUTUANTE (A MÁGICA VISUAL) ---
+        # Esta função cria a janela "Pop-up" bonita
+        @st.dialog(f"🛡️ Registrar Ocorrência: {cultura_atual}")
+        def popup_monitoramento(lat, lon):
+            st.markdown(f"<div style='font-size:0.8rem; color:#64748b; margin-bottom:10px;'>📍 Localização Exata: {lat:.5f}, {lon:.5f}</div>", unsafe_allow_html=True)
+            
+            # Abas dentro do Modal (Praga vs Doença)
+            tab_p, tab_d = st.tabs(["🐛 PRAGAS", "🍄 DOENÇAS"])
+            
+            sel_nome = None
+            sel_img = None
+            sel_tipo = None
 
-        m = folium.Map(location=[st.session_state['loc_lat'], st.session_state['loc_lon']], zoom_start=18, tiles=None, control_scale=True)
-        folium.TileLayer(tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', attr='Esri', name='Satélite HD', overlay=False).add_to(m)
-        
-        if len(historico_real) > 1:
-            caminho = [[p['lat'], p['lon']] for p in historico_real if p.get('Cultura') == str(cult_sel)]
-            if caminho: folium.PolyLine(caminho, color="#fbbf24", weight=3, opacity=0.8, dash_array='10').add_to(m)
+            # Conteúdo Visual (Cards Selecionáveis)
+            with tab_p:
+                st.caption("Toque na imagem para selecionar")
+                cols = st.columns(3)
+                idx = 0
+                for nome, url in imgs_cultura.items():
+                    # Filtro simples (num app real seria mais robusto)
+                    if "Ferrugem" not in nome and "Antracnose" not in nome and "Mofo" not in nome: 
+                        with cols[idx % 3]:
+                            st.image(url, use_container_width=True)
+                            if st.button(nome, key=f"btn_p_{nome}", use_container_width=True):
+                                st.session_state['temp_sel'] = (nome, url, "Praga")
+                        idx += 1
+            
+            with tab_d:
+                st.caption("Toque na imagem para selecionar")
+                cols_d = st.columns(3)
+                idx_d = 0
+                for nome, url in imgs_cultura.items():
+                    if "Ferrugem" in nome or "Antracnose" in nome or "Mofo" in nome:
+                        with cols_d[idx_d % 3]:
+                            st.image(url, use_container_width=True)
+                            if st.button(nome, key=f"btn_d_{nome}", use_container_width=True):
+                                st.session_state['temp_sel'] = (nome, url, "Doença")
+                        idx_d += 1
 
-        for p in historico_real:
-            cor_icon = "red" if p['Nivel'] == "Alto" else "orange" if p['Nivel'] == "Médio" else "#4ade80"
-            folium.Marker([p['lat'], p['lon']], popup=f"<b>{p['Praga']}</b><br>{p['Nivel']}", icon=folium.Icon(color="black", icon_color=cor_icon, icon="bug", prefix="fa")).add_to(m)
+            st.divider()
 
-        LocateControl(auto_start=True).add_to(m)
-        map_data = st_folium(m, height=480, returned_objects=["last_clicked"])
-
-        st.divider()
-
-        lat_f = map_data["last_clicked"]["lat"] if map_data and map_data["last_clicked"] else None
-        lon_f = map_data["last_clicked"]["lng"] if map_data and map_data["last_clicked"] else None
-
-        if lat_f:
-            st.markdown(f"<div style='background:#f0fdf4; padding:10px; border-radius:8px; margin-bottom:15px;'>📍 <b>PONTO CAPTURADO!</b></div>", unsafe_allow_html=True)
-            with st.form("form_mip_master"):
-                c_sel, c_foto = st.columns([1.5, 1])
-                with c_sel:
-                    tipo = st.radio("Categoria", ["🐛 Praga", "🍄 Doença", "🌿 Daninha"], horizontal=True)
-                    sugestoes = ["Lagarta-do-cartucho", "Percevejo-marrom", "Ferrugem Asiática"] if str(cult_sel) == "Soja" else ["Cigarrinha-do-milho", "Pulgão"] if str(cult_sel) == "Milho" else ["Outro"]
-                    praga_sel = st.selectbox("Agente", sugestoes + ["Outro..."])
-                    nivel = st.select_slider("Severidade", ["Baixo", "Médio", "Alto"], value="Médio")
-                with c_foto:
-                    img_url = DB_IMAGENS.get(praga_sel, "https://via.placeholder.com/150?text=Sem+Foto")
-                    st.image(img_url, caption="Referência", use_container_width=True)
+            # Área de Confirmação (Só aparece se selecionou algo)
+            if 'temp_sel' in st.session_state:
+                s_nome, s_url, s_tipo = st.session_state['temp_sel']
                 
-                if st.form_submit_button("✅ SALVAR", type="primary", use_container_width=True):
-                    novo_registro = {"Data": date.today().strftime("%d/%m/%Y"), "Cultura": str(cult_sel), "Tipo": tipo, "Praga": praga_sel, "Nivel": nivel, "lat": lat_f, "lon": lon_f}
-                    salvar_dados_mip(novo_registro)
+                st.markdown(f"""
+                <div style="background:#f0fdf4; padding:10px; border-radius:8px; border:1px solid #bbf7d0; display:flex; align-items:center; gap:10px;">
+                    <img src="{s_url}" style="width:50px; height:50px; border-radius:50%; object-fit:cover;">
+                    <div>
+                        <div style="font-weight:bold; color:#166534;">{s_nome}</div>
+                        <div style="font-size:0.8rem; color:#166534;">{s_tipo} Identificada</div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                c_qtd, c_sev = st.columns(2)
+                with c_qtd:
+                    focos = st.number_input("Número de Focos", min_value=1, value=1)
+                with c_sev:
+                    severidade = st.select_slider("Severidade", ["Leve", "Média", "Alta"], value="Média")
+                
+                obs = st.text_input("Observação de Campo", placeholder="Ex: Próximo à bordadura...")
+
+                if st.button("✅ CONFIRMAR REGISTRO", type="primary", use_container_width=True):
+                    novo = {
+                        "Data": datetime.now().strftime("%d/%m/%Y %H:%M"),
+                        "Cultura": cultura_atual,
+                        "Tipo": s_tipo,
+                        "Nome": s_nome,
+                        "Focos": focos,
+                        "Severidade": severidade,
+                        "Obs": obs,
+                        "lat": lat,
+                        "lon": lon
+                    }
+                    salvar_dado(novo)
+                    st.toast("💾 Ocorrência Salva com Sucesso!")
+                    del st.session_state['temp_sel'] # Limpa seleção
                     st.rerun()
-        else:
-            st.info("👆 Toque no mapa para identificar uma ocorrência.")
+
+        # --- 3. TELA PRINCIPAL (MAPA FULL) ---
+        st.markdown('<div class="app-card" style="padding:0px; overflow:hidden;">', unsafe_allow_html=True)
+        
+        # Header Flutuante
+        c_act1, c_act2 = st.columns([2, 1])
+        with c_act1:
+            st.markdown(f"### 🛰️ Monitoramento Ativo")
+            st.caption(f"Pontos na Sessão: **{len(historico)}**")
+        with c_act2:
+            # Botão de Exportar
+            if st.button("📂 Fechar & Exportar", type="secondary", use_container_width=True):
+                 st.session_state['modo_relatorio'] = True
+                 st.rerun()
+
+        # O MAPA (GOOGLE EARTH STYLE)
+        m = folium.Map(
+            location=[st.session_state['loc_lat'], st.session_state['loc_lon']], 
+            zoom_start=18,
+            tiles=None,
+            control_scale=True
+        )
+        
+        # Satélite HD
+        folium.TileLayer(
+            tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+            attr='Esri', name='Satélite HD', overlay=False
+        ).add_to(m)
+
+        # Pontos Salvos (Ícones Profissionais)
+        for p in historico:
+            cor = "red" if p['Severidade'] == "Alta" else "orange" if p['Severidade'] == "Média" else "#4ade80"
+            folium.Marker(
+                [p['lat'], p['lon']],
+                popup=f"<b>{p['Nome']}</b><br>{p['Focos']} focos ({p['Severidade']})",
+                icon=folium.Icon(color="black", icon_color=cor, icon="bug", prefix="fa")
+            ).add_to(m)
+
+        # GPS DO USUÁRIO (BOLINHA AZUL PULSANTE)
+        LocateControl(auto_start=True, strings={"title": "Minha Posição"}).add_to(m)
+        
+        # Captura de Clique
+        map_data = st_folium(m, height=500, returned_objects=["last_clicked"])
+
+        # --- GATILHO DO MODAL ---
+        # Se clicar no mapa, ABRE O MODAL (Não abre formulário embaixo!)
+        if map_data and map_data["last_clicked"]:
+            lat_clique = map_data["last_clicked"]["lat"]
+            lon_clique = map_data["last_clicked"]["lng"]
+            popup_monitoramento(lat_clique, lon_clique)
+
         st.markdown('</div>', unsafe_allow_html=True)
+
+        # --- 4. ÁREA DE RELATÓRIO / EXPORTAÇÃO (PASTA DIGITAL) ---
+        if st.session_state.get('modo_relatorio'):
+            st.markdown("<br>", unsafe_allow_html=True)
+            with st.expander("📂 RELATÓRIO DE MONITORAMENTO (EXPORTAR)", expanded=True):
+                st.markdown("### 📋 Resumo da Inspeção")
+                
+                if not historico:
+                    st.warning("Nenhum dado coletado nesta sessão.")
+                else:
+                    df = pd.DataFrame(historico)
+                    
+                    # Métricas
+                    c_m1, c_m2, c_m3 = st.columns(3)
+                    c_m1.metric("Total de Pontos", len(df))
+                    c_m2.metric("Pragas Críticas", len(df[df['Severidade']=='Alta']))
+                    c_m3.metric("Focos Totais", df['Focos'].sum())
+                    
+                    st.dataframe(df[['Data', 'Nome', 'Severidade', 'Focos', 'Obs']], use_container_width=True)
+                    
+                    # Botão Download Excel
+                    c_d1, c_d2 = st.columns(2)
+                    with c_d1:
+                        # Converte para Excel na memória
+                        output = BytesIO()
+                        with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+                            df.to_excel(writer, index=False, sheet_name='Monitoramento')
+                        excel_data = output.getvalue()
+                        
+                        st.download_button(
+                            label="📥 Baixar Planilha (.xlsx)",
+                            data=excel_data,
+                            file_name=f"Monitoramento_{cultura_atual}_{date.today()}.xlsx",
+                            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                            use_container_width=True
+                        )
+                    
+                    with c_d2:
+                        if st.button("🔙 Voltar ao Mapa", use_container_width=True):
+                            st.session_state['modo_relatorio'] = False
+                            st.rerun()
 
                                 
     # 6. GESTÃO (SIMULADOR DE NEGÓCIO - CORRIGIDO E PRÁTICO)
