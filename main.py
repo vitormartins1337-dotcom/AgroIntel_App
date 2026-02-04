@@ -143,7 +143,7 @@ if not df_clima.empty:
     # ==============================================================================
     st.markdown("<br>", unsafe_allow_html=True)
     # Removemos IA e Laudo, adicionamos Gestão em destaque
-    tabs = st.tabs(["🧬 TÉCNICO", "☁️ CLIMA", "📡 RADAR", "🗺️ MAPA", "💰 GESTÃO", "🔔 ALERTAS"])
+    tabs = st.tabs(["🧬 TÉCNICO", "🧪 NUTRIÇÃO", "☁️ CLIMA", "📡 RADAR", "🗺️ MAPA", "💰 GESTÃO", "🔔 ALERTAS"])
 
     # 1. TÉCNICO
     with tabs[0]:
@@ -188,8 +188,390 @@ if not df_clima.empty:
         AgroBrain.render_protocolo_quimico(dados_fase.get('quimica')) 
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # 2. CLIMA
+# 2. NUTRIÇÃO (MARCHA DE ABSORÇÃO - 18 CULTURAS - DADOS MALAVOLTA/EMBRAPA/IPNI)
     with tabs[1]:
+        st.markdown('<div class="app-card">', unsafe_allow_html=True)
+        
+        # --- CABEÇALHO TÉCNICO ---
+        st.markdown(f"### 🧪 Fisiologia Nutricional: **{cult_sel}**")
+        st.caption("Curvas de acúmulo de nutrientes (Extração Total) baseadas em altas produtividades.")
+
+        # --- BANCO DE DADOS MASTER (18 CULTURAS) ---
+        # Macros em kg/ha | Micros em g/ha
+        # As curvas representam o acúmulo total (planta inteira + fruto) ao longo das fases.
+        
+        DB_NUTRI_MASTER = {
+            "Soja": {
+                "fases": ["V1 (Emerg)", "V4 (Veg)", "R1 (Flor)", "R5 (Grão)", "R8 (Mat)"],
+                "macros": {
+                    "Nitrogênio (N)": [5, 30, 90, 240, 300], # Fixação Simbiótica é crucial no R1-R5
+                    "Fósforo (P)":    [1, 5, 15, 25, 30],
+                    "Potássio (K)":   [5, 25, 70, 95, 100],  # Absorção rápida no vegetativo
+                    "Cálcio (Ca)":    [2, 15, 45, 75, 85],
+                    "Magnésio (Mg)":  [1, 5, 15, 25, 30],
+                    "Enxofre (S)":    [1, 5, 10, 18, 20]
+                },
+                "micros": {
+                    "Manganês (Mn)": [10, 80, 200, 300, 350],
+                    "Zinco (Zn)":    [5, 40, 120, 200, 250],
+                    "Boro (B)":      [2, 10, 40, 80, 100],
+                    "Cobre (Cu)":    [1, 5, 15, 30, 40]
+                },
+                "dica": "A Soja absorve 70% do Nitrogênio (via FBN) e Potássio entre a Florada (R1) e o enchimento de grãos (R5). Garanta K no solo antes do plantio."
+            },
+            "Milho": {
+                "fases": ["V2", "V6 (Def. Prod)", "VT (Pendão)", "R3 (Leitoso)", "R6 (Matur)"],
+                "macros": {
+                    "Nitrogênio (N)": [5, 45, 130, 190, 220], # Pico absurdo em V6-VT
+                    "Fósforo (P)":    [1, 10, 35, 45, 50],
+                    "Potássio (K)":   [5, 60, 160, 175, 180], # K cessa absorção cedo
+                    "Cálcio (Ca)":    [2, 15, 40, 50, 55],
+                    "Magnésio (Mg)":  [1, 8, 25, 35, 40],
+                    "Enxofre (S)":    [1, 5, 15, 25, 30]
+                },
+                "micros": {
+                    "Zinco (Zn)":    [10, 120, 350, 450, 500], # Milho ama Zinco
+                    "Manganês (Mn)": [10, 90, 250, 320, 350],
+                    "Boro (B)":      [5, 20, 60, 90, 100]
+                },
+                "dica": "A 'Fome de Nitrogênio' do milho ocorre de V6 a VT. É a janela crítica para a adubação de cobertura."
+            },
+            "Algodão": { # Ref: Algodão tem demanda bimodal
+                "fases": ["Emergência", "Botão Floral", "Florada", "Maçã", "Abertura"],
+                "macros": {
+                    "Nitrogênio (N)": [5, 35, 95, 140, 160],
+                    "Potássio (K)":   [5, 45, 110, 145, 155],
+                    "Fósforo (P)":    [1, 8, 25, 35, 40],
+                    "Cálcio (Ca)":    [2, 20, 60, 90, 100],
+                    "Magnésio (Mg)":  [1, 5, 15, 25, 30]
+                },
+                "micros": {
+                    "Boro (B)":   [10, 60, 180, 280, 320], # Muito exigente em Boro
+                    "Zinco (Zn)": [10, 50, 120, 180, 200]
+                },
+                "dica": "O Algodoeiro é extremamente sensível à deficiência de Boro na fase reprodutiva, causando abortamento de maçãs."
+            },
+            "Café": { # Perene - Ciclo Anual
+                "fases": ["Vegetação", "Botão Floral", "Chumbinho", "Expansão", "Maturação"],
+                "macros": {
+                    "Nitrogênio (N)": [30, 80, 150, 220, 280],
+                    "Potássio (K)":   [25, 60, 120, 200, 260], # K é o motor do enchimento
+                    "Cálcio (Ca)":    [20, 40, 70, 90, 100],
+                    "Magnésio (Mg)":  [5, 15, 30, 40, 45],
+                    "Fósforo (P)":    [3, 8, 18, 25, 30]
+                },
+                "micros": {
+                    "Ferro (Fe)": [200, 800, 1500, 2000, 2500],
+                    "Boro (B)":   [50, 200, 400, 550, 600],
+                    "Zinco (Zn)": [40, 150, 300, 400, 450],
+                    "Cobre (Cu)": [20, 60, 100, 150, 180]
+                },
+                "dica": "No Café, o Potássio (K) é crucial na fase de Expansão/Granação. A demanda de N é constante, mas pica na vegetação."
+            },
+            "Citros": { # Laranja/Limão
+                "fases": ["Brotação", "Florada", "Fruto I", "Fruto II", "Colheita"],
+                "macros": {
+                    "Nitrogênio (N)": [20, 60, 120, 180, 200],
+                    "Potássio (K)":   [15, 50, 110, 170, 190],
+                    "Cálcio (Ca)":    [30, 80, 140, 180, 200], # Citros ama Cálcio
+                    "Magnésio (Mg)":  [5, 15, 30, 40, 45],
+                    "Fósforo (P)":    [2, 8, 15, 20, 25]
+                },
+                "micros": {
+                    "Manganês (Mn)": [50, 200, 400, 500, 600],
+                    "Zinco (Zn)":    [50, 200, 400, 500, 600], # Zn e Mn andam juntos
+                    "Boro (B)":      [20, 80, 150, 200, 250]
+                },
+                "dica": "Citros extrai quantidades massivas de Cálcio. Deficiência de Zn e Mn (folhas zebradas) é comum e afeta produção."
+            },
+            "Feijão": { # Ciclo Curto (90 dias)
+                "fases": ["V2", "V4 (3ª Trif)", "R5 (Flor)", "R7 (Vagem)", "R9 (Mat)"],
+                "macros": {
+                    "Nitrogênio (N)": [5, 25, 60, 100, 120],
+                    "Potássio (K)":   [5, 20, 50, 80, 90],
+                    "Cálcio (Ca)":    [3, 15, 40, 60, 70],
+                    "Fósforo (P)":    [1, 5, 12, 18, 20],
+                    "Enxofre (S)":    [1, 3, 8, 12, 15]
+                },
+                "micros": {
+                    "Ferro (Fe)":    [50, 200, 600, 1000, 1200],
+                    "Manganês (Mn)": [20, 80, 200, 300, 350],
+                    "Zinco (Zn)":    [10, 40, 100, 150, 180]
+                },
+                "dica": "Ciclo muito rápido. O Nitrogênio deve ser parcelado (Plantio + Cobertura V4) pois a planta não tem tempo de recuperar deficiências."
+            },
+            "Trigo": {
+                "fases": ["Emerg", "Perfilhamento", "Alongamento", "Espigamento", "Grão"],
+                "macros": {
+                    "Nitrogênio (N)": [5, 30, 80, 110, 130],
+                    "Potássio (K)":   [5, 25, 70, 90, 100],
+                    "Fósforo (P)":    [1, 8, 18, 22, 25],
+                    "Enxofre (S)":    [1, 4, 10, 15, 18]
+                },
+                "micros": {
+                    "Manganês (Mn)": [20, 100, 300, 400, 450],
+                    "Cobre (Cu)":    [2, 10, 25, 35, 40], # Sensível a Cu
+                    "Zinco (Zn)":    [5, 20, 50, 70, 80]
+                },
+                "dica": "O Nitrogênio define o teor de glúten e proteína. Aplicações tardias (espigamento) visam qualidade, não só volume."
+            },
+            "Batata": { # Tubérculo (Demanda K absurda)
+                "fases": ["Emerg", "Estoloniz.", "Início Tuber", "Enchimento", "Maturação"],
+                "macros": {
+                    "Nitrogênio (N)": [10, 50, 100, 140, 160],
+                    "Potássio (K)":   [15, 60, 150, 250, 280], # Rei do Potássio
+                    "Fósforo (P)":    [2, 10, 25, 35, 40],
+                    "Cálcio (Ca)":    [5, 20, 50, 70, 80],
+                    "Magnésio (Mg)":  [2, 10, 25, 35, 40]
+                },
+                "micros": {
+                    "Manganês (Mn)": [20, 100, 250, 400, 450],
+                    "Boro (B)":      [5, 20, 50, 80, 100],
+                    "Zinco (Zn)":    [10, 40, 100, 150, 180]
+                },
+                "dica": "A Batata exporta quantidades massivas de K. A relação N/K é vital para evitar 'top growth' (muita folha, pouca batata)."
+            },
+            "Tomate": { # Mesa/Indústria
+                "fases": ["Veg", "Florada 1", "Fruto 1", "Fruto Total", "Colheita"],
+                "macros": {
+                    "Nitrogênio (N)": [10, 40, 100, 180, 220],
+                    "Potássio (K)":   [15, 60, 160, 280, 350], # Altíssima demanda
+                    "Cálcio (Ca)":    [10, 40, 100, 160, 190], # Fundo Preto
+                    "Fósforo (P)":    [2, 10, 25, 35, 40],
+                    "Magnésio (Mg)":  [5, 15, 35, 50, 60]
+                },
+                "micros": {
+                    "Manganês (Mn)": [20, 150, 400, 600, 700],
+                    "Boro (B)":      [10, 50, 120, 200, 250],
+                    "Zinco (Zn)":    [10, 60, 150, 250, 300]
+                },
+                "dica": "Cálcio é o nutriente da qualidade. Deficiência causa 'Fundo Preto' (Podridão Apical). Mantenha relação K/Ca equilibrada."
+            },
+            "Banana": { # Fruta Tropical (K muito alto)
+                "fases": ["Cresc", "Floração", "Cacho Jovem", "Enchimento", "Colheita"],
+                "macros": {
+                    "Potássio (K)":   [50, 200, 600, 1200, 1500], # Maior extrator de K
+                    "Nitrogênio (N)": [30, 100, 250, 350, 400],
+                    "Cálcio (Ca)":    [20, 60, 150, 200, 220],
+                    "Magnésio (Mg)":  [10, 30, 80, 120, 140],
+                    "Fósforo (P)":    [5, 15, 40, 50, 60]
+                },
+                "micros": {
+                    "Manganês (Mn)": [100, 500, 1500, 2500, 3000],
+                    "Ferro (Fe)":    [50, 300, 800, 1200, 1500],
+                    "Zinco (Zn)":    [20, 100, 300, 500, 600],
+                    "Boro (B)":      [10, 50, 150, 250, 300]
+                },
+                "dica": "A Banana é uma 'bomba' de Potássio. Sem K, os cachos são pequenos e a planta tomba facilmente."
+            },
+            "Cebola": {
+                "fases": ["Mudas", "Cresc", "Bulbificação", "Maturação", "Estalo"],
+                "macros": {
+                    "Nitrogênio (N)": [5, 30, 90, 120, 130],
+                    "Potássio (K)":   [5, 40, 110, 150, 160],
+                    "Cálcio (Ca)":    [3, 20, 60, 80, 90],
+                    "Enxofre (S)":    [2, 10, 30, 45, 50], # S dá a pungência (ardor)
+                    "Fósforo (P)":    [1, 10, 25, 30, 35]
+                },
+                "micros": {
+                    "Manganês (Mn)": [10, 50, 150, 250, 300],
+                    "Zinco (Zn)":    [5, 30, 80, 120, 150],
+                    "Boro (B)":      [2, 10, 30, 50, 60]
+                },
+                "dica": "O Enxofre (S) é vital para a Cebola e Alho, conferindo sabor e pungência. Aplique sulfatos no plantio."
+            },
+            "Alho": { # Similar a cebola, mas mais exigente em S
+                "fases": ["Emerg", "Veg", "Bulbificação", "Maturação", "Colheita"],
+                "macros": {
+                    "Nitrogênio (N)": [5, 40, 100, 120, 125],
+                    "Potássio (K)":   [5, 45, 120, 140, 150],
+                    "Enxofre (S)":    [3, 15, 40, 55, 60], # Pico de S
+                    "Cálcio (Ca)":    [3, 25, 60, 70, 75],
+                    "Fósforo (P)":    [1, 10, 20, 25, 30]
+                },
+                "micros": {
+                    "Zinco (Zn)":    [5, 40, 100, 130, 150],
+                    "Boro (B)":      [2, 15, 40, 60, 70]
+                },
+                "dica": "Evite excesso de Nitrogênio na fase final para não 'abrir' a cabeça do alho ou causar superbrotamento."
+            },
+            "Uva": { # Videira
+                "fases": ["Brotação", "Florada", "Varaison", "Maturação", "Colheita"],
+                "macros": {
+                    "Potássio (K)":   [10, 40, 90, 130, 150], # Açúcar
+                    "Nitrogênio (N)": [15, 50, 90, 100, 110],
+                    "Cálcio (Ca)":    [10, 40, 80, 100, 110],
+                    "Magnésio (Mg)":  [5, 15, 30, 40, 45], # Fotossíntese
+                    "Fósforo (P)":    [2, 8, 15, 20, 25]
+                },
+                "micros": {
+                    "Ferro (Fe)":    [50, 200, 500, 700, 800],
+                    "Boro (B)":      [10, 50, 100, 150, 180], # Florada
+                    "Zinco (Zn)":    [10, 40, 100, 150, 200]
+                },
+                "dica": "Magnésio (Mg) é fundamental para evitar a 'Dessecação da Ráquis'. Potássio é responsável pelo Brix (Doçura)."
+            },
+            "Manga": {
+                "fases": ["Veg", "Florada", "Chumbinho", "Expansão", "Colheita"],
+                "macros": {
+                    "Nitrogênio (N)": [20, 60, 100, 130, 150],
+                    "Potássio (K)":   [15, 50, 110, 160, 180],
+                    "Cálcio (Ca)":    [15, 50, 100, 130, 150], # Firmeza
+                    "Magnésio (Mg)":  [5, 20, 40, 60, 70]
+                },
+                "micros": {
+                    "Boro (B)":      [10, 60, 120, 180, 200], # Essencial
+                    "Ferro (Fe)":    [50, 200, 600, 800, 1000],
+                    "Zinco (Zn)":    [20, 80, 150, 200, 250]
+                },
+                "dica": "Pare o Nitrogênio antes da indução floral. Excesso de N estimula vegetação e aborta a florada da manga."
+            },
+            "Morango": {
+                "fases": ["Plantio", "Floração", "Frutif. Inic", "Pico Prod.", "Final"],
+                "macros": {
+                    "Potássio (K)":   [5, 30, 80, 150, 180],
+                    "Nitrogênio (N)": [5, 25, 60, 100, 120],
+                    "Cálcio (Ca)":    [5, 25, 60, 90, 110], # Firmeza do fruto
+                    "Magnésio (Mg)":  [2, 10, 25, 40, 50],
+                    "Fósforo (P)":    [1, 8, 15, 25, 30]
+                },
+                "micros": {
+                    "Ferro (Fe)":    [20, 100, 300, 500, 600],
+                    "Manganês (Mn)": [10, 50, 150, 250, 300],
+                    "Boro (B)":      [5, 20, 50, 80, 100]
+                },
+                "dica": "Cálcio e Boro são os segredos para morangos firmes e sem deformações. Potássio garante o sabor e cor."
+            },
+            "Mirtilo": { # Blueberry (Gosta de amônio e solo ácido)
+                "fases": ["Brotação", "Florada", "Fruto Verde", "Maturação", "Dormência"],
+                "macros": {
+                    "Nitrogênio (N)": [5, 20, 40, 60, 70], # Baixa demanda comparado a outros
+                    "Potássio (K)":   [5, 15, 35, 55, 65],
+                    "Cálcio (Ca)":    [2, 10, 20, 30, 35],
+                    "Magnésio (Mg)":  [1, 5, 10, 15, 18],
+                    "Fósforo (P)":    [1, 3, 8, 12, 15]
+                },
+                "micros": {
+                    "Ferro (Fe)":    [10, 50, 100, 150, 180], # Clorose férrica é comum
+                    "Manganês (Mn)": [5, 20, 50, 80, 100]
+                },
+                "dica": "O Mirtilo prefere Nitrogênio na forma Amoniacal (NH4+). Evite Nitratos em excesso. Mantenha pH ácido (4.5-5.5)."
+            },
+            "Framboesa": {
+                "fases": ["Veg", "Flor", "Fruto Verde", "Colheita", "Senesc"],
+                "macros": {
+                    "Nitrogênio (N)": [10, 30, 60, 80, 90],
+                    "Potássio (K)":   [10, 35, 70, 100, 110],
+                    "Cálcio (Ca)":    [5, 20, 40, 60, 70],
+                    "Magnésio (Mg)":  [2, 8, 15, 25, 30]
+                },
+                "micros": {
+                    "Ferro (Fe)": [20, 80, 150, 200, 250],
+                    "Boro (B)":   [5, 15, 30, 45, 50]
+                },
+                "dica": "Monitorar Ferro. Solos alcalinos bloqueiam a absorção causando amarelecimento das folhas novas."
+            },
+            "Pastagens": { # Brachiaria/Panicum (Ciclo Contínuo - Dias após pastejo)
+                "fases": ["Dia 0", "Dia 10", "Dia 20", "Dia 30", "Dia 45"],
+                "macros": {
+                    "Nitrogênio (N)": [5, 40, 100, 180, 250], # Motor da biomassa
+                    "Potássio (K)":   [5, 30, 90, 160, 220],
+                    "Fósforo (P)":    [2, 8, 18, 25, 30], # Estabelecimento
+                    "Cálcio (Ca)":    [2, 10, 30, 50, 60],
+                    "Enxofre (S)":    [1, 5, 15, 25, 30] # Aumenta proteína
+                },
+                "micros": {
+                    "Manganês (Mn)": [10, 50, 150, 250, 300],
+                    "Zinco (Zn)":    [5, 30, 80, 120, 150]
+                },
+                "dica": "O Nitrogênio alavanca a produção de massa seca, mas exige Enxofre para converter o N em proteína verdadeira para o gado."
+            }
+        }
+
+        # --- LÓGICA DE SELEÇÃO E PLOTAGEM ---
+        
+        # Tenta encontrar a cultura exata ou normaliza o nome
+        cultura_key = cult_sel
+        # Mapeamento de nomes com acentos/variações para as chaves do dicionário
+        mapa_nomes = {
+            "Algodao": "Algodão", "Cafe": "Café", "Citrus": "Citros", "Feijao": "Feijão", 
+            "Mirtilo (Blueberry)": "Mirtilo", "Pastagem": "Pastagens"
+        }
+        if cultura_key in mapa_nomes: cultura_key = mapa_nomes[cultura_key]
+        
+        # Carrega dados
+        dados_nutri = DB_NUTRI_MASTER.get(cultura_key)
+
+        if dados_nutri:
+            
+            # --- 1. GRÁFICO MACRONUTRIENTES ---
+            st.markdown("#### 🥦 Macronutrientes (Acúmulo em kg/ha)")
+            st.caption(f"Curva de extração acumulada para {cult_sel}.")
+            
+            fig_macro = go.Figure()
+            # Cores Oficiais da Nutrição (IPNI)
+            colors_macro = {'Nitrogênio (N)': '#16a34a', 'Fósforo (P)': '#2563eb', 'Potássio (K)': '#dc2626', 'Cálcio (Ca)': '#fbbf24', 'Magnésio (Mg)': '#9333ea', 'Enxofre (S)': '#d97706'}
+            
+            for nutri, valores in dados_nutri['macros'].items():
+                fig_macro.add_trace(go.Scatter(
+                    x=dados_nutri['fases'], y=valores, mode='lines+markers', name=nutri,
+                    line=dict(width=3, color=colors_macro.get(nutri, '#333')),
+                    hovertemplate='%{y} kg/ha<extra></extra>'
+                ))
+            
+            fig_macro.update_layout(
+                height=380, margin=dict(l=20, r=20, t=20, b=20),
+                legend=dict(orientation="h", y=1.1),
+                xaxis=dict(title="Estádio Fenológico", showgrid=False),
+                yaxis=dict(title="kg/ha", showgrid=True, gridcolor='#f1f5f9'),
+                paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)'
+            )
+            st.plotly_chart(fig_macro, use_container_width=True)
+            
+            st.divider()
+
+            # --- 2. GRÁFICO MICRONUTRIENTES ---
+            st.markdown("#### 🧪 Micronutrientes (Acúmulo em g/ha)")
+            st.caption("Elementos traço essenciais.")
+
+            fig_micro = go.Figure()
+            colors_micro = {'Boro (B)': '#db2777', 'Zinco (Zn)': '#0891b2', 'Manganês (Mn)': '#7c3aed', 'Cobre (Cu)': '#d97706', 'Ferro (Fe)': '#475569'}
+
+            for nutri, valores in dados_nutri['micros'].items():
+                fig_micro.add_trace(go.Scatter(
+                    x=dados_nutri['fases'], y=valores, mode='lines+markers', name=nutri,
+                    line=dict(width=3, dash='dot', color=colors_micro.get(nutri, '#555')),
+                    hovertemplate='%{y} g/ha<extra></extra>'
+                ))
+
+            fig_micro.update_layout(
+                height=380, margin=dict(l=20, r=20, t=20, b=20),
+                legend=dict(orientation="h", y=1.1),
+                xaxis=dict(title="Estádio Fenológico", showgrid=False),
+                yaxis=dict(title="g/ha", showgrid=True, gridcolor='#f1f5f9'),
+                paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)'
+            )
+            st.plotly_chart(fig_micro, use_container_width=True)
+
+            # --- 3. DICA TÉCNICA PERSONALIZADA ---
+            st.markdown("""
+            <div style="background:linear-gradient(to right, #f0fdf4, #ffffff); border-left:5px solid #16a34a; padding:20px; border-radius:8px; margin-top:20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <div style="color:#166534; font-weight:800; font-size:0.95rem; margin-bottom:5px;">💡 DICA DO ESPECIALISTA</div>
+                <div style="color:#14532d; font-size:0.9rem; line-height:1.5;">
+            """ + dados_nutri['dica'] + """
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        else:
+            # Fallback seguro caso algo dê errado no nome da cultura
+            st.warning(f"Dados de marcha de absorção para '{cult_sel}' estão sendo compilados pelo nosso time técnico.")
+            st.info("Utilize as curvas de uma cultura similar temporariamente.")
+
+        st.markdown('</div>', unsafe_allow_html=True)
+    
+    # 3. CLIMA
+    with tabs[2]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         st.markdown("### 📅 Tendência Semanal")
         fig = go.Figure()
@@ -216,8 +598,8 @@ if not df_clima.empty:
             st.plotly_chart(fig_dt, use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # 3. RADAR (VISUAL MASTER)
-    with tabs[2]:
+    # 4. RADAR (VISUAL MASTER)
+    with tabs[3]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         st.markdown("### 📡 Monitoramento Regional")
         st.caption("Dados em tempo real das estações meteorológicas vizinhas.")
@@ -242,8 +624,8 @@ if not df_clima.empty:
                 with cols[i]: st.markdown(html_radar, unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # 4. MAPA (MIP SYNGENTA STYLE)
-    with tabs[3]:
+    # 5. MAPA (MIP SYNGENTA STYLE)
+    with tabs[4]:
         # Carrega histórico
         DB_FILE = "monitoramento_campo.json"
         def carregar_dados_mip():
@@ -312,8 +694,8 @@ if not df_clima.empty:
         st.markdown('</div>', unsafe_allow_html=True)
 
                                 
-    # 5. GESTÃO (SIMULADOR DE NEGÓCIO - CORRIGIDO E PRÁTICO)
-    with tabs[4]:
+    # 6. GESTÃO (SIMULADOR DE NEGÓCIO - CORRIGIDO E PRÁTICO)
+    with tabs[5]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         
         # --- 1. BANCO DE DADOS INTELIGENTE (CORRIGIDO) ---
@@ -450,8 +832,8 @@ if not df_clima.empty:
             
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # 6. ALERTAS (CENTRAL DE CONFIGURAÇÃO)
-    with tabs[5]:
+    # 7. ALERTAS (CENTRAL DE CONFIGURAÇÃO)
+    with tabs[6]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         st.markdown("### 🔔 Central de Automação")
         st.info("Configure aqui os alertas automáticos. No App Mobile, estas notificações chegarão como Push Notification.")
