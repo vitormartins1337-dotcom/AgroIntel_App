@@ -532,185 +532,93 @@ if not df_clima.empty:
         st.markdown('</div>', unsafe_allow_html=True)
     
     
-    # 3. CLIMA (PAINEL TÉCNICO PROFISSIONAL - CORRIGIDO V2)
-    with tabs[2]:
+    # 2. CLIMA (ATUALIZADO - TABELA DE DECISÃO OPERACIONAL)
+    with tabs[1]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         
-        # --- 1. CABEÇALHO TÉCNICO ---
-        if not df_clima.empty:
-            hoje = df_clima.iloc[0]
-            st.markdown(f"""
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                <div>
-                    <h3 style="margin:0; color:#0f172a;">🌦️ Clima e Planejamento</h3>
-                    <span style="font-size:0.9rem; color:#64748b;">Monitoramento agrometeorológico para <b>{city if city else 'Local Selecionado'}</b></span>
-                </div>
-                <div style="text-align:right;">
-                    <span style="font-size:2rem; font-weight:800; color:#0f172a;">{hoje['Temp']:.1f}°C</span><br>
-                    <span style="font-size:0.8rem; background:#e0f2fe; color:#0284c7; padding:2px 8px; border-radius:10px; font-weight:bold;">Kc Atual: {info.get('kc', 1.0)}</span>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+        # Cabeçalho com Carimbo de Tempo (Gera confiança no dado)
+        c_clim1, c_clim2 = st.columns([3, 1])
+        with c_clim1:
+            st.markdown("### 📅 Planejamento Climático")
+        with c_clim2:
+            hora_att = datetime.now().strftime("%H:%M")
+            st.markdown(f"<div style='text-align:right; font-size:0.7rem; color:#64748b; margin-top:5px;'>🔄 Atualizado às: <b>{hora_att}</b></div>", unsafe_allow_html=True)
 
-        # --- GRÁFICO 1: BALANÇO HÍDRICO SEMANAL ---
-        st.markdown("#### 1. Balanço Hídrico (Oferta vs. Demanda)")
-        st.caption("Comparativo entre Precipitação (Chuva) e Evapotranspiração da Cultura (ETc/Consumo).")
-        
-        fig_balanco = go.Figure()
-        
-        # Barra de Chuva
-        fig_balanco.add_trace(go.Bar(
-            x=df_clima['Data'], 
-            y=df_clima['Chuva'], 
-            name='Chuva (mm)', 
-            marker_color='#3b82f6',
-            hovertemplate='Chuva: %{y} mm<extra></extra>',
-            opacity=0.8
-        ))
-        
-        # Linha de Consumo
-        fig_balanco.add_trace(go.Scatter(
-            x=df_clima['Data'], 
-            y=df_clima['ETc'], 
-            name='Consumo (ETc)', 
-            mode='lines+markers',
-            line=dict(color='#ef4444', width=3),
-            marker=dict(size=6, color='#ef4444'),
-            hovertemplate='Demanda: %{y} mm<extra></extra>'
-        ))
-
-        fig_balanco.update_layout(
-            height=300,
-            margin=dict(l=20, r=20, t=10, b=20),
-            legend=dict(orientation="h", y=1.1, x=0),
-            yaxis=dict(title="Lâmina de Água (mm)", showgrid=True, gridcolor='#f1f5f9'),
-            xaxis=dict(showgrid=False),
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-            hovermode="x unified"
-        )
-        st.plotly_chart(fig_balanco, use_container_width=True)
+        # GRÁFICO 1: TENDÊNCIA SEMANAL (MANTIDO POIS É BOM PARA VISÃO GERAL)
+        fig = go.Figure()
+        fig.add_trace(go.Bar(x=df_clima['Data'], y=df_clima['Chuva'], name='Chuva (mm)', marker_color='#3b82f6'))
+        fig.add_trace(go.Scatter(x=df_clima['Data'], y=df_clima['ETc'], name='Consumo (ETc)', line=dict(color='#ef4444', width=3)))
+        fig.update_layout(height=280, margin=dict(l=20, r=20, t=10, b=20), legend=dict(orientation="h", y=1.1), paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+        st.plotly_chart(fig, use_container_width=True)
         
         st.divider()
-
-        # --- DADOS HORÁRIOS ---
+        
+        # --- NOVO DETALHE HORÁRIO (TABELA DE DECISÃO) ---
+        # Substitui o gráfico de linha confuso por dados acionáveis
+        
         df_hora = WeatherConn.get_hourly_forecast(url_w, st.session_state['loc_lat'], st.session_state['loc_lon'])
         
         if not df_hora.empty:
+            st.markdown("### 🕒 Detalhe Operacional (Próximas 24h)")
+            st.caption("Analise as janelas de aplicação baseadas no Delta T.")
+
+            # Preparando os dados para ficarem bonitos na tabela
+            # Vamos criar uma coluna visual de "Status" baseada no Delta T
+            def get_status_deltat(dt):
+                if 2 <= dt <= 8: return "✅ IDEAL"
+                elif 8 < dt <= 10: return "⚠️ ATENÇÃO"
+                else: return "🚫 PARE"
+
+            df_hora['Condição'] = df_hora['Delta T'].apply(get_status_deltat)
             
-            # --- GRÁFICO 2: METEOGRAMA 24H (CORRIGIDO) ---
-            st.markdown("#### 2. Detalhe Horário (Temp. x Umidade)")
-            st.caption("Evolução térmica e higrométrica nas próximas 24 horas.")
+            # Seleciona e renomeia colunas para ficar profissional
+            df_view = df_hora[['HoraSimples', 'Temp', 'Chuva', 'Umid', 'Vento', 'Delta T', 'Condição']].copy()
+            df_view.columns = ['Hora', 'Temp (°C)', 'Chuva (mm)', 'Umid (%)', 'Vento (km/h)', 'Delta T', 'Status']
 
-            fig_meteo = go.Figure()
-
-            # Temperatura (Eixo Y1 - Esquerda)
-            fig_meteo.add_trace(go.Scatter(
-                x=df_hora['HoraSimples'], 
-                y=df_hora['Temp'], 
-                name='Temperatura (°C)', 
-                mode='lines',
-                line=dict(color='#f97316', width=3),
-                yaxis='y' # Indica eixo Y primário
-            ))
-
-            # Umidade (Eixo Y2 - Direita)
-            fig_meteo.add_trace(go.Scatter(
-                x=df_hora['HoraSimples'], 
-                y=df_hora['Umid'], 
-                name='Umidade (%)', 
-                mode='lines',
-                line=dict(color='#0ea5e9', width=2, dash='dot'),
-                fill='tozeroy',
-                fillcolor='rgba(14, 165, 233, 0.1)',
-                yaxis='y2' # Indica eixo Y secundário
-            ))
-
-            # LAYOUT ATUALIZADO (SINTAXE V5 SEGURA)
-            fig_meteo.update_layout(
-                height=300,
-                margin=dict(l=20, r=40, t=10, b=20), # Margem direita maior para o eixo Y2
-                legend=dict(orientation="h", y=1.1, x=0),
-                xaxis=dict(showgrid=False),
-                
-                # Eixo Y Principal (Esquerda)
-                yaxis=dict(
-                    title=dict(text="Temperatura (°C)", font=dict(color="#f97316")),
-                    tickfont=dict(color="#f97316"),
-                    showgrid=True, 
-                    gridcolor='#f1f5f9'
-                ),
-                
-                # Eixo Y Secundário (Direita)
-                yaxis2=dict(
-                    title=dict(text="Umidade (%)", font=dict(color="#0ea5e9")),
-                    tickfont=dict(color="#0ea5e9"),
-                    anchor="x",
-                    overlaying="y",
-                    side="right",
-                    showgrid=False
-                ),
-                paper_bgcolor='rgba(0,0,0,0)',
-                plot_bgcolor='rgba(0,0,0,0)',
-                hovermode="x unified"
+            # EXIBIÇÃO: DATA FRAME INTERATIVO (STYLE "BLOOMBERG")
+            st.dataframe(
+                df_view,
+                use_container_width=True,
+                hide_index=True,
+                column_config={
+                    "Hora": st.column_config.TextColumn("Horário", help="Horário da previsão"),
+                    "Temp (°C)": st.column_config.ProgressColumn(
+                        "Temperatura", 
+                        format="%.1f°", 
+                        min_value=10, 
+                        max_value=45,
+                        help="Barra de calor"
+                    ),
+                    "Chuva (mm)": st.column_config.NumberColumn(
+                        "Chuva", 
+                        format="%.1f mm"
+                    ),
+                    "Umid (%)": st.column_config.NumberColumn(
+                        "Umidade",
+                        format="%d%%"
+                    ),
+                    "Delta T": st.column_config.NumberColumn(
+                        "Delta T",
+                        format="%.1f",
+                        help="Indicador de qualidade para pulverização (Ideal: 2 a 8)"
+                    ),
+                    "Status": st.column_config.TextColumn(
+                        "Janela de Aplicação",
+                        help="Recomendação técnica"
+                    )
+                }
             )
-            st.plotly_chart(fig_meteo, use_container_width=True)
-
-            st.divider()
-
-            # --- GRÁFICO 3: DELTA T (PULVERIZAÇÃO) ---
-            st.markdown("#### 3. Janela de Aplicação (Delta T)")
-            st.caption("Indicador de qualidade para pulverização. **Ideal: Entre 2 e 8.**")
-
-            # Cálculo das cores
-            cores_dt = []
-            for dt in df_hora['Delta T']:
-                if 2 <= dt <= 8: cores_dt.append("#16a34a") # Verde
-                elif 8 < dt <= 10 or 1 <= dt < 2: cores_dt.append("#eab308") # Amarelo
-                else: cores_dt.append("#dc2626") # Vermelho
-
-            fig_dt = go.Figure()
-
-            # Barras do Delta T
-            fig_dt.add_trace(go.Bar(
-                x=df_hora['HoraSimples'], 
-                y=df_hora['Delta T'],
-                marker_color=cores_dt,
-                text=df_hora['Delta T'],
-                textposition='auto',
-                name='Delta T'
-            ))
-
-            # Zona Ideal (Faixa Verde)
-            fig_dt.add_hrect(
-                y0=2, y1=8, 
-                fillcolor="#22c55e", opacity=0.1, 
-                layer="below", line_width=0,
-                annotation_text="Faixa Segura (2-8)", annotation_position="top left", annotation_font_color="#15803d"
-            )
-
-            fig_dt.update_layout(
-                height=250,
-                margin=dict(l=20, r=20, t=10, b=20),
-                yaxis=dict(title="Delta T (°C)", showgrid=True, gridcolor='#f1f5f9'),
-                xaxis=dict(showgrid=False),
-                paper_bgcolor='rgba(0,0,0,0)',
-                plot_bgcolor='rgba(0,0,0,0)',
-                showlegend=False
-            )
-            st.plotly_chart(fig_dt, use_container_width=True)
-
-            st.markdown("""
-            <div style="display:flex; gap:15px; justify-content:center; margin-top:10px; font-size:0.8rem;">
-                <div style="display:flex; align-items:center;"><div style="width:12px; height:12px; background:#16a34a; border-radius:50%; margin-right:5px;"></div> <b>Ideal</b></div>
-                <div style="display:flex; align-items:center;"><div style="width:12px; height:12px; background:#eab308; border-radius:50%; margin-right:5px;"></div> <b>Atenção</b></div>
-                <div style="display:flex; align-items:center;"><div style="width:12px; height:12px; background:#dc2626; border-radius:50%; margin-right:5px;"></div> <b>Inapto</b></div>
-            </div>
-            """, unsafe_allow_html=True)
+            
+            # Legenda Técnica Rápida
+            c_leg1, c_leg2 = st.columns(2)
+            with c_leg1:
+                st.info("💧 **Chuva:** Acumulado previsto na hora.")
+            with c_leg2:
+                st.warning("🛡️ **Delta T:** Ideal entre 2 e 8 para evitar deriva ou evaporação.")
 
         else:
-            st.info("⏳ Carregando dados horários de alta precisão...")
-
+            st.error("⚠️ Não foi possível carregar a previsão horária. Verifique sua conexão.")
+            
         st.markdown('</div>', unsafe_allow_html=True)
 
     # 4. RADAR (VISUAL MASTER)
