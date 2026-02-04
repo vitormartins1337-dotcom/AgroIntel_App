@@ -532,7 +532,7 @@ if not df_clima.empty:
         st.markdown('</div>', unsafe_allow_html=True)
     
     
-    # 3. CLIMA (PAINEL TÉCNICO PROFISSIONAL - 3 GRÁFICOS)
+    # 3. CLIMA (PAINEL TÉCNICO PROFISSIONAL - CORRIGIDO V2)
     with tabs[2]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         
@@ -552,13 +552,13 @@ if not df_clima.empty:
             </div>
             """, unsafe_allow_html=True)
 
-        # --- GRÁFICO 1: BALANÇO HÍDRICO SEMANAL (CHUVA vs DEMANDA DA CULTURA) ---
+        # --- GRÁFICO 1: BALANÇO HÍDRICO SEMANAL ---
         st.markdown("#### 1. Balanço Hídrico (Oferta vs. Demanda)")
         st.caption("Comparativo entre Precipitação (Chuva) e Evapotranspiração da Cultura (ETc/Consumo).")
         
         fig_balanco = go.Figure()
         
-        # Barra de Chuva (Oferta)
+        # Barra de Chuva
         fig_balanco.add_trace(go.Bar(
             x=df_clima['Data'], 
             y=df_clima['Chuva'], 
@@ -568,11 +568,11 @@ if not df_clima.empty:
             opacity=0.8
         ))
         
-        # Linha de Consumo (Demanda - Kc * ETo)
+        # Linha de Consumo
         fig_balanco.add_trace(go.Scatter(
             x=df_clima['Data'], 
             y=df_clima['ETc'], 
-            name='Consumo da Cultura (ETc)', 
+            name='Consumo (ETc)', 
             mode='lines+markers',
             line=dict(color='#ef4444', width=3),
             marker=dict(size=6, color='#ef4444'),
@@ -593,12 +593,12 @@ if not df_clima.empty:
         
         st.divider()
 
-        # --- DADOS HORÁRIOS PARA OS PRÓXIMOS GRÁFICOS ---
+        # --- DADOS HORÁRIOS ---
         df_hora = WeatherConn.get_hourly_forecast(url_w, st.session_state['loc_lat'], st.session_state['loc_lon'])
         
         if not df_hora.empty:
             
-            # --- GRÁFICO 2: METEOGRAMA 24H (TEMPERATURA E UMIDADE) ---
+            # --- GRÁFICO 2: METEOGRAMA 24H (CORRIGIDO) ---
             st.markdown("#### 2. Detalhe Horário (Temp. x Umidade)")
             st.caption("Evolução térmica e higrométrica nas próximas 24 horas.")
 
@@ -611,7 +611,7 @@ if not df_clima.empty:
                 name='Temperatura (°C)', 
                 mode='lines',
                 line=dict(color='#f97316', width=3),
-                yaxis='y1'
+                yaxis='y' # Indica eixo Y primário
             ))
 
             # Umidade (Eixo Y2 - Direita)
@@ -621,30 +621,33 @@ if not df_clima.empty:
                 name='Umidade (%)', 
                 mode='lines',
                 line=dict(color='#0ea5e9', width=2, dash='dot'),
-                fill='tozeroy', # Preenchimento leve para dar volume
+                fill='tozeroy',
                 fillcolor='rgba(14, 165, 233, 0.1)',
-                yaxis='y2'
+                yaxis='y2' # Indica eixo Y secundário
             ))
 
+            # LAYOUT ATUALIZADO (SINTAXE V5 SEGURA)
             fig_meteo.update_layout(
                 height=300,
-                margin=dict(l=20, r=20, t=10, b=20),
+                margin=dict(l=20, r=40, t=10, b=20), # Margem direita maior para o eixo Y2
                 legend=dict(orientation="h", y=1.1, x=0),
                 xaxis=dict(showgrid=False),
-                # Eixo Y1 (Temp)
+                
+                # Eixo Y Principal (Esquerda)
                 yaxis=dict(
-                    title="Temperatura (°C)", 
-                    titlefont=dict(color="#f97316"), 
+                    title=dict(text="Temperatura (°C)", font=dict(color="#f97316")),
                     tickfont=dict(color="#f97316"),
-                    showgrid=True, gridcolor='#f1f5f9'
+                    showgrid=True, 
+                    gridcolor='#f1f5f9'
                 ),
-                # Eixo Y2 (Umid)
+                
+                # Eixo Y Secundário (Direita)
                 yaxis2=dict(
-                    title="Umidade (%)", 
-                    titlefont=dict(color="#0ea5e9"), 
+                    title=dict(text="Umidade (%)", font=dict(color="#0ea5e9")),
                     tickfont=dict(color="#0ea5e9"),
-                    overlaying='y', 
-                    side='right',
+                    anchor="x",
+                    overlaying="y",
+                    side="right",
                     showgrid=False
                 ),
                 paper_bgcolor='rgba(0,0,0,0)',
@@ -655,23 +658,16 @@ if not df_clima.empty:
 
             st.divider()
 
-            # --- GRÁFICO 3: DELTA T (PULVERIZAÇÃO) - O MAIS IMPORTANTE ---
+            # --- GRÁFICO 3: DELTA T (PULVERIZAÇÃO) ---
             st.markdown("#### 3. Janela de Aplicação (Delta T)")
             st.caption("Indicador de qualidade para pulverização. **Ideal: Entre 2 e 8.**")
 
-            # Cálculo das cores das barras (Verde = Bom, Vermelho = Ruim, Amarelo = Atenção)
+            # Cálculo das cores
             cores_dt = []
-            textos_dt = []
             for dt in df_hora['Delta T']:
-                if 2 <= dt <= 8:
-                    cores_dt.append("#16a34a") # Verde (Ideal)
-                    textos_dt.append("Ideal")
-                elif 8 < dt <= 10 or 1 <= dt < 2:
-                    cores_dt.append("#eab308") # Amarelo (Atenção)
-                    textos_dt.append("Atenção")
-                else:
-                    cores_dt.append("#dc2626") # Vermelho (Pare)
-                    textos_dt.append("Inapto")
+                if 2 <= dt <= 8: cores_dt.append("#16a34a") # Verde
+                elif 8 < dt <= 10 or 1 <= dt < 2: cores_dt.append("#eab308") # Amarelo
+                else: cores_dt.append("#dc2626") # Vermelho
 
             fig_dt = go.Figure()
 
@@ -680,12 +676,12 @@ if not df_clima.empty:
                 x=df_hora['HoraSimples'], 
                 y=df_hora['Delta T'],
                 marker_color=cores_dt,
-                text=df_hora['Delta T'], # Mostra o valor na barra
+                text=df_hora['Delta T'],
                 textposition='auto',
                 name='Delta T'
             ))
 
-            # ZONA IDEAL (Faixa Verde Transparente de fundo)
+            # Zona Ideal (Faixa Verde)
             fig_dt.add_hrect(
                 y0=2, y1=8, 
                 fillcolor="#22c55e", opacity=0.1, 
@@ -704,12 +700,11 @@ if not df_clima.empty:
             )
             st.plotly_chart(fig_dt, use_container_width=True)
 
-            # Legenda Explicativa Profissional
             st.markdown("""
             <div style="display:flex; gap:15px; justify-content:center; margin-top:10px; font-size:0.8rem;">
-                <div style="display:flex; align-items:center;"><div style="width:12px; height:12px; background:#16a34a; border-radius:50%; margin-right:5px;"></div> <b>Ideal (Aplicar)</b></div>
-                <div style="display:flex; align-items:center;"><div style="width:12px; height:12px; background:#eab308; border-radius:50%; margin-right:5px;"></div> <b>Marginal (Cuidado)</b></div>
-                <div style="display:flex; align-items:center;"><div style="width:12px; height:12px; background:#dc2626; border-radius:50%; margin-right:5px;"></div> <b>Crítico (Não Aplicar)</b></div>
+                <div style="display:flex; align-items:center;"><div style="width:12px; height:12px; background:#16a34a; border-radius:50%; margin-right:5px;"></div> <b>Ideal</b></div>
+                <div style="display:flex; align-items:center;"><div style="width:12px; height:12px; background:#eab308; border-radius:50%; margin-right:5px;"></div> <b>Atenção</b></div>
+                <div style="display:flex; align-items:center;"><div style="width:12px; height:12px; background:#dc2626; border-radius:50%; margin-right:5px;"></div> <b>Inapto</b></div>
             </div>
             """, unsafe_allow_html=True)
 
