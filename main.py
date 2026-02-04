@@ -311,98 +311,133 @@ if not df_clima.empty:
             st.info("👆 Toque no mapa para identificar uma ocorrência.")
         st.markdown('</div>', unsafe_allow_html=True)
 
-                                # 5. GESTÃO (INTELIGÊNCIA DE MERCADO - BUSCA AUTOMÁTICA)
+                                
+                    # 5. GESTÃO (SIMULADOR DE VIABILIDADE ECONÔMICA)
     with tabs[4]:
-        from duckduckgo_search import DDGS
-        
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         
-        # --- 1. CABEÇALHO INTELIGENTE ---
-        # O sistema já sabe a cultura e a cidade (definida no filtro lateral/topo)
-        # Se não tiver cidade definida, usa uma genérica
-        local_busca = city if city else "Brasil"
-        
-        st.markdown(f"### 🤖 Radar de Preços: **{cult_sel}**")
-        st.caption(f"Monitorando oportunidades comerciais em: **{local_busca}** e região.")
+        # --- 1. CÉREBRO AGRONÔMICO (DADOS DE REFERÊNCIA) ---
+        # Aqui está a inteligência. O sistema sabe a média de produção por nível tecnológico.
+        AGRO_INTELLIGENCE = {
+            "Soja":    {"unidade": "ha", "prod": [50, 65, 85], "medida": "Sacas", "preco": 128.00, "custo_perc": 0.65}, # Custo 65% da receita
+            "Milho":   {"unidade": "ha", "prod": [100, 140, 180], "medida": "Sacas", "preco": 58.00, "custo_perc": 0.70},
+            "Café":    {"unidade": "ha", "prod": [25, 35, 55], "medida": "Sacas", "preco": 1150.00, "custo_perc": 0.60},
+            "Algodão": {"unidade": "ha", "prod": [250, 320, 400], "medida": "@", "preco": 145.00, "custo_perc": 0.75},
+            
+            # Fruticultura / Perenes (Cálculo por PLANTA/PÉ) - Ideal para pequenos/médios
+            "Citros":  {"unidade": "pé", "prod": [2.0, 3.5, 5.0], "medida": "Cx 40kg", "preco": 45.00, "custo_perc": 0.40},
+            "Mirtilo": {"unidade": "pé", "prod": [1.5, 3.0, 5.0], "medida": "Kg", "preco": 45.00, "custo_perc": 0.50},
+            "Uva":     {"unidade": "pé", "prod": [8.0, 12.0, 20.0], "medida": "Kg", "preco": 9.00, "custo_perc": 0.55},
+            "Tomate":  {"unidade": "pé", "prod": [4.0, 7.0, 10.0], "medida": "Cx 20kg", "preco": 70.00, "custo_perc": 0.60},
+            "Banana":  {"unidade": "pé", "prod": [15, 25, 40], "medida": "Kg", "preco": 3.00, "custo_perc": 0.40},
+        }
 
-        # --- 2. MOTOR DE BUSCA (A MÁGICA ACONTECE AQUI) ---
-        # Não pede nada pro usuário. O Python vai na internet buscar agora.
-        
-        @st.cache_data(ttl=600) # Guarda a busca por 10 min para não ficar lento
-        def buscar_oportunidades(cultura, local):
-            results = []
-            try:
-                with DDGS() as ddgs:
-                    # Estratégia 1: Preço Local Específico
-                    query1 = f"preço {cultura} hoje em {local} cotação atual"
-                    for r in ddgs.text(query1, region='br-pt', max_results=3):
-                        r['tipo'] = '📍 Local'
-                        results.append(r)
-                    
-                    # Estratégia 2: Cotação Geral / Ceasa do Estado
-                    query2 = f"cotação {cultura} ceasa atacado mercado do produtor"
-                    for r in ddgs.text(query2, region='br-pt', max_results=2):
-                        r['tipo'] = '🚛 Regional'
-                        results.append(r)
-            except Exception as e:
-                return []
-            return results
+        # Carrega inteligência da cultura selecionada
+        # Se não tiver, usa padrão genérico
+        ref = AGRO_INTELLIGENCE.get(cult_sel, {"unidade": "ha", "prod": [1, 2, 3], "medida": "Unid", "preco": 10.0, "custo_perc": 0.5})
 
-        # Executa a busca automática
-        with st.spinner(f"📡 Varrendo o mercado em busca de preços para {cult_sel} em {local_busca}..."):
-            oportunidades = buscar_oportunidades(cult_sel, local_busca)
+        st.markdown(f"### 📈 Simulador de Viabilidade: **{cult_sel}**")
+        st.caption("Planejamento financeiro baseado no seu nível tecnológico.")
+
+        # --- 2. INPUTS SIMPLIFICADOS (O USUÁRIO SÓ INFORMA O BÁSICO) ---
+        
+        c_in1, c_in2 = st.columns([1, 2])
+        
+        with c_in1:
+            # Pergunta 1: Quanto você tem?
+            txt_label = "Área Total (Hectares)" if ref["unidade"] == "ha" else "Nº de Plantas/Pés"
+            qtd = st.number_input(txt_label, min_value=1.0, value=100.0 if ref["unidade"] == "pé" else 50.0, step=1.0)
+
+        with c_in2:
+            # Pergunta 2: Qual seu nível de tecnologia? (Isso muda a produtividade automaticamente)
+            nivel_tec = st.select_slider(
+                "Nível Tecnológico / Manejo", 
+                options=["Baixo (Tradicional)", "Médio (Tecnificado)", "Alto (Precisão)"],
+                value="Médio (Tecnificado)"
+            )
+            
+            # Define o índice da lista de produtividade (0, 1 ou 2)
+            idx_tec = 0 if "Baixo" in nivel_tec else 1 if "Médio" in nivel_tec else 2
+            prod_estimada = ref["prod"][idx_tec]
 
         st.divider()
 
-        if oportunidades:
-            st.markdown(f"#### 📢 Cotações Encontradas ({len(oportunidades)})")
-            
-            # Exibe os resultados em Cards Profissionais (Clicáveis)
-            for item in oportunidades:
-                titulo = item.get('title', 'Sem título')
-                link = item.get('href', '#')
-                resumo = item.get('body', 'Clique para ver detalhes do preço...')
-                tag = item.get('tipo', 'Geral')
-                
-                # Visual de Card "Notícias Agrícolas"
-                st.markdown(f"""
-                <div style="
-                    background: #ffffff; 
-                    border-left: 5px solid {'#16a34a' if tag == '📍 Local' else '#3b82f6'};
-                    padding: 15px; 
-                    border-radius: 8px; 
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-                    margin-bottom: 15px;
-                    transition: transform 0.2s;
-                ">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                        <span style="font-size:0.7rem; font-weight:bold; background:#f1f5f9; padding:2px 8px; border-radius:4px; color:#64748b;">{tag.upper()}</span>
-                        <a href="{link}" target="_blank" style="text-decoration:none; color:#3b82f6; font-size:0.8rem; font-weight:bold;">🔗 ABRIR FONTE</a>
-                    </div>
-                    <div style="font-size:1rem; font-weight:800; color:#0f172a; margin-bottom:5px;">
-                        {titulo}
-                    </div>
-                    <div style="font-size:0.85rem; color:#475569; line-height:1.4;">
-                        {resumo} ...
-                    </div>
+        # --- 3. O CÁLCULO MÁGICO (MOTOR FINANCEIRO) ---
+        
+        # Produção Total
+        total_colheita = qtd * prod_estimada
+        
+        # Receita Bruta (Entrada de Dinheiro)
+        receita_bruta = total_colheita * ref["preco"]
+        
+        # Custo Estimado (Baseado na margem setorial)
+        custo_operacional = receita_bruta * ref["custo_perc"]
+        
+        # Lucro (O que sobra)
+        lucro_estimado = receita_bruta - custo_operacional
+        margem_lucro = (lucro_estimado / receita_bruta) * 100
+
+        # --- 4. APRESENTAÇÃO DE RESULTADOS (VISUAL ESTRATÉGICO) ---
+        
+        col_res1, col_res2, col_res3 = st.columns(3)
+        
+        with col_res1:
+            # CARTÃO PRODUÇÃO
+            st.markdown(f"""
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:15px; text-align:center;">
+                <div style="color:#64748b; font-size:0.75rem; font-weight:bold;">EXPECTATIVA DE COLHEITA</div>
+                <div style="color:#0f172a; font-size:1.8rem; font-weight:800;">{total_colheita:,.0f}</div>
+                <div style="background:#e2e8f0; color:#475569; font-size:0.7rem; padding:2px; border-radius:4px; margin-top:5px;">
+                    {prod_estimada} {ref['medida']} por {ref['unidade']}
                 </div>
-                """, unsafe_allow_html=True)
-                
-            # --- 3. ANÁLISE COMPARATIVA AUTOMÁTICA ---
-            # O sistema tenta extrair números do texto (Básico de Inteligência)
-            st.info("💡 **Dica de Negócio:** Clique em 'Abrir Fonte' para confirmar a data da cotação. Preços de internet podem variar do balcão físico.")
+            </div>
+            """, unsafe_allow_html=True)
 
-        else:
-            # Fallback se a busca falhar ou não achar nada
-            st.warning(f"O sistema não encontrou cotações online recentes para {cult_sel} especificamente em {local_busca}.")
-            st.markdown("Isso acontece quando a cidade é pequena ou não tem publicações recentes na internet.")
+        with col_res2:
+            # CARTÃO CUSTO (ALERTA)
+            st.markdown(f"""
+            <div style="background:#fff1f2; border:1px solid #fda4af; border-radius:10px; padding:15px; text-align:center;">
+                <div style="color:#9f1239; font-size:0.75rem; font-weight:bold;">CUSTO ESTIMADO</div>
+                <div style="color:#be123c; font-size:1.4rem; font-weight:800;">R$ {custo_operacional/1000:,.1f} k</div>
+                <div style="color:#9f1239; font-size:0.7rem; margin-top:5px;">
+                    ~{ref['custo_perc']*100:.0f}% da Receita
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        with col_res3:
+            # CARTÃO LUCRO (SUCESSO)
+            st.markdown(f"""
+            <div style="background:#f0fdf4; border:1px solid #86efac; border-radius:10px; padding:15px; text-align:center;">
+                <div style="color:#166534; font-size:0.75rem; font-weight:bold;">LUCRO LÍQUIDO</div>
+                <div style="color:#16a34a; font-size:1.4rem; font-weight:800;">R$ {lucro_estimado/1000:,.1f} k</div>
+                <div style="color:#15803d; font-size:0.7rem; margin-top:5px;">
+                    Margem: {margem_lucro:.1f}%
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        # --- 5. FERRAMENTAS DE MERCADO (O "BUSCADOR") ---
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("#### 🔎 Inteligência Comercial")
+        st.caption(f"Preço base utilizado: R$ {ref['preco']:.2f} / {ref['medida']}. Pesquise compradores reais abaixo:")
+        
+        c_b1, c_b2 = st.columns(2)
+        with c_b1:
+            # Botão Inteligente 1: Busca Preço no Google
+            link_preco = f"https://www.google.com/search?q=preço+{cult_sel}+hoje+cotacao"
+            st.link_button(f"💰 Ver Cotação Atual ({cult_sel})", link_preco, use_container_width=True)
             
-            # Botão de Busca Manual Google
-            url_google = f"https://www.google.com/search?q=preço+{cult_sel}+{local_busca}+compradores"
-            st.link_button(f"🔍 Tentar Busca Profunda no Google", url_google, type="primary", use_container_width=True)
+        with c_b2:
+            # Botão Inteligente 2: Busca Compradores na Região
+            # Se tiver cidade definida, busca lá. Se não, busca geral.
+            local_busca = city if city else "na minha região"
+            link_comprador = f"https://www.google.com/search?q=compradores+de+{cult_sel}+{local_busca}"
+            st.link_button(f"🤝 Encontrar Compradores", link_comprador, use_container_width=True)
 
+        st.info("💡 **Dica Profissional:** O Lucro real depende do seu controle de custos. Use a Aba **Alertas** para monitorar riscos climáticos que podem causar quebra de safra.")
+        
         st.markdown('</div>', unsafe_allow_html=True)
-
 
     # 6. ALERTAS (CENTRAL DE CONFIGURAÇÃO)
     with tabs[5]:
