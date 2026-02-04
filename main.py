@@ -89,8 +89,8 @@ st.markdown('<div class="app-card">', unsafe_allow_html=True)
 c1, c2, c3, c4 = st.columns([2, 2, 1.5, 1])
 
 with c1:
-    st.markdown("### 📍 Unidade")
-    city = st.text_input("GPS", placeholder="Fazenda...", label_visibility="collapsed")
+    st.markdown("### 📍 Local")
+    city = st.text_input("GPS", placeholder="cidade,estado", label_visibility="collapsed")
     if st.button("📡 Sincronizar GPS", use_container_width=True) and city:
         lat, lon = WeatherConn.get_coords(city, url_w)
         if lat: st.session_state['loc_lat'], st.session_state['loc_lon'] = lat, lon; st.rerun()
@@ -188,155 +188,150 @@ if not df_clima.empty:
         AgroBrain.render_protocolo_quimico(dados_fase.get('quimica')) 
         st.markdown('</div>', unsafe_allow_html=True)
 
-# 2. NUTRIÇÃO (PAINEL FISIOLÓGICO COMPLETO - 18 CULTURAS)
+
+                
+            # 2. NUTRIÇÃO (PAINEL MASTER - COM ESCALA CORRIGIDA E MANEJO TÁTICO)
     with tabs[1]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         
         # --- 1. CABEÇALHO ---
-        st.markdown(f"### 🧪 Marcha de Absorção: **{cult_sel}**")
-        st.caption("Curvas de acúmulo de nutrientes e Extração Total por hectare/planta.")
+        st.markdown(f"### 🧪 Nutrição de Precisão: **{cult_sel}**")
+        st.caption("Curvas de absorção segmentadas e recomendações de manejo baseadas na mobilidade do nutriente.")
 
-        # --- 2. BANCO DE DADOS (18 CULTURAS - DADOS REAIS MALAVOLTA/EMBRAPA/IPNI) ---
-        # ATENÇÃO: Os dados representam a extração TOTAL (Grão + Palha ou Fruto + Folha)
-        # Macros em KG/HA (ou Kg/mil plantas) | Micros em G/HA
-        
+        # --- 2. BANCO DE DADOS (18 CULTURAS - DADOS REAIS) ---
+        # Macros em KG/HA | Micros em G/HA
         DB_NUTRI_MASTER = {
             "Soja": {
                 "fases": ["V1", "V4", "R1 (Flor)", "R5 (Grão)", "R8 (Mat)"],
                 "macros": {"N": [5, 30, 90, 240, 300], "P": [1, 5, 15, 25, 30], "K": [5, 25, 70, 95, 100], "Ca": [2, 15, 45, 75, 85], "Mg": [1, 5, 15, 25, 30], "S": [1, 5, 10, 18, 20]},
                 "micros": {"Mn": [10, 80, 200, 300, 350], "Zn": [5, 40, 120, 200, 250], "B": [2, 10, 40, 80, 100]},
-                "dica": "A Soja necessita de 300kg de N, mas 70% vem da FBN. Foco total em Potássio (K) antes de R1."
+                "tipo_raiz": "pivotante", "ciclo": "anual"
             },
             "Milho": {
                 "fases": ["V2", "V6", "VT", "R3", "R6"],
                 "macros": {"N": [5, 45, 130, 190, 220], "P": [1, 10, 35, 45, 50], "K": [5, 60, 160, 175, 180], "Ca": [2, 15, 40, 50, 55], "Mg": [1, 8, 25, 35, 40], "S": [1, 5, 15, 25, 30]},
                 "micros": {"Zn": [10, 120, 350, 450, 500], "Mn": [10, 90, 250, 320, 350], "B": [5, 20, 60, 90, 100]},
-                "dica": "A 'Fome de Nitrogênio' vai de V6 a VT. Zinco é o micronutriente limitante."
+                "tipo_raiz": "fasciculada", "ciclo": "anual"
             },
             "Café": { 
                 "fases": ["Veg", "Botão", "Chumbinho", "Expansão", "Maturação"],
                 "macros": {"N": [30, 80, 150, 220, 280], "P": [3, 8, 18, 25, 30], "K": [25, 60, 120, 200, 260], "Ca": [20, 40, 70, 90, 100], "Mg": [5, 15, 30, 40, 45], "S": [5, 10, 20, 30, 35]},
                 "micros": {"Fe": [200, 800, 1500, 2000, 2500], "B": [50, 200, 400, 550, 600], "Zn": [40, 150, 300, 400, 450]},
-                "dica": "O Potássio é o motor do enchimento do grão na fase de Expansão. Boro essencial na florada."
+                "tipo_raiz": "axial", "ciclo": "perene"
             },
             "Algodão": {
                 "fases": ["Emerg", "Botão", "Flor", "Maçã", "Abertura"],
                 "macros": {"N": [5, 35, 95, 140, 160], "P": [1, 8, 25, 35, 40], "K": [5, 45, 110, 145, 155], "Ca": [2, 20, 60, 90, 100], "Mg": [1, 5, 15, 25, 30], "S": [1, 5, 15, 25, 30]},
                 "micros": {"B": [10, 60, 180, 280, 320], "Zn": [10, 50, 120, 180, 200]},
-                "dica": "Extremamente exigente em Boro para segurar as maçãs."
+                "tipo_raiz": "pivotante", "ciclo": "anual"
             },
             "Citros": {
                 "fases": ["Brotação", "Flor", "Fruto I", "Fruto II", "Colheita"],
                 "macros": {"N": [20, 60, 120, 180, 200], "P": [2, 8, 15, 20, 25], "K": [15, 50, 110, 170, 190], "Ca": [30, 80, 140, 180, 200], "Mg": [5, 15, 30, 40, 45], "S": [5, 15, 25, 35, 40]},
                 "micros": {"Mn": [50, 200, 400, 500, 600], "Zn": [50, 200, 400, 500, 600], "B": [20, 80, 150, 200, 250]},
-                "dica": "Cálcio é vital. Deficiência de Zn e Mn (folha zebrada) derruba produtividade."
+                "tipo_raiz": "axial", "ciclo": "perene"
             },
             "Banana": {
                 "fases": ["Cresc", "Flor", "Cacho", "Enchimento", "Colheita"],
                 "macros": {"N": [30, 100, 250, 350, 400], "P": [5, 15, 40, 50, 60], "K": [50, 200, 600, 1200, 1500], "Ca": [20, 60, 150, 200, 220], "Mg": [10, 30, 80, 120, 140], "S": [10, 30, 60, 80, 100]},
                 "micros": {"Mn": [100, 500, 1500, 2500, 3000], "Zn": [20, 100, 300, 500, 600], "B": [10, 50, 150, 250, 300]},
-                "dica": "A maior extratora de Potássio (K). Sem K, o cacho não enche e a planta quebra."
+                "tipo_raiz": "rizoma", "ciclo": "perene"
             },
             "Tomate": {
                 "fases": ["Veg", "Flor 1", "Fruto 1", "Fruto Total", "Colheita"],
                 "macros": {"N": [10, 40, 100, 180, 220], "P": [2, 10, 25, 35, 40], "K": [15, 60, 160, 280, 350], "Ca": [10, 40, 100, 160, 190], "Mg": [5, 15, 35, 50, 60], "S": [5, 15, 30, 45, 50]},
                 "micros": {"Mn": [20, 150, 400, 600, 700], "B": [10, 50, 120, 200, 250], "Zn": [10, 60, 150, 250, 300]},
-                "dica": "Exigente em Cálcio. Deficiência causa Podridão Apical (Fundo Preto)."
+                "tipo_raiz": "pivotante", "ciclo": "anual"
             },
             "Batata": {
                 "fases": ["Emerg", "Estolon", "Tuber", "Enchimento", "Maturação"],
                 "macros": {"N": [10, 50, 100, 140, 160], "P": [2, 10, 25, 35, 40], "K": [15, 60, 150, 250, 280], "Ca": [5, 20, 50, 70, 80], "Mg": [2, 10, 25, 35, 40], "S": [2, 8, 15, 25, 30]},
                 "micros": {"Mn": [20, 100, 250, 400, 450], "B": [5, 20, 50, 80, 100], "Zn": [10, 40, 100, 150, 180]},
-                "dica": "Extração de Potássio violenta no enchimento. Cuidado com excesso de N."
+                "tipo_raiz": "tubérculo", "ciclo": "anual"
             },
             "Feijão": {
                 "fases": ["V2", "V4", "R5", "R7", "R9"],
                 "macros": {"N": [5, 25, 60, 100, 120], "P": [1, 5, 12, 18, 20], "K": [5, 20, 50, 80, 90], "Ca": [3, 15, 40, 60, 70], "Mg": [2, 8, 15, 20, 25], "S": [1, 3, 8, 12, 15]},
                 "micros": {"Fe": [50, 200, 600, 1000, 1200], "Mn": [20, 80, 200, 300, 350], "Zn": [10, 40, 100, 150, 180]},
-                "dica": "Ciclo curto: Adubação de base bem feita é 70% do sucesso."
+                "tipo_raiz": "pivotante", "ciclo": "anual"
             },
             "Trigo": {
                 "fases": ["Emerg", "Perfilho", "Along", "Espiga", "Grão"],
                 "macros": {"N": [5, 30, 80, 110, 130], "P": [1, 8, 18, 22, 25], "K": [5, 25, 70, 90, 100], "Ca": [2, 10, 25, 35, 40], "Mg": [1, 5, 10, 15, 18], "S": [1, 4, 10, 15, 18]},
                 "micros": {"Mn": [20, 100, 300, 400, 450], "Cu": [2, 10, 25, 35, 40], "Zn": [5, 20, 50, 70, 80]},
-                "dica": "Nitrogênio tardio aumenta proteína e glúten."
+                "tipo_raiz": "fasciculada", "ciclo": "anual"
             },
             "Uva": {
                 "fases": ["Brota", "Flor", "Varaison", "Maturação", "Colheita"],
                 "macros": {"N": [15, 50, 90, 100, 110], "P": [2, 8, 15, 20, 25], "K": [10, 40, 90, 130, 150], "Ca": [10, 40, 80, 100, 110], "Mg": [5, 15, 30, 40, 45], "S": [2, 10, 20, 30, 35]},
                 "micros": {"Fe": [50, 200, 500, 700, 800], "B": [10, 50, 100, 150, 180], "Zn": [10, 40, 100, 150, 200]},
-                "dica": "Potássio define o Brix (açúcar) e Magnésio evita seca da ráquis."
+                "tipo_raiz": "axial", "ciclo": "perene"
             },
             "Manga": {
                 "fases": ["Veg", "Flor", "Chumbinho", "Expansão", "Colheita"],
                 "macros": {"N": [20, 60, 100, 130, 150], "P": [5, 15, 25, 35, 40], "K": [15, 50, 110, 160, 180], "Ca": [15, 50, 100, 130, 150], "Mg": [5, 20, 40, 60, 70], "S": [5, 15, 30, 40, 50]},
                 "micros": {"B": [10, 60, 120, 180, 200], "Fe": [50, 200, 600, 800, 1000], "Zn": [20, 80, 150, 200, 250]},
-                "dica": "Cortar N antes da florada para indução."
+                "tipo_raiz": "axial", "ciclo": "perene"
             },
             "Morango": {
                 "fases": ["Plantio", "Flor", "Fruto Inic", "Pico", "Final"],
                 "macros": {"N": [5, 25, 60, 100, 120], "P": [1, 8, 15, 25, 30], "K": [5, 30, 80, 150, 180], "Ca": [5, 25, 60, 90, 110], "Mg": [2, 10, 25, 40, 50], "S": [2, 8, 15, 25, 30]},
                 "micros": {"Fe": [20, 100, 300, 500, 600], "Mn": [10, 50, 150, 250, 300], "B": [5, 20, 50, 80, 100]},
-                "dica": "Cálcio e Boro garantem fruto firme."
+                "tipo_raiz": "fasciculada", "ciclo": "anual"
             },
             "Mirtilo": {
                 "fases": ["Brota", "Flor", "Verde", "Matur", "Dorm"],
                 "macros": {"N": [5, 20, 40, 60, 70], "P": [1, 3, 8, 12, 15], "K": [5, 15, 35, 55, 65], "Ca": [2, 10, 20, 30, 35], "Mg": [1, 5, 10, 15, 18], "S": [2, 8, 15, 20, 25]},
                 "micros": {"Fe": [10, 50, 100, 150, 180], "Mn": [5, 20, 50, 80, 100]},
-                "dica": "Prefere N Amoniacal e pH ácido."
+                "tipo_raiz": "rasa", "ciclo": "perene"
             },
             "Framboesa": {
                 "fases": ["Veg", "Flor", "Verde", "Colheita", "Senesc"],
                 "macros": {"N": [10, 30, 60, 80, 90], "P": [2, 8, 15, 20, 25], "K": [10, 35, 70, 100, 110], "Ca": [5, 20, 40, 60, 70], "Mg": [2, 8, 15, 25, 30], "S": [2, 8, 15, 20, 25]},
                 "micros": {"Fe": [20, 80, 150, 200, 250], "B": [5, 15, 30, 45, 50]},
-                "dica": "Sensível a deficiência de Ferro em solos alcalinos."
+                "tipo_raiz": "rasa", "ciclo": "perene"
             },
             "Cebola": {
                 "fases": ["Mudas", "Cresc", "Bulbo", "Mat", "Estalo"],
                 "macros": {"N": [5, 30, 90, 120, 130], "P": [1, 10, 25, 30, 35], "K": [5, 40, 110, 150, 160], "Ca": [3, 20, 60, 80, 90], "Mg": [2, 8, 20, 30, 35], "S": [2, 10, 30, 45, 50]},
                 "micros": {"Mn": [10, 50, 150, 250, 300], "Zn": [5, 30, 80, 120, 150], "B": [2, 10, 30, 50, 60]},
-                "dica": "Enxofre (S) define a pungência (sabor)."
+                "tipo_raiz": "bulbo", "ciclo": "anual"
             },
             "Alho": {
                 "fases": ["Emerg", "Veg", "Bulbo", "Mat", "Colheita"],
                 "macros": {"N": [5, 40, 100, 120, 125], "P": [1, 10, 20, 25, 30], "K": [5, 45, 120, 140, 150], "Ca": [3, 25, 60, 70, 75], "Mg": [2, 10, 20, 30, 35], "S": [3, 15, 40, 55, 60]},
                 "micros": {"Zn": [5, 40, 100, 130, 150], "B": [2, 15, 40, 60, 70]},
-                "dica": "Não aplicar N no final para evitar superbrotamento."
+                "tipo_raiz": "bulbo", "ciclo": "anual"
             },
             "Pastagens": {
                 "fases": ["D0", "D10", "D20", "D30", "D45"],
                 "macros": {"N": [5, 40, 100, 180, 250], "P": [2, 8, 18, 25, 30], "K": [5, 30, 90, 160, 220], "Ca": [2, 10, 30, 50, 60], "Mg": [1, 5, 15, 25, 30], "S": [1, 5, 15, 25, 30]},
                 "micros": {"Mn": [10, 50, 150, 250, 300], "Zn": [5, 30, 80, 120, 150]},
-                "dica": "N produz massa, S produz proteína."
+                "tipo_raiz": "fasciculada", "ciclo": "continuo"
             }
         }
 
-        # --- 3. LÓGICA DE BUSCA INTELIGENTE (MATCH PARCIAL) ---
-        # Resolve o problema de "Café (Coffea...)" não bater com "Café"
-        # O sistema agora varre as chaves e vê se a chave está DENTRO do nome selecionado
-        
+        # --- 3. SELEÇÃO DA CULTURA ---
         dados_nutri = None
         nome_cultura_exibicao = str(cult_sel)
         
         for chave in DB_NUTRI_MASTER:
-            # Se "Café" estiver dentro de "Café (Coffea arabica)" -> Match!
             if chave.lower() in str(cult_sel).lower() or str(cult_sel).lower() in chave.lower():
                 dados_nutri = DB_NUTRI_MASTER[chave]
-                nome_cultura_exibicao = chave # Usa o nome limpo (Ex: Café)
+                nome_cultura_exibicao = chave
                 break
         
-        # Fallback para Citrus/Citros (Variação comum)
+        # Fallback para Citrus
         if not dados_nutri and ("citrus" in str(cult_sel).lower() or "limão" in str(cult_sel).lower() or "laranja" in str(cult_sel).lower()):
             dados_nutri = DB_NUTRI_MASTER["Citros"]
             nome_cultura_exibicao = "Citros"
 
         if dados_nutri:
-            # --- 4. PAINEL QUÍMICO (VISUAL TABELA PERIÓDICA) ---
-            # Mostra a extração TOTAL (último valor da lista) em cartões
             
-            st.markdown(f"#### ⚛️ Extração Total Estimada ({nome_cultura_exibicao})")
+            # --- 4. PAINEL QUÍMICO (ELEMENTOS) ---
+            st.markdown(f"#### ⚛️ Extração Total ({nome_cultura_exibicao})")
             
-            # Pega os valores finais (pico de absorção)
+            # Pega totais
             n_tot = dados_nutri['macros'].get('N', [0])[-1]
             p_tot = dados_nutri['macros'].get('P', [0])[-1]
             k_tot = dados_nutri['macros'].get('K', [0])[-1]
@@ -344,115 +339,166 @@ if not df_clima.empty:
             mg_tot = dados_nutri['macros'].get('Mg', [0])[-1]
             s_tot = dados_nutri['macros'].get('S', [0])[-1]
 
-            # HTML CSS Grid para os cartões químicos
             st.markdown(f"""
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 10px; margin-bottom: 20px;">
-                <div style="background:#f0fdf4; border:1px solid #16a34a; border-radius:8px; padding:10px; text-align:center;">
-                    <div style="font-weight:900; color:#16a34a; font-size:1.2rem;">N</div>
-                    <div style="font-size:0.8rem; color:#14532d;">{n_tot}</div>
-                    <div style="font-size:0.6rem; color:#86efac;">kg/ha</div>
+                <div style="background:#f0fdf4; border:1px solid #16a34a; border-radius:8px; padding:8px; text-align:center;">
+                    <div style="font-weight:900; color:#16a34a; font-size:1.1rem;">N</div><div style="font-size:0.8rem;">{n_tot} kg</div>
                 </div>
-                <div style="background:#eff6ff; border:1px solid #2563eb; border-radius:8px; padding:10px; text-align:center;">
-                    <div style="font-weight:900; color:#2563eb; font-size:1.2rem;">P</div>
-                    <div style="font-size:0.8rem; color:#1e3a8a;">{p_tot}</div>
-                    <div style="font-size:0.6rem; color:#93c5fd;">kg/ha</div>
+                <div style="background:#eff6ff; border:1px solid #2563eb; border-radius:8px; padding:8px; text-align:center;">
+                    <div style="font-weight:900; color:#2563eb; font-size:1.1rem;">P</div><div style="font-size:0.8rem;">{p_tot} kg</div>
                 </div>
-                <div style="background:#fef2f2; border:1px solid #dc2626; border-radius:8px; padding:10px; text-align:center;">
-                    <div style="font-weight:900; color:#dc2626; font-size:1.2rem;">K</div>
-                    <div style="font-size:0.8rem; color:#7f1d1d;">{k_tot}</div>
-                    <div style="font-size:0.6rem; color:#fca5a5;">kg/ha</div>
+                <div style="background:#fef2f2; border:1px solid #dc2626; border-radius:8px; padding:8px; text-align:center;">
+                    <div style="font-weight:900; color:#dc2626; font-size:1.1rem;">K</div><div style="font-size:0.8rem;">{k_tot} kg</div>
                 </div>
-                <div style="background:#fffbeb; border:1px solid #d97706; border-radius:8px; padding:10px; text-align:center;">
-                    <div style="font-weight:900; color:#d97706; font-size:1.2rem;">Ca</div>
-                    <div style="font-size:0.8rem; color:#78350f;">{ca_tot}</div>
-                    <div style="font-size:0.6rem; color:#fcd34d;">kg/ha</div>
+                <div style="background:#fffbeb; border:1px solid #d97706; border-radius:8px; padding:8px; text-align:center;">
+                    <div style="font-weight:900; color:#d97706; font-size:1.1rem;">Ca</div><div style="font-size:0.8rem;">{ca_tot} kg</div>
                 </div>
-                <div style="background:#faf5ff; border:1px solid #9333ea; border-radius:8px; padding:10px; text-align:center;">
-                    <div style="font-weight:900; color:#9333ea; font-size:1.2rem;">Mg</div>
-                    <div style="font-size:0.8rem; color:#581c87;">{mg_tot}</div>
-                    <div style="font-size:0.6rem; color:#d8b4fe;">kg/ha</div>
+                <div style="background:#faf5ff; border:1px solid #9333ea; border-radius:8px; padding:8px; text-align:center;">
+                    <div style="font-weight:900; color:#9333ea; font-size:1.1rem;">Mg</div><div style="font-size:0.8rem;">{mg_tot} kg</div>
                 </div>
-                <div style="background:#fff7ed; border:1px solid #ea580c; border-radius:8px; padding:10px; text-align:center;">
-                    <div style="font-weight:900; color:#ea580c; font-size:1.2rem;">S</div>
-                    <div style="font-size:0.8rem; color:#7c2d12;">{s_tot}</div>
-                    <div style="font-size:0.6rem; color:#fdba74;">kg/ha</div>
+                <div style="background:#fff7ed; border:1px solid #ea580c; border-radius:8px; padding:8px; text-align:center;">
+                    <div style="font-weight:900; color:#ea580c; font-size:1.1rem;">S</div><div style="font-size:0.8rem;">{s_tot} kg</div>
                 </div>
             </div>
             """, unsafe_allow_html=True)
 
-            # --- 5. GRÁFICO MACROS (CURVAS DE ÁREA) ---
-            st.markdown("#### 🥦 Macronutrientes (Acumulados)")
+            # --- 5. GRÁFICOS SEPARADOS (AQUI ESTÁ A CORREÇÃO DE ESCALA) ---
             
-            fig_macro = go.Figure()
-            # Cores: N=Verde, P=Azul, K=Vermelho, Ca=Amarelo, Mg=Roxo, S=Laranja
-            colors_macro = {'N': '#16a34a', 'P': '#2563eb', 'K': '#dc2626', 'Ca': '#eab308', 'Mg': '#9333ea', 'S': '#f97316'}
+            # GRÁFICO 1: OS GIGANTES (N e K)
+            st.markdown("#### 1. Macronutrientes de Alta Demanda (N, K)")
+            st.caption("Atenção: Estes elementos atingem centenas de kg/ha.")
             
-            for nutri, valores in dados_nutri['macros'].items():
-                fig_macro.add_trace(go.Scatter(
-                    x=dados_nutri['fases'], y=valores, mode='lines+markers', name=nutri,
-                    line=dict(width=3, color=colors_macro.get(nutri, '#333')),
-                    fill='tozeroy', fillcolor=f"rgba{tuple(int(colors_macro.get(nutri, '#000').lstrip('#')[i:i+2], 16) for i in (0, 2, 4)) + (0.05,)}", # Cor transparente
-                    hovertemplate='%{y} kg/ha<extra></extra>'
-                ))
+            fig_high = go.Figure()
+            colors_high = {'N': '#16a34a', 'K': '#dc2626'}
             
-            fig_macro.update_layout(
-                height=350, margin=dict(l=20, r=20, t=20, b=20),
-                legend=dict(orientation="h", y=1.1),
-                yaxis=dict(title="Kg/ha", showgrid=True, gridcolor='#f1f5f9'),
-                paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)'
-            )
-            st.plotly_chart(fig_macro, use_container_width=True)
+            for nutri in ['N', 'K']:
+                if nutri in dados_nutri['macros']:
+                    valores = dados_nutri['macros'][nutri]
+                    fig_high.add_trace(go.Scatter(
+                        x=dados_nutri['fases'], y=valores, mode='lines+markers', name=f"{nutri} (Alta)",
+                        line=dict(width=4, color=colors_high[nutri]),
+                        fill='tozeroy', fillcolor=f"rgba{tuple(int(colors_high[nutri].lstrip('#')[i:i+2], 16) for i in (0, 2, 4)) + (0.1,)}",
+                        hovertemplate='%{y} kg/ha<extra></extra>'
+                    ))
             
-            st.divider()
+            fig_high.update_layout(height=300, margin=dict(l=20, r=20, t=10, b=20), yaxis=dict(title="kg/ha"))
+            st.plotly_chart(fig_high, use_container_width=True)
 
-            # --- 6. GRÁFICO MICROS ---
-            st.markdown("#### 🧪 Micronutrientes (Gramas/ha)")
+            # GRÁFICO 2: O FÓSFORO E SECUNDÁRIOS (P, Ca, Mg, S)
+            st.markdown("#### 2. Fósforo e Secundários (P, Ca, Mg, S)")
+            st.caption("Gráfico com escala ampliada para visualizar a curva do Fósforo.")
             
+            fig_low = go.Figure()
+            colors_low = {'P': '#2563eb', 'Ca': '#eab308', 'Mg': '#9333ea', 'S': '#f97316'}
+            
+            for nutri in ['P', 'Ca', 'Mg', 'S']:
+                if nutri in dados_nutri['macros']:
+                    valores = dados_nutri['macros'][nutri]
+                    fig_low.add_trace(go.Scatter(
+                        x=dados_nutri['fases'], y=valores, mode='lines+markers', name=nutri,
+                        line=dict(width=3, color=colors_low[nutri]),
+                        hovertemplate='%{y} kg/ha<extra></extra>'
+                    ))
+            
+            fig_low.update_layout(height=300, margin=dict(l=20, r=20, t=10, b=20), yaxis=dict(title="kg/ha"))
+            st.plotly_chart(fig_low, use_container_width=True)
+            
+            # GRÁFICO 3: MICRONUTRIENTES
+            st.markdown("#### 3. Micronutrientes (g/ha)")
             fig_micro = go.Figure()
             colors_micro = {'B': '#ec4899', 'Zn': '#06b6d4', 'Mn': '#8b5cf6', 'Cu': '#f59e0b', 'Fe': '#64748b'}
 
             for nutri, valores in dados_nutri['micros'].items():
                 fig_micro.add_trace(go.Scatter(
                     x=dados_nutri['fases'], y=valores, mode='lines+markers', name=nutri,
-                    line=dict(width=2, dash='solid', color=colors_micro.get(nutri, '#555')),
+                    line=dict(width=2, dash='dot', color=colors_micro.get(nutri, '#555')),
                     hovertemplate='%{y} g/ha<extra></extra>'
                 ))
-
-            fig_micro.update_layout(
-                height=350, margin=dict(l=20, r=20, t=20, b=20),
-                legend=dict(orientation="h", y=1.1),
-                yaxis=dict(title="g/ha", showgrid=True, gridcolor='#f1f5f9'),
-                paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)'
-            )
+            fig_micro.update_layout(height=300, margin=dict(l=20, r=20, t=10, b=20), yaxis=dict(title="g/ha"))
             st.plotly_chart(fig_micro, use_container_width=True)
 
-            # --- 7. DICA DE MANEJO (CAIXA COLORIDA) ---
-            st.markdown(f"""
-            <div style="background:linear-gradient(to right, #f0f9ff, #ffffff); border-left:5px solid #0ea5e9; padding:20px; border-radius:8px; margin-top:20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                <div style="color:#0369a1; font-weight:800; font-size:0.95rem; margin-bottom:5px;">💡 ESTRATÉGIA NUTRICIONAL: {nome_cultura_exibicao.upper()}</div>
-                <div style="color:#0c4a6e; font-size:0.9rem; line-height:1.5;">
-            """ + dados_nutri['dica'] + """
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+            st.divider()
 
-            # --- 8. TABELA DE DADOS (EXPANSÍVEL) ---
-            with st.expander("📋 Ver Tabela de Dados Brutos"):
-                # Cria DataFrame para Macros
-                df_macro = pd.DataFrame(dados_nutri['macros'])
-                df_macro.index = dados_nutri['fases']
-                st.markdown("**Macros (kg/ha):**")
-                st.dataframe(df_macro.T, use_container_width=True)
+            # --- 6. PLANEJAMENTO TÁTICO DE ADUBAÇÃO (INTELIGÊNCIA AGRONÔMICA) ---
+            st.markdown("### 🚜 Planejamento Tático de Adubação")
+            st.caption("Recomendações técnicas baseadas na mobilidade do elemento e tipo da cultura.")
+
+            # Lógica de Adubação
+            ciclo = dados_nutri.get('ciclo', 'anual')
+            
+            col_adub1, col_adub2, col_adub3 = st.columns(3)
+            
+            # MANEJO DE FÓSFORO (P) - CRÍTICO (IMÓVEL)
+            with col_adub1:
+                st.markdown("""
+                <div style="border-top: 4px solid #2563eb; background:#f8fafc; padding:15px; border-radius:8px;">
+                    <b style="color:#1e3a8a;">FÓSFORO (P)</b><br>
+                    <span style="font-size:0.8rem; color:#64748b;">Mobilidade no Solo: <b>BAIXA/IMÓVEL</b></span>
+                    <hr style="margin:5px 0;">
+                """, unsafe_allow_html=True)
                 
-                # Cria DataFrame para Micros
-                df_micro = pd.DataFrame(dados_nutri['micros'])
-                df_micro.index = dados_nutri['fases']
-                st.markdown("**Micros (g/ha):**")
-                st.dataframe(df_micro.T, use_container_width=True)
+                if ciclo == 'anual':
+                    st.markdown("""
+                    <div style="font-size:0.85rem; color:#0f172a;">
+                    🎯 <b>Foco: Plantio</b><br>
+                    Todo o P deve ser aplicado no <b>SULCO DE PLANTIO</b>, logo abaixo da semente. Devido à imobilidade, raízes não buscam P longe. Aplicações a lanço têm baixa eficiência.
+                    </div>""", unsafe_allow_html=True)
+                else: # Perene
+                    st.markdown("""
+                    <div style="font-size:0.85rem; color:#0f172a;">
+                    🎯 <b>Foco: Fundação/Projeção</b><br>
+                    Fundamental na cova de plantio. Em produção, aplicar na projeção da copa (onde estão as raízes finas) e se possível incorporar levemente ou usar fontes solúveis.
+                    </div>""", unsafe_allow_html=True)
+                st.markdown("</div>", unsafe_allow_html=True)
+
+            # MANEJO DE NITROGÊNIO (N) - VOLÁTIL
+            with col_adub2:
+                st.markdown("""
+                <div style="border-top: 4px solid #16a34a; background:#f8fafc; padding:15px; border-radius:8px;">
+                    <b style="color:#14532d;">NITROGÊNIO (N)</b><br>
+                    <span style="font-size:0.8rem; color:#64748b;">Mobilidade no Solo: <b>ALTA (LIXIVIA)</b></span>
+                    <hr style="margin:5px 0;">
+                """, unsafe_allow_html=True)
+                
+                if nome_cultura_exibicao == "Soja" or nome_cultura_exibicao == "Feijão":
+                    st.markdown("""
+                    <div style="font-size:0.85rem; color:#0f172a;">
+                    🦠 <b>Inoculação (FBN)</b><br>
+                    Priorize inoculantes de alta qualidade (Bradyrhizobium). O N mineral inibe a nodulação. Aplique cobalto e molibdênio para turbinar a fixação.
+                    </div>""", unsafe_allow_html=True)
+                else:
+                    st.markdown("""
+                    <div style="font-size:0.85rem; color:#0f172a;">
+                    ⚡ <b>Parcelamento Obrigatório</b><br>
+                    Aplique 20-30% no plantio e o resto em cobertura (V4-V8). Evite aplicar tudo de uma vez para não perder por lixiviação (chuva) ou volatilização (sol).
+                    </div>""", unsafe_allow_html=True)
+                st.markdown("</div>", unsafe_allow_html=True)
+
+            # MANEJO DE POTÁSSIO (K) - SALINO
+            with col_adub3:
+                st.markdown("""
+                <div style="border-top: 4px solid #dc2626; background:#f8fafc; padding:15px; border-radius:8px;">
+                    <b style="color:#7f1d1d;">POTÁSSIO (K)</b><br>
+                    <span style="font-size:0.8rem; color:#64748b;">Mobilidade no Solo: <b>MÉDIA</b></span>
+                    <hr style="margin:5px 0;">
+                """, unsafe_allow_html=True)
+                
+                if k_tot > 150:
+                    st.markdown("""
+                    <div style="font-size:0.85rem; color:#0f172a;">
+                    ⚠️ <b>Cuidado: Índice Salino</b><br>
+                    Alta demanda! Porém, não aplique mais que 50-60kg de K2O junto à semente para não "queimar" a germinação. Parcele o restante em cobertura junto com o Nitrogênio.
+                    </div>""", unsafe_allow_html=True)
+                else:
+                    st.markdown("""
+                    <div style="font-size:0.85rem; color:#0f172a;">
+                    ✅ <b>Manejo Padrão</b><br>
+                    Pode ser aplicado no plantio ou pré-plantio. Em solos arenosos, parcele para evitar perdas para o lençol freático (lixiviação).
+                    </div>""", unsafe_allow_html=True)
+                st.markdown("</div>", unsafe_allow_html=True)
             
         else:
-            st.error(f"Erro de Banco de Dados: Não foi possível carregar a marcha para '{cult_sel}'.")
-            st.info("Verifique se o nome da cultura está correto na lista.")
+            st.error(f"Erro ao carregar dados para '{cult_sel}'.")
 
         st.markdown('</div>', unsafe_allow_html=True)
     
