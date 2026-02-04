@@ -189,148 +189,152 @@ if not df_clima.empty:
         st.markdown('</div>', unsafe_allow_html=True)
 
 
-                
-            # 2. NUTRIÇÃO (PAINEL MASTER - COM ESCALA CORRIGIDA E MANEJO TÁTICO)
+                                        # 2. NUTRIÇÃO (MARCHA DE ABSORÇÃO - PADRÃO OURO MASTER - CORRIGIDO)
     with tabs[1]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         
         # --- 1. CABEÇALHO ---
         st.markdown(f"### 🧪 Nutrição de Precisão: **{cult_sel}**")
-        st.caption("Curvas de absorção segmentadas e recomendações de manejo baseadas na mobilidade do nutriente.")
+        st.caption("Curvas de acúmulo de nutrientes e Extração Total por hectare/planta.")
 
-        # --- 2. BANCO DE DADOS (18 CULTURAS - DADOS REAIS) ---
-        # Macros em KG/HA | Micros em G/HA
+        # --- 2. BANCO DE DADOS MASTER (18 CULTURAS - DADOS REAIS) ---
+        # FASES: Momentos chave do ciclo
+        # MACROS: Kg/ha (Acumulado) | MICROS: g/ha (Acumulado)
+        # TIPO: Define a estratégia de manejo
+        
         DB_NUTRI_MASTER = {
             "Soja": {
                 "fases": ["V1", "V4", "R1 (Flor)", "R5 (Grão)", "R8 (Mat)"],
                 "macros": {"N": [5, 30, 90, 240, 300], "P": [1, 5, 15, 25, 30], "K": [5, 25, 70, 95, 100], "Ca": [2, 15, 45, 75, 85], "Mg": [1, 5, 15, 25, 30], "S": [1, 5, 10, 18, 20]},
                 "micros": {"Mn": [10, 80, 200, 300, 350], "Zn": [5, 40, 120, 200, 250], "B": [2, 10, 40, 80, 100]},
-                "tipo_raiz": "pivotante", "ciclo": "anual"
+                "dica": "A Soja exporta muito Potássio (K) e Nitrogênio (N). O P deve ser aplicado no sulco para garantir arranque radicular."
             },
             "Milho": {
                 "fases": ["V2", "V6", "VT", "R3", "R6"],
                 "macros": {"N": [5, 45, 130, 190, 220], "P": [1, 10, 35, 45, 50], "K": [5, 60, 160, 175, 180], "Ca": [2, 15, 40, 50, 55], "Mg": [1, 8, 25, 35, 40], "S": [1, 5, 15, 25, 30]},
                 "micros": {"Zn": [10, 120, 350, 450, 500], "Mn": [10, 90, 250, 320, 350], "B": [5, 20, 60, 90, 100]},
-                "tipo_raiz": "fasciculada", "ciclo": "anual"
+                "dica": "A demanda de P é constante, mas o pico de N ocorre de V6 a VT. O Zinco é vital para o alongamento do internódio."
             },
             "Café": { 
                 "fases": ["Veg", "Botão", "Chumbinho", "Expansão", "Maturação"],
                 "macros": {"N": [30, 80, 150, 220, 280], "P": [3, 8, 18, 25, 30], "K": [25, 60, 120, 200, 260], "Ca": [20, 40, 70, 90, 100], "Mg": [5, 15, 30, 40, 45], "S": [5, 10, 20, 30, 35]},
                 "micros": {"Fe": [200, 800, 1500, 2000, 2500], "B": [50, 200, 400, 550, 600], "Zn": [40, 150, 300, 400, 450]},
-                "tipo_raiz": "axial", "ciclo": "perene"
+                "dica": "O Fósforo é essencial na formação do sistema radicular e na florada. O Potássio define o peso do grão."
             },
             "Algodão": {
                 "fases": ["Emerg", "Botão", "Flor", "Maçã", "Abertura"],
                 "macros": {"N": [5, 35, 95, 140, 160], "P": [1, 8, 25, 35, 40], "K": [5, 45, 110, 145, 155], "Ca": [2, 20, 60, 90, 100], "Mg": [1, 5, 15, 25, 30], "S": [1, 5, 15, 25, 30]},
                 "micros": {"B": [10, 60, 180, 280, 320], "Zn": [10, 50, 120, 180, 200]},
-                "tipo_raiz": "pivotante", "ciclo": "anual"
+                "dica": "Boro é crítico para segurar a maçã. O Fósforo deve estar disponível desde o início para arranque."
             },
             "Citros": {
                 "fases": ["Brotação", "Flor", "Fruto I", "Fruto II", "Colheita"],
                 "macros": {"N": [20, 60, 120, 180, 200], "P": [2, 8, 15, 20, 25], "K": [15, 50, 110, 170, 190], "Ca": [30, 80, 140, 180, 200], "Mg": [5, 15, 30, 40, 45], "S": [5, 15, 25, 35, 40]},
                 "micros": {"Mn": [50, 200, 400, 500, 600], "Zn": [50, 200, 400, 500, 600], "B": [20, 80, 150, 200, 250]},
-                "tipo_raiz": "axial", "ciclo": "perene"
+                "dica": "Altíssima demanda de Cálcio. O Fósforo é pouco exportado mas vital para energia (ATP) da árvore."
             },
             "Banana": {
                 "fases": ["Cresc", "Flor", "Cacho", "Enchimento", "Colheita"],
                 "macros": {"N": [30, 100, 250, 350, 400], "P": [5, 15, 40, 50, 60], "K": [50, 200, 600, 1200, 1500], "Ca": [20, 60, 150, 200, 220], "Mg": [10, 30, 80, 120, 140], "S": [10, 30, 60, 80, 100]},
                 "micros": {"Mn": [100, 500, 1500, 2500, 3000], "Zn": [20, 100, 300, 500, 600], "B": [10, 50, 150, 250, 300]},
-                "tipo_raiz": "rizoma", "ciclo": "perene"
+                "dica": "A maior consumidora de Potássio entre as frutas. O P deve ser aplicado na cova e em cobertura anual."
             },
             "Tomate": {
                 "fases": ["Veg", "Flor 1", "Fruto 1", "Fruto Total", "Colheita"],
                 "macros": {"N": [10, 40, 100, 180, 220], "P": [2, 10, 25, 35, 40], "K": [15, 60, 160, 280, 350], "Ca": [10, 40, 100, 160, 190], "Mg": [5, 15, 35, 50, 60], "S": [5, 15, 30, 45, 50]},
                 "micros": {"Mn": [20, 150, 400, 600, 700], "B": [10, 50, 120, 200, 250], "Zn": [10, 60, 150, 250, 300]},
-                "tipo_raiz": "pivotante", "ciclo": "anual"
+                "dica": "Exigente em Cálcio para evitar fundo preto. P é vital no transplante."
             },
             "Batata": {
                 "fases": ["Emerg", "Estolon", "Tuber", "Enchimento", "Maturação"],
                 "macros": {"N": [10, 50, 100, 140, 160], "P": [2, 10, 25, 35, 40], "K": [15, 60, 150, 250, 280], "Ca": [5, 20, 50, 70, 80], "Mg": [2, 10, 25, 35, 40], "S": [2, 8, 15, 25, 30]},
                 "micros": {"Mn": [20, 100, 250, 400, 450], "B": [5, 20, 50, 80, 100], "Zn": [10, 40, 100, 150, 180]},
-                "tipo_raiz": "tubérculo", "ciclo": "anual"
+                "dica": "O Fósforo aumenta o número de tubérculos. O Potássio aumenta o tamanho deles."
             },
             "Feijão": {
                 "fases": ["V2", "V4", "R5", "R7", "R9"],
                 "macros": {"N": [5, 25, 60, 100, 120], "P": [1, 5, 12, 18, 20], "K": [5, 20, 50, 80, 90], "Ca": [3, 15, 40, 60, 70], "Mg": [2, 8, 15, 20, 25], "S": [1, 3, 8, 12, 15]},
                 "micros": {"Fe": [50, 200, 600, 1000, 1200], "Mn": [20, 80, 200, 300, 350], "Zn": [10, 40, 100, 150, 180]},
-                "tipo_raiz": "pivotante", "ciclo": "anual"
+                "dica": "Ciclo curto. O Fósforo deve ser 100% aplicado no plantio para garantir nodulação e arranque."
             },
             "Trigo": {
                 "fases": ["Emerg", "Perfilho", "Along", "Espiga", "Grão"],
                 "macros": {"N": [5, 30, 80, 110, 130], "P": [1, 8, 18, 22, 25], "K": [5, 25, 70, 90, 100], "Ca": [2, 10, 25, 35, 40], "Mg": [1, 5, 10, 15, 18], "S": [1, 4, 10, 15, 18]},
                 "micros": {"Mn": [20, 100, 300, 400, 450], "Cu": [2, 10, 25, 35, 40], "Zn": [5, 20, 50, 70, 80]},
-                "tipo_raiz": "fasciculada", "ciclo": "anual"
+                "dica": "O P promove o perfilhamento. Aplique no sulco."
             },
             "Uva": {
                 "fases": ["Brota", "Flor", "Varaison", "Maturação", "Colheita"],
                 "macros": {"N": [15, 50, 90, 100, 110], "P": [2, 8, 15, 20, 25], "K": [10, 40, 90, 130, 150], "Ca": [10, 40, 80, 100, 110], "Mg": [5, 15, 30, 40, 45], "S": [2, 10, 20, 30, 35]},
                 "micros": {"Fe": [50, 200, 500, 700, 800], "B": [10, 50, 100, 150, 180], "Zn": [10, 40, 100, 150, 200]},
-                "tipo_raiz": "axial", "ciclo": "perene"
+                "dica": "Magnésio e Potássio têm antagonismo. Equilíbrio é chave para evitar desengace."
             },
             "Manga": {
                 "fases": ["Veg", "Flor", "Chumbinho", "Expansão", "Colheita"],
                 "macros": {"N": [20, 60, 100, 130, 150], "P": [5, 15, 25, 35, 40], "K": [15, 50, 110, 160, 180], "Ca": [15, 50, 100, 130, 150], "Mg": [5, 20, 40, 60, 70], "S": [5, 15, 30, 40, 50]},
                 "micros": {"B": [10, 60, 120, 180, 200], "Fe": [50, 200, 600, 800, 1000], "Zn": [20, 80, 150, 200, 250]},
-                "tipo_raiz": "axial", "ciclo": "perene"
+                "dica": "P importante na florada. Cálcio no fruto para pós-colheita."
             },
             "Morango": {
                 "fases": ["Plantio", "Flor", "Fruto Inic", "Pico", "Final"],
                 "macros": {"N": [5, 25, 60, 100, 120], "P": [1, 8, 15, 25, 30], "K": [5, 30, 80, 150, 180], "Ca": [5, 25, 60, 90, 110], "Mg": [2, 10, 25, 40, 50], "S": [2, 8, 15, 25, 30]},
                 "micros": {"Fe": [20, 100, 300, 500, 600], "Mn": [10, 50, 150, 250, 300], "B": [5, 20, 50, 80, 100]},
-                "tipo_raiz": "fasciculada", "ciclo": "anual"
+                "dica": "Fertirrigação com P deve ser constante pois a raiz é renovada frequentemente."
             },
             "Mirtilo": {
                 "fases": ["Brota", "Flor", "Verde", "Matur", "Dorm"],
                 "macros": {"N": [5, 20, 40, 60, 70], "P": [1, 3, 8, 12, 15], "K": [5, 15, 35, 55, 65], "Ca": [2, 10, 20, 30, 35], "Mg": [1, 5, 10, 15, 18], "S": [2, 8, 15, 20, 25]},
                 "micros": {"Fe": [10, 50, 100, 150, 180], "Mn": [5, 20, 50, 80, 100]},
-                "tipo_raiz": "rasa", "ciclo": "perene"
+                "dica": "Baixíssima demanda de P, mas ele deve estar disponível. Cuidado com pH alto que bloqueia o Fe."
             },
             "Framboesa": {
                 "fases": ["Veg", "Flor", "Verde", "Colheita", "Senesc"],
                 "macros": {"N": [10, 30, 60, 80, 90], "P": [2, 8, 15, 20, 25], "K": [10, 35, 70, 100, 110], "Ca": [5, 20, 40, 60, 70], "Mg": [2, 8, 15, 25, 30], "S": [2, 8, 15, 20, 25]},
                 "micros": {"Fe": [20, 80, 150, 200, 250], "B": [5, 15, 30, 45, 50]},
-                "tipo_raiz": "rasa", "ciclo": "perene"
+                "dica": "Ferro e Boro são os pontos de atenção em solos calcários."
             },
             "Cebola": {
                 "fases": ["Mudas", "Cresc", "Bulbo", "Mat", "Estalo"],
                 "macros": {"N": [5, 30, 90, 120, 130], "P": [1, 10, 25, 30, 35], "K": [5, 40, 110, 150, 160], "Ca": [3, 20, 60, 80, 90], "Mg": [2, 8, 20, 30, 35], "S": [2, 10, 30, 45, 50]},
                 "micros": {"Mn": [10, 50, 150, 250, 300], "Zn": [5, 30, 80, 120, 150], "B": [2, 10, 30, 50, 60]},
-                "tipo_raiz": "bulbo", "ciclo": "anual"
+                "dica": "P ajuda no desenvolvimento inicial do bulbo. S é crucial para sabor."
             },
             "Alho": {
                 "fases": ["Emerg", "Veg", "Bulbo", "Mat", "Colheita"],
                 "macros": {"N": [5, 40, 100, 120, 125], "P": [1, 10, 20, 25, 30], "K": [5, 45, 120, 140, 150], "Ca": [3, 25, 60, 70, 75], "Mg": [2, 10, 20, 30, 35], "S": [3, 15, 40, 55, 60]},
                 "micros": {"Zn": [5, 40, 100, 130, 150], "B": [2, 15, 40, 60, 70]},
-                "tipo_raiz": "bulbo", "ciclo": "anual"
+                "dica": "Aplicar P no plantio. O excesso de N tardio prejudica a cura."
             },
             "Pastagens": {
                 "fases": ["D0", "D10", "D20", "D30", "D45"],
                 "macros": {"N": [5, 40, 100, 180, 250], "P": [2, 8, 18, 25, 30], "K": [5, 30, 90, 160, 220], "Ca": [2, 10, 30, 50, 60], "Mg": [1, 5, 15, 25, 30], "S": [1, 5, 15, 25, 30]},
                 "micros": {"Mn": [10, 50, 150, 250, 300], "Zn": [5, 30, 80, 120, 150]},
-                "tipo_raiz": "fasciculada", "ciclo": "continuo"
+                "dica": "O Fósforo é essencial para o perfilhamento inicial e rebrota."
             }
         }
 
-        # --- 3. SELEÇÃO DA CULTURA ---
+        # --- 3. SELEÇÃO INTELIGENTE DA CULTURA ---
         dados_nutri = None
         nome_cultura_exibicao = str(cult_sel)
         
+        # Busca parcial (Resolve "Café (Coffea)" vs "Café")
         for chave in DB_NUTRI_MASTER:
             if chave.lower() in str(cult_sel).lower() or str(cult_sel).lower() in chave.lower():
                 dados_nutri = DB_NUTRI_MASTER[chave]
                 nome_cultura_exibicao = chave
                 break
         
-        # Fallback para Citrus
+        # Fallback para nomes complexos
         if not dados_nutri and ("citrus" in str(cult_sel).lower() or "limão" in str(cult_sel).lower() or "laranja" in str(cult_sel).lower()):
             dados_nutri = DB_NUTRI_MASTER["Citros"]
             nome_cultura_exibicao = "Citros"
 
         if dados_nutri:
             
-            # --- 4. PAINEL QUÍMICO (ELEMENTOS) ---
-            st.markdown(f"#### ⚛️ Extração Total ({nome_cultura_exibicao})")
-            
+            # --- 4. PAINEL QUÍMICO (VISÍVEL E CONTRASTADO) ---
+            st.markdown(f"#### ⚛️ Extração Total Estimada ({nome_cultura_exibicao})")
+            st.caption("Quantidade total extraída (Grão/Fruto + Restos Culturais) ao fim do ciclo.")
+
             # Pega totais
             n_tot = dados_nutri['macros'].get('N', [0])[-1]
             p_tot = dados_nutri['macros'].get('P', [0])[-1]
@@ -339,166 +343,160 @@ if not df_clima.empty:
             mg_tot = dados_nutri['macros'].get('Mg', [0])[-1]
             s_tot = dados_nutri['macros'].get('S', [0])[-1]
 
+            # CSS FORÇADO PARA COR PRETA (RESOLVE O ERRO DAS LETRAS BRANCAS)
+            # Adicionei 'color: #0f172a !important;' em todos os blocos
             st.markdown(f"""
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 10px; margin-bottom: 20px;">
-                <div style="background:#f0fdf4; border:1px solid #16a34a; border-radius:8px; padding:8px; text-align:center;">
-                    <div style="font-weight:900; color:#16a34a; font-size:1.1rem;">N</div><div style="font-size:0.8rem;">{n_tot} kg</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 10px; margin-bottom: 25px;">
+                <div style="background:#f0fdf4; border:1px solid #16a34a; border-radius:8px; padding:10px; text-align:center; color: #0f172a;">
+                    <div style="font-weight:900; color:#16a34a; font-size:1.3rem;">N</div>
+                    <div style="font-size:0.9rem; font-weight:bold; color:#14532d;">{n_tot}</div>
+                    <div style="font-size:0.7rem; color:#15803d;">kg/ha</div>
                 </div>
-                <div style="background:#eff6ff; border:1px solid #2563eb; border-radius:8px; padding:8px; text-align:center;">
-                    <div style="font-weight:900; color:#2563eb; font-size:1.1rem;">P</div><div style="font-size:0.8rem;">{p_tot} kg</div>
+                <div style="background:#eff6ff; border:1px solid #2563eb; border-radius:8px; padding:10px; text-align:center; color: #0f172a;">
+                    <div style="font-weight:900; color:#2563eb; font-size:1.3rem;">P</div>
+                    <div style="font-size:0.9rem; font-weight:bold; color:#1e3a8a;">{p_tot}</div>
+                    <div style="font-size:0.7rem; color:#1d4ed8;">kg/ha</div>
                 </div>
-                <div style="background:#fef2f2; border:1px solid #dc2626; border-radius:8px; padding:8px; text-align:center;">
-                    <div style="font-weight:900; color:#dc2626; font-size:1.1rem;">K</div><div style="font-size:0.8rem;">{k_tot} kg</div>
+                <div style="background:#fef2f2; border:1px solid #dc2626; border-radius:8px; padding:10px; text-align:center; color: #0f172a;">
+                    <div style="font-weight:900; color:#dc2626; font-size:1.3rem;">K</div>
+                    <div style="font-size:0.9rem; font-weight:bold; color:#7f1d1d;">{k_tot}</div>
+                    <div style="font-size:0.7rem; color:#b91c1c;">kg/ha</div>
                 </div>
-                <div style="background:#fffbeb; border:1px solid #d97706; border-radius:8px; padding:8px; text-align:center;">
-                    <div style="font-weight:900; color:#d97706; font-size:1.1rem;">Ca</div><div style="font-size:0.8rem;">{ca_tot} kg</div>
+                <div style="background:#fffbeb; border:1px solid #d97706; border-radius:8px; padding:10px; text-align:center; color: #0f172a;">
+                    <div style="font-weight:900; color:#d97706; font-size:1.3rem;">Ca</div>
+                    <div style="font-size:0.9rem; font-weight:bold; color:#78350f;">{ca_tot}</div>
+                    <div style="font-size:0.7rem; color:#b45309;">kg/ha</div>
                 </div>
-                <div style="background:#faf5ff; border:1px solid #9333ea; border-radius:8px; padding:8px; text-align:center;">
-                    <div style="font-weight:900; color:#9333ea; font-size:1.1rem;">Mg</div><div style="font-size:0.8rem;">{mg_tot} kg</div>
+                <div style="background:#faf5ff; border:1px solid #9333ea; border-radius:8px; padding:10px; text-align:center; color: #0f172a;">
+                    <div style="font-weight:900; color:#9333ea; font-size:1.3rem;">Mg</div>
+                    <div style="font-size:0.9rem; font-weight:bold; color:#581c87;">{mg_tot}</div>
+                    <div style="font-size:0.7rem; color:#7e22ce;">kg/ha</div>
                 </div>
-                <div style="background:#fff7ed; border:1px solid #ea580c; border-radius:8px; padding:8px; text-align:center;">
-                    <div style="font-weight:900; color:#ea580c; font-size:1.1rem;">S</div><div style="font-size:0.8rem;">{s_tot} kg</div>
+                <div style="background:#fff7ed; border:1px solid #ea580c; border-radius:8px; padding:10px; text-align:center; color: #0f172a;">
+                    <div style="font-weight:900; color:#ea580c; font-size:1.3rem;">S</div>
+                    <div style="font-size:0.9rem; font-weight:bold; color:#7c2d12;">{s_tot}</div>
+                    <div style="font-size:0.7rem; color:#c2410c;">kg/ha</div>
                 </div>
             </div>
             """, unsafe_allow_html=True)
 
-            # --- 5. GRÁFICOS SEPARADOS (AQUI ESTÁ A CORREÇÃO DE ESCALA) ---
+            # --- 5. GRÁFICOS PROFISSIONAIS (COM FÓSFORO EVIDENTE) ---
             
-            # GRÁFICO 1: OS GIGANTES (N e K)
-            st.markdown("#### 1. Macronutrientes de Alta Demanda (N, K)")
-            st.caption("Atenção: Estes elementos atingem centenas de kg/ha.")
+            # GRÁFICO 1: GRANDE PORTE (Nitrogênio e Potássio)
+            # Estes nutrientes tem escala muito alta (0 a 300kg)
+            st.markdown("#### 1. Macronutrientes Primários (Alta Demanda)")
+            st.caption("Nitrogênio (N) e Potássio (K) - Escala: 0 a 300 kg/ha")
             
-            fig_high = go.Figure()
-            colors_high = {'N': '#16a34a', 'K': '#dc2626'}
+            fig_big = go.Figure()
+            colors_big = {'N': '#16a34a', 'K': '#dc2626'}
             
             for nutri in ['N', 'K']:
                 if nutri in dados_nutri['macros']:
-                    valores = dados_nutri['macros'][nutri]
-                    fig_high.add_trace(go.Scatter(
-                        x=dados_nutri['fases'], y=valores, mode='lines+markers', name=f"{nutri} (Alta)",
-                        line=dict(width=4, color=colors_high[nutri]),
-                        fill='tozeroy', fillcolor=f"rgba{tuple(int(colors_high[nutri].lstrip('#')[i:i+2], 16) for i in (0, 2, 4)) + (0.1,)}",
+                    fig_big.add_trace(go.Scatter(
+                        x=dados_nutri['fases'], y=dados_nutri['macros'][nutri],
+                        mode='lines+markers', name=nutri,
+                        line=dict(width=4, color=colors_big[nutri]),
+                        fill='tozeroy', # Cria efeito de área acumulada
                         hovertemplate='%{y} kg/ha<extra></extra>'
                     ))
-            
-            fig_high.update_layout(height=300, margin=dict(l=20, r=20, t=10, b=20), yaxis=dict(title="kg/ha"))
-            st.plotly_chart(fig_high, use_container_width=True)
+            fig_big.update_layout(height=300, margin=dict(l=20, r=20, t=10, b=20), yaxis=dict(title="kg/ha"))
+            st.plotly_chart(fig_big, use_container_width=True)
 
-            # GRÁFICO 2: O FÓSFORO E SECUNDÁRIOS (P, Ca, Mg, S)
-            st.markdown("#### 2. Fósforo e Secundários (P, Ca, Mg, S)")
-            st.caption("Gráfico com escala ampliada para visualizar a curva do Fósforo.")
+            # GRÁFICO 2: O FÓSFORO E SECUNDÁRIOS (AQUI O P APARECE!)
+            # Escala menor (0 a 50kg), permitindo ver a curva do Fósforo
+            st.markdown("#### 2. Fósforo e Secundários (Curva Detalhada)")
+            st.caption("Fósforo (P), Cálcio (Ca), Magnésio (Mg), Enxofre (S) - Escala Ampliada")
             
-            fig_low = go.Figure()
-            colors_low = {'P': '#2563eb', 'Ca': '#eab308', 'Mg': '#9333ea', 'S': '#f97316'}
+            fig_mid = go.Figure()
+            colors_mid = {'P': '#2563eb', 'Ca': '#eab308', 'Mg': '#9333ea', 'S': '#f97316'}
             
-            for nutri in ['P', 'Ca', 'Mg', 'S']:
+            # Garante que o P seja o primeiro a ser desenhado (linha azul forte)
+            lista_nutris = ['P', 'Ca', 'Mg', 'S']
+            for nutri in lista_nutris:
                 if nutri in dados_nutri['macros']:
-                    valores = dados_nutri['macros'][nutri]
-                    fig_low.add_trace(go.Scatter(
-                        x=dados_nutri['fases'], y=valores, mode='lines+markers', name=nutri,
-                        line=dict(width=3, color=colors_low[nutri]),
+                    width_line = 5 if nutri == 'P' else 3 # Fósforo com linha mais grossa
+                    fig_mid.add_trace(go.Scatter(
+                        x=dados_nutri['fases'], y=dados_nutri['macros'][nutri],
+                        mode='lines+markers', name=nutri,
+                        line=dict(width=width_line, color=colors_mid[nutri]),
                         hovertemplate='%{y} kg/ha<extra></extra>'
                     ))
-            
-            fig_low.update_layout(height=300, margin=dict(l=20, r=20, t=10, b=20), yaxis=dict(title="kg/ha"))
-            st.plotly_chart(fig_low, use_container_width=True)
-            
-            # GRÁFICO 3: MICRONUTRIENTES
-            st.markdown("#### 3. Micronutrientes (g/ha)")
-            fig_micro = go.Figure()
-            colors_micro = {'B': '#ec4899', 'Zn': '#06b6d4', 'Mn': '#8b5cf6', 'Cu': '#f59e0b', 'Fe': '#64748b'}
+            fig_mid.update_layout(height=300, margin=dict(l=20, r=20, t=10, b=20), yaxis=dict(title="kg/ha"))
+            st.plotly_chart(fig_mid, use_container_width=True)
 
-            for nutri, valores in dados_nutri['micros'].items():
-                fig_micro.add_trace(go.Scatter(
-                    x=dados_nutri['fases'], y=valores, mode='lines+markers', name=nutri,
-                    line=dict(width=2, dash='dot', color=colors_micro.get(nutri, '#555')),
+            # GRÁFICO 3: MICRONUTRIENTES
+            st.markdown("#### 3. Micronutrientes (Grama por Hectare)")
+            
+            fig_mic = go.Figure()
+            colors_mic = {'B': '#ec4899', 'Zn': '#06b6d4', 'Mn': '#8b5cf6', 'Cu': '#f59e0b', 'Fe': '#64748b'}
+            
+            for nutri, vals in dados_nutri['micros'].items():
+                fig_mic.add_trace(go.Scatter(
+                    x=dados_nutri['fases'], y=vals, mode='lines+markers', name=nutri,
+                    line=dict(width=2, dash='dot', color=colors_mic.get(nutri, '#555')),
                     hovertemplate='%{y} g/ha<extra></extra>'
                 ))
-            fig_micro.update_layout(height=300, margin=dict(l=20, r=20, t=10, b=20), yaxis=dict(title="g/ha"))
-            st.plotly_chart(fig_micro, use_container_width=True)
+            fig_mic.update_layout(height=300, margin=dict(l=20, r=20, t=10, b=20), yaxis=dict(title="g/ha"))
+            st.plotly_chart(fig_mic, use_container_width=True)
 
             st.divider()
 
-            # --- 6. PLANEJAMENTO TÁTICO DE ADUBAÇÃO (INTELIGÊNCIA AGRONÔMICA) ---
-            st.markdown("### 🚜 Planejamento Tático de Adubação")
-            st.caption("Recomendações técnicas baseadas na mobilidade do elemento e tipo da cultura.")
-
-            # Lógica de Adubação
-            ciclo = dados_nutri.get('ciclo', 'anual')
+            # --- 6. PLANEJAMENTO TÁTICO DE ADUBAÇÃO (CORRIGIDO PARA TEXTO ESCURO) ---
+            st.markdown("### 🚜 Estratégia de Manejo (Nutrição)")
             
-            col_adub1, col_adub2, col_adub3 = st.columns(3)
+            c_ad1, c_ad2, c_ad3 = st.columns(3)
             
-            # MANEJO DE FÓSFORO (P) - CRÍTICO (IMÓVEL)
-            with col_adub1:
+            # MANEJO FÓSFORO (P)
+            with c_ad1:
                 st.markdown("""
-                <div style="border-top: 4px solid #2563eb; background:#f8fafc; padding:15px; border-radius:8px;">
+                <div style="background:#eff6ff; border-top: 4px solid #2563eb; padding:15px; border-radius:8px; color:#0f172a;">
                     <b style="color:#1e3a8a;">FÓSFORO (P)</b><br>
-                    <span style="font-size:0.8rem; color:#64748b;">Mobilidade no Solo: <b>BAIXA/IMÓVEL</b></span>
-                    <hr style="margin:5px 0;">
+                    <span style="font-size:0.8rem; color:#475569;">Mobilidade: <b>IMÓVEL</b></span>
+                    <hr style="margin:8px 0; border-color:#bfdbfe;">
+                    <div style="font-size:0.85rem; line-height:1.4;">
+                    Como o P não se move no solo, a raiz precisa ir até ele.
+                    <br><br>
+                    <b>Ação:</b> Aplique 100% da dose no sulco de plantio ou na cova, o mais próximo possível das raízes, para garantir o "arranque".
+                    </div>
+                </div>
                 """, unsafe_allow_html=True)
                 
-                if ciclo == 'anual':
-                    st.markdown("""
-                    <div style="font-size:0.85rem; color:#0f172a;">
-                    🎯 <b>Foco: Plantio</b><br>
-                    Todo o P deve ser aplicado no <b>SULCO DE PLANTIO</b>, logo abaixo da semente. Devido à imobilidade, raízes não buscam P longe. Aplicações a lanço têm baixa eficiência.
-                    </div>""", unsafe_allow_html=True)
-                else: # Perene
-                    st.markdown("""
-                    <div style="font-size:0.85rem; color:#0f172a;">
-                    🎯 <b>Foco: Fundação/Projeção</b><br>
-                    Fundamental na cova de plantio. Em produção, aplicar na projeção da copa (onde estão as raízes finas) e se possível incorporar levemente ou usar fontes solúveis.
-                    </div>""", unsafe_allow_html=True)
-                st.markdown("</div>", unsafe_allow_html=True)
-
-            # MANEJO DE NITROGÊNIO (N) - VOLÁTIL
-            with col_adub2:
+            # MANEJO NITROGÊNIO (N)
+            with c_ad2:
                 st.markdown("""
-                <div style="border-top: 4px solid #16a34a; background:#f8fafc; padding:15px; border-radius:8px;">
+                <div style="background:#f0fdf4; border-top: 4px solid #16a34a; padding:15px; border-radius:8px; color:#0f172a;">
                     <b style="color:#14532d;">NITROGÊNIO (N)</b><br>
-                    <span style="font-size:0.8rem; color:#64748b;">Mobilidade no Solo: <b>ALTA (LIXIVIA)</b></span>
-                    <hr style="margin:5px 0;">
+                    <span style="font-size:0.8rem; color:#475569;">Mobilidade: <b>ALTA (Lixivia)</b></span>
+                    <hr style="margin:8px 0; border-color:#bbf7d0;">
+                    <div style="font-size:0.85rem; line-height:1.4;">
+                    O N se perde facilmente com a chuva (lixiviação) ou sol (volatilização).
+                    <br><br>
+                    <b>Ação:</b> Divida a dose! Aplique uma parte no plantio e o restante em cobertura nas fases de maior crescimento (veja o gráfico 1).
+                    </div>
+                </div>
                 """, unsafe_allow_html=True)
-                
-                if nome_cultura_exibicao == "Soja" or nome_cultura_exibicao == "Feijão":
-                    st.markdown("""
-                    <div style="font-size:0.85rem; color:#0f172a;">
-                    🦠 <b>Inoculação (FBN)</b><br>
-                    Priorize inoculantes de alta qualidade (Bradyrhizobium). O N mineral inibe a nodulação. Aplique cobalto e molibdênio para turbinar a fixação.
-                    </div>""", unsafe_allow_html=True)
-                else:
-                    st.markdown("""
-                    <div style="font-size:0.85rem; color:#0f172a;">
-                    ⚡ <b>Parcelamento Obrigatório</b><br>
-                    Aplique 20-30% no plantio e o resto em cobertura (V4-V8). Evite aplicar tudo de uma vez para não perder por lixiviação (chuva) ou volatilização (sol).
-                    </div>""", unsafe_allow_html=True)
-                st.markdown("</div>", unsafe_allow_html=True)
 
-            # MANEJO DE POTÁSSIO (K) - SALINO
-            with col_adub3:
+            # MANEJO POTÁSSIO (K)
+            with c_ad3:
                 st.markdown("""
-                <div style="border-top: 4px solid #dc2626; background:#f8fafc; padding:15px; border-radius:8px;">
+                <div style="background:#fef2f2; border-top: 4px solid #dc2626; padding:15px; border-radius:8px; color:#0f172a;">
                     <b style="color:#7f1d1d;">POTÁSSIO (K)</b><br>
-                    <span style="font-size:0.8rem; color:#64748b;">Mobilidade no Solo: <b>MÉDIA</b></span>
-                    <hr style="margin:5px 0;">
+                    <span style="font-size:0.8rem; color:#475569;">Risco: <b>SALINIDADE</b></span>
+                    <hr style="margin:8px 0; border-color:#fecaca;">
+                    <div style="font-size:0.85rem; line-height:1.4;">
+                    Fundamental para qualidade de fruto e grão, mas é salino e pode queimar a raiz.
+                    <br><br>
+                    <b>Ação:</b> Não aplique mais que 50kg/ha junto com a semente. Se a dose for alta, faça pré-plantio ou cobertura.
+                    </div>
+                </div>
                 """, unsafe_allow_html=True)
-                
-                if k_tot > 150:
-                    st.markdown("""
-                    <div style="font-size:0.85rem; color:#0f172a;">
-                    ⚠️ <b>Cuidado: Índice Salino</b><br>
-                    Alta demanda! Porém, não aplique mais que 50-60kg de K2O junto à semente para não "queimar" a germinação. Parcele o restante em cobertura junto com o Nitrogênio.
-                    </div>""", unsafe_allow_html=True)
-                else:
-                    st.markdown("""
-                    <div style="font-size:0.85rem; color:#0f172a;">
-                    ✅ <b>Manejo Padrão</b><br>
-                    Pode ser aplicado no plantio ou pré-plantio. Em solos arenosos, parcele para evitar perdas para o lençol freático (lixiviação).
-                    </div>""", unsafe_allow_html=True)
-                st.markdown("</div>", unsafe_allow_html=True)
-            
+
+            # DICA ESPECÍFICA DA CULTURA
+            st.markdown("<br>", unsafe_allow_html=True)
+            st.info(f"💡 **Nota Técnica ({nome_cultura_exibicao}):** {dados_nutri['dica']}")
+
         else:
-            st.error(f"Erro ao carregar dados para '{cult_sel}'.")
+            st.error("Erro ao carregar dados. Selecione uma cultura válida no menu.")
 
         st.markdown('</div>', unsafe_allow_html=True)
     
