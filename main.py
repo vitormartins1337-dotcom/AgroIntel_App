@@ -311,90 +311,105 @@ if not df_clima.empty:
             st.info("👆 Toque no mapa para identificar uma ocorrência.")
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # 5. GESTÃO 360 (NOVA ABA PODEROSA)
+    # 5. GESTÃO 360 (INTELIGÊNCIA DE SAFRA PRÁTICA)
     with tabs[4]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
-        st.markdown("### 💰 Gestão de Safra & Estimativa")
+        st.markdown("### 💰 Calculadora de Safra Inteligente")
         
-        # BANCO DE DADOS DE PRODUTIVIDADE (INTELIGÊNCIA AGRONÔMICA)
-        # Valores médios de referência para o cálculo
-        DB_PRODUTIVIDADE = {
-            "Soja": {"media": 60, "unidade": "Sacas", "peso_unidade": 60}, # 60 sacas/ha
-            "Milho": {"media": 140, "unidade": "Sacas", "peso_unidade": 60},
-            "Café": {"media": 35, "unidade": "Sacas", "peso_unidade": 60},
-            "Algodão": {"media": 300, "unidade": "Arrobas", "peso_unidade": 15},
-            "Citros": {"media": 40, "unidade": "Toneladas", "peso_unidade": 1000},
-            "Tomate": {"media": 80, "unidade": "Toneladas", "peso_unidade": 1000},
+        # --- 1. CÉREBRO DE DADOS AGRONÔMICOS (O "GOOGLE" INTERNO) ---
+        # Aqui definimos como cada cultura funciona: por hectare ou por pé?
+        # Fatores baseados em média de alta tecnologia (Padrão Profissional)
+        AGRO_DB = {
+            "Soja":      {"input": "area",   "fator": 65,  "unidade": "Sacas",  "preco_base": 135.00, "txt_input": "Área (Hectares)"},
+            "Milho":     {"input": "area",   "fator": 160, "unidade": "Sacas",  "preco_base": 55.00,  "txt_input": "Área (Hectares)"},
+            "Algodão":   {"input": "area",   "fator": 320, "unidade": "@ (Arrobas)", "preco_base": 140.00, "txt_input": "Área (Hectares)"},
+            "Trigo":     {"input": "area",   "fator": 50,  "unidade": "Sacas",  "preco_base": 80.00,  "txt_input": "Área (Hectares)"},
+            "Café":      {"input": "area",   "fator": 40,  "unidade": "Sacas",  "preco_base": 1100.00, "txt_input": "Área (Hectares)"},
+            
+            # Culturas Perenes / Fruticultura (Cálculo por Planta)
+            "Citros":    {"input": "planta", "fator": 3.5, "unidade": "Caixas (40.8kg)", "preco_base": 45.00, "txt_input": "Total de Pés/Árvores"},
+            "Mirtilo":   {"input": "planta", "fator": 3.0, "unidade": "Kg",     "preco_base": 40.00,  "txt_input": "Total de Plantas"},
+            "Tomate":    {"input": "planta", "fator": 6.0, "unidade": "Kg",     "preco_base": 4.50,   "txt_input": "Total de Plantas"},
+            "Uva":       {"input": "planta", "fator": 12.0,"unidade": "Kg",     "preco_base": 7.00,   "txt_input": "Total de Plantas"},
+            "Banana":    {"input": "planta", "fator": 20.0,"unidade": "Kg",     "preco_base": 3.00,   "txt_input": "Total de Touceiras"},
         }
 
-        # 1. Inputs do Produtor
-        st.markdown("#### 1. Parâmetros da Área")
-        c_g1, c_g2, c_g3 = st.columns(3)
-        with c_g1: 
-            area_ha = st.number_input("Área (Hectares)", min_value=1.0, value=50.0)
-        with c_g2:
-            populacao = st.number_input("Plantas/Ha (Mil)", min_value=1.0, value=250.0, help="População estimada")
-        with c_g3:
-            perda_est = st.slider("Quebra/Perda Estimada (%)", 0, 50, 5, help="Perdas por clima ou pragas")
+        # Identifica a cultura e carrega os dados
+        # Se a cultura não estiver na lista, usa um padrão genérico de área
+        cultura_info = AGRO_DB.get(cult_sel, {"input": "area", "fator": 1, "unidade": "Unid", "preco_base": 1.00, "txt_input": "Área/Qtd"})
 
-        # 2. Motor de Cálculo
-        cultura_info = DB_PRODUTIVIDADE.get(cult_sel, {"media": 0, "unidade": "Unid", "peso_unidade": 1})
+        # --- 2. INPUTS PRÁTICOS (O QUE O PRODUTOR PREENCHE) ---
+        c_calc1, c_calc2, c_calc3 = st.columns(3)
         
-        # Cálculo: Área * Produtividade Média * (1 - Perda)
-        prod_bruta = area_ha * cultura_info['media']
-        prod_liquida = prod_bruta * (1 - (perda_est/100))
-        
-        # 3. Integração com Mercado (Pegar preço real do Market Engine se possível, ou manual)
-        st.markdown("#### 2. Precificação de Mercado")
-        
-        # Tenta achar preço automático no Ticker HTML (Simulação de extração) ou pede manual
-        preco_sugerido = 0.0
-        if cult_sel == "Soja": preco_sugerido = 135.00
-        elif cult_sel == "Milho": preco_sugerido = 55.00
-        elif cult_sel == "Café": preco_sugerido = 1100.00
-        
-        c_p1, c_p2 = st.columns(2)
-        with c_p1:
-            preco_venda = st.number_input(f"Preço Atual ({cultura_info['unidade']}) - R$", value=preco_sugerido)
-        with c_p2:
-            receita_bruta = prod_liquida * preco_venda
-            st.metric("Faturamento Previsto", f"R$ {receita_bruta:,.2f}", delta=f"-{perda_est}% Quebra", delta_color="inverse")
+        with c_calc1:
+            # Pergunta inteligente: Hectares ou Nº de Plantas?
+            qtd_input = st.number_input(
+                f"1. {cultura_info['txt_input']}", 
+                min_value=0.0, 
+                value=1000.0 if cultura_info['input'] == 'planta' else 50.0,
+                help="Quantidade plantada."
+            )
+            
+        with c_calc2:
+            # Produtividade Média (Já vem preenchida com a média nacional, mas editável)
+            label_prod = f"2. Produtividade ({cultura_info['unidade']}/{'ha' if cultura_info['input']=='area' else 'planta'})"
+            prod_esperada = st.number_input(label_prod, value=float(cultura_info['fator']), step=0.5)
+
+        with c_calc3:
+            # Preço de Mercado (Sugestão editável)
+            preco_venda = st.number_input(f"3. Preço de Venda (R$/{cultura_info['unidade']})", value=cultura_info['preco_base'], step=1.0)
 
         st.divider()
 
-        # 4. Resultado Consolidado
-        st.markdown("#### 📊 DRE Sintético (Estimativa)")
-        col_res1, col_res2, col_res3 = st.columns(3)
+        # --- 3. CÁLCULO AUTOMÁTICO (O ROBÔ TRABALHANDO) ---
+        producao_total = qtd_input * prod_esperada
+        faturamento_bruto = producao_total * preco_venda
         
-        with col_res1:
-            st.markdown(f"""
-            <div class="kpi-box">
-                <div class="kpi-header">PRODUÇÃO TOTAL</div>
-                <div class="kpi-value">{prod_liquida:,.0f}</div>
-                <div class="kpi-unit">{cultura_info['unidade']}</div>
-            </div>
-            """, unsafe_allow_html=True)
+        # Simulação visual de "Processando dados..."
+        if producao_total > 0:
             
-        with col_res2:
-            media_ha = prod_liquida / area_ha
-            st.markdown(f"""
-            <div class="kpi-box">
-                <div class="kpi-header">MÉDIA / HA</div>
-                <div class="kpi-value">{media_ha:.1f}</div>
-                <div class="kpi-unit">{cultura_info['unidade']}/ha</div>
-            </div>
-            """, unsafe_allow_html=True)
+            st.markdown("#### 📊 Resultado Consolidado")
             
-        with col_res3:
-            st.markdown(f"""
-            <div class="kpi-box" style="border-color:#10b981;">
-                <div class="kpi-header" style="color:#166534;">RECEITA BRUTA</div>
-                <div class="kpi-value" style="color:#166534; font-size:1.4rem;">R$ {receita_bruta/1000:,.1f} k</div>
-                <div class="kpi-unit">Mil Reais</div>
-            </div>
-            """, unsafe_allow_html=True)
+            # --- OS BALÕES (KPI CARDS) QUE VOCÊ GOSTA ---
+            col_res1, col_res2, col_res3 = st.columns(3)
+            
+            with col_res1:
+                # ESTIMATIVA DE PRODUÇÃO
+                st.markdown(f"""
+                <div class="kpi-box" style="border-left: 4px solid #3b82f6;">
+                    <div class="kpi-header">ESTIMATIVA DE COLHEITA</div>
+                    <div class="kpi-value" style="color:#3b82f6;">{producao_total:,.0f}</div>
+                    <div class="kpi-footer" style="background:#3b82f6;">{cultura_info['unidade']} TOTAIS</div>
+                </div>
+                """, unsafe_allow_html=True)
 
-        st.caption("Nota: A estimativa utiliza dados médios regionais e pode variar conforme o manejo.")
+            with col_res2:
+                # FATURAMENTO (DINHEIRO)
+                st.markdown(f"""
+                <div class="kpi-box" style="border-left: 4px solid #10b981;">
+                    <div class="kpi-header">FATURAMENTO BRUTO</div>
+                    <div class="kpi-value" style="color:#10b981;">R$ {faturamento_bruto/1000:,.1f} k</div>
+                    <div class="kpi-footer" style="background:#10b981;">POTENCIAL DE RECEITA</div>
+                </div>
+                """, unsafe_allow_html=True)
+                
+            with col_res3:
+                # VISÃO DE MERCADO
+                st.markdown(f"""
+                <div class="kpi-box" style="border-left: 4px solid #f59e0b;">
+                    <div class="kpi-header">PREÇO MÉDIO APLICADO</div>
+                    <div class="kpi-value" style="color:#f59e0b;">R$ {preco_venda:.2f}</div>
+                    <div class="kpi-footer" style="background:#f59e0b;">POR {cultura_info['unidade'].upper()}</div>
+                </div>
+                """, unsafe_allow_html=True)
+                
+            # Feedback inteligente
+            st.markdown("<br>", unsafe_allow_html=True)
+            st.info(f"💡 **Análise:** Com base em {qtd_input:,.0f} {cultura_info['txt_input'].lower()}, sua produção estimada de **{producao_total:,.0f} {cultura_info['unidade']}** gera um potencial financeiro robusto. Monitore o clima na aba 2 para evitar perdas.")
+
+        else:
+            st.warning("Preencha os dados acima para gerar a estimativa.")
+
         st.markdown('</div>', unsafe_allow_html=True)
 
     # 6. ALERTAS (CENTRAL DE CONFIGURAÇÃO)
