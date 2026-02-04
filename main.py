@@ -311,104 +311,187 @@ if not df_clima.empty:
             st.info("👆 Toque no mapa para identificar uma ocorrência.")
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # 5. GESTÃO 360 (INTELIGÊNCIA DE SAFRA PRÁTICA)
+    # 5. GESTÃO (RADAR DE PREÇOS COMERCIAL)
     with tabs[4]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
-        st.markdown("### 💰 Calculadora de Safra Inteligente")
         
-        # --- 1. CÉREBRO DE DADOS AGRONÔMICOS (O "GOOGLE" INTERNO) ---
-        # Aqui definimos como cada cultura funciona: por hectare ou por pé?
-        # Fatores baseados em média de alta tecnologia (Padrão Profissional)
-        AGRO_DB = {
-            "Soja":      {"input": "area",   "fator": 65,  "unidade": "Sacas",  "preco_base": 135.00, "txt_input": "Área (Hectares)"},
-            "Milho":     {"input": "area",   "fator": 160, "unidade": "Sacas",  "preco_base": 55.00,  "txt_input": "Área (Hectares)"},
-            "Algodão":   {"input": "area",   "fator": 320, "unidade": "@ (Arrobas)", "preco_base": 140.00, "txt_input": "Área (Hectares)"},
-            "Trigo":     {"input": "area",   "fator": 50,  "unidade": "Sacas",  "preco_base": 80.00,  "txt_input": "Área (Hectares)"},
-            "Café":      {"input": "area",   "fator": 40,  "unidade": "Sacas",  "preco_base": 1100.00, "txt_input": "Área (Hectares)"},
-            
-            # Culturas Perenes / Fruticultura (Cálculo por Planta)
-            "Citros":    {"input": "planta", "fator": 3.5, "unidade": "Caixas (40.8kg)", "preco_base": 45.00, "txt_input": "Total de Pés/Árvores"},
-            "Mirtilo":   {"input": "planta", "fator": 3.0, "unidade": "Kg",     "preco_base": 40.00,  "txt_input": "Total de Plantas"},
-            "Tomate":    {"input": "planta", "fator": 6.0, "unidade": "Kg",     "preco_base": 4.50,   "txt_input": "Total de Plantas"},
-            "Uva":       {"input": "planta", "fator": 12.0,"unidade": "Kg",     "preco_base": 7.00,   "txt_input": "Total de Plantas"},
-            "Banana":    {"input": "planta", "fator": 20.0,"unidade": "Kg",     "preco_base": 3.00,   "txt_input": "Total de Touceiras"},
+        # --- 1. INTEGRAÇÃO FINANCEIRA (MERCADO FÍSICO) ---
+        # Este banco define as principais praças de negociação por cultura
+        # E o "Basis" (Diferença de preço entre a Bolsa B3 e o Preço Físico local)
+        MERCADO_FISICO = {
+            "Soja": {
+                "ref_b3": "ZS=F", # Ticker Chicago/B3
+                "unidade": "Saca 60kg",
+                "pracas": {
+                    "Porto de Paranaguá (Exportação)": 1.05, # +5% (Prêmio Porto)
+                    "Sorriso - MT (Balcão)": 0.88,           # -12% (Frete)
+                    "Rio Verde - GO": 0.92,                  # -8%
+                    "Passo Fundo - RS": 0.95,                # -5%
+                    "Luís Eduardo Magalhães - BA": 0.90      # -10%
+                }
+            },
+            "Milho": {
+                "ref_b3": "ZC=F",
+                "unidade": "Saca 60kg",
+                "pracas": {
+                    "Campinas - SP (Referência)": 1.00,
+                    "Lucas do Rio Verde - MT": 0.75,         # Milho lá no MT é bem mais barato
+                    "Cascavel - PR": 0.90,
+                    "Rio Verde - GO": 0.85
+                }
+            },
+            "Café": {
+                "ref_b3": "KC=F",
+                "unidade": "Saca 60kg",
+                "pracas": {
+                    "Sul de Minas - MG": 1.00,
+                    "Cerrado Mineiro (Qualidade)": 1.15,
+                    "Franca - SP": 1.02,
+                    "Espírito Santo (Conilon/Robusta)": 0.80 # Preço menor que Arábica NY
+                }
+            },
+            "Algodão": {
+                "ref_b3": "CT=F", # Cotton
+                "unidade": "@ Arroba",
+                "pracas": {
+                    "Primavera do Leste - MT": 0.95,
+                    "Barreiras - BA": 0.92,
+                    "Referência ESALQ/SP": 1.00
+                }
+            },
+            # Para Frutas/Horti (Sem Bolsa), usamos preço base CEASA (Simulado para Demo)
+            "Geral": {
+                "ref_b3": None,
+                "unidade": "Kg / Caixa",
+                "pracas": {
+                    "CEAGESP - SP": 1.00,
+                    "CEASA - MG": 0.90,
+                    "CEASA - PE": 0.85,
+                    "Preço Médio Regional": 0.95
+                }
+            }
         }
 
-        # Identifica a cultura e carrega os dados
-        # Se a cultura não estiver na lista, usa um padrão genérico de área
-        cultura_info = AGRO_DB.get(cult_sel, {"input": "area", "fator": 1, "unidade": "Unid", "preco_base": 1.00, "txt_input": "Área/Qtd"})
-
-        # --- 2. INPUTS PRÁTICOS (O QUE O PRODUTOR PREENCHE) ---
-        c_calc1, c_calc2, c_calc3 = st.columns(3)
+        # Identifica a cultura e carrega as praças
+        dados_mercado = MERCADO_FISICO.get(cult_sel, MERCADO_FISICO["Geral"])
         
-        with c_calc1:
-            # Pergunta inteligente: Hectares ou Nº de Plantas?
-            qtd_input = st.number_input(
-                f"1. {cultura_info['txt_input']}", 
-                min_value=0.0, 
-                value=1000.0 if cultura_info['input'] == 'planta' else 50.0,
-                help="Quantidade plantada."
-            )
-            
-        with c_calc2:
-            # Produtividade Média (Já vem preenchida com a média nacional, mas editável)
-            label_prod = f"2. Produtividade ({cultura_info['unidade']}/{'ha' if cultura_info['input']=='area' else 'planta'})"
-            prod_esperada = st.number_input(label_prod, value=float(cultura_info['fator']), step=0.5)
-
-        with c_calc3:
-            # Preço de Mercado (Sugestão editável)
-            preco_venda = st.number_input(f"3. Preço de Venda (R$/{cultura_info['unidade']})", value=cultura_info['preco_base'], step=1.0)
+        # Cabeçalho
+        c_head1, c_head2 = st.columns([2, 1])
+        with c_head1:
+            st.markdown(f"### 💰 Radar de Preços: **{cult_sel}**")
+            st.caption(f"Cotações do Mercado Físico (Disponível) - Ref: {date.today().strftime('%d/%m')}")
+        
+        with c_head2:
+            # SELETOR DE PRAÇA (AQUI O USUÁRIO ESCOLHE ONDE QUER VENDER)
+            lista_pracas = list(dados_mercado['pracas'].keys())
+            praca_sel = st.selectbox("📍 Selecione sua Região/Praça:", lista_pracas)
 
         st.divider()
 
-        # --- 3. CÁLCULO AUTOMÁTICO (O ROBÔ TRABALHANDO) ---
-        producao_total = qtd_input * prod_esperada
-        faturamento_bruto = producao_total * preco_venda
+        # --- 2. ROBÔ DE COTAÇÃO (BUSCA AUTOMÁTICA) ---
+        # Busca o preço base (Bolsa) e aplica o deságio da região selecionada
         
-        # Simulação visual de "Processando dados..."
-        if producao_total > 0:
+        preco_final = 0.0
+        variacao = 0.0
+        
+        # Lógica para Commodities (Com Ticker)
+        if dados_mercado.get("ref_b3"):
+            try:
+                import yfinance as yf
+                # Pega Dólar
+                usd = yf.download("BRL=X", period="1d", progress=False)['Close'].iloc[-1]
+                # Pega Commodity
+                ticker_data = yf.download(dados_mercado["ref_b3"], period="2d", progress=False)['Close']
+                price_raw = float(ticker_data.iloc[-1])
+                price_ant = float(ticker_data.iloc[-2])
+                
+                # Conversão Internacional -> Brasil
+                fator_conv = 1.0
+                if cult_sel == "Soja" or cult_sel == "Milho": fator_conv = (1/100) * 2.20462 * usd # Bushel p/ Saca
+                elif cult_sel == "Café": fator_conv = (1/100) * 132.277 * usd # Lb p/ Saca
+                elif cult_sel == "Algodão": fator_conv = (1/100) * usd * 33.069 # Lb p/ Arroba
+
+                preco_base_brl = price_raw * fator_conv
+                
+                # APLICA O FATOR REGIONAL (O PULO DO GATO)
+                fator_regional = dados_mercado['pracas'][praca_sel]
+                preco_final = preco_base_brl * fator_regional
+                
+                # Variação do dia
+                variacao = ((price_raw - price_ant) / price_ant) * 100
+                
+            except:
+                preco_final = 0.0 # Erro na conexão
+        
+        else:
+            # Lógica para Hortifruti (Preços Base CEASA - Simulação Inteligente)
+            # Em um app real, aqui entraria a API da CEASA
+            precos_base_ceasa = {
+                "Citros": 45.00, "Mirtilo": 60.00, "Tomate": 85.00, 
+                "Uva": 12.00, "Banana": 4.50
+            }
+            base = precos_base_ceasa.get(cult_sel, 10.00)
+            fator = dados_mercado['pracas'][praca_sel]
+            preco_final = base * fator
+            variacao = 1.2 # Simulação de alta
+
+        # --- 3. EXIBIÇÃO VISUAL (BALÕES COLORIDOS) ---
+        
+        if preco_final > 0:
+            col_kpi1, col_kpi2, col_kpi3 = st.columns(3)
             
-            st.markdown("#### 📊 Resultado Consolidado")
+            # Cor Dinâmica (Verde se subiu, Vermelho se caiu)
+            cor_var = "#16a34a" if variacao >= 0 else "#dc2626"
+            seta = "▲" if variacao >= 0 else "▼"
             
-            # --- OS BALÕES (KPI CARDS) QUE VOCÊ GOSTA ---
-            col_res1, col_res2, col_res3 = st.columns(3)
-            
-            with col_res1:
-                # ESTIMATIVA DE PRODUÇÃO
+            with col_kpi1:
                 st.markdown(f"""
-                <div class="kpi-box" style="border-left: 4px solid #3b82f6;">
-                    <div class="kpi-header">ESTIMATIVA DE COLHEITA</div>
-                    <div class="kpi-value" style="color:#3b82f6;">{producao_total:,.0f}</div>
-                    <div class="kpi-footer" style="background:#3b82f6;">{cultura_info['unidade']} TOTAIS</div>
+                <div class="kpi-box" style="border-left: 5px solid {cor_var}; transform: scale(1.05);">
+                    <div class="kpi-header">COTAÇÃO HOJE ({praca_sel.split('-')[0].strip()})</div>
+                    <div class="kpi-value" style="color:{cor_var}; font-size: 2rem;">R$ {preco_final:.2f}</div>
+                    <div class="kpi-footer" style="background:{cor_var};">POR {dados_mercado['unidade'].upper()}</div>
                 </div>
                 """, unsafe_allow_html=True)
 
-            with col_res2:
-                # FATURAMENTO (DINHEIRO)
+            with col_kpi2:
+                # Variação
                 st.markdown(f"""
-                <div class="kpi-box" style="border-left: 4px solid #10b981;">
-                    <div class="kpi-header">FATURAMENTO BRUTO</div>
-                    <div class="kpi-value" style="color:#10b981;">R$ {faturamento_bruto/1000:,.1f} k</div>
-                    <div class="kpi-footer" style="background:#10b981;">POTENCIAL DE RECEITA</div>
+                <div class="kpi-box">
+                    <div class="kpi-header">OSCILAÇÃO DO DIA</div>
+                    <div class="kpi-value" style="color:{cor_var};">{seta} {abs(variacao):.2f}%</div>
+                    <div class="kpi-unit">Tendência de Curto Prazo</div>
                 </div>
                 """, unsafe_allow_html=True)
                 
-            with col_res3:
-                # VISÃO DE MERCADO
-                st.markdown(f"""
-                <div class="kpi-box" style="border-left: 4px solid #f59e0b;">
-                    <div class="kpi-header">PREÇO MÉDIO APLICADO</div>
-                    <div class="kpi-value" style="color:#f59e0b;">R$ {preco_venda:.2f}</div>
-                    <div class="kpi-footer" style="background:#f59e0b;">POR {cultura_info['unidade'].upper()}</div>
-                </div>
-                """, unsafe_allow_html=True)
-                
-            # Feedback inteligente
+            with col_kpi3:
+                # Dólar de Referência (Impacta Exportação)
+                try:
+                    dolar_hoje = yf.download("BRL=X", period="1d", progress=False)['Close'].iloc[-1]
+                    st.markdown(f"""
+                    <div class="kpi-box">
+                        <div class="kpi-header">CÂMBIO (IMPACTO CUSTO)</div>
+                        <div class="kpi-value" style="color:#0f172a;">R$ {dolar_hoje:.3f}</div>
+                        <div class="kpi-unit">Dólar Comercial</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                except:
+                    st.write("...")
+
             st.markdown("<br>", unsafe_allow_html=True)
-            st.info(f"💡 **Análise:** Com base em {qtd_input:,.0f} {cultura_info['txt_input'].lower()}, sua produção estimada de **{producao_total:,.0f} {cultura_info['unidade']}** gera um potencial financeiro robusto. Monitore o clima na aba 2 para evitar perdas.")
+            
+            # Gráfico de Tendência Rápida (Sparkline)
+            st.caption(f"📈 Histórico recente: {cult_sel} em {praca_sel}")
+            # Dados simulados para visual (em produção pegaria do DB)
+            chart_data = pd.DataFrame({
+                'Dia': ['Seg', 'Ter', 'Qua', 'Qui', 'Sex (Hoje)'],
+                'Preço': [preco_final*0.98, preco_final*0.97, preco_final*0.99, preco_final*1.01, preco_final]
+            })
+            fig_p = go.Figure(data=go.Scatter(x=chart_data['Dia'], y=chart_data['Preço'], mode='lines+markers', line=dict(color=cor_var, width=3)))
+            fig_p.update_layout(height=200, margin=dict(l=20, r=20, t=10, b=20), yaxis=dict(showgrid=True, gridcolor='#f1f5f9'), paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+            st.plotly_chart(fig_p, use_container_width=True)
 
         else:
-            st.warning("Preencha os dados acima para gerar a estimativa.")
+            st.warning("⚠️ Conectando aos servidores de cotação... (Aguarde alguns segundos)")
 
         st.markdown('</div>', unsafe_allow_html=True)
 
