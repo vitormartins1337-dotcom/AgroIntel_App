@@ -532,145 +532,189 @@ if not df_clima.empty:
         st.markdown('</div>', unsafe_allow_html=True)
     
     
-    # 3. CLIMA (GOOGLE STYLE - VISUAL CLEAN & PREMIUM)
+    # 3. CLIMA (PAINEL TÉCNICO PROFISSIONAL - 3 GRÁFICOS)
     with tabs[2]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         
-        # --- 1. CABEÇALHO DO CLIMA AGORA ---
-        # Pega o dado atual (primeira linha do forecast)
+        # --- 1. CABEÇALHO TÉCNICO ---
         if not df_clima.empty:
             hoje = df_clima.iloc[0]
-            temp_now = hoje['Temp']
-            chuva_now = hoje['Chuva']
-            
-            # Ícone dinâmico
-            icon_w = "☀️" if chuva_now < 1 else "🌧️" if chuva_now > 5 else "cloud"
-            
-            # Layout de Cabeçalho estilo App de Celular
-            c_now1, c_now2 = st.columns([1, 3])
-            with c_now1:
-                st.markdown(f"""
-                <div style="text-align:center;">
-                    <div style="font-size:3.5rem;">{icon_w}</div>
+            st.markdown(f"""
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <div>
+                    <h3 style="margin:0; color:#0f172a;">🌦️ Clima e Planejamento</h3>
+                    <span style="font-size:0.9rem; color:#64748b;">Monitoramento agrometeorológico para <b>{city if city else 'Local Selecionado'}</b></span>
                 </div>
-                """, unsafe_allow_html=True)
-            with c_now2:
-                st.markdown(f"""
-                <div style="margin-top:10px;">
-                    <span style="font-size:2.5rem; font-weight:900; color:#0f172a;">{temp_now:.0f}°</span>
-                    <span style="font-size:1.2rem; color:#64748b; margin-left:10px;">Hoje em {city if city else 'Sua Fazenda'}</span><br>
-                    <span style="font-size:0.9rem; color:#94a3b8;">Probabilidade de Chuva: <b>{hoje.get('ProbChuva', 0)}%</b></span>
+                <div style="text-align:right;">
+                    <span style="font-size:2rem; font-weight:800; color:#0f172a;">{hoje['Temp']:.1f}°C</span><br>
+                    <span style="font-size:0.8rem; background:#e0f2fe; color:#0284c7; padding:2px 8px; border-radius:10px; font-weight:bold;">Kc Atual: {info.get('kc', 1.0)}</span>
                 </div>
-                """, unsafe_allow_html=True)
+            </div>
+            """, unsafe_allow_html=True)
 
+        # --- GRÁFICO 1: BALANÇO HÍDRICO SEMANAL (CHUVA vs DEMANDA DA CULTURA) ---
+        st.markdown("#### 1. Balanço Hídrico (Oferta vs. Demanda)")
+        st.caption("Comparativo entre Precipitação (Chuva) e Evapotranspiração da Cultura (ETc/Consumo).")
+        
+        fig_balanco = go.Figure()
+        
+        # Barra de Chuva (Oferta)
+        fig_balanco.add_trace(go.Bar(
+            x=df_clima['Data'], 
+            y=df_clima['Chuva'], 
+            name='Chuva (mm)', 
+            marker_color='#3b82f6',
+            hovertemplate='Chuva: %{y} mm<extra></extra>',
+            opacity=0.8
+        ))
+        
+        # Linha de Consumo (Demanda - Kc * ETo)
+        fig_balanco.add_trace(go.Scatter(
+            x=df_clima['Data'], 
+            y=df_clima['ETc'], 
+            name='Consumo da Cultura (ETc)', 
+            mode='lines+markers',
+            line=dict(color='#ef4444', width=3),
+            marker=dict(size=6, color='#ef4444'),
+            hovertemplate='Demanda: %{y} mm<extra></extra>'
+        ))
+
+        fig_balanco.update_layout(
+            height=300,
+            margin=dict(l=20, r=20, t=10, b=20),
+            legend=dict(orientation="h", y=1.1, x=0),
+            yaxis=dict(title="Lâmina de Água (mm)", showgrid=True, gridcolor='#f1f5f9'),
+            xaxis=dict(showgrid=False),
+            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='rgba(0,0,0,0)',
+            hovermode="x unified"
+        )
+        st.plotly_chart(fig_balanco, use_container_width=True)
+        
         st.divider()
 
-        # --- 2. GRÁFICO "GOOGLE WEATHER" (A GRANDE MUDANÇA) ---
-        # Busca dados horários
+        # --- DADOS HORÁRIOS PARA OS PRÓXIMOS GRÁFICOS ---
         df_hora = WeatherConn.get_hourly_forecast(url_w, st.session_state['loc_lat'], st.session_state['loc_lon'])
         
         if not df_hora.empty:
-            st.markdown("#### 🕒 Evolução 24 Horas")
             
-            # Cria a figura
-            fig_google = go.Figure()
-            
-            # Adiciona a Curva de Temperatura (Suave e Preenchida)
-            fig_google.add_trace(go.Scatter(
+            # --- GRÁFICO 2: METEOGRAMA 24H (TEMPERATURA E UMIDADE) ---
+            st.markdown("#### 2. Detalhe Horário (Temp. x Umidade)")
+            st.caption("Evolução térmica e higrométrica nas próximas 24 horas.")
+
+            fig_meteo = go.Figure()
+
+            # Temperatura (Eixo Y1 - Esquerda)
+            fig_meteo.add_trace(go.Scatter(
                 x=df_hora['HoraSimples'], 
                 y=df_hora['Temp'], 
-                mode='lines+text+markers', # Linha + Texto em cima + Bolinhas
-                name='Temp',
-                line=dict(color='#f59e0b', width=4, shape='spline', smoothing=1.3), # COR AMARELO SOL + CURVA SUAVE
-                fill='tozeroy', # Preenche embaixo
-                fillcolor='rgba(245, 158, 11, 0.1)', # Amarelinho transparente
-                text=[f"{t:.0f}°" for t in df_hora['Temp']], # O texto é a própria temperatura
-                textposition="top center", # Texto flutua em cima do ponto
-                textfont=dict(size=14, color='#78350f', family="Arial, sans-serif", weight="bold"),
-                marker=dict(size=6, color='#f59e0b', line=dict(width=2, color='white')) # Bolinha com borda branca
+                name='Temperatura (°C)', 
+                mode='lines',
+                line=dict(color='#f97316', width=3),
+                yaxis='y1'
             ))
 
-            # Configuração do Layout para ficar "Clean" (Sem poluição)
-            fig_google.update_layout(
-                height=280,
-                margin=dict(l=10, r=10, t=30, b=10), # Margens apertadas
-                xaxis=dict(
-                    showgrid=False, # Tira grade vertical
-                    showline=False,
-                    zeroline=False,
-                    tickfont=dict(size=12, color='#64748b'),
-                    fixedrange=True
-                ),
+            # Umidade (Eixo Y2 - Direita)
+            fig_meteo.add_trace(go.Scatter(
+                x=df_hora['HoraSimples'], 
+                y=df_hora['Umid'], 
+                name='Umidade (%)', 
+                mode='lines',
+                line=dict(color='#0ea5e9', width=2, dash='dot'),
+                fill='tozeroy', # Preenchimento leve para dar volume
+                fillcolor='rgba(14, 165, 233, 0.1)',
+                yaxis='y2'
+            ))
+
+            fig_meteo.update_layout(
+                height=300,
+                margin=dict(l=20, r=20, t=10, b=20),
+                legend=dict(orientation="h", y=1.1, x=0),
+                xaxis=dict(showgrid=False),
+                # Eixo Y1 (Temp)
                 yaxis=dict(
-                    showgrid=False, # Tira grade horizontal (O SEGREDO DO VISUAL LIMPO)
-                    showticklabels=False, # Tira os números do eixo Y (já estão na linha)
-                    visible=False, # Esconde eixo Y
-                    range=[min(df_hora['Temp'])-2, max(df_hora['Temp'])+5], # Dá um respiro pro texto não cortar
-                    fixedrange=True
+                    title="Temperatura (°C)", 
+                    titlefont=dict(color="#f97316"), 
+                    tickfont=dict(color="#f97316"),
+                    showgrid=True, gridcolor='#f1f5f9'
                 ),
-                hovermode="x unified", # Hover moderno
-                paper_bgcolor='rgba(0,0,0,0)', # Fundo transparente
+                # Eixo Y2 (Umid)
+                yaxis2=dict(
+                    title="Umidade (%)", 
+                    titlefont=dict(color="#0ea5e9"), 
+                    tickfont=dict(color="#0ea5e9"),
+                    overlaying='y', 
+                    side='right',
+                    showgrid=False
+                ),
+                paper_bgcolor='rgba(0,0,0,0)',
                 plot_bgcolor='rgba(0,0,0,0)',
-                showlegend=False # Sem legenda, é óbvio que é temperatura
+                hovermode="x unified"
             )
-            
-            # Renderiza o gráfico
-            st.plotly_chart(fig_google, use_container_width=True, config={'displayModeBar': False})
+            st.plotly_chart(fig_meteo, use_container_width=True)
 
-            # --- 3. BARRA DE CHUVA (SEPARADA E MINIMALISTA) ---
-            # O Google mostra chuva como barrinhas azuis embaixo
-            
-            if 'Chuva' in df_hora.columns and df_hora['Chuva'].sum() > 0:
-                st.markdown("<br>", unsafe_allow_html=True)
-                st.caption("💧 Volume de Chuva Previsto (mm)")
-                
-                fig_rain = go.Figure()
-                fig_rain.add_trace(go.Bar(
-                    x=df_hora['HoraSimples'],
-                    y=df_hora['Chuva'],
-                    marker_color='#3b82f6',
-                    text=df_hora['Chuva'],
-                    textposition='auto',
-                    opacity=0.7
-                ))
-                fig_rain.update_layout(
-                    height=120,
-                    margin=dict(l=10, r=10, t=10, b=10),
-                    xaxis=dict(showgrid=False, showticklabels=False), # Alinhado com o de cima
-                    yaxis=dict(showgrid=False, visible=False),
-                    paper_bgcolor='rgba(0,0,0,0)',
-                    plot_bgcolor='rgba(0,0,0,0)',
-                    showlegend=False
-                )
-                st.plotly_chart(fig_rain, use_container_width=True, config={'displayModeBar': False})
-                
+            st.divider()
+
+            # --- GRÁFICO 3: DELTA T (PULVERIZAÇÃO) - O MAIS IMPORTANTE ---
+            st.markdown("#### 3. Janela de Aplicação (Delta T)")
+            st.caption("Indicador de qualidade para pulverização. **Ideal: Entre 2 e 8.**")
+
+            # Cálculo das cores das barras (Verde = Bom, Vermelho = Ruim, Amarelo = Atenção)
+            cores_dt = []
+            textos_dt = []
+            for dt in df_hora['Delta T']:
+                if 2 <= dt <= 8:
+                    cores_dt.append("#16a34a") # Verde (Ideal)
+                    textos_dt.append("Ideal")
+                elif 8 < dt <= 10 or 1 <= dt < 2:
+                    cores_dt.append("#eab308") # Amarelo (Atenção)
+                    textos_dt.append("Atenção")
+                else:
+                    cores_dt.append("#dc2626") # Vermelho (Pare)
+                    textos_dt.append("Inapto")
+
+            fig_dt = go.Figure()
+
+            # Barras do Delta T
+            fig_dt.add_trace(go.Bar(
+                x=df_hora['HoraSimples'], 
+                y=df_hora['Delta T'],
+                marker_color=cores_dt,
+                text=df_hora['Delta T'], # Mostra o valor na barra
+                textposition='auto',
+                name='Delta T'
+            ))
+
+            # ZONA IDEAL (Faixa Verde Transparente de fundo)
+            fig_dt.add_hrect(
+                y0=2, y1=8, 
+                fillcolor="#22c55e", opacity=0.1, 
+                layer="below", line_width=0,
+                annotation_text="Faixa Segura (2-8)", annotation_position="top left", annotation_font_color="#15803d"
+            )
+
+            fig_dt.update_layout(
+                height=250,
+                margin=dict(l=20, r=20, t=10, b=20),
+                yaxis=dict(title="Delta T (°C)", showgrid=True, gridcolor='#f1f5f9'),
+                xaxis=dict(showgrid=False),
+                paper_bgcolor='rgba(0,0,0,0)',
+                plot_bgcolor='rgba(0,0,0,0)',
+                showlegend=False
+            )
+            st.plotly_chart(fig_dt, use_container_width=True)
+
+            # Legenda Explicativa Profissional
+            st.markdown("""
+            <div style="display:flex; gap:15px; justify-content:center; margin-top:10px; font-size:0.8rem;">
+                <div style="display:flex; align-items:center;"><div style="width:12px; height:12px; background:#16a34a; border-radius:50%; margin-right:5px;"></div> <b>Ideal (Aplicar)</b></div>
+                <div style="display:flex; align-items:center;"><div style="width:12px; height:12px; background:#eab308; border-radius:50%; margin-right:5px;"></div> <b>Marginal (Cuidado)</b></div>
+                <div style="display:flex; align-items:center;"><div style="width:12px; height:12px; background:#dc2626; border-radius:50%; margin-right:5px;"></div> <b>Crítico (Não Aplicar)</b></div>
+            </div>
+            """, unsafe_allow_html=True)
+
         else:
-            st.warning("Carregando dados horários...")
-
-        # --- 4. PREVISÃO SEMANAL (VISUAL CARD) ---
-        st.divider()
-        st.markdown("#### 📅 Próximos 5 Dias")
-        
-        # Vamos fazer cards em vez de gráfico de barras, fica mais "App Nativo"
-        cols_sem = st.columns(5)
-        for i, row in df_clima.head(5).iterrows():
-            dia_sem = row['Data'] # Ex: Seg
-            t_max = row.get('TempMax', row['Temp'] + 5) # Simulação se não tiver Max
-            t_min = row.get('TempMin', row['Temp'] - 5)
-            mm = row['Chuva']
-            
-            icon_sem = "☀️" if mm < 2 else "🌦️" if mm < 10 else "⛈️"
-            
-            with cols_sem[i]:
-                st.markdown(f"""
-                <div style="text-align:center; background:#f8fafc; border-radius:10px; padding:10px 5px;">
-                    <div style="font-size:0.8rem; font-weight:bold; color:#64748b;">{dia_sem}</div>
-                    <div style="font-size:1.5rem; margin:5px 0;">{icon_sem}</div>
-                    <div style="font-size:0.9rem; font-weight:800; color:#0f172a;">{t_max:.0f}°</div>
-                    <div style="font-size:0.8rem; color:#94a3b8;">{t_min:.0f}°</div>
-                    <div style="font-size:0.7rem; color:#3b82f6; font-weight:bold; margin-top:5px;">{mm:.0f}mm</div>
-                </div>
-                """, unsafe_allow_html=True)
+            st.info("⏳ Carregando dados horários de alta precisão...")
 
         st.markdown('</div>', unsafe_allow_html=True)
 
