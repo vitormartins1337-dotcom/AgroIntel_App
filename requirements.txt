@@ -7,3 +7,4 @@ streamlit-folium
 google-generativeai
 Pillow
 yfinance
+duckduckgo-search
