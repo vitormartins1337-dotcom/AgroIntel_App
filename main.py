@@ -242,35 +242,6 @@ if not df_clima.empty:
     with tabs[1]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         
-        # --- 1. CABEÇALHO (AGORA COM VISUALIZAÇÃO DA META) ---
-        
-        # Recupera a meta do banco de dados, ou usa um padrão se não tiver
-        meta_produtividade = dados_nutri.get("meta", "Consulte Agrônomo")
-
-        c_head_n1, c_head_n2 = st.columns([2.5, 1.5])
-        
-        with c_head_n1:
-            st.markdown(f"### 🧪 Nutrição High-Yield: **{nome_cultura_exibicao}**")
-            st.caption("Curvas de Absorção para Tetos Produtivos (Fisiologia de Alta Performance)")
-            
-        with c_head_n2:
-            # CARD DE META (KPI VISUAL)
-            st.markdown(f"""
-            <div style="
-                background-color: #fef2f2; 
-                border: 1px solid #ef4444; 
-                border-radius: 8px; 
-                padding: 8px 12px; 
-                text-align: right; 
-                box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-                <div style="color: #ef4444; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
-                    🎯 META ALVO
-                </div>
-                <div style="color: #991b1b; font-size: 1.1rem; font-weight: 800;">
-                    {meta_produtividade}
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
 
       # --- 2. BANCO DE DADOS MASTER (COM META DE PRODUTIVIDADE EXPLÍCITA) ---
         DB_NUTRI_MASTER = {
@@ -491,6 +462,58 @@ if not df_clima.empty:
                 }
             }
         }
+
+dados_nutri = None
+        nome_cultura_exibicao = str(cult_sel)
+        
+        # Lógica de Busca Inteligente
+        for chave in DB_NUTRI_MASTER:
+            if chave.lower() in str(cult_sel).lower() or str(cult_sel).lower() in chave.lower():
+                dados_nutri = DB_NUTRI_MASTER[chave]
+                nome_cultura_exibicao = chave
+                break
+        
+        # Fallbacks (Cítricos e Frutas Vermelhas)
+        if not dados_nutri and ("citrus" in str(cult_sel).lower() or "limão" in str(cult_sel).lower() or "laranja" in str(cult_sel).lower()):
+            dados_nutri = DB_NUTRI_MASTER["Citros"]
+            nome_cultura_exibicao = "Citros"
+        
+        if not dados_nutri and ("berry" in str(cult_sel).lower() or "framboesa" in str(cult_sel).lower()):
+             dados_nutri = DB_NUTRI_MASTER["Framboesa"]
+             nome_cultura_exibicao = "Framboesa"
+
+
+if dados_nutri:
+            
+            # Recupera a meta do banco de dados (COM SEGURANÇA)
+            meta_produtividade = dados_nutri.get("meta", "Consulte Agrônomo")
+
+            # Layout do Cabeçalho com KPI
+            c_head_n1, c_head_n2 = st.columns([2.5, 1.5])
+            
+            with c_head_n1:
+                st.markdown(f"### 🧪 Nutrição High-Yield: **{nome_cultura_exibicao}**")
+                st.caption("Curvas de Absorção para Tetos Produtivos (Fisiologia de Alta Performance)")
+                
+            with c_head_n2:
+                # CARD DE META (KPI VISUAL)
+                st.markdown(f"""
+                <div style="
+                    background-color: #fef2f2; 
+                    border: 1px solid #ef4444; 
+                    border-radius: 8px; 
+                    padding: 8px 12px; 
+                    text-align: right; 
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                    <div style="color: #ef4444; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
+                        🎯 META ALVO
+                    </div>
+                    <div style="color: #991b1b; font-size: 1.1rem; font-weight: 800;">
+                        {meta_produtividade}
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+        
         # --- 3. SELEÇÃO DA CULTURA ---
         dados_nutri = None
         nome_cultura_exibicao = str(cult_sel)
