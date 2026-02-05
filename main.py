@@ -612,38 +612,45 @@ if not df_clima.empty:
 
             st.divider()
 
-            # --- 6. MANEJO ESPECÍFICO (PROFISSIONAL E DINÂMICO) ---
+            # --- 6. MANEJO ESPECÍFICO (DINÂMICO E BLINDADO) ---
             st.markdown("### 🚜 Estratégia de Manejo Específica")
             st.caption(f"Recomendações técnicas para atingir o potencial genético do(a) **{nome_cultura_exibicao}**.")
             
+            # Recupera o dicionário de manejo
+            manejo = dados_nutri.get('manejo_tatico', {"Geral": "Consulte um Engenheiro Agrônomo para recomendações locais."})
+            
+            # Transforma o dicionário em lista para podermos acessar por índice (0, 1, 2)
+            # Isso resolve o erro: não buscamos mais por chave fixa ['P'], pegamos o que tiver.
+            itens_manejo = list(manejo.items())
+            
+            # Garante que a lista tenha pelo menos 3 itens para não quebrar o layout de 3 colunas
+            # Se a cultura tiver só 2 dicas, ele completa com vazio para não dar erro de índice
+            while len(itens_manejo) < 3:
+                itens_manejo.append((" - ", "Sem recomendação específica adicional."))
+
             c_ad1, c_ad2, c_ad3 = st.columns(3)
             
-            manejo = dados_nutri.get('manejo_tatico', {
-                "N": "Aplicar parcelado para evitar perdas.",
-                "P": "Aplicar no plantio (imóvel).",
-                "K": "Aplicar conforme análise de solo."
-            })
+            # Definição de estilos visuais para os cards (Azul, Verde, Vermelho)
+            # O sistema vai aplicar essas cores na ordem dos itens
+            estilos = [
+                {"bg": "#eff6ff", "border": "#2563eb", "text": "#1e3a8a"}, # Estilo 1 (Azul)
+                {"bg": "#f0fdf4", "border": "#16a34a", "text": "#14532d"}, # Estilo 2 (Verde)
+                {"bg": "#fef2f2", "border": "#dc2626", "text": "#7f1d1d"}  # Estilo 3 (Vermelho)
+            ]
 
-            with c_ad1:
-                st.markdown(f"""
-                <div style="background:#eff6ff; border-top: 4px solid #2563eb; padding:15px; border-radius:8px; color:#0f172a; height:100%;">
-                    <b style="color:#1e3a8a;">FÓSFORO (P)</b><hr style="margin:8px 0;">
-                    <div style="font-size:0.85rem;">{manejo['P']}</div>
-                </div>""", unsafe_allow_html=True)
+            # Loop para criar os 3 cards dinamicamente
+            colunas_cards = [c_ad1, c_ad2, c_ad3]
+            
+            for i in range(3):
+                chave_nutri, texto_nutri = itens_manejo[i]
+                style = estilos[i]
                 
-            with c_ad2:
-                st.markdown(f"""
-                <div style="background:#f0fdf4; border-top: 4px solid #16a34a; padding:15px; border-radius:8px; color:#0f172a; height:100%;">
-                    <b style="color:#14532d;">NITROGÊNIO (N)</b><hr style="margin:8px 0;">
-                    <div style="font-size:0.85rem;">{manejo['N']}</div>
-                </div>""", unsafe_allow_html=True)
-
-            with c_ad3:
-                st.markdown(f"""
-                <div style="background:#fef2f2; border-top: 4px solid #dc2626; padding:15px; border-radius:8px; color:#0f172a; height:100%;">
-                    <b style="color:#7f1d1d;">POTÁSSIO (K)</b><hr style="margin:8px 0;">
-                    <div style="font-size:0.85rem;">{manejo['K']}</div>
-                </div>""", unsafe_allow_html=True)
+                with colunas_cards[i]:
+                    st.markdown(f"""
+                    <div style="background:{style['bg']}; border-top: 4px solid {style['border']}; padding:15px; border-radius:8px; color:#0f172a; height:100%;">
+                        <b style="color:{style['text']};">{chave_nutri}</b><hr style="margin:8px 0;">
+                        <div style="font-size:0.85rem;">{texto_nutri}</div>
+                    </div>""", unsafe_allow_html=True)
 
             # --- 7. AVISO LEGAL E FONTE (MANDATÓRIO) ---
             st.markdown("<br>", unsafe_allow_html=True)
