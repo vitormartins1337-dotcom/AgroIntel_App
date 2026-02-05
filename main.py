@@ -463,7 +463,7 @@ if not df_clima.empty:
             }
         }
 
-dados_nutri = None
+    dados_nutri = None
         nome_cultura_exibicao = str(cult_sel)
         
         # Lógica de Busca Inteligente
@@ -483,7 +483,7 @@ dados_nutri = None
              nome_cultura_exibicao = "Framboesa"
 
 
-if dados_nutri:
+    if dados_nutri:
             
             # Recupera a meta do banco de dados (COM SEGURANÇA)
             meta_produtividade = dados_nutri.get("meta", "Consulte Agrônomo")
