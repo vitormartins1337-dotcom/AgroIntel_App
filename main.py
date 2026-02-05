@@ -201,7 +201,7 @@ if not df_clima.empty:
         with c_head_n2:
             st.markdown("<div style='text-align:right; color:#b91c1c; font-weight:bold; font-size:0.8rem; border:1px solid #b91c1c; padding:2px 8px; border-radius:4px;'>ALTA PERFORMANCE</div>", unsafe_allow_html=True)
 
-        # --- 2. BANCO DE DADOS MASTER (CALIBRADO 100% DAS CULTURAS) ---
+       # --- 2. BANCO DE DADOS MASTER (COM MANEJO TÁTICO DE ALTA PRECISÃO) ---
         
         DB_NUTRI_MASTER = {
             "Soja": {
@@ -217,9 +217,9 @@ if not df_clima.empty:
                 },
                 "micros": {"Mn": [20, 100, 300, 500, 600], "Zn": [10, 50, 150, 300, 350], "B": [5, 20, 60, 100, 120]},
                 "manejo_tatico": {
-                    "N": "<b>ALTA PERFORMANCE:</b> Não aplicar N mineral. Garanta inoculação dupla + Co-inoculação (Azospirillum). O N vem 100% da bactéria.",
-                    "P": "Aplicar 100% no sulco ou pré-plantio corrigido. Níveis críticos de P no solo > 15mg/dm³.",
-                    "K": "Para colher 80 sacas, a extração passa de 180kg K₂O. Se solo arenoso, parcelar (Pré-plantio + V4) para evitar salinidade."
+                    "N": "<b>ALTA PERFORMANCE (FBN):</b> Proibido aplicar N mineral (ureia/sulfato) na base ou cobertura, pois inibe a nodulação. O segredo de 85+ sacas é: Inoculação Turbo (Turfa + Líquido) + Co-inoculação (Azospirillum) + Cobalto/Molibdênio foliar em V3.",
+                    "P": "<b>ENERGIA (ATP):</b> Aplicar 100% no sulco ou pré-plantio incorporado. Níveis de P no solo devem ser > 15-20 mg/dm³. Se usar MAP, cuidado com a salinidade junto à semente.",
+                    "K": "<b>ENCHIMENTO DE GRÃO:</b> A extração é violenta no final do ciclo (R5). Se o solo for arenoso (CTC baixa), parcele o K: 50% pré-plantio e 50% em V4 (a lanço). Isso evita lixiviação e queima de raiz."
                 }
             },
             "Milho": {
@@ -235,9 +235,9 @@ if not df_clima.empty:
                 },
                 "micros": {"Zn": [20, 150, 400, 550, 600], "Mn": [15, 100, 300, 400, 450], "B": [10, 30, 80, 120, 140]},
                 "manejo_tatico": {
-                    "N": "<b>DEFINIÇÃO DE TETO:</b> A planta define a espiga entre V4 e V6. 70% do Nitrogênio deve estar disponível até V6.",
-                    "P": "Fósforo no sulco é lei. Milho cresce rápido e precisa de P 'na boca' da raiz.",
-                    "K": "Equilíbrio N:K é vital. Muito N sem K causa acamamento e grão leve."
+                    "N": "<b>DEFINIÇÃO DE TETO (V4-V6):</b> O número de fileiras da espiga é definido agora. A planta não pode passar fome de N aqui. Aplique 70% da dose de cobertura até V6 impreterivelmente. Atrasar cobertura reduz teto produtivo.",
+                    "Zn": "<b>ELEMENTO CHAVE:</b> O milho é extremamente exigente em Zinco. Se o solo for pobre, usar Zn no sulco ou tratamento de semente robusto. Deficiência de Zn encurta os entrenós e reduz área foliar.",
+                    "K": "<b>RESISTÊNCIA:</b> Equilíbrio N:K é vital. Excesso de N sem K proporcional gera plantas com colmo fraco, suscetíveis a tombamento (acamamento) e quebramento."
                 }
             },
             "Café": { 
@@ -253,9 +253,9 @@ if not df_clima.empty:
                 },
                 "micros": {"Fe": [200, 1000, 2000, 2500, 3000], "B": [50, 250, 500, 700, 800], "Zn": [40, 200, 400, 550, 600]},
                 "manejo_tatico": {
-                    "N": "Parcelar em 4x (Out a Mar). Demanda violenta na fase de expansão.",
-                    "P": "Essencial garantir teor foliar adequado na pré-florada. P baixo = Florada fraca.",
-                    "K": "<b>VILÃO E HERÓI:</b> Na Granação (Jan-Mar), o fruto 'rouba' K da folha. Dose de 330kg+ necessária para evitar die-back."
+                    "N": "<b>VEGETAÇÃO E CARGA:</b> Parcelar em 3 ou 4x (Set a Mar). Para altas cargas (>80sc), a demanda na fase de expansão (Dez/Jan) é crítica. Use Nitrato de Amônio se não houver previsão de chuva imediata (menor volatilização).",
+                    "K": "<b>DIE-BACK (SECA DE PONTEIROS):</b> Na fase de Granação (Jan-Mar), o fruto drena todo o K das folhas. Se faltar K no solo, a planta sacrifica as folhas e os ramos secam, prejudicando a safra seguinte.",
+                    "B": "<b>PEGAMENTO DE FLOR:</b> Boro foliar na pré-florada e chumbinho é obrigatório. O Boro é imóvel no floema do café, precisa de aplicações localizadas nas rosetas."
                 }
             },
             "Algodão": {
@@ -271,9 +271,9 @@ if not df_clima.empty:
                 },
                 "micros": {"B": [20, 100, 250, 350, 400], "Zn": [15, 80, 180, 250, 300]},
                 "manejo_tatico": {
-                    "N": "Gerenciar vigor com regulador. Muito N faz a planta 'vegetar' e abortar maçã.",
-                    "K": "Fome de Potássio ('Oulakh') ocorre na carga máxima. K garante resistência da fibra (Micronaire).",
-                    "B": "Aplicações foliares sequenciais na florada são obrigatórias."
+                    "N": "<b>VIGOR CONTROLADO:</b> Algodão não pode 'disparar'. O N deve ser acompanhado de Regulador de Crescimento (Mepiquat). Planta muito vegetativa aborta as maçãs do baixeiro.",
+                    "K": "<b>QUALIDADE DE FIBRA:</b> A 'Fome de Potássio' (Oulakh) ocorre no pico de carga. K baixo resulta em fibra com Micronaire (finura) baixo, desvalorizando o produto final.",
+                    "B": "<b>RETENÇÃO:</b> A demanda de Boro na florada é altíssima. O solo sozinho não supre. Fazer de 3 a 5 aplicações foliares sequenciais para segurar as estruturas reprodutivas."
                 }
             },
             "Citros": {
@@ -289,27 +289,27 @@ if not df_clima.empty:
                 },
                 "micros": {"Mn": [50, 250, 500, 700, 800], "Zn": [50, 250, 500, 700, 800], "B": [30, 100, 200, 300, 350]},
                 "manejo_tatico": {
-                    "N": "Focar nos fluxos de brotação. Árvore bem enfolhada suporta carga.",
-                    "Ca": "Vital para resistência pós-colheita. Deficiência causa 'Creasing' (rachadura).",
-                    "K": "Equilíbrio: K demais engrossa casca e acidifica; K de menos deixa fruto pequeno."
+                    "N": "<b>FLUXOS VEGETATIVOS:</b> Sincronizar adubação nitrogenada com os fluxos de brotação (Primavera/Verão). Árvore bem enfolhada suporta carga e protege frutos do sol.",
+                    "Ca": "<b>CREASING (RACHADURA):</b> O Ca é o 'cimento' da casca (albedo). Deficiência causa rachadura (Creasing) e colapso da casca pós-colheita. Usar Nitrato de Cálcio via solo.",
+                    "Mg": "<b>CLOROSE V:</b> Deficiência de Mg causa o 'V amarelo' nas folhas velhas, reduzindo fotossíntese e tamanho de fruto."
                 }
             },
             "Banana": {
                 # Meta: > 80 ton/ha (Alta Tecnologia)
                 "fases": ["Cresc", "Flor", "Cacho", "Enchimento", "Colheita"],
                 "macros": {
-                    "N": [50, 150, 300, 450, 550],    # Banana precisa de muito N para manter área foliar
+                    "N": [50, 150, 300, 450, 550],    
                     "P": [10, 30, 50, 70, 80],
-                    "K": [100, 400, 900, 1300, 1600], # O "Rei" da extração de K. 1.6 ton/ha é real para alta meta.
-                    "Ca": [30, 80, 180, 250, 300],    # Ca para evitar despencamento
+                    "K": [100, 400, 900, 1300, 1600], 
+                    "Ca": [30, 80, 180, 250, 300],    
                     "Mg": [15, 40, 90, 130, 150],
                     "S": [15, 40, 80, 100, 120]
                 },
                 "micros": {"Mn": [150, 600, 1800, 2800, 3500], "Zn": [30, 150, 400, 600, 700], "B": [15, 60, 180, 280, 350]},
                 "manejo_tatico": {
-                    "N": "Aplicar quinzenalmente. A planta emite folha nova a cada 7-10 dias e precisa de N constante.",
-                    "K": "<b>BOMBA DE POTÁSSIO:</b> Extração massiva. Parcelar em 10-12x no ano. Sem K, o cacho é pequeno e quebra.",
-                    "Ca": "Atenção à relação K/Ca/Mg. Muito K inibe Ca e Mg (Azul do Bananal)."
+                    "K": "<b>BOMBA DE POTÁSSIO:</b> A banana exporta 1600kg de K/ha. É impossível aplicar tudo de uma vez. Parcelar em 10 a 12 aplicações anuais. Sem K, o cacho não enche e o 'pescoço' quebra.",
+                    "N": "<b>RITMO CONSTANTE:</b> A planta emite uma folha nova a cada 7-10 dias. Se faltar N, a emissão para. Aplicação mensal ou quinzenal obrigatória.",
+                    "Ca": "<b>EQUILÍBRIO IÔNICO:</b> Com tanto Potássio aplicado, ocorre inibição competitiva de Cálcio e Magnésio ('Azul da Banana'). Obrigatório aplicar Ca e Mg via calcário ou gesso regularmente."
                 }
             },
             "Tomate": {
@@ -318,41 +318,41 @@ if not df_clima.empty:
                 "macros": {
                     "N": [20, 60, 150, 250, 300], 
                     "P": [5, 20, 40, 50, 60], 
-                    "K": [30, 100, 250, 400, 480],  # K subiu para 480kg. Tomate de mesa exige muito.
-                    "Ca": [20, 70, 160, 220, 250],  # Ca alto para evitar fundo preto
+                    "K": [30, 100, 250, 400, 480],  
+                    "Ca": [20, 70, 160, 220, 250],  
                     "Mg": [10, 30, 60, 80, 90], 
                     "S": [10, 30, 60, 80, 90]
                 }, 
                 "micros": {"Mn": [25, 180, 450, 650, 750], "B": [15, 60, 140, 220, 280], "Zn": [15, 70, 180, 280, 350]},
                 "manejo_tatico": {
-                    "N": "Cuidado com excesso na fase vegetativa (vício). Aumentar dose no enchimento.",
-                    "Ca": "<b>FUNDO PRETO:</b> Aplicar Ca via foliar semanalmente na fase de crescimento do fruto. O solo não supre a velocidade de absorção.",
-                    "K": "Fundamental para Brix e cor vermelha intensa."
+                    "Ca": "<b>FUNDO PRETO (PODRIDÃO APICAL):</b> O cálcio é imóvel e não chega na ponta do fruto rápido o suficiente. Pulverizações semanais de Cloreto de Cálcio ou quelatos direcionadas aos frutos são mandatórias.",
+                    "N": "<b>VÍCIO:</b> Excesso de N na fase inicial cria plantas com entrenós longos e pouca flor. Segurar o N até o pegamento do primeiro cacho.",
+                    "K": "<b>BRIX E COR:</b> O Potássio é responsável pela translocação de açúcares. K baixo resulta em tomate manchado (blotchy ripening) e sem sabor."
                 }
             },
             "Batata": {
                 # Meta: > 50 ton/ha
                 "fases": ["Emerg", "Estolon", "Tuber", "Enchimento", "Maturação"],
                 "macros": {
-                    "N": [20, 70, 140, 190, 220],   # N alto, mas cuidado com excesso tardio
+                    "N": [20, 70, 140, 190, 220],   
                     "P": [5, 20, 40, 55, 60],
-                    "K": [30, 100, 220, 320, 360],  # K subiu para 360kg. Batata é exigente.
-                    "Ca": [10, 40, 80, 100, 120],   # Ca para pele resistente
+                    "K": [30, 100, 220, 320, 360],  
+                    "Ca": [10, 40, 80, 100, 120],   
                     "Mg": [5, 20, 40, 55, 65], 
                     "S": [5, 15, 30, 45, 55]
                 },
                 "micros": {"Mn": [30, 120, 280, 450, 500], "B": [8, 30, 70, 100, 120], "Zn": [15, 50, 120, 180, 220]},
                 "manejo_tatico": {
-                    "N": "Parcelar: Plantio + Amontoa. Excesso tardio atrasa tuberização e baixa matéria seca.",
-                    "K": "Usar Sulfato de Potássio (SOP) para batata indústria (fritura). O Cloro do KCl reduz amido e queima as bordas.",
-                    "P": "Tudo no sulco. Define número de tubérculos."
+                    "P": "<b>TUBERIZAÇÃO:</b> Fósforo no sulco define o NÚMERO de tubérculos por planta. Use fontes solúveis. P deficiente = poucos tubérculos grandes.",
+                    "K": "<b>FONTE NOBRE:</b> Para batata indústria (chips/frita), use Sulfato de Potássio (SOP). O Cloreto (KCl) reduz o teor de amido e aumenta a absorção de água, piorando a fritura.",
+                    "Ca": "<b>SARNA E PELE:</b> Cálcio reforça a parede celular da casca, reduzindo incidência de Sarna e danos mecânicos na colheita."
                 }
             },
             "Feijão": {
                 # Meta: > 60 sacas/ha (Irrigado Alta Tec)
                 "fases": ["V2", "V4", "R5", "R7", "R9"],
                 "macros": {
-                    "N": [10, 40, 90, 130, 150],    # Feijão de alta responde muito a N mineral (diferente da soja)
+                    "N": [10, 40, 90, 130, 150],    
                     "P": [3, 10, 20, 30, 35],
                     "K": [10, 35, 80, 110, 130],
                     "Ca": [5, 25, 60, 80, 90],
@@ -361,27 +361,27 @@ if not df_clima.empty:
                 },
                 "micros": {"Fe": [60, 250, 700, 1100, 1300], "Mn": [25, 100, 250, 350, 400], "Zn": [15, 50, 120, 180, 220]},
                 "manejo_tatico": {
-                    "N": "Ciclo curto. Aplicar 1/3 plantio e 2/3 em V4. Atrasar V4 é perder produtividade irreversível.",
-                    "Mo": "Aplicação foliar de Molibdênio é obrigatória para ajudar na fixação e uso do N.",
-                    "K": "Cuidado com salinidade no sulco. Feijão tem raiz sensível."
+                    "N": "<b>TIMING PERFEITO:</b> O ciclo é muito rápido. Aplique 1/3 no plantio e 2/3 em cobertura V3/V4. Passou de V4, o N não recupera mais o potencial produtivo.",
+                    "Mo": "<b>MOLIBDÊNIO:</b> Essencial para a enzima Nitrato Redutase. Aplicação foliar em V3/V4 melhora drasticamente o aproveitamento do Nitrogênio aplicado.",
+                    "Micros": "<b>FERRO E MANGANÊS:</b> Feijão é muito sensível a clorose férrica em solos de pH alto. Atenção aos micronutrientes foliares."
                 }
             },
             "Trigo": {
                 # Meta: > 6.000 kg/ha (100 sc)
                 "fases": ["Emerg", "Perfilho", "Along", "Espiga", "Grão"],
                 "macros": {
-                    "N": [15, 50, 110, 150, 170],   # N para proteína e glúten
+                    "N": [15, 50, 110, 150, 170],   
                     "P": [5, 15, 30, 40, 45],
-                    "K": [10, 40, 100, 130, 150],   # K para resistência a acamamento
+                    "K": [10, 40, 100, 130, 150],   
                     "Ca": [5, 20, 45, 60, 70],
                     "Mg": [3, 10, 20, 30, 35],
                     "S": [5, 15, 30, 45, 50]
                 },
                 "micros": {"Mn": [30, 150, 350, 450, 500], "Cu": [5, 15, 35, 50, 60], "Zn": [10, 30, 70, 100, 120]},
                 "manejo_tatico": {
-                    "N": "Estratégia Tríplice: Plantio + Perfilhamento (define nº espigas) + Emborrachamento (define proteína/W).",
-                    "Cu": "Cobre é vital para sanidade e formação de pólen no trigo.",
-                    "K": "Não negligenciar. K baixo = Trigo acamado."
+                    "N": "<b>TRÍPLICE ESTRATÉGIA:</b> 1. Base (Arranque). 2. Perfilhamento (Define nº de espigas). 3. Emborrachamento (Define teor de proteína/glúten). Fracionar é a chave.",
+                    "Cu": "<b>SANIDADE E PÓLEN:</b> Cobre é vital no trigo. Deficiência causa esterilidade masculina (espigas chochas) e menor resistência a doenças fúngicas.",
+                    "K": "<b>ACAMAMENTO:</b> Trigo de alta produtividade (espiga pesada) tomba fácil. Potássio reforça a parede celular do colmo, funcionando como o 'esqueleto' da planta."
                 }
             },
             "Uva": {
@@ -390,34 +390,34 @@ if not df_clima.empty:
                 "macros": {
                     "N": [20, 60, 100, 120, 130],
                     "P": [5, 12, 20, 30, 35],
-                    "K": [15, 50, 120, 180, 220],   # K alto para Brix
-                    "Ca": [15, 50, 100, 130, 150],  # Ca para firmeza da baga
-                    "Mg": [5, 20, 40, 55, 65],      # Mg previne "Dessecação da Ráquis"
+                    "K": [15, 50, 120, 180, 220],   
+                    "Ca": [15, 50, 100, 130, 150],  
+                    "Mg": [5, 20, 40, 55, 65],      
                     "S": [5, 15, 30, 40, 50]
                 },
                 "micros": {"Fe": [60, 250, 600, 800, 900], "B": [15, 60, 120, 180, 220], "Zn": [15, 50, 120, 180, 250]},
                 "manejo_tatico": {
-                    "N": "Aplicar na brotação. Suspender cedo na maturação para não prejudicar cor e não deixar a baga aguada.",
-                    "Mg": "Atenção à Dessecação da Ráquis. Magnésio foliar é preventivo.",
-                    "K": "Parcelar da 'chumbada' ao Varaison para garantir açúcar e cor."
+                    "K": "<b>AÇÚCAR (BRIX):</b> O Potássio é o motor da translocação de açúcar para a baga. Aumentar a dose a partir da mudança de cor (Varaison) para garantir doçura.",
+                    "Mg": "<b>DESSECAÇÃO DA RÁQUIS:</b> Distúrbio fisiológico grave (Palo Negro) causado por falta de Mg/Ca. As bagas murcham e caem. Aplicações preventivas de Magnésio no cacho são necessárias.",
+                    "N": "<b>SUSPENSÃO:</b> Cortar o Nitrogênio na fase de maturação. N tardio deixa a baga aguada, com pele fina e propensa a podridão."
                 }
             },
             "Manga": {
                 # Meta: Alta Produtividade (Vale do São Francisco)
                 "fases": ["Veg", "Flor", "Chumbinho", "Expansão", "Colheita"],
                 "macros": {
-                    "N": [30, 80, 140, 180, 200],   # N alto para repor poda
+                    "N": [30, 80, 140, 180, 200],   
                     "P": [5, 20, 35, 50, 60],
-                    "K": [20, 70, 160, 240, 280],   # K para qualidade de polpa
-                    "Ca": [20, 70, 140, 180, 220],  # Ca evita Colapso Interno
+                    "K": [20, 70, 160, 240, 280],   
+                    "Ca": [20, 70, 140, 180, 220],  
                     "Mg": [10, 30, 60, 80, 95],
                     "S": [10, 25, 50, 70, 80]
                 },
                 "micros": {"B": [15, 80, 160, 240, 280], "Fe": [60, 250, 700, 900, 1100], "Zn": [25, 100, 200, 280, 350]},
                 "manejo_tatico": {
-                    "N": "Estimula vegetação. Deve ser zerado 60 dias antes da indução floral para causar estresse.",
-                    "Ca": "Fundamental pulverizar Ca na fase de chumbinho para evitar 'Colapso Interno' da polpa na exportação.",
-                    "B": "Essencial na florada para pegamento."
+                    "N": "<b>INDUÇÃO FLORAL:</b> O N estimula vegetação. Deve ser suspenso 60 dias antes da indução (Paclobutrazol) para causar o estresse necessário para a planta florir.",
+                    "Ca": "<b>COLAPSO INTERNO:</b> Distúrbio fisiológico (Soft Nose) que apodrece a manga de dentro para fora na prateleira. Cálcio via solo e foliar na fase de chumbinho é a única prevenção.",
+                    "B": "<b>PEGAMENTO:</b> Manga tem taxa de abortamento alta natural. Boro e Zinco na pré-florada aumentam a viabilidade do pólen e a fixação dos frutinhos."
                 }
             },
             "Morango": {
@@ -426,34 +426,34 @@ if not df_clima.empty:
                 "macros": {
                     "N": [10, 40, 90, 150, 180],
                     "P": [5, 15, 25, 40, 50],
-                    "K": [10, 50, 120, 220, 280],   # K altíssimo para sabor
-                    "Ca": [10, 40, 90, 140, 170],   # Ca para firmeza (transporte)
+                    "K": [10, 50, 120, 220, 280],   
+                    "Ca": [10, 40, 90, 140, 170],   
                     "Mg": [5, 15, 40, 60, 75],
                     "S": [5, 15, 30, 50, 60]
                 },
                 "micros": {"Fe": [30, 120, 350, 550, 650], "Mn": [15, 70, 200, 300, 350], "B": [8, 30, 70, 100, 120]},
                 "manejo_tatico": {
-                    "N": "Fertirrigação diária/constante. Equilíbrio N:K de 1:1.5 a 1:2.0 na frutificação.",
-                    "Ca": "Sem Ca, o morango fica mole e apodrece (Botrytis) rápido.",
-                    "K": "Responsável direto pelo Brix (doçura)."
+                    "N:K": "<b>EQUILÍBRIO:</b> Na fase vegetativa use 1:1. Na frutificação mude para 1:1.5 ou 1:2. Excesso de N gera fruto mole e Botrytis.",
+                    "Ca": "<b>FIRMEZA:</b> Morango é pura água e parede celular. Sem Cálcio constante na fertirrigação, a fruta perde 'shelf-life' (tempo de prateleira) e vaza líquido.",
+                    "Fe": "<b>CLOROSE:</b> Morango em substrato inerte tende a ter deficiência de Ferro (folhas novas amarelas). Usar Ferro EDDHA (quelato) na solução nutritiva."
                 }
             },
             "Mirtilo": {
                 # Meta: Alta Produtividade
                 "fases": ["Brota", "Flor", "Verde", "Matur", "Dorm"],
                 "macros": {
-                    "N": [10, 30, 60, 90, 100],     # Baixa demanda comparado a outras, mas constante
+                    "N": [10, 30, 60, 90, 100],     
                     "P": [2, 8, 15, 20, 25],
                     "K": [10, 30, 60, 90, 110],     
                     "Ca": [5, 20, 40, 60, 70],
                     "Mg": [2, 10, 20, 30, 35],
-                    "S": [5, 15, 30, 45, 55]        # Exige S para acidificar
+                    "S": [5, 15, 30, 45, 55]        
                 },
                 "micros": {"Fe": [20, 80, 150, 220, 250], "Mn": [10, 40, 80, 120, 150]},
                 "manejo_tatico": {
-                    "N": "<b>pH ÁCIDO:</b> Usar Sulfato de Amônio. Mirtilo prefere N Amoniacal e não tolera Nitratos em excesso.",
-                    "K": "Sensível a Cloro e Salinidade. Usar apenas fontes nobres (Sulfato de K).",
-                    "Fe": "Clorose férrica é comum se pH > 5.5."
+                    "N": "<b>FORMA AMONIACAL:</b> O Mirtilo evoluiu em solos ácidos e não metaboliza bem Nitratos. Use Sulfato de Amônio ou Ureia. Evite Nitrato de Cálcio/Potássio em excesso.",
+                    "pH": "<b>ACIDIFICAÇÃO:</b> O pH da rizosfera deve estar entre 4.5 e 5.5. Se subir, o Ferro fica indisponível. Injete ácido (fosfórico/sulfúrico) na irrigação se necessário.",
+                    "K": "<b>SENSIBILIDADE:</b> Mirtilo é sensível a Cloro e Salinidade. Jamais use Cloreto de Potássio (KCl). Use apenas Sulfato de Potássio (SOP)."
                 }
             },
             "Cebola": {
@@ -462,16 +462,16 @@ if not df_clima.empty:
                 "macros": {
                     "N": [10, 50, 120, 160, 180],
                     "P": [5, 20, 40, 50, 60],
-                    "K": [10, 60, 150, 200, 240],   # K garante pós-colheita
+                    "K": [10, 60, 150, 200, 240],   
                     "Ca": [5, 30, 80, 110, 130],
                     "Mg": [3, 12, 30, 45, 55],
-                    "S": [10, 30, 60, 80, 100]      # S alto para pungência
+                    "S": [10, 30, 60, 80, 100]      
                 },
                 "micros": {"Mn": [20, 80, 200, 350, 400], "Zn": [10, 50, 120, 180, 220], "B": [5, 20, 50, 80, 100]},
                 "manejo_tatico": {
-                    "N": "Suspender na maturação (estalo) para evitar rebrota e podridão bacteriana no armazém.",
-                    "S": "Enxofre é vital para o sabor e resistência a pragas.",
-                    "K": "Melhora a cera da folha e a qualidade da 'casca' do bulbo."
+                    "N": "<b>ESTALO:</b> O Nitrogênio deve ser suspenso assim que os bulbos começarem a formar ou no início do 'estalo' (tombamento). N tardio causa 'pescoço grosso', rebrota e podridão no armazém.",
+                    "S": "<b>PUNGÊNCIA:</b> O Enxofre é responsável pelo cheiro e sabor (ácido pirúvico) da cebola. Em solos pobres em S, a cebola fica 'fraca' e suscetível a ácaros.",
+                    "K": "<b>PELE:</b> Potássio abundante garante número de cera nas folhas (proteção) e catáfilos (casca) resistentes, melhorando a cura pós-colheita."
                 }
             },
             "Alho": {
@@ -480,34 +480,44 @@ if not df_clima.empty:
                 "macros": {
                     "N": [10, 60, 140, 160, 170],
                     "P": [5, 20, 40, 50, 55],
-                    "K": [10, 70, 160, 200, 220],   # K para encher dente
+                    "K": [10, 70, 160, 200, 220],   
                     "Ca": [5, 35, 80, 100, 110],
                     "Mg": [3, 15, 35, 50, 60],
                     "S": [10, 30, 60, 80, 90]
                 },
                 "micros": {"Zn": [10, 60, 140, 180, 220], "B": [5, 25, 60, 90, 100]},
                 "manejo_tatico": {
-                    "N": "Fundamental no início (folhas = dentes). Suspender na diferenciação para não causar superbrotamento ('dente de cachorro').",
-                    "P": "Aplicar no sulco para enraizamento profundo.",
-                    "K": "Garante o peso final da cabeça e conservação."
+                    "N": "<b>DENTE DE CACHORRO:</b> O alho precisa de N no início para formar folhas. Porém, na fase de diferenciação (formação dos dentes), o excesso de N causa o superbrotamento (anomalia fisiológica). Corte o N no momento certo.",
+                    "P": "<b>ENRAIZAMENTO:</b> O sistema radicular do alho é fasciculado e pouco eficiente. Fósforo disponível no sulco é vital para arranque.",
+                    "K": "<b>PESO:</b> O Potássio é o principal responsável pelo enchimento e peso final da cabeça. Deficiência gera bulbos 'ocos' ou leves."
                 }
             },
             "Pastagens": {
                 # Meta: Intensiva (Rotacionado/Adubado)
                 "fases": ["D0", "D10", "D20", "D30", "D45"],
                 "macros": {
-                    "N": [10, 60, 150, 250, 300],   # Pasto intensivo consome muito N
+                    "N": [10, 60, 150, 250, 300],   
                     "P": [5, 15, 30, 40, 45],
-                    "K": [10, 50, 140, 220, 280],   # K alto para rebrota rápida
+                    "K": [10, 50, 140, 220, 280],   
                     "Ca": [5, 20, 50, 70, 80],
                     "Mg": [2, 10, 25, 40, 50],
                     "S": [5, 15, 30, 50, 60]
                 },
                 "micros": {"Mn": [20, 80, 200, 350, 400], "Zn": [10, 50, 120, 180, 220]},
                 "manejo_tatico": {
-                    "N": "Motor da produção. Aplicar parcelado após cada saída dos animais, sempre com umidade.",
-                    "P": "P é energia. Sem P, o pasto não responde ao N.",
-                    "K": "Em sistemas de corte (Feno/Pré-secado), a extração de K é total e precisa ser reposta 100%."
+                    "N": "<b>MOTOR DE PRODUÇÃO:</b> O N deve ser aplicado IMEDIATAMENTE após a saída dos animais (rotacionado), desde que haja umidade. É ele que empurra a rebrota rápida.",
+                    "P": "<b>RESPOSTA:</b> Não adianta jogar N se o P estiver baixo. O Fósforo é o combustível energético. Reposição anual de P (superfosfato) é necessária em sistemas intensivos.",
+                    "K": "<b>RECICLAGEM vs CORTE:</b> Em pastejo, 80% do K volta na urina. Em sistemas de corte (Feno/Silagem), a planta leva o K embora. A reposição deve ser muito maior em capineiras de corte."
+                }
+            },
+             "Framboesa": {
+                "fases": ["Veg", "Flor", "Verde", "Colheita", "Senesc"],
+                "macros": {"N": [10, 30, 60, 80, 90], "P": [2, 8, 15, 20, 25], "K": [10, 35, 70, 100, 110], "Ca": [5, 20, 40, 60, 70], "Mg": [2, 8, 15, 25, 30], "S": [2, 8, 15, 20, 25]},
+                "micros": {"Fe": [20, 80, 150, 200, 250], "B": [5, 15, 30, 45, 50]},
+                "manejo_tatico": {
+                    "N": "<b>EQUILÍBRIO:</b> Parcelar a oferta de nitrogênio principalmente na primavera e início do verão. Excesso tardio gera ramos moles e suscetíveis a doenças.",
+                    "P": "<b>MANUTENÇÃO:</b> Aplicar anualmente no início da primavera para suportar o novo fluxo de raízes e brotos.",
+                    "K": "<b>DOÇURA:</b> Vital para a translocação de açúcares. Aplique potássio consistentemente durante a formação do fruto para garantir sabor e qualidade."
                 }
             }
         }
