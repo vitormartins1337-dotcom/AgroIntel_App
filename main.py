@@ -242,22 +242,43 @@ if not df_clima.empty:
     with tabs[1]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         
-        # --- 1. CABEÇALHO ---
-        c_head_n1, c_head_n2 = st.columns([3, 1])
-        with c_head_n1:
-            st.markdown(f"### 🧪 Nutrição High-Yield: **{cult_sel}**")
-            st.caption("Curvas de Absorção para Tetos Produtivos (Fisiologia de Alta Performance)")
-        with c_head_n2:
-            st.markdown("<div style='text-align:right; color:#b91c1c; font-weight:bold; font-size:0.8rem; border:1px solid #b91c1c; padding:2px 8px; border-radius:4px;'>ALTA PERFORMANCE</div>", unsafe_allow_html=True)
+        # --- 1. CABEÇALHO (AGORA COM VISUALIZAÇÃO DA META) ---
+        
+        # Recupera a meta do banco de dados, ou usa um padrão se não tiver
+        meta_produtividade = dados_nutri.get("meta", "Consulte Agrônomo")
 
-      # --- 2. BANCO DE DADOS MASTER (COM FAIXAS DE EXTRAÇÃO E MANEJO TÁTICO) ---
+        c_head_n1, c_head_n2 = st.columns([2.5, 1.5])
+        
+        with c_head_n1:
+            st.markdown(f"### 🧪 Nutrição High-Yield: **{nome_cultura_exibicao}**")
+            st.caption("Curvas de Absorção para Tetos Produtivos (Fisiologia de Alta Performance)")
+            
+        with c_head_n2:
+            # CARD DE META (KPI VISUAL)
+            st.markdown(f"""
+            <div style="
+                background-color: #fef2f2; 
+                border: 1px solid #ef4444; 
+                border-radius: 8px; 
+                padding: 8px 12px; 
+                text-align: right; 
+                box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                <div style="color: #ef4444; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
+                    🎯 META ALVO
+                </div>
+                <div style="color: #991b1b; font-size: 1.1rem; font-weight: 800;">
+                    {meta_produtividade}
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+      # --- 2. BANCO DE DADOS MASTER (COM META DE PRODUTIVIDADE EXPLÍCITA) ---
         DB_NUTRI_MASTER = {
             "Soja": {
-                # Meta: 75 a 90 sacas/ha
+                "meta": "75 a 90 sacas/ha", # <--- ADICIONEI ISSO AQUI EM TODAS
                 "fases": ["V1", "V4", "R1 (Flor)", "R5.1 (Ench)", "R8 (Mat)"],
                 "macros": {"N": [10, 40, 110, 280, 380], "P": [2, 8, 20, 35, 40], "K": [10, 40, 100, 180, 200], "Ca": [5, 25, 60, 90, 110], "Mg": [2, 10, 25, 40, 50], "S": [2, 8, 20, 35, 45]},
                 "micros": {"Mn": [20, 100, 300, 500, 600], "Zn": [10, 50, 150, 300, 350], "B": [5, 20, 60, 100, 120]},
-                # NOVA LINHA: Faixas de Extração (Ranges)
                 "totais_display": {"N": "300 – 400", "P": "30 – 50", "K": "180 – 230", "Ca": "90 – 120", "Mg": "40 – 60", "S": "30 – 50"},
                 "manejo_tatico": {
                     "N": "<b>ALTA PERFORMANCE (FBN):</b> Proibido aplicar N mineral (ureia/sulfato) na base ou cobertura, pois inibe a nodulação. O segredo de 85+ sacas é: Inoculação Turbo (Turfa + Líquido) + Co-inoculação (Azospirillum) + Cobalto/Molibdênio foliar em V3.",
@@ -266,7 +287,7 @@ if not df_clima.empty:
                 }
             },
             "Milho": {
-                # Meta: 180 a 220 sacas/ha
+                "meta": "180 a 220 sacas/ha",
                 "fases": ["V2", "V6", "VT (Pendão)", "R3 (Leitoso)", "R6 (Matur)"],
                 "macros": {"N": [10, 60, 160, 240, 280], "P": [2, 15, 40, 55, 60], "K": [15, 90, 200, 240, 260], "Ca": [5, 25, 50, 65, 75], "Mg": [3, 15, 35, 50, 60], "S": [2, 10, 25, 35, 40]},
                 "micros": {"Zn": [20, 150, 400, 550, 600], "Mn": [15, 100, 300, 400, 450], "B": [10, 30, 80, 120, 140]},
@@ -278,7 +299,7 @@ if not df_clima.empty:
                 }
             },
             "Café": { 
-                # Meta: 60 a 90 sacas/ha
+                "meta": "60 a 90 sacas/ha",
                 "fases": ["Veg/Flor", "Chumbinho", "Expansão", "Granação", "Maturação"],
                 "macros": {"N": [40, 100, 180, 260, 300], "P": [5, 15, 25, 35, 40], "K": [30, 90, 180, 280, 330], "Ca": [30, 60, 100, 140, 160], "Mg": [10, 25, 45, 60, 70], "S": [10, 20, 35, 50, 60]},
                 "micros": {"Fe": [200, 1000, 2000, 2500, 3000], "B": [50, 250, 500, 700, 800], "Zn": [40, 200, 400, 550, 600]},
@@ -290,7 +311,7 @@ if not df_clima.empty:
                 }
             },
             "Batata": {
-                # Meta: 45 a 60 ton/ha (SEU EXEMPLO)
+                "meta": "45 a 60 ton/ha",
                 "fases": ["Emerg", "Estolon", "Tuber", "Enchimento", "Maturação"],
                 "macros": {"N": [20, 70, 140, 190, 220], "P": [5, 20, 40, 55, 60], "K": [30, 100, 220, 320, 360], "Ca": [10, 40, 80, 100, 120], "Mg": [5, 20, 40, 55, 65], "S": [5, 15, 30, 45, 55]},
                 "micros": {"Mn": [30, 120, 280, 450, 500], "B": [8, 30, 70, 100, 120], "Zn": [15, 50, 120, 180, 220]},
@@ -302,7 +323,7 @@ if not df_clima.empty:
                 }
             },
             "Algodão": {
-                # Meta: 350 a 450 @/ha
+                "meta": "350 a 450 @/ha",
                 "fases": ["Emerg", "Botão", "Flor", "Maçã", "Abertura"],
                 "macros": {"N": [10, 50, 120, 180, 200], "P": [2, 15, 35, 50, 60], "K": [10, 60, 140, 200, 220], "Ca": [5, 30, 80, 120, 140], "Mg": [2, 10, 25, 40, 45], "S": [2, 10, 25, 40, 50]},
                 "micros": {"B": [20, 100, 250, 350, 400], "Zn": [15, 80, 180, 250, 300]},
@@ -314,7 +335,7 @@ if not df_clima.empty:
                 }
             },
             "Citros": {
-                # Meta: 1200 a 1800 cx/ha
+                "meta": "1200 a 1800 cx/ha",
                 "fases": ["Brotação", "Flor", "Fruto I", "Fruto II", "Colheita"],
                 "macros": {"N": [30, 80, 150, 220, 250], "P": [5, 12, 20, 30, 35], "K": [20, 70, 150, 220, 260], "Ca": [40, 100, 180, 220, 240], "Mg": [10, 25, 45, 60, 70], "S": [10, 25, 40, 55, 65]},
                 "micros": {"Mn": [50, 250, 500, 700, 800], "Zn": [50, 250, 500, 700, 800], "B": [30, 100, 200, 300, 350]},
@@ -326,7 +347,7 @@ if not df_clima.empty:
                 }
             },
             "Banana": {
-                # Meta: 80 a 100 ton/ha
+                "meta": "80 a 100 ton/ha",
                 "fases": ["Cresc", "Flor", "Cacho", "Enchimento", "Colheita"],
                 "macros": {"N": [50, 150, 300, 450, 550], "P": [10, 30, 50, 70, 80], "K": [100, 400, 900, 1300, 1600], "Ca": [30, 80, 180, 250, 300], "Mg": [15, 40, 90, 130, 150], "S": [15, 40, 80, 100, 120]},
                 "micros": {"Mn": [150, 600, 1800, 2800, 3500], "Zn": [30, 150, 400, 600, 700], "B": [15, 60, 180, 280, 350]},
@@ -338,7 +359,7 @@ if not df_clima.empty:
                 }
             },
             "Tomate": {
-                # Meta: 120 a 140 ton/ha
+                "meta": "120 a 140 ton/ha",
                 "fases": ["Veg", "Flor 1", "Fruto 1", "Fruto Total", "Colheita"],
                 "macros": {"N": [20, 60, 150, 250, 300], "P": [5, 20, 40, 50, 60], "K": [30, 100, 250, 400, 480], "Ca": [20, 70, 160, 220, 250], "Mg": [10, 30, 60, 80, 90], "S": [10, 30, 60, 80, 90]},
                 "micros": {"Mn": [25, 180, 450, 650, 750], "B": [15, 60, 140, 220, 280], "Zn": [15, 70, 180, 280, 350]},
@@ -350,7 +371,7 @@ if not df_clima.empty:
                 }
             },
             "Feijão": {
-                # Meta: 50 a 65 sacas/ha
+                "meta": "50 a 65 sacas/ha",
                 "fases": ["V2", "V4", "R5", "R7", "R9"],
                 "macros": {"N": [10, 40, 90, 130, 150], "P": [3, 10, 20, 30, 35], "K": [10, 35, 80, 110, 130], "Ca": [5, 25, 60, 80, 90], "Mg": [3, 12, 25, 35, 40], "S": [2, 8, 15, 20, 25]},
                 "micros": {"Fe": [60, 250, 700, 1100, 1300], "Mn": [25, 100, 250, 350, 400], "Zn": [15, 50, 120, 180, 220]},
@@ -362,7 +383,7 @@ if not df_clima.empty:
                 }
             },
             "Trigo": {
-                # Meta: 90 a 110 sacas/ha
+                "meta": "90 a 110 sacas/ha",
                 "fases": ["Emerg", "Perfilho", "Along", "Espiga", "Grão"],
                 "macros": {"N": [15, 50, 110, 150, 170], "P": [5, 15, 30, 40, 45], "K": [10, 40, 100, 130, 150], "Ca": [5, 20, 45, 60, 70], "Mg": [3, 10, 20, 30, 35], "S": [5, 15, 30, 45, 50]},
                 "micros": {"Mn": [30, 150, 350, 450, 500], "Cu": [5, 15, 35, 50, 60], "Zn": [10, 30, 70, 100, 120]},
@@ -374,7 +395,7 @@ if not df_clima.empty:
                 }
             },
             "Uva": {
-                # Meta: Alta qualidade (Mesa/Vinho)
+                "meta": "Alta qualidade (Mesa/Vinho)",
                 "fases": ["Brota", "Flor", "Varaison", "Maturação", "Colheita"],
                 "macros": {"N": [20, 60, 100, 120, 130], "P": [5, 12, 20, 30, 35], "K": [15, 50, 120, 180, 220], "Ca": [15, 50, 100, 130, 150], "Mg": [5, 20, 40, 55, 65], "S": [5, 15, 30, 40, 50]},
                 "micros": {"Fe": [60, 250, 600, 800, 900], "B": [15, 60, 120, 180, 220], "Zn": [15, 50, 120, 180, 250]},
@@ -386,7 +407,7 @@ if not df_clima.empty:
                 }
             },
             "Manga": {
-                # Meta: 30 a 45 ton/ha
+                "meta": "30 a 45 ton/ha",
                 "fases": ["Veg", "Flor", "Chumbinho", "Expansão", "Colheita"],
                 "macros": {"N": [30, 80, 140, 180, 200], "P": [5, 20, 35, 50, 60], "K": [20, 70, 160, 240, 280], "Ca": [20, 70, 140, 180, 220], "Mg": [10, 30, 60, 80, 95], "S": [10, 25, 50, 70, 80]},
                 "micros": {"B": [15, 80, 160, 240, 280], "Fe": [60, 250, 700, 900, 1100], "Zn": [25, 100, 200, 280, 350]},
@@ -398,7 +419,7 @@ if not df_clima.empty:
                 }
             },
             "Morango": {
-                # Meta: Alta performance
+                "meta": "Alta performance (Estufa)",
                 "fases": ["Plantio", "Flor", "Fruto Inic", "Pico", "Final"],
                 "macros": {"N": [10, 40, 90, 150, 180], "P": [5, 15, 25, 40, 50], "K": [10, 50, 120, 220, 280], "Ca": [10, 40, 90, 140, 170], "Mg": [5, 15, 40, 60, 75], "S": [5, 15, 30, 50, 60]},
                 "micros": {"Fe": [30, 120, 350, 550, 650], "Mn": [15, 70, 200, 300, 350], "B": [8, 30, 70, 100, 120]},
@@ -410,7 +431,7 @@ if not df_clima.empty:
                 }
             },
             "Mirtilo": {
-                # Meta: 15 a 20 ton/ha
+                "meta": "15 a 20 ton/ha",
                 "fases": ["Brota", "Flor", "Verde", "Matur", "Dorm"],
                 "macros": {"N": [10, 30, 60, 90, 100], "P": [2, 8, 15, 20, 25], "K": [10, 30, 60, 90, 110], "Ca": [5, 20, 40, 60, 70], "Mg": [2, 10, 20, 30, 35], "S": [5, 15, 30, 45, 55]},
                 "micros": {"Fe": [20, 80, 150, 220, 250], "Mn": [10, 40, 80, 120, 150]},
@@ -422,7 +443,7 @@ if not df_clima.empty:
                 }
             },
             "Cebola": {
-                # Meta: 70 a 90 ton/ha
+                "meta": "70 a 90 ton/ha",
                 "fases": ["Mudas", "Cresc", "Bulbo", "Mat", "Estalo"],
                 "macros": {"N": [10, 50, 120, 160, 180], "P": [5, 20, 40, 50, 60], "K": [10, 60, 150, 200, 240], "Ca": [5, 30, 80, 110, 130], "Mg": [3, 12, 30, 45, 55], "S": [10, 30, 60, 80, 100]},
                 "micros": {"Mn": [20, 80, 200, 350, 400], "Zn": [10, 50, 120, 180, 220], "B": [5, 20, 50, 80, 100]},
@@ -434,7 +455,7 @@ if not df_clima.empty:
                 }
             },
             "Alho": {
-                # Meta: 15 a 18 ton/ha
+                "meta": "15 a 18 ton/ha",
                 "fases": ["Emerg", "Veg", "Bulbo", "Mat", "Colheita"],
                 "macros": {"N": [10, 60, 140, 160, 170], "P": [5, 20, 40, 50, 55], "K": [10, 70, 160, 200, 220], "Ca": [5, 35, 80, 100, 110], "Mg": [3, 15, 35, 50, 60], "S": [10, 30, 60, 80, 90]},
                 "micros": {"Zn": [10, 60, 140, 180, 220], "B": [5, 25, 60, 90, 100]},
@@ -446,7 +467,7 @@ if not df_clima.empty:
                 }
             },
             "Pastagens": {
-                # Meta: Intensiva
+                "meta": "Intensiva (Corte/Rotacionado)",
                 "fases": ["D0", "D10", "D20", "D30", "D45"],
                 "macros": {"N": [10, 60, 150, 250, 300], "P": [5, 15, 30, 40, 45], "K": [10, 50, 140, 220, 280], "Ca": [5, 20, 50, 70, 80], "Mg": [2, 10, 25, 40, 50], "S": [5, 15, 30, 50, 60]},
                 "micros": {"Mn": [20, 80, 200, 350, 400], "Zn": [10, 50, 120, 180, 220]},
@@ -458,6 +479,7 @@ if not df_clima.empty:
                 }
             },
             "Framboesa": {
+                "meta": "Alta Produtividade",
                 "fases": ["Veg", "Flor", "Verde", "Colheita", "Senesc"],
                 "macros": {"N": [10, 30, 60, 80, 90], "P": [2, 8, 15, 20, 25], "K": [10, 35, 70, 100, 110], "Ca": [5, 20, 40, 60, 70], "Mg": [2, 8, 15, 25, 30], "S": [2, 8, 15, 20, 25]},
                 "micros": {"Fe": [20, 80, 150, 200, 250], "B": [5, 15, 30, 45, 50]},
