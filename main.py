@@ -83,34 +83,83 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # ==============================================================================
-# 💎 FILTROS GLOBAIS
+# 💎 FILTROS GLOBAIS (SISTEMA DE MEMÓRIA PERSISTENTE & GPS)
 # ==============================================================================
 st.markdown('<div class="app-card">', unsafe_allow_html=True)
 c1, c2, c3, c4 = st.columns([2, 2, 1.5, 1])
 
+# --- 1. MÓDULO GPS (MEMÓRIA DE LOCALIZAÇÃO) ---
 with c1:
-    st.markdown("### 📍 Local")
-    city = st.text_input("GPS", placeholder="cidade,estado", label_visibility="collapsed")
-    if st.button("📡 Sincronizar GPS", use_container_width=True) and city:
-        lat, lon = WeatherConn.get_coords(city, url_w)
-        if lat: st.session_state['loc_lat'], st.session_state['loc_lon'] = lat, lon; st.rerun()
+    st.markdown("### 📍 Unidade")
+    # Tenta recuperar o último local digitado, senão usa vazio
+    default_gps = st.session_state.get('last_city', '')
+    city = st.text_input("GPS", value=default_gps, placeholder="Digitar Cidade ou Fazenda...", label_visibility="collapsed")
+    
+    # Botão de Sincronia com Feedback
+    if st.button("📡 Sincronizar Local", use_container_width=True):
+        if city:
+            # Busca Coordenadas
+            lat, lon = WeatherConn.get_coords(city, url_w)
+            if lat: 
+                st.session_state['loc_lat'] = lat
+                st.session_state['loc_lon'] = lon
+                st.session_state['last_city'] = city # Salva na memória para não sumir
+                st.toast(f"✅ GPS Calibrado: {city.upper()}", icon="🛰️")
+                # Não usamos st.rerun() aqui desnecessariamente para evitar piscar, 
+                # o fluxo segue e atualiza os dados abaixo naturalmente.
+            else:
+                st.toast("⚠️ Local não encontrado. Tente cidade próxima.", icon="❌")
+        else:
+            st.toast("⚠️ Digite o nome da fazenda ou cidade.", icon="⌨️")
 
+# --- 2. SELETOR DE CULTURA (COM MEMÓRIA KEY) ---
 with c2:
     st.markdown("### 🚜 Cultura")
     if BANCO_MASTER:
-        cult_sel = st.selectbox("Cultura", sorted(list(BANCO_MASTER.keys())), label_visibility="collapsed")
+        # AQUI ESTÁ O SEGREDO: key="sessao_cultura"
+        # Isso impede que o valor volte para 'Algodão' quando o GPS roda.
+        cult_sel = st.selectbox(
+            "Cultura", 
+            sorted(list(BANCO_MASTER.keys())), 
+            label_visibility="collapsed",
+            key="sessao_cultura" 
+        )
+        
+        # Atualiza as listas baseadas na cultura selecionada
         vars_disp = list(BANCO_MASTER[cult_sel].get('vars', {}).keys())
         fases_disp = list(BANCO_MASTER[cult_sel].get('fases', {}).keys())
-        var_sel = st.selectbox("Genética", vars_disp)
-    else: st.error("Banco de Dados Offline"); st.stop()
+        
+        var_sel = st.selectbox(
+            "Genética", 
+            vars_disp,
+            key="sessao_genetica" # Memória para a Genética
+        )
+    else: 
+        st.error("Banco de Dados Offline")
+        st.stop()
 
+# --- 3. SELETOR DE FASE (COM MEMÓRIA KEY) ---
 with c3:
     st.markdown("### 📊 Fase")
-    fase_sel = st.selectbox("Estádio", fases_disp, label_visibility="collapsed")
+    fase_sel = st.selectbox(
+        "Estádio", 
+        fases_disp, 
+        label_visibility="collapsed",
+        key="sessao_fase" # Memória para a Fase
+    )
 
+# --- 4. DATA DE PLANTIO (COM MEMÓRIA KEY) ---
 with c4:
     st.markdown("### 📆 Safra")
-    st.session_state['d_plantio'] = st.date_input("Plantio", st.session_state['d_plantio'], label_visibility="collapsed")
+    # Se não tiver data na sessão, define hoje
+    if 'd_plantio' not in st.session_state: st.session_state['d_plantio'] = date.today()
+    
+    st.session_state['d_plantio'] = st.date_input(
+        "Plantio", 
+        st.session_state['d_plantio'], 
+        label_visibility="collapsed",
+        key="sessao_data"
+    )
     dias = (date.today() - st.session_state['d_plantio']).days
 
 st.markdown('</div>', unsafe_allow_html=True)
