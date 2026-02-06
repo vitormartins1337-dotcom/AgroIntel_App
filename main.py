@@ -314,7 +314,7 @@ if not df_clima.empty:
                 "meta": "350 a 450 @/ha",
                 "fases": ["Emerg", "Botão", "Flor", "Maçã", "Abertura"],
                 "macros": {"N": [20, 100, 190, 260, 320], "P": [4, 25, 45, 60, 75], "K": [30, 150, 280, 380, 460], "Ca": [10, 60, 110, 170, 230], "Mg": [4, 25, 50, 75, 100], "S": [3, 20, 40, 60, 80]},
-                "micros": {"B": [20, 120, 250, 400, 550], "Zn": [15, 80, 160, 240, 320],"Mn": [30, 200, 450, 700, 950],"Fe": [100, 600, 1200, 1800, 2500],"Cu": [5, 25, 60, 90, 120],"Mo": [0.5, 3, 6, 9, 12]},
+                "micros": {"B": [25, 120, 240, 380, 520], "Zn": [20, 100, 190, 270, 350], "Mn": [40, 220, 420, 650, 900], "Fe": [150, 700, 1300, 1900, 2600], "Cu": [6, 35, 70, 100, 130], "Mo": [0.5, 3, 6, 9, 12]},
                 "totais_display": {"N": "280 – 320", "P": "60 – 75", "K": "440 – 460", "Ca": "200 – 230", "Mg": "80 – 100", "S": "60 – 85"},
                 "manejo_tatico": {
                     "N": "<b>VIGOR CONTROLADO:</b> Algodão não pode 'disparar'. O N deve ser acompanhado de Regulador de Crescimento (Mepiquat). Planta muito vegetativa aborta as maçãs do baixeiro.",
