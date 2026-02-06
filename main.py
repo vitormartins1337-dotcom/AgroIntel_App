@@ -328,8 +328,7 @@ if not df_clima.empty:
                    "Mn": "<b>FOTOSSÍNTESE E METABOLISMO ENERGÉTICO:</b> Participa da fotólise da água e metabolismo do N. Monitorar em solos com pH elevado. Aplicações foliares podem ser necessárias em estádios vegetativos avançados.",
                    "Fe": "<b>FORMAÇÃO DE CLOROFILA:</b> Essencial para manutenção da área foliar ativa. Problemas ocorrem em solos alcalinos ou compactados. Clorose internerval em folhas novas indica deficiência.",
                    "Cu": "<b>LIGNIFICAÇÃO E SANIDADE:</b> Relacionado à formação de lignina e resistência estrutural. Deficiência pode aumentar suscetibilidade a doenças e quebramento de ramos produtivos.",
-                   "Mo": "<b>METABOLISMO DO N:</b> Participa da enzima redutase do nitrato. Importante para eficiência do nitrogênio aplicado. Normalmente suprido em pequenas doses via tratamento de sementes."
-}
+                   "Mo": "<b>METABOLISMO DO N:</b> Participa da enzima redutase do nitrato. Importante para eficiência do nitrogênio aplicado. Normalmente suprido em pequenas doses via tratamento de sementes."}
 ,
             "Citros": {
                 "meta": "1200 a 1800 cx/ha",
