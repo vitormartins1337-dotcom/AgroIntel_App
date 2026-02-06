@@ -302,7 +302,7 @@ if not df_clima.empty:
                 "meta": "45 a 60 ton/ha",
                 "fases": ["Emerg", "Estolon", "Tuber", "Enchimento", "Maturação"],
                 "macros": {"N": [15, 80, 140, 190, 220], "P": [5, 25, 45, 65, 80], "K": [20, 120, 220, 320, 380], "Ca": [4, 20, 40, 65, 85], "Mg": [3, 15, 30, 45, 55], "S": [2, 10, 18, 28, 35]},
-                "micros": {"Mn": [30, 120, 280, 450, 500], "B": [8, 30, 70, 100, 120], "Zn": [15, 50, 120, 180, 220]},
+                "micros": {"B": [5, 40, 90, 150, 220], "Zn": [8, 60, 120, 180, 250], "Mn": [20, 150, 300, 450, 600], "Fe": [50, 400, 800, 1200, 1600], "Cu": [3, 20, 45, 70, 100], "Mo": [0.5, 3, 6, 9, 12]},
                 "totais_display": {"N": "200 – 220", "P": "65 – 80", "K": "320 – 380", "Ca": "65 – 85", "Mg": "45 – 55", "S": "28 – 35"},
                 "manejo_tatico": {
                     "P": "<b>TUBERIZAÇÃO:</b> Fósforo no sulco define o NÚMERO de tubérculos por planta. Use fontes solúveis. P deficiente = poucos tubérculos grandes.",
