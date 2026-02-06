@@ -260,9 +260,9 @@ if not df_clima.empty:
             "Milho": {
                 "meta": "180 a 220 sacas/ha",
                 "fases": ["V2", "V6", "VT (Pendão)", "R3 (Leitoso)", "R6 (Matur)"],
-                "macros": {"N": [25, 120, 240, 320, 380], "P": [5, 30, 60, 85, 110], "K": [30, 150, 300, 420, 500], "Ca": [8, 45, 90, 130, 170], "Mg": [5, 25, 55, 85, 110], "S": [4, 20, 45, 70, 95]},
+                "macros": "N": [20, 110, 220, 290, 330], "P": [4, 25, 45, 60, 70], "K": [25, 120, 220, 280, 310], "Ca": [6, 35, 65, 85, 100], "Mg": [4, 20, 40, 55, 65], "S": [3, 15, 30, 40, 48]},
                 "micros": {"B": [15, 80, 160, 230, 300], "Zn": [20, 110, 220, 320, 420], "Mn": [40, 220, 450, 650, 850], "Fe": [120, 700, 1400, 2000, 2700], "Cu": [5, 30, 70, 100, 130], "Mo": [0.5, 3, 6, 9, 12]},
-                "totais_display": {"N": "350 – 380", "P": "85 – 110", "K": "450 – 500", "Ca": "150 – 170", "Mg": "80 – 110", "S": "75 – 95"},
+                "totais_display": {"N": "300 – 330", "P": "60 – 70", "K": "300 – 310", "Ca": "85 – 100", "Mg": "55 – 65", "S": "40 – 48"},
                 "manejo_tatico": {
 
     "N": "<b>DEFINIÇÃO DE TETO (V4-V6):</b> O número de fileiras por espiga e o potencial de grãos são definidos nessa fase. A planta não pode sofrer deficiência de N. Aplicar 60–70% da dose total até V6. Em sequeiro, priorizar aplicação antes de chuva prevista. Déficit nessa janela reduz irreversivelmente o teto produtivo. Entre V8–VT ocorre o pico de absorção diária. Excesso tardio aumenta risco de acamamento e reduz eficiência de uso.",
