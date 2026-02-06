@@ -370,13 +370,46 @@ if not df_clima.empty:
             "Banana": {
                 "meta": "80 a 100 ton/ha",
                 "fases": ["Cresc", "Flor", "Cacho", "Enchimento", "Colheita"],
-                "macros": {"N": [30, 150, 280, 360, 420], "P": [8, 30, 50, 65, 80], "K": [60, 350, 700, 950, 1100], "Ca": [10, 45, 85, 120, 160], "Mg": [6, 35, 65, 90, 110], "S": [4, 18, 32, 45, 55]},
-                "micros": {"B": [40, 200, 350, 500, 700], "Zn": [60, 350, 650, 950, 1300], "Mn": [120, 700, 1300, 2000, 2800], "Fe": [250, 1200, 2500, 3500, 4500], "Cu": [20, 90, 160, 250, 350], "Mo": [3, 15, 30, 45, 70]},
-                "totais_display": {"N": "360 – 420", "P": "65 – 80", "K": "950 – 1100", "Ca": "120 – 160", "Mg": "90 – 110", "S": "45 – 55"},
+                "macros": {
+                    "N": [30, 150, 280, 360, 420], 
+                    "P": [8, 30, 50, 65, 80], 
+                    "K": [60, 350, 700, 950, 1100], 
+                    "Ca": [10, 45, 85, 120, 160], 
+                    "Mg": [6, 35, 65, 90, 110], 
+                    "S": [4, 18, 32, 45, 55]
+                },
+                "micros": {
+                    "B": [40, 200, 350, 500, 700], 
+                    "Zn": [60, 350, 650, 950, 1300], 
+                    "Mn": [120, 700, 1300, 2000, 2800], 
+                    "Fe": [250, 1200, 2500, 3500, 4500], 
+                    "Cu": [20, 90, 160, 250, 350], 
+                    "Mo": [3, 15, 30, 45, 70]
+                },
+                "totais_display": {
+                    "N": "360 – 420", "P": "65 – 80", "K": "950 – 1100", "Ca": "120 – 160", "Mg": "90 – 110", "S": "45 – 55",
+                    "B": "500 – 700 g", "Zn": "950 – 1300 g", "Mn": "2000 – 2800 g", "Fe": "3500 – 4500 g", "Cu": "250 – 350 g", "Mo": "45 – 70 g"
+                },
+                
+                "contexto_solo": {
+                    "tipo": "Solo Franco-Argiloso a Argiloso (Irrigado)",
+                    "ideal": ["Argila: 25–45%", "CTC: >10 cmolc/dm³", "V%: 70–80%", "pH: 5.8–6.5", "MO: ≥ 3%"],
+                    "alerta": "⚠️ DRENAGEM OBRIGATÓRIA: A Banana não tolera encharcamento (hipoxia radicular). Exige clima tropical com alta radiação e K trocável médio a alto."
+                },
+
                 "manejo_tatico": {
-                    "K": "<b>BOMBA DE POTÁSSIO:</b> A banana exporta 1600kg de K/ha. É impossível aplicar tudo de uma vez. Parcelar em 10 a 12 aplicações anuais. Sem K, o cacho não enche e o 'pescoço' quebra.",
-                    "N": "<b>RITMO CONSTANTE:</b> A planta emite uma folha nova a cada 7-10 dias. Se faltar N, a emissão para. Aplicação mensal ou quinzenal obrigatória.",
-                    "Ca": "<b>EQUILÍBRIO IÔNICO:</b> Com tanto Potássio aplicado, ocorre inibição competitiva de Cálcio e Magnésio ('Azul da Banana'). Obrigatório aplicar Ca e Mg via calcário ou gesso regularmente."
+                    "N": "<b>FORMAÇÃO DE BIOMASSA E DEFINIÇÃO DE POTENCIAL:</b> Nitrogênio é determinante na construção do pseudocaule e da área foliar ativa. Aplicar de forma parcelada via fertirrigação durante todo o ciclo vegetativo. Excesso próximo à colheita reduz firmeza e aumenta suscetibilidade a doenças.",
+                    "P": "<b>ARRANQUE INICIAL E DIFERENCIAÇÃO FLORAL:</b> Fundamental nos primeiros 120 dias para expansão radicular. Deve estar bem corrigido no pré-plantio. Baixa disponibilidade limita precocemente o potencial produtivo.",
+                    "K": "<b>NUTRIENTE ESTRUTURAL DA PRODUTIVIDADE:</b> Banana é altamente exigente em potássio. Essencial na regulação osmótica, enchimento dos frutos, translocação de açúcares e qualidade do cacho. Relação N:K deve ser superior a 1:2,5. Deficiência reduz peso, calibre e uniformidade.",
+                    "Ca": "<b>QUALIDADE DE FRUTO E RESISTÊNCIA:</b> Atua na integridade de parede celular e firmeza pós-colheita. Importante no enchimento. Baixa saturação de Ca na CTC favorece distúrbios fisiológicos e menor vida útil.",
+                    "Mg": "<b>EFICIÊNCIA FOTOSSINTÉTICA:</b> Componente central da clorofila. Alta taxa fotossintética exige suprimento constante. Relação K:Mg deve ser monitorada para evitar antagonismo.",
+                    "S": "<b>SÍNTESE PROTEICA:</b> Participa do metabolismo do N. Relação N:S equilibrada aumenta eficiência nutricional.",
+                    "B": "<b>FLORAÇÃO E PEGAMENTO:</b> Essencial para formação floral e pegamento uniforme das pencas. Deficiência causa má formação e deformações.",
+                    "Zn": "<b>CRESCIMENTO VEGETATIVO:</b> Atua na síntese de auxinas e expansão foliar. Fundamental no estabelecimento inicial.",
+                    "Mn": "<b>METABOLISMO FOTOSSINTÉTICO:</b> Participa da fotólise da água e ativação enzimática. Importante em solos com pH elevado.",
+                    "Fe": "<b>MANUTENÇÃO DA CLOROFILA:</b> Deficiência comum em solos mal drenados ou alcalinos. Clorose reduz área foliar funcional.",
+                    "Cu": "<b>RESISTÊNCIA ESTRUTURAL:</b> Atua na lignificação e resistência a doenças.",
+                    "Mo": "<b>EFICIÊNCIA DO N:</b> Participa da redutase do nitrato. Pequenas quantidades melhoram eficiência do sistema."
                 }
             },
             "Tomate": {
