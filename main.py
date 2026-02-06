@@ -301,9 +301,9 @@ if not df_clima.empty:
             "Batata": {
                 "meta": "45 a 60 ton/ha",
                 "fases": ["Emerg", "Estolon", "Tuber", "Enchimento", "Maturação"],
-                "macros": {"N": [20, 70, 140, 190, 220], "P": [5, 20, 40, 55, 60], "K": [30, 100, 220, 320, 360], "Ca": [10, 40, 80, 100, 120], "Mg": [5, 20, 40, 55, 65], "S": [5, 15, 30, 45, 55]},
+                "macros": {"N": [15, 80, 140, 190, 220], "P": [5, 25, 45, 65, 80], "K": [20, 120, 220, 320, 380], "Ca": [4, 20, 40, 65, 85], "Mg": [3, 15, 30, 45, 55], "S": [2, 10, 18, 28, 35]},
                 "micros": {"Mn": [30, 120, 280, 450, 500], "B": [8, 30, 70, 100, 120], "Zn": [15, 50, 120, 180, 220]},
-                "totais_display": {"N": "220 – 300", "P": "80 – 120", "K": "350 – 500", "Ca": "80 – 150", "Mg": "30 – 60", "S": "25 – 50"},
+                "totais_display": {"N": "200 – 220", "P": "65 – 80", "K": "320 – 380", "Ca": "65 – 85", "Mg": "45 – 55", "S": "28 – 35"},
                 "manejo_tatico": {
                     "P": "<b>TUBERIZAÇÃO:</b> Fósforo no sulco define o NÚMERO de tubérculos por planta. Use fontes solúveis. P deficiente = poucos tubérculos grandes.",
                     "K": "<b>FONTE NOBRE:</b> Para batata indústria (chips/frita), use Sulfato de Potássio (SOP). O Cloreto (KCl) reduz o teor de amido e aumenta a absorção de água, piorando a fritura.",
