@@ -478,9 +478,9 @@ if not df_clima.empty:
             "Alho": {
                 "meta": "15 a 18 ton/ha",
                 "fases": ["Emerg", "Veg", "Bulbo", "Mat", "Colheita"],
-                "macros": {"N": [10, 60, 140, 160, 170], "P": [5, 20, 40, 50, 55], "K": [10, 70, 160, 200, 220], "Ca": [5, 35, 80, 100, 110], "Mg": [3, 15, 35, 50, 60], "S": [10, 30, 60, 80, 90]},
+                "macros": {"N": [20, 90, 160, 210, 250], , "P": [5, 25, 45, 60, 75], "K": [25, 120, 220, 320, 380], "Ca": [10, 40, 80, 120, 160], "Mg": [5, 20, 40, 60, 80], "S": [6, 25, 50, 70, 90]},
                 "micros": {"Zn": [10, 60, 140, 180, 220], "B": [5, 25, 60, 90, 100]},
-                "totais_display": {"N": "150 – 180", "P": "45 – 60", "K": "200 – 240", "Ca": "100 – 120", "Mg": "50 – 70", "S": "80 – 100"},
+                "totais_display": {"N": "210 – 250", "P": "60 – 75", "K": "320 – 380", "Ca": "120 – 160", "Mg": "60 – 80", "S": "70 – 90"},
                 "manejo_tatico": {
                     "N": "<b>DENTE DE CACHORRO:</b> O alho precisa de N no início para formar folhas. Porém, na fase de diferenciação (formação dos dentes), o excesso de N causa o superbrotamento (anomalia fisiológica). Corte o N no momento certo.",
                     "P": "<b>ENRAIZAMENTO:</b> O sistema radicular do alho é fasciculado e pouco eficiente. Fósforo disponível no sulco é vital para arranque.",
