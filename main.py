@@ -530,6 +530,32 @@ if not df_clima.empty:
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
+                # ... (Código do Card de Meta que você já tem fica aqui acima) ...
+
+            # --- NOVO: EXIBIÇÃO DO CONTEXTO DE SOLO (SE EXISTIR) ---
+            # Verifica se a cultura tem a chave 'contexto_solo' cadastrada
+            ctx_solo = dados_nutri.get("contexto_solo")
+            
+            if ctx_solo:
+                st.markdown("<br>", unsafe_allow_html=True) # Espaçamento
+                # Cria um container visual elegante (Azul Profissional)
+                with st.expander(f"🌍 Requisito de Solo: **{ctx_solo['tipo']}**", expanded=False):
+                    c_solo1, c_solo2 = st.columns([2, 1])
+                    
+                    with c_solo1:
+                        st.markdown("**Parâmetros Ideais:**")
+                        for item in ctx_solo['ideal']:
+                            st.markdown(f"✅ {item}")
+                    
+                    with c_solo2:
+                        st.markdown(f"""
+                        <div style="background-color:#fffbeb; border-left:3px solid #f59e0b; padding:10px; border-radius:4px; font-size:0.85rem; color:#92400e;">
+                            {ctx_solo['alerta']}
+                        </div>
+                        """, unsafe_allow_html=True)
+                st.markdown("<br>", unsafe_allow_html=True)
+
+            # ... (O código do Painel Químico continua daqui para baixo) ...
         
         # --- 3. SELEÇÃO DA CULTURA ---
         dados_nutri = None
