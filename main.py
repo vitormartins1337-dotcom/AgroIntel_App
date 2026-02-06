@@ -272,9 +272,9 @@ if not df_clima.empty:
             "Café": { 
                 "meta": "60 a 90 sacas/ha",
                 "fases": ["Veg/Flor", "Chumbinho", "Expansão", "Granação", "Maturação"],
-                "macros": {"N": [40, 100, 180, 260, 300], "P": [5, 15, 25, 35, 40], "K": [30, 90, 180, 280, 330], "Ca": [30, 60, 100, 140, 160], "Mg": [10, 25, 45, 60, 70], "S": [10, 20, 35, 50, 60]},
-                "micros": {"Fe": [200, 1000, 2000, 2500, 3000], "B": [50, 250, 500, 700, 800], "Zn": [40, 200, 400, 550, 600]},
-                "totais_display": {"N": "280 – 350", "P": "35 – 50", "K": "300 – 400", "Ca": "140 – 180", "Mg": "50 – 80", "S": "40 – 60"},
+                "macros": {"N": [30, 80, 140, 220, 300], "P": [5, 15, 30, 45, 65], "K": [25, 90, 180, 300, 420], "Ca": [15, 40, 80, 130, 180], "Mg": [5, 20, 45, 75, 110], "S": [4, 15, 30, 55, 85]},
+                "micros": {"B": [20, 70, 150, 260, 380], "Zn": [15, 50, 110, 190, 280], "Mn": [40, 140, 300, 500, 750], "Fe": [120, 400, 900, 1500, 2200], "Cu": [6, 20, 45, 75, 110], "Mo": [0.5, 2, 4, 7, 10]},
+                "totais_display": {"N": "280 – 300", "P": "45 – 60", "K": "400 – 420", "Ca": "140 – 180", "Mg": "75 – 110", "S": "55 – 85"},
                 "manejo_tatico": {
                     "N": "<b>VEGETAÇÃO E CARGA:</b> Parcelar em 3 ou 4x (Set a Mar). Para altas cargas (>80sc), a demanda na fase de expansão (Dez/Jan) é crítica. Use Nitrato de Amônio se não houver previsão de chuva imediata (menor volatilização).",
                     "K": "<b>DIE-BACK (SECA DE PONTEIROS):</b> Na fase de Granação (Jan-Mar), o fruto drena todo o K das folhas. Se faltar K no solo, a planta sacrifica as folhas e os ramos secam, prejudicando a safra seguinte.",
