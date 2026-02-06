@@ -260,35 +260,32 @@ if not df_clima.empty:
             "Milho": {
                 "meta": "180 a 220 sacas/ha",
                 "fases": ["V2", "V6", "VT (Pendão)", "R3 (Leitoso)", "R6 (Matur)"],
-                "macros": "N": [20, 110, 220, 290, 330], "P": [4, 25, 45, 60, 70], "K": [25, 120, 220, 280, 310], "Ca": [6, 35, 65, 85, 100], "Mg": [4, 20, 40, 55, 65], "S": [3, 15, 30, 40, 48]},
-                "micros": {"B": [15, 80, 160, 230, 300], "Zn": [20, 110, 220, 320, 420], "Mn": [40, 220, 450, 650, 850], "Fe": [120, 700, 1400, 2000, 2700], "Cu": [5, 30, 70, 100, 130], "Mo": [0.5, 3, 6, 9, 12]},
-                "totais_display": {"N": "300 – 330", "P": "60 – 70", "K": "300 – 310", "Ca": "85 – 100", "Mg": "55 – 65", "S": "40 – 48"},
+                "macros": {"N": [20, 110, 220, 290, 330], "P": [4, 25, 45, 60, 70], "K": [25, 120, 220, 280, 310], "Ca": [6, 35, 65, 85, 100], "Mg": [4, 20, 40, 55, 65], "S": [3, 15, 30, 40, 48]},
+                "micros": {"Zn": [20, 150, 400, 550, 600], "Mn": [15, 100, 300, 400, 450], "B": [10, 30, 80, 120, 140]},
+                "totais_display": {"N": "290 – 330", "P": "60 – 70", "K": "280 – 310", "Ca": "85 – 100", "Mg": "55 – 65", "S": "40 – 48"},
+                
+                # NOVA CHAVE: Especificação do Solo Ideal
+                "contexto_solo": {
+                    "tipo": "Solo de Textura Média a Argilosa (Cerrado Construído)",
+                    "ideal": ["Argila: 25–45%", "CTC: >8 cmolc/dm³ (Média/Alta)", "Matéria Orgânica: ≥ 2,5%", "V%: 65–75%"],
+                    "alerta": "⚠️ NÃO OTIMIZADO PARA AREIAS FRACAS: Em solos <18% argila ou CTC baixa, a retenção de K, S e N é crítica. Parcelar as doses acima em mais vezes."
+                },
+
                 "manejo_tatico": {
-
-    "N": "<b>DEFINIÇÃO DE TETO (V4-V6):</b> O número de fileiras por espiga e o potencial de grãos são definidos nessa fase. A planta não pode sofrer deficiência de N. Aplicar 60–70% da dose total até V6. Em sequeiro, priorizar aplicação antes de chuva prevista. Déficit nessa janela reduz irreversivelmente o teto produtivo. Entre V8–VT ocorre o pico de absorção diária. Excesso tardio aumenta risco de acamamento e reduz eficiência de uso.",
-
-    "P": "<b>ARRANQUE INICIAL E ENRAIZAMENTO:</b> Fósforo é determinante até V6 para desenvolvimento radicular e definição estrutural da espiga. Deve estar 100% disponível no sulco de plantio. Solos frios ou compactados reduzem absorção. Deficiência precoce compromete o número de grãos por fileira e reduz vigor inicial, afetando uniformidade de estande.",
-
-    "K": "<b>RESISTÊNCIA E ENCHIMENTO:</b> Potássio regula turgescência, transporte de fotoassimilados e tolerância ao estresse hídrico. 70% é absorvido até o pendoamento. Desequilíbrio N:K favorece colmo fraco e acamamento. Em solos de baixa CTC, parcelar aplicação (50% base + 50% até V6). Essencial manter níveis adequados para enchimento uniforme até R5.",
-
-    "Ca": "<b>ESTRUTURA E SANIDADE:</b> Fundamental para integridade de parede celular e crescimento radicular profundo. Saturação por bases entre 65–75% favorece absorção equilibrada. Baixo Ca limita desenvolvimento radicular e aumenta suscetibilidade a estresse hídrico no florescimento.",
-
-    "Mg": "<b>FOTOSSÍNTESE ATIVA:</b> Componente central da clorofila. Alta demanda entre V8 e R3. Relação Ca:Mg equilibrada (3:1 a 4:1) otimiza absorção. Deficiência reduz taxa fotossintética e compromete enchimento de grãos.",
-
-    "S": "<b>EFICIÊNCIA DO NITROGÊNIO:</b> Enxofre participa da síntese de aminoácidos. Solos arenosos ou com baixa matéria orgânica exigem suplementação (15–25 kg S/ha). Relação N:S ideal próxima de 10–12:1. Deficiência reduz eficiência da adubação nitrogenada.",
-
-    "Zn": "<b>ELEMENTO CHAVE NO INÍCIO:</b> Milho é altamente responsivo a Zinco. Atua na síntese de auxinas e alongamento celular. Aplicar 2–4 kg/ha via solo ou tratamento de sementes robusto. Deficiência causa entrenós curtos e folhas estreitas, reduzindo interceptação luminosa.",
-
-    "B": "<b>POLINIZAÇÃO E PEGAMENTO:</b> Importante na viabilidade do pólen e formação do tubo polínico. Aplicação foliar entre V8 e pré-pendoamento (300–600 g/ha) melhora fecundação e uniformidade de espigas.",
-
-    "Mn": "<b>METABOLISMO ENERGÉTICO:</b> Atua na fotossíntese e metabolismo do nitrogênio. Deficiências são comuns em solos de pH elevado. Monitorar visualmente e corrigir via aplicação foliar em V6–V8 se necessário.",
-
-    "Fe": "<b>DESENVOLVIMENTO VEGETATIVO:</b> Essencial para síntese de clorofila. Problemas ocorrem em solos alcalinos ou compactados. Clorose internerval em folhas novas indica deficiência.",
-
-    "Cu": "<b>INTEGRIDADE DO COLMO:</b> Relacionado à lignificação. Deficiência aumenta risco de quebramento e doenças de colmo. Solos orgânicos ou arenosos são mais suscetíveis.",
-
-    "Mo": "<b>METABOLISMO DO N:</b> Participa da enzima redutase do nitrato. Necessário em pequenas quantidades, mas crítico para eficiência do nitrogênio. Aplicação via tratamento de sementes pode ser estratégica."
-},
+                    "N": "<b>DEFINIÇÃO DE TETO (V4-V6):</b> O número de fileiras por espiga e o potencial de grãos são definidos nessa fase. A planta não pode sofrer deficiência de N. Aplicar 60–70% da dose total até V6. Em sequeiro, priorizar aplicação antes de chuva prevista. Déficit nessa janela reduz irreversivelmente o teto produtivo. Entre V8–VT ocorre o pico de absorção diária.",
+                    "P": "<b>ARRANQUE INICIAL E ENRAIZAMENTO:</b> Fósforo é determinante até V6 para desenvolvimento radicular e definição estrutural da espiga. Deve estar 100% disponível no sulco de plantio. Solos frios ou compactados reduzem absorção. Deficiência precoce compromete o número de grãos por fileira e reduz vigor inicial.",
+                    "K": "<b>RESISTÊNCIA E ENCHIMENTO:</b> Potássio regula turgescência, transporte de fotoassimilados e tolerância ao estresse hídrico. 70% é absorvido até o pendoamento. Desequilíbrio N:K favorece colmo fraco e acamamento. Em solos de baixa CTC, parcelar aplicação (50% base + 50% até V6).",
+                    "Ca": "<b>ESTRUTURA E SANIDADE:</b> Fundamental para integridade de parede celular e crescimento radicular profundo. Saturação por bases entre 65–75% favorece absorção equilibrada. Baixo Ca limita desenvolvimento radicular e aumenta suscetibilidade a estresse hídrico no florescimento.",
+                    "Mg": "<b>FOTOSSÍNTESE ATIVA:</b> Componente central da clorofila. Alta demanda entre V8 e R3. Relação Ca:Mg equilibrada (3:1 a 4:1) otimiza absorção. Deficiência reduz taxa fotossintética e compromete enchimento de grãos.",
+                    "S": "<b>EFICIÊNCIA DO NITROGÊNIO:</b> Enxofre participa da síntese de aminoácidos. Solos arenosos ou com baixa matéria orgânica exigem suplementação (15–25 kg S/ha). Relação N:S ideal próxima de 10–12:1. Deficiência reduz eficiência da adubação nitrogenada.",
+                    "Zn": "<b>ELEMENTO CHAVE NO INÍCIO:</b> Milho é altamente responsivo a Zinco. Atua na síntese de auxinas e alongamento celular. Aplicar 2–4 kg/ha via solo ou tratamento de sementes robusto. Deficiência causa entrenós curtos e folhas estreitas, reduzindo interceptação luminosa.",
+                    "B": "<b>POLINIZAÇÃO E PEGAMENTO:</b> Importante na viabilidade do pólen e formação do tubo polínico. Aplicação foliar entre V8 e pré-pendoamento (300–600 g/ha) melhora fecundação e uniformidade de espigas.",
+                    "Mn": "<b>METABOLISMO ENERGÉTICO:</b> Atua na fotossíntese e metabolismo do nitrogênio. Deficiências são comuns em solos de pH elevado. Monitorar visualmente e corrigir via aplicação foliar em V6–V8 se necessário.",
+                    "Fe": "<b>DESENVOLVIMENTO VEGETATIVO:</b> Essencial para síntese de clorofila. Problemas ocorrem em solos alcalinos ou compactados. Clorose internerval em folhas novas indica deficiência.",
+                    "Cu": "<b>INTEGRIDADE DO COLMO:</b> Relacionado à lignificação. Deficiência aumenta risco de quebramento e doenças de colmo. Solos orgânicos ou arenosos são mais suscetíveis.",
+                    "Mo": "<b>METABOLISMO DO N:</b> Participa da enzima redutase do nitrato. Necessário em pequenas quantidades, mas crítico para eficiência do nitrogênio. Aplicação via tratamento de sementes pode ser estratégica."
+                }
+            },
             "Café": { 
                 "meta": "60 a 90 sacas/ha",
                 "fases": ["Veg/Flor", "Chumbinho", "Expansão", "Granação", "Maturação"],
