@@ -475,16 +475,49 @@ if not df_clima.empty:
                     "K": "<b>PELE:</b> Potássio abundante garante número de cera nas folhas (proteção) e catáfilos (casca) resistentes, melhorando a cura pós-colheita."
                 }
             },
-            "Alho": {
+           "Alho": {
                 "meta": "15 a 18 ton/ha",
                 "fases": ["Emerg", "Veg", "Bulbo", "Mat", "Colheita"],
-                "macros": {"N": [20, 90, 160, 210, 250], , "P": [5, 25, 45, 60, 75], "K": [25, 120, 220, 320, 380], "Ca": [10, 40, 80, 120, 160], "Mg": [5, 20, 40, 60, 80], "S": [6, 25, 50, 70, 90]},
-                "micros": {"B": [20, 80, 160, 240, 320], "Zn": [15, 60, 120, 180, 240], "Mn": [40, 150, 300, 450, 600], "Fe": [150, 600, 1100, 1600, 2200], "Cu": [8, 30, 60, 90, 120], "Mo": [0.5, 2, 4, 6, 8]},
-                "totais_display": {"N": "210 – 250", "P": "60 – 75", "K": "320 – 380", "Ca": "120 – 160", "Mg": "60 – 80", "S": "70 – 90"},
+                "macros": {
+                    "N": [20, 90, 160, 210, 250], 
+                    "P": [5, 25, 45, 60, 75], 
+                    "K": [25, 120, 220, 320, 380], 
+                    "Ca": [10, 40, 80, 120, 160], 
+                    "Mg": [5, 20, 40, 60, 80], 
+                    "S": [6, 25, 50, 70, 90]
+                },
+                "micros": {
+                    "B": [20, 80, 160, 240, 320], 
+                    "Zn": [15, 60, 120, 180, 240], 
+                    "Mn": [40, 150, 300, 450, 600], 
+                    "Fe": [150, 600, 1100, 1600, 2200], 
+                    "Cu": [8, 30, 60, 90, 120], 
+                    "Mo": [0.5, 2, 4, 6, 8]
+                },
+                "totais_display": {
+                    "N": "210 – 250", "P": "60 – 75", "K": "320 – 380", "Ca": "120 – 160", "Mg": "60 – 80", "S": "70 – 90",
+                    "B": "240 – 320 g", "Zn": "180 – 240 g", "Mn": "450 – 600 g", "Fe": "1600 – 2200 g", "Cu": "90 – 120 g", "Mo": "6 – 8 g"
+                },
+                
+                "contexto_solo": {
+                    "tipo": "Solo Franco-Arenoso a Franco-Argiloso (Irrigado)",
+                    "ideal": ["Argila: 20–35%", "CTC: >7 cmolc/dm³", "pH: 6.0–6.5 (Essencial)", "MO: ≥ 3%", "V%: 70–80%"],
+                    "alerta": "⚠️ SENSIBILIDADE ÁCIDA: O Alho não tolera acidez (Alumínio tóxico). pH abaixo de 5.5 compromete severamente o sistema radicular e a absorção de nutrientes. Exige solo bem drenado (não tolera encharcamento)."
+                },
+
                 "manejo_tatico": {
-                    "N": "<b>DENTE DE CACHORRO:</b> O alho precisa de N no início para formar folhas. Porém, na fase de diferenciação (formação dos dentes), o excesso de N causa o superbrotamento (anomalia fisiológica). Corte o N no momento certo.",
-                    "P": "<b>ENRAIZAMENTO:</b> O sistema radicular do alho é fasciculado e pouco eficiente. Fósforo disponível no sulco é vital para arranque.",
-                    "K": "<b>PESO:</b> O Potássio é o principal responsável pelo enchimento e peso final da cabeça. Deficiência gera bulbos 'ocos' ou leves."
+                   "N": "<b>FORMAÇÃO DE ÁREA FOLIAR (EMERGÊNCIA–60 DAP):</b> Nitrogênio é determinante na fase vegetativa para construção da máquina fotossintética. Aplicar 60–70% até início da bulbificação. Após início da formação do bulbo, reduzir drasticamente o N para evitar bulbos chochos, atraso de maturação e maior incidência de doenças. Excesso tardio compromete conservação pós-colheita.",
+                   "P": "<b>ENRAIZAMENTO E DIFERENCIAÇÃO DE BULBO:</b> Fósforo deve estar totalmente disponível no plantio. Essencial para crescimento radicular inicial e estímulo à diferenciação do bulbo. Deficiência precoce reduz número e uniformidade de dentes. Aplicação concentrada na base é estratégica.",
+                   "K": "<b>ENCHIMENTO E QUALIDADE DE BULBO:</b> É o nutriente mais exigido pelo alho. Alta demanda a partir da diferenciação do bulbo. Responsável por enchimento, firmeza, peso final e conservação. Parcelamento obrigatório via fertirrigação. Relação N:K equilibrada evita crescimento vegetativo excessivo e favorece bulbos compactos.",
+                   "Ca": "<b>FIRMEZA E CONSERVAÇÃO:</b> Fundamental para integridade celular e armazenamento pós-colheita. Saturação adequada na CTC é essencial. Baixo Ca aumenta incidência de podridões e reduz vida útil. Aplicações via solo são prioritárias; foliar pode complementar em fase de enchimento.",
+                   "Mg": "<b>FOTOSSÍNTESE E TRANSLOCAÇÃO:</b> Componente central da clorofila. Alta demanda na fase vegetativa e durante enchimento. Relação Ca:Mg equilibrada favorece absorção eficiente. Deficiência reduz taxa fotossintética e peso de bulbo.",
+                   "S": "<b>COMPOSTOS SULFURADOS E QUALIDADE:</b> Nutriente crítico no alho. Responsável pelos compostos sulfurados que determinam aroma, pungência e qualidade comercial. Alta exigência durante todo o ciclo. Relação N:S próxima de 10–12:1 otimiza metabolismo proteico. Deficiência reduz qualidade sensorial e produtividade.",
+                   "B": "<b>FORMAÇÃO E UNIFORMIDADE DE DENTES:</b> Atua na divisão celular e diferenciação do bulbo. Deficiência causa deformações e má formação dos dentes. Aplicação via solo e complemento foliar antes da expansão do bulbo são estratégicos.",
+                   "Zn": "<b>CRESCIMENTO INICIAL:</b> Importante na síntese hormonal e alongamento celular. Essencial nos primeiros 40 dias. Aplicação no sulco ou via tratamento de bulbilhos favorece estabelecimento uniforme.",
+                   "Mn": "<b>METABOLISMO FOTOSSINTÉTICO:</b> Participa da fotólise da água e metabolismo do N. Solos com pH elevado podem limitar disponibilidade. Monitorar sintomas e corrigir via foliar se necessário.",
+                   "Fe": "<b>MANUTENÇÃO DA ÁREA FOLIAR:</b> Essencial para síntese de clorofila. Clorose internerval em folhas novas indica deficiência. Problemas são mais comuns em solos com drenagem inadequada ou pH alto.",
+                   "Cu": "<b>RESISTÊNCIA E SANIDADE:</b> Relacionado à lignificação e resistência a patógenos. Deficiência aumenta suscetibilidade a doenças foliares e podridões de bulbo.",
+                   "Mo": "<b>EFICIÊNCIA DO NITROGÊNIO:</b> Participa da enzima redutase do nitrato. Necessário em pequenas quantidades, mas essencial para eficiência do N aplicado. Pode ser fornecido via tratamento de bulbilhos ou aplicação foliar inicial."
                 }
             },
             "Pastagens": {
