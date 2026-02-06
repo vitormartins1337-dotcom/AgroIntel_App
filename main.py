@@ -301,13 +301,46 @@ if not df_clima.empty:
             "Batata": {
                 "meta": "45 a 60 ton/ha",
                 "fases": ["Emerg", "Estolon", "Tuber", "Enchimento", "Maturação"],
-                "macros": {"N": [15, 80, 140, 190, 220], "P": [5, 25, 45, 65, 80], "K": [20, 120, 220, 320, 380], "Ca": [4, 20, 40, 65, 85], "Mg": [3, 15, 30, 45, 55], "S": [2, 10, 18, 28, 35]},
-                "micros": {"B": [5, 40, 90, 150, 220], "Zn": [8, 60, 120, 180, 250], "Mn": [20, 150, 300, 450, 600], "Fe": [50, 400, 800, 1200, 1600], "Cu": [3, 20, 45, 70, 100], "Mo": [0.5, 3, 6, 9, 12]},
-                "totais_display": {"N": "200 – 220", "P": "65 – 80", "K": "320 – 380", "Ca": "65 – 85", "Mg": "45 – 55", "S": "28 – 35"},
+                "macros": {
+                    "N": [15, 80, 140, 190, 220], 
+                    "P": [5, 25, 45, 65, 80], 
+                    "K": [20, 120, 220, 320, 380], 
+                    "Ca": [4, 20, 40, 65, 85], 
+                    "Mg": [3, 15, 30, 45, 55], 
+                    "S": [2, 10, 18, 28, 35]
+                },
+                "micros": {
+                    "B": [5, 40, 90, 150, 220], 
+                    "Zn": [8, 60, 120, 180, 250], 
+                    "Mn": [20, 150, 300, 450, 600], 
+                    "Fe": [50, 400, 800, 1200, 1600], 
+                    "Cu": [3, 20, 45, 70, 100], 
+                    "Mo": [0.5, 3, 6, 9, 12]
+                },
+                "totais_display": {
+                    "N": "200 – 220", "P": "65 – 80", "K": "320 – 380", "Ca": "65 – 85", "Mg": "45 – 55", "S": "28 – 35",
+                    "B": "150 – 220 g", "Zn": "180 – 250 g", "Mn": "450 – 600 g", "Fe": "1200 – 1600 g", "Cu": "70 – 100 g", "Mo": "9 – 12 g"
+                },
+                
+                "contexto_solo": {
+                    "tipo": "Solo Franco-Arenoso a Franco (Irrigado)",
+                    "ideal": ["Argila: 15–30%", "CTC: 8–15 cmolc/dm³", "pH: 5.2–6.0 (Controle de Sarna)", "V%: 60–70%", "Alta aeração"],
+                    "alerta": "⚠️ SENSIBILIDADE FÍSICA: Batata é altamente sensível a encharcamento (lenticelas abertas/podridão) e compactação. Exige solo solto para expansão dos tubérculos."
+                },
+
                 "manejo_tatico": {
-                    "P": "<b>TUBERIZAÇÃO:</b> Fósforo no sulco define o NÚMERO de tubérculos por planta. Use fontes solúveis. P deficiente = poucos tubérculos grandes.",
-                    "K": "<b>FONTE NOBRE:</b> Para batata indústria (chips/frita), use Sulfato de Potássio (SOP). O Cloreto (KCl) reduz o teor de amido e aumenta a absorção de água, piorando a fritura.",
-                    "Ca": "<b>SARNA E PELE:</b> Cálcio reforça a parede celular da casca, reduzindo incidência de Sarna e danos mecânicos na colheita."
+                    "N": "<b>DEFINIÇÃO DE TETO (20–40 DAS):</b> Nitrogênio determina a construção da área foliar que sustentará a tuberização. Deficiência precoce reduz número de tubérculos. Excesso após início da tuberização favorece parte aérea em detrimento do enchimento.",
+                    "P": "<b>ARRANQUE RADICULAR E INÍCIO DA TUBERIZAÇÃO:</b> Fundamental na fase inicial. Deve estar bem disponível no sulco. Baixa disponibilidade reduz formação inicial de estolões e tubérculos.",
+                    "K": "<b>ENCHIMENTO E QUALIDADE:</b> Principal nutriente da batata. Atua no transporte de carboidratos para os tubérculos, regula pressão osmótica e influencia teor de matéria seca. Relação N:K deve ser próxima de 1:1,8 a 1:2.",
+                    "Ca": "<b>QUALIDADE INTERNA E RESISTÊNCIA:</b> Essencial para firmeza, redução de distúrbios fisiológicos (ex: coração oco). Deve estar presente na camada de formação dos tubérculos.",
+                    "Mg": "<b>FOTOSSÍNTESE EFICIENTE:</b> Mantém atividade fotossintética elevada durante enchimento. Relação K:Mg deve ser equilibrada para evitar antagonismo.",
+                    "S": "<b>SÍNTESE PROTEICA:</b> Atua na eficiência do uso do nitrogênio.",
+                    "B": "<b>FORMAÇÃO DE TECIDOS:</b> Atua na divisão celular e integridade estrutural dos tubérculos.",
+                    "Zn": "<b>DESENVOLVIMENTO VEGETATIVO:</b> Participa da síntese de auxinas e crescimento inicial.",
+                    "Mn": "<b>ATIVAÇÃO ENZIMÁTICA:</b> Importante no metabolismo energético durante enchimento.",
+                    "Fe": "<b>CLOROFILA E ENERGIA:</b> Deficiência reduz capacidade fotossintética.",
+                    "Cu": "<b>RESISTÊNCIA ESTRUTURAL:</b> Participa da lignificação e sanidade da planta.",
+                    "Mo": "<b>EFICIÊNCIA DO N:</b> Essencial na redução do nitrato."
                 }
             },
             "Algodão": {
