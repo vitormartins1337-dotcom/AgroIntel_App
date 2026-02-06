@@ -260,9 +260,9 @@ if not df_clima.empty:
             "Milho": {
                 "meta": "180 a 220 sacas/ha",
                 "fases": ["V2", "V6", "VT (Pendão)", "R3 (Leitoso)", "R6 (Matur)"],
-                "macros": {"N": [10, 60, 160, 240, 280], "P": [2, 15, 40, 55, 60], "K": [15, 90, 200, 240, 260], "Ca": [5, 25, 50, 65, 75], "Mg": [3, 15, 35, 50, 60], "S": [2, 10, 25, 35, 40]},
-                "micros": {"Zn": [20, 150, 400, 550, 600], "Mn": [15, 100, 300, 400, 450], "B": [10, 30, 80, 120, 140]},
-                "totais_display": {"N": "240 – 300", "P": "50 – 80", "K": "220 – 280", "Ca": "60 – 90", "Mg": "40 – 70", "S": "35 – 50"},
+                "macros": {"N": [25, 120, 240, 320, 380], "P": [5, 30, 60, 85, 110], "K": [30, 150, 300, 420, 500], "Ca": [8, 45, 90, 130, 170], "Mg": [5, 25, 55, 85, 110], "S": [4, 20, 45, 70, 95]},
+                "micros": {"B": [15, 80, 160, 230, 300], "Zn": [20, 110, 220, 320, 420], "Mn": [40, 220, 450, 650, 850], "Fe": [120, 700, 1400, 2000, 2700], "Cu": [5, 30, 70, 100, 130], "Mo": [0.5, 3, 6, 9, 12]},
+                "totais_display": {"N": "350 – 380", "P": "85 – 110", "K": "450 – 500", "Ca": "150 – 170", "Mg": "80 – 110", "S": "75 – 95"},
                 "manejo_tatico": {
                     "N": "<b>DEFINIÇÃO DE TETO (V4-V6):</b> O número de fileiras da espiga é definido agora. A planta não pode passar fome de N aqui. Aplique 70% da dose de cobertura até V6 impreterivelmente. Atrasar cobertura reduz teto produtivo.",
                     "Zn": "<b>ELEMENTO CHAVE:</b> O milho é extremamente exigente em Zinco. Se o solo for pobre, usar Zn no sulco ou tratamento de semente robusto. Deficiência de Zn encurta os entrenós e reduz área foliar.",
