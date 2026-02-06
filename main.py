@@ -370,9 +370,9 @@ if not df_clima.empty:
             "Banana": {
                 "meta": "80 a 100 ton/ha",
                 "fases": ["Cresc", "Flor", "Cacho", "Enchimento", "Colheita"],
-                "macros": {"N": [50, 150, 300, 450, 550], "P": [10, 30, 50, 70, 80], "K": [100, 400, 900, 1300, 1600], "Ca": [30, 80, 180, 250, 300], "Mg": [15, 40, 90, 130, 150], "S": [15, 40, 80, 100, 120]},
+                "macros": {"N": [30, 150, 280, 360, 420], "P": [8, 30, 50, 65, 80], "K": [60, 350, 700, 950, 1100], "Ca": [10, 45, 85, 120, 160], "Mg": [6, 35, 65, 90, 110], "S": [4, 18, 32, 45, 55]},
                 "micros": {"Mn": [150, 600, 1800, 2800, 3500], "Zn": [30, 150, 400, 600, 700], "B": [15, 60, 180, 280, 350]},
-                "totais_display": {"N": "400 – 600", "P": "60 – 90", "K": "1400 – 1800", "Ca": "250 – 350", "Mg": "120 – 160", "S": "80 – 120"},
+                "totais_display": {"N": "360 – 420", "P": "65 – 80", "K": "950 – 1100", "Ca": "120 – 160", "Mg": "90 – 110", "S": "45 – 55"},
                 "manejo_tatico": {
                     "K": "<b>BOMBA DE POTÁSSIO:</b> A banana exporta 1600kg de K/ha. É impossível aplicar tudo de uma vez. Parcelar em 10 a 12 aplicações anuais. Sem K, o cacho não enche e o 'pescoço' quebra.",
                     "N": "<b>RITMO CONSTANTE:</b> A planta emite uma folha nova a cada 7-10 dias. Se faltar N, a emissão para. Aplicação mensal ou quinzenal obrigatória.",
