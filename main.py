@@ -313,10 +313,34 @@ if not df_clima.empty:
             "Algodão": {
                 "meta": "350 a 450 @/ha",
                 "fases": ["Emerg", "Botão", "Flor", "Maçã", "Abertura"],
-                "macros": {"N": [20, 100, 190, 260, 320], "P": [4, 25, 45, 60, 75], "K": [30, 150, 280, 380, 460], "Ca": [10, 60, 110, 170, 230], "Mg": [4, 25, 50, 75, 100], "S": [3, 20, 40, 60, 80]},
-                "micros": {"B": [25, 120, 240, 380, 520], "Zn": [20, 100, 190, 270, 350], "Mn": [40, 220, 420, 650, 900], "Fe": [150, 700, 1300, 1900, 2600], "Cu": [6, 35, 70, 100, 130], "Mo": [0.5, 3, 6, 9, 12]},
-                "totais_display": {"N": "280 – 320", "P": "60 – 75", "K": "440 – 460", "Ca": "200 – 230", "Mg": "80 – 100", "S": "60 – 85"},
-               "manejo_tatico": {
+                "macros": {
+                    "N": [20, 100, 190, 260, 320], 
+                    "P": [4, 25, 45, 60, 75], 
+                    "K": [30, 150, 280, 380, 460], 
+                    "Ca": [10, 60, 110, 170, 230], 
+                    "Mg": [4, 25, 50, 75, 100], 
+                    "S": [3, 20, 40, 60, 80]
+                },
+                "micros": {
+                    "B": [25, 120, 240, 380, 520], 
+                    "Zn": [20, 100, 190, 270, 350], 
+                    "Mn": [40, 220, 420, 650, 900], 
+                    "Fe": [150, 700, 1300, 1900, 2600], 
+                    "Cu": [6, 35, 70, 100, 130], 
+                    "Mo": [0.5, 3, 6, 9, 12]
+                },
+                "totais_display": {
+                    "N": "280 – 320", "P": "60 – 75", "K": "440 – 460", "Ca": "200 – 230", "Mg": "80 – 100", "S": "60 – 85",
+                    "B": "450 – 550 g", "Zn": "300 – 400 g", "Mn": "800 – 1000 g", "Fe": "2000 – 2800 g", "Cu": "100 – 150 g", "Mo": "10 – 15 g"
+                },
+                
+                "contexto_solo": {
+                    "tipo": "Solo Profundo e Bem Drenado (Perfil Construído)",
+                    "ideal": ["Argila: >35%", "V%: 60–70%", "Sem impedimento físico (Pé-de-grade)", "Drenagem perfeita"],
+                    "alerta": "⚠️ SENSIBILIDADE RADICULAR: O Algodão tem raiz pivotante agressiva. Compactação entre 20-40cm limita drasticamente a produtividade ('Raiz torta'). Não tolera encharcamento."
+                },
+
+                "manejo_tatico": {
                    "N": "<b>EQUILÍBRIO VEGETATIVO-REPRODUTIVO (V5–F1):</b> O nitrogênio define o potencial produtivo, mas em excesso favorece crescimento vegetativo exagerado e retenção tardia. Aplicar 30–40% na base e concentrar 60–70% entre V4 e início de botão floral (B1). Déficit entre B1–F1 reduz número de estruturas reprodutivas. Excesso após F1 aumenta ciclo, sombreamento e risco de doenças.",
                    "P": "<b>ARRANQUE E DIFERENCIAÇÃO FLORAL:</b> Fósforo é essencial no início do ciclo para formação radicular e diferenciação de estruturas reprodutivas. Deve estar 100% disponível no plantio. Deficiência precoce compromete número de nós produtivos e uniformidade de florescimento.",
                    "K": "<b>RETENÇÃO E ENCHIMENTO DE MAÇÃS:</b> É o nutriente mais exigido pelo algodão. Cerca de 70% é absorvido até o pico de florescimento. Essencial para transporte de fotoassimilados, controle estomático e enchimento das maçãs. Desequilíbrio N:K favorece crescimento excessivo e queda de estruturas. Saturação ideal de K entre 3–5% da CTC.",
@@ -328,8 +352,9 @@ if not df_clima.empty:
                    "Mn": "<b>FOTOSSÍNTESE E METABOLISMO ENERGÉTICO:</b> Participa da fotólise da água e metabolismo do N. Monitorar em solos com pH elevado. Aplicações foliares podem ser necessárias em estádios vegetativos avançados.",
                    "Fe": "<b>FORMAÇÃO DE CLOROFILA:</b> Essencial para manutenção da área foliar ativa. Problemas ocorrem em solos alcalinos ou compactados. Clorose internerval em folhas novas indica deficiência.",
                    "Cu": "<b>LIGNIFICAÇÃO E SANIDADE:</b> Relacionado à formação de lignina e resistência estrutural. Deficiência pode aumentar suscetibilidade a doenças e quebramento de ramos produtivos.",
-                   "Mo": "<b>METABOLISMO DO N:</b> Participa da enzima redutase do nitrato. Importante para eficiência do nitrogênio aplicado. Normalmente suprido em pequenas doses via tratamento de sementes."}
-,
+                   "Mo": "<b>METABOLISMO DO N:</b> Participa da enzima redutase do nitrato. Importante para eficiência do nitrogênio aplicado. Normalmente suprido em pequenas doses via tratamento de sementes."
+                }
+            },
             "Citros": {
                 "meta": "1200 a 1800 cx/ha",
                 "fases": ["Brotação", "Flor", "Fruto I", "Fruto II", "Colheita"],
