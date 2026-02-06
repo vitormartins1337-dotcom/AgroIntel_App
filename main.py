@@ -371,7 +371,7 @@ if not df_clima.empty:
                 "meta": "80 a 100 ton/ha",
                 "fases": ["Cresc", "Flor", "Cacho", "Enchimento", "Colheita"],
                 "macros": {"N": [30, 150, 280, 360, 420], "P": [8, 30, 50, 65, 80], "K": [60, 350, 700, 950, 1100], "Ca": [10, 45, 85, 120, 160], "Mg": [6, 35, 65, 90, 110], "S": [4, 18, 32, 45, 55]},
-                "micros": {"Mn": [150, 600, 1800, 2800, 3500], "Zn": [30, 150, 400, 600, 700], "B": [15, 60, 180, 280, 350]},
+                "micros": {"B": [40, 200, 350, 500, 700], "Zn": [60, 350, 650, 950, 1300], "Mn": [120, 700, 1300, 2000, 2800], "Fe": [250, 1200, 2500, 3500, 4500], "Cu": [20, 90, 160, 250, 350], "Mo": [3, 15, 30, 45, 70]},
                 "totais_display": {"N": "360 – 420", "P": "65 – 80", "K": "950 – 1100", "Ca": "120 – 160", "Mg": "90 – 110", "S": "45 – 55"},
                 "manejo_tatico": {
                     "K": "<b>BOMBA DE POTÁSSIO:</b> A banana exporta 1600kg de K/ha. É impossível aplicar tudo de uma vez. Parcelar em 10 a 12 aplicações anuais. Sem K, o cacho não enche e o 'pescoço' quebra.",
