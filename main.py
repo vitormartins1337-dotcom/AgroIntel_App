@@ -479,7 +479,7 @@ if not df_clima.empty:
                 "meta": "15 a 18 ton/ha",
                 "fases": ["Emerg", "Veg", "Bulbo", "Mat", "Colheita"],
                 "macros": {"N": [20, 90, 160, 210, 250], , "P": [5, 25, 45, 60, 75], "K": [25, 120, 220, 320, 380], "Ca": [10, 40, 80, 120, 160], "Mg": [5, 20, 40, 60, 80], "S": [6, 25, 50, 70, 90]},
-                "micros": {"Zn": [10, 60, 140, 180, 220], "B": [5, 25, 60, 90, 100]},
+                "micros": {"B": [20, 80, 160, 240, 320], "Zn": [15, 60, 120, 180, 240], "Mn": [40, 150, 300, 450, 600], "Fe": [150, 600, 1100, 1600, 2200], "Cu": [8, 30, 60, 90, 120], "Mo": [0.5, 2, 4, 6, 8]},
                 "totais_display": {"N": "210 – 250", "P": "60 – 75", "K": "320 – 380", "Ca": "120 – 160", "Mg": "60 – 80", "S": "70 – 90"},
                 "manejo_tatico": {
                     "N": "<b>DENTE DE CACHORRO:</b> O alho precisa de N no início para formar folhas. Porém, na fase de diferenciação (formação dos dentes), o excesso de N causa o superbrotamento (anomalia fisiológica). Corte o N no momento certo.",
