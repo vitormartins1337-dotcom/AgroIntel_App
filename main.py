@@ -248,9 +248,9 @@ if not df_clima.empty:
             "Soja": {
                 "meta": "75 a 90 sacas/ha", # <--- ADICIONEI ISSO AQUI EM TODAS
                 "fases": ["V1", "V4", "R1 (Flor)", "R5.1 (Ench)", "R8 (Mat)"],
-                "macros": {"N": [10, 40, 110, 280, 380], "P": [2, 8, 20, 35, 40], "K": [10, 40, 100, 180, 200], "Ca": [5, 25, 60, 90, 110], "Mg": [2, 10, 25, 40, 50], "S": [2, 8, 20, 35, 45]},
-                "micros": {"Mn": [20, 100, 300, 500, 600], "Zn": [10, 50, 150, 300, 350], "B": [5, 20, 60, 100, 120]},
-                "totais_display": {"N": "300 – 400", "P": "30 – 50", "K": "180 – 230", "Ca": "90 – 120", "Mg": "40 – 60", "S": "30 – 50"},
+                "macros": {"N": [20, 100, 220, 350, 450], "P": [3, 18, 40, 65, 85], "K": [15, 90, 180, 300, 380], "Ca": [5, 30, 70, 120, 160], "Mg": [3, 15, 35, 60, 85], "S": [2, 12, 28, 50, 70]},
+                "micros": {"Mn": [20, 120, 260, 420, 600], "Zn": [8, 45, 90, 150, 210], "B": [10, 60, 130, 220, 300],"Fe": [80, 400, 900, 1500, 2200], "Cu": [3, 18, 40, 70, 100], "Mo": [0.5, 2.5, 5, 8, 12]},
+                "totais_display": {"N": "400 – 450", "P": "65 – 85", "K": "350 – 380", "Ca": "130 – 160", "Mg": "60 – 85", "S": "50 – 70"},
                 "manejo_tatico": {
                     "N": "<b>ALTA PERFORMANCE (FBN):</b> Proibido aplicar N mineral (ureia/sulfato) na base ou cobertura, pois inibe a nodulação. O segredo de 85+ sacas é: Inoculação Turbo (Turfa + Líquido) + Co-inoculação (Azospirillum) + Cobalto/Molibdênio foliar em V3.",
                     "P": "<b>ENERGIA (ATP):</b> Aplicar 100% no sulco ou pré-plantio incorporado. Níveis de P no solo devem ser > 15-20 mg/dm³. Se usar MAP, cuidado com a salinidade junto à semente.",
