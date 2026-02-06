@@ -663,45 +663,81 @@ if not df_clima.empty:
 
             st.divider()
 
-            # --- 6. MANEJO ESPECÍFICO (DINÂMICO E BLINDADO) ---
+            # --- 6. MANEJO ESPECÍFICO (SMART LAYOUT: MACROS ABERTOS / MICROS NA ABA) ---
             st.markdown("### 🚜 Estratégia de Manejo Específica")
             st.caption(f"Recomendações técnicas para atingir o potencial genético do(a) **{nome_cultura_exibicao}**.")
             
-            # Recupera o dicionário de manejo
-            manejo = dados_nutri.get('manejo_tatico', {"Geral": "Consulte um Engenheiro Agrônomo para recomendações locais."})
+            # Recupera o dicionário
+            manejo = dados_nutri.get('manejo_tatico', {})
             
-            # Transforma o dicionário em lista para podermos acessar por índice (0, 1, 2)
-            # Isso resolve o erro: não buscamos mais por chave fixa ['P'], pegamos o que tiver.
-            itens_manejo = list(manejo.items())
+            # LISTAS DE SEPARAÇÃO (AGRONOMIA)
+            lista_macros = ['N', 'P', 'K', 'Ca', 'Mg', 'S']
             
-            # Garante que a lista tenha pelo menos 3 itens para não quebrar o layout de 3 colunas
-            # Se a cultura tiver só 2 dicas, ele completa com vazio para não dar erro de índice
-            while len(itens_manejo) < 3:
-                itens_manejo.append((" - ", "Sem recomendação específica adicional."))
+            # Dicionários separados
+            macros_para_exibir = {k:v for k,v in manejo.items() if k in lista_macros}
+            micros_para_exibir = {k:v for k,v in manejo.items() if k not in lista_macros}
 
-            c_ad1, c_ad2, c_ad3 = st.columns(3)
-            
-            # Definição de estilos visuais para os cards (Azul, Verde, Vermelho)
-            # O sistema vai aplicar essas cores na ordem dos itens
-            estilos = [
-                {"bg": "#eff6ff", "border": "#2563eb", "text": "#1e3a8a"}, # Estilo 1 (Azul)
-                {"bg": "#f0fdf4", "border": "#16a34a", "text": "#14532d"}, # Estilo 2 (Verde)
-                {"bg": "#fef2f2", "border": "#dc2626", "text": "#7f1d1d"}  # Estilo 3 (Vermelho)
-            ]
+            # --- PARTE A: EXIBIÇÃO DOS MACROS (ABERTO) ---
+            # Define cores específicas para cada Macro para ficar visualmente rico
+            cores_macros = {
+                'N': {'bg': '#f0fdf4', 'border': '#16a34a', 'text': '#14532d'}, # Verde
+                'P': {'bg': '#eff6ff', 'border': '#2563eb', 'text': '#1e3a8a'}, # Azul
+                'K': {'bg': '#fef2f2', 'border': '#dc2626', 'text': '#7f1d1d'}, # Vermelho
+                'Ca': {'bg': '#fffbeb', 'border': '#d97706', 'text': '#78350f'}, # Amarelo/Laranja
+                'Mg': {'bg': '#faf5ff', 'border': '#9333ea', 'text': '#581c87'}, # Roxo
+                'S': {'bg': '#fff7ed', 'border': '#ea580c', 'text': '#7c2d12'}  # Laranja Escuro
+            }
 
-            # Loop para criar os 3 cards dinamicamente
-            colunas_cards = [c_ad1, c_ad2, c_ad3]
+            # Lógica de Grid Dinâmico (3 colunas por linha)
+            items_macro = list(macros_para_exibir.items())
             
-            for i in range(3):
-                chave_nutri, texto_nutri = itens_manejo[i]
-                style = estilos[i]
+            # Itera em passos de 3 em 3 (Cria linhas conforme necessário)
+            for i in range(0, len(items_macro), 3):
+                cols = st.columns(3)
+                # Preenche as 3 colunas da linha atual
+                for j in range(3):
+                    if i + j < len(items_macro):
+                        chave, texto = items_macro[i+j]
+                        style = cores_macros.get(chave, {'bg': '#f8fafc', 'border': '#64748b', 'text': '#0f172a'}) # Fallback cinza
+                        
+                        with cols[j]:
+                            st.markdown(f"""
+                            <div style="background:{style['bg']}; border-top: 4px solid {style['border']}; padding:15px; border-radius:8px; color:#0f172a; height:100%; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <b style="color:{style['text']}; font-size:1.1rem;">{chave}</b>
+                                    <span style="font-size:0.7rem; background:white; padding:2px 6px; border-radius:4px; border:1px solid {style['border']}; color:{style['text']};">MACRO</span>
+                                </div>
+                                <hr style="margin:8px 0; border-color:{style['border']}; opacity:0.3;">
+                                <div style="font-size:0.85rem; line-height:1.4;">{texto}</div>
+                            </div>""", unsafe_allow_html=True)
+
+            # --- PARTE B: EXIBIÇÃO DOS MICROS (ABA EXPANSÍVEL "BONITA") ---
+            if micros_para_exibir:
+                st.markdown("<br>", unsafe_allow_html=True)
                 
-                with colunas_cards[i]:
-                    st.markdown(f"""
-                    <div style="background:{style['bg']}; border-top: 4px solid {style['border']}; padding:15px; border-radius:8px; color:#0f172a; height:100%;">
-                        <b style="color:{style['text']};">{chave_nutri}</b><hr style="margin:8px 0;">
-                        <div style="font-size:0.85rem;">{texto_nutri}</div>
+                # O EXPANDER (A "ABA FECHADA")
+                with st.expander(f"🧩 Micronutrientes & Elementos Traço ({len(micros_para_exibir)} elementos)", expanded=False):
+                    
+                    st.markdown("""<div style="font-size:0.85rem; color:#64748b; margin-bottom:15px;">
+                    <i>*Elementos essenciais para ativação enzimática e qualidade final do produto. A Lei do Mínimo aplica-se rigorosamente aqui.</i>
                     </div>""", unsafe_allow_html=True)
+
+                    items_micro = list(micros_para_exibir.items())
+                    
+                    # Grid de 2 colunas para os Micros (ficam melhores mais largos)
+                    for i in range(0, len(items_micro), 2):
+                        cols_m = st.columns(2)
+                        for j in range(2):
+                            if i + j < len(items_micro):
+                                chave_m, texto_m = items_micro[i+j]
+                                with cols_m[j]:
+                                    # Card Visual Clean para Micros
+                                    st.markdown(f"""
+                                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #64748b; padding: 12px; border-radius: 6px; margin-bottom: 10px;">
+                                        <b style="color: #334155;">{chave_m}</b>
+                                        <div style="font-size: 0.85rem; color: #475569; margin-top: 5px;">{texto_m}</div>
+                                    </div>
+                                    """, unsafe_allow_html=True)
 
             # --- 7. AVISO LEGAL E FONTE (MANDATÓRIO) ---
             st.markdown("<br>", unsafe_allow_html=True)
