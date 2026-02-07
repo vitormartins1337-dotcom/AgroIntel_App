@@ -700,9 +700,9 @@ if not df_clima.empty:
             "Framboesa": {
                 "meta": "Alta Produtividade",
                 "fases": ["Veg", "Flor", "Verde", "Colheita", "Senesc"],
-                "macros": {"N": [10, 30, 60, 80, 90], "P": [2, 8, 15, 20, 25], "K": [10, 35, 70, 100, 110], "Ca": [5, 20, 40, 60, 70], "Mg": [2, 8, 15, 25, 30], "S": [2, 8, 15, 20, 25]},
-                "micros": {"Fe": [20, 80, 150, 200, 250], "B": [5, 15, 30, 45, 50]},
-                "totais_display": {"N": "80 – 100", "P": "20 – 30", "K": "100 – 120", "Ca": "60 – 80", "Mg": "25 – 35", "S": "20 – 30"},
+                "macros": {"N": [20, 60, 100, 140, 170], "P": [3, 12, 22, 35, 45], "K": [15, 55, 100, 160, 210], "Ca": [6, 20, 40, 65, 85], "Mg": [3, 10, 20, 30, 40], "S": [2, 8, 15, 25, 35]},
+                "micros": {"B": [5, 20, 40, 70, 100], "Zn": [8, 35, 65, 110, 150], "Mn": [15, 70, 140, 220, 300], "Fe": [40, 180, 350, 550, 750], "Cu": [3, 12, 25, 40, 60], "Mo": [0.5, 2, 4, 6, 8]},
+                "totais_display": {"N": "140 – 170", "P": "35 – 45", "K": "160 – 210", "Ca": "65 – 85", "Mg": "30 – 40", "S": "25 – 35"},
                 "manejo_tatico": {
                     "N": "<b>EQUILÍBRIO:</b> Parcelar a oferta de nitrogênio principalmente na primavera e início do verão. Excesso tardio gera ramos moles e suscetíveis a doenças.",
                     "P": "<b>MANUTENÇÃO:</b> Aplicar anualmente no início da primavera para suportar o novo fluxo de raízes e brotos.",
