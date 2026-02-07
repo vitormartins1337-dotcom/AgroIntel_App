@@ -904,10 +904,9 @@ if not df_clima.empty:
                                     </div>
                                     """, unsafe_allow_html=True)
 
-           # --- 7. AVISO LEGAL E FONTES (CORREÇÃO FINAL) ---
+           # --- 7. AVISO LEGAL E FONTES (CORREÇÃO DEFINITIVA) ---
             st.markdown("<br>", unsafe_allow_html=True)
             
-            # AQUI COMEÇA A MÁGICA:
             st.markdown("""
             <div style="background-color: #fff7ed; border-left: 5px solid #f97316; padding: 20px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
                 <h4 style="color: #9a3412; margin-top: 0; font-size: 1.1rem;">⚠️ ALERTA AGRONÔMICO (LEIA COM ATENÇÃO)</h4>
