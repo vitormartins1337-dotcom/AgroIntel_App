@@ -741,7 +741,7 @@ if not df_clima.empty:
                    "Cu": "<b>RESISTÊNCIA ESTRUTURAL:</b> Atua na lignificação.",
                    "Mo": "<b>METABOLISMO DO N:</b> Atua na redutase do nitrato."
                 }
-            }
+            },
 
         dados_nutri = None
         nome_cultura_exibicao = str(cult_sel)
