@@ -904,34 +904,39 @@ if not df_clima.empty:
                                     </div>
                                     """, unsafe_allow_html=True)
 
-           # --- 7. AVISO LEGAL (VERSÃO NATIVA BLINDADA - SEM HTML) ---
-            st.markdown("---") # Linha divisória simples
+          # --- 7. AVISO LEGAL E FONTES (LAYOUT GOLD MASTER: COLUNAS & CARDS) ---
+            st.markdown("---")
             
-            # Expander nativo (Aba que abre e fecha)
-            with st.expander("⚠️ AVISO LEGAL E FONTES (CFSEMG / Malavolta)", expanded=False):
+            # Barra Expansível Limpa e Profissional
+            with st.expander("⚖️ AVISO LEGAL & REFERÊNCIAS TÉCNICAS (Clique para expandir)", expanded=False):
                 
-                # Componente de Alerta Nativo (Fundo Amarelo/Laranja automático)
-                st.warning(
-                    """
-                    **ATENÇÃO: DEMANDA vs. RECOMENDAÇÃO**
-                    
-                    1. **Fisiologia:** Estes gráficos mostram a **Marcha de Absorção** (o que a planta consome), **NÃO** a recomendação de adubação.
-                    2. **Lei do Mínimo:** O solo já possui reservas. Aplicar a dose total do gráfico sem descontar a análise de solo causa prejuízo financeiro e salinidade.
-                    
-                    **RECOMENDAÇÃO OFICIAL:** Consulte sempre um Eng. Agrônomo para cálculo baseado na Análise de Solo e Lei de Restituição.
-                    """
-                )
+                # Cria duas colunas para separar visualmente o Alerta das Fontes
+                c_aviso, c_fontes = st.columns([1.3, 1])
 
-                # Lista de Fontes em Markdown Simples (Limpo e Profissional)
-                st.markdown("### 📚 Referências Bibliográficas")
-                st.markdown(
-                    """
-                    * **CFSEMG (5ª Aproximação):** Recomendações para o Estado de Minas Gerais (Foco em Café).
-                    * **Malavolta, E. (2006):** Manual de Nutrição Mineral de Plantas.
-                    * **Embrapa (Soja/Milho/Algodão):** Circulares Técnicas para Alta Produtividade.
-                    * **IPNI Brasil:** Dados de extração e exportação.
-                    """
-                )
+                # COLUNA 1: O ALERTA (Visual de Importância)
+                with c_aviso:
+                    st.warning("⚠️ **ALERTA: DEMANDA vs. RECOMENDAÇÃO**")
+                    st.markdown(
+                        """
+                        > **1. Fisiologia Pura:** Os gráficos acima mostram a **Marcha de Absorção** (o que a planta consome para viver), e **NÃO** a recomendação de adubação direta.
+                        
+                        > **2. Lei do Mínimo:** O solo já possui reservas. Aplicar a extração total do gráfico sem descontar o estoque do solo gera **salinidade, toxidez e prejuízo financeiro**.
+                        
+                        **CONCLUSÃO:** Os dados servem para balizar a extração. A dose final deve ser calculada por Eng. Agrônomo via **Análise de Solo**.
+                        """
+                    )
+
+                # COLUNA 2: AS FONTES (Visual Técnico/Informativo)
+                with c_fontes:
+                    st.info("📚 **BIBLIOGRAFIA UTILIZADA**")
+                    st.markdown(
+                        """
+                        * **CFSEMG (5ª Aproximação):** Recomendações Oficiais para Minas Gerais (Multiculturas).
+                        * **Malavolta, E. (2006):** Manual de Nutrição Mineral de Plantas.
+                        * **Embrapa:** Circulares Técnicas (Soja, Milho, Algodão e Frutíferas).
+                        * **IPNI Brasil:** Tabelas Oficiais de Extração e Exportação de Nutrientes.
+                        """
+                    )
     
     
     # 3. CLIMA (CORRIGIDO E BLINDADO)
