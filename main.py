@@ -904,47 +904,35 @@ if not df_clima.empty:
                                     </div>
                                     """, unsafe_allow_html=True)
 
-          # --- 7. AVISO LEGAL E FONTES (VERSÃO FINAL: LARANJA NATIVO) ---
+          # --- 7. AVISO LEGAL E FONTES (VERSÃO FINAL BLINDADA) ---
             st.markdown("---")
             
-            # A ABA (Expander) - Simples e Direta como você pediu
-            with st.expander("⚠️ AVISO LEGAL (Clique para abrir)", expanded=False):
+            # ABA DE AVISO (EXPANDER)
+            with st.expander("⚠️ AVISO LEGAL", expanded=False):
                 
-                # O CARD LARANJA (Nativo do Streamlit - À prova de falhas)
+                # 1. O CARD DE ALERTA (Nativo do Streamlit -> Fundo Amarelo/Laranja Automático)
                 st.warning(
                     """
-                    **IMPORTANTE: NÃO É RECOMENDAÇÃO DE ADUBAÇÃO**
+                    **IMPORTANTE: DEMANDA vs. RECOMENDAÇÃO**
                     
-                    1. **Fisiologia:** Os gráficos mostram a **Marcha de Absorção** (o que a planta consome), não o que você deve aplicar.
-                    2. **Risco:** Aplicar a dose total sem descontar o que já existe no solo gera salinidade e prejuízo.
+                    1. **Fisiologia:** Os gráficos acima mostram a **Marcha de Absorção** (o que a planta consome para viver e produzir), e **NÃO** a recomendação de adubação direta.
+                    2. **Risco:** O solo já possui reservas. Aplicar a dose total do gráfico sem descontar o estoque do solo (Análise) gera salinidade, toxidez e prejuízo financeiro.
                     
-                    **ORIENTAÇÃO:** Consulte sempre um Eng. Agrônomo. Use a Análise de Solo e a Lei de Restituição.
+                    **ORIENTAÇÃO:** Consulte sempre um Eng. Agrônomo. A adubação deve seguir a **Lei de Restituição** baseada na Análise de Solo.
                     """,
                     icon="⚠️"
                 )
 
-                # AS FONTES (Texto limpo abaixo do alerta)
+                # 2. AS FONTES (Texto Limpo e Profissional logo abaixo)
                 st.markdown(
                     """
-                    **📚 Referências Bibliográficas (Multiculturas):**
+                    ### 📚 Base Científica (Multiculturas)
                     * **CFSEMG (5ª Aproximação):** Recomendações Oficiais para Minas Gerais.
                     * **Malavolta, E. (2006):** Manual de Nutrição Mineral de Plantas.
-                    * **Embrapa:** Circulares Técnicas (Grãos e Frutíferas).
-                    * **IPNI Brasil:** Tabelas de Extração e Exportação.
+                    * **Embrapa:** Circulares Técnicas (Soja, Milho, Algodão, Frutíferas).
+                    * **IPNI Brasil:** Tabelas de Extração e Exportação de Nutrientes.
                     """
                 )
-
-                # COLUNA 2: AS FONTES (Visual Técnico/Informativo)
-                with c_fontes:
-                    st.info("📚 **BIBLIOGRAFIA UTILIZADA**")
-                    st.markdown(
-                        """
-                        * **CFSEMG (5ª Aproximação):** Recomendações Oficiais para Minas Gerais (Multiculturas).
-                        * **Malavolta, E. (2006):** Manual de Nutrição Mineral de Plantas.
-                        * **Embrapa:** Circulares Técnicas (Soja, Milho, Algodão e Frutíferas).
-                        * **IPNI Brasil:** Tabelas Oficiais de Extração e Exportação de Nutrientes.
-                        """
-                    )
     
     
     # 3. CLIMA (CORRIGIDO E BLINDADO)
