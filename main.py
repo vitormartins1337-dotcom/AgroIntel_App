@@ -904,40 +904,34 @@ if not df_clima.empty:
                                     </div>
                                     """, unsafe_allow_html=True)
 
-           # --- 7. AVISO LEGAL E FONTES (VERSÃO FINAL: OCULTO/EXPANSÍVEL) ---
-            st.markdown("<br>", unsafe_allow_html=True)
+           # --- 7. AVISO LEGAL (VERSÃO NATIVA BLINDADA - SEM HTML) ---
+            st.markdown("---") # Linha divisória simples
             
-            # CRIA A BARRA CLICÁVEL (Oculta o conteúdo por padrão)
-            with st.expander("⚠️ NOTA TÉCNICA & FONTES CIENTÍFICAS (CFSEMG / Malavolta) - Clique para ler", expanded=False):
+            # Expander nativo (Aba que abre e fecha)
+            with st.expander("⚠️ AVISO LEGAL E FONTES (CFSEMG / Malavolta)", expanded=False):
                 
-                # CONTEÚDO QUE SÓ APARECE AO ABRIR
-                st.markdown("""
-                <div style="font-family: sans-serif; font-size: 0.9rem; color: #374151;">
+                # Componente de Alerta Nativo (Fundo Amarelo/Laranja automático)
+                st.warning(
+                    """
+                    **ATENÇÃO: DEMANDA vs. RECOMENDAÇÃO**
                     
-                    <div style="background-color: #fff7ed; border-left: 4px solid #f97316; padding: 15px; border-radius: 4px; margin-bottom: 15px;">
-                        <h4 style="color: #9a3412; margin-top: 0; font-size: 1rem;">⚠️ LEIA COM ATENÇÃO:</h4>
-                        <p style="margin-bottom: 8px;">
-                            <b>1. Demanda vs. Recomendação:</b> Estes gráficos representam a <i>Fisiologia da Planta</i> (o que ela consome), 
-                            <b>NÃO</b> a recomendação de adubação direta.
-                        </p>
-                        <p style="margin-bottom: 0;">
-                            <b>2. Lei do Mínimo:</b> O solo já possui reservas. Aplicar a extração total sem descontar a análise de solo 
-                            gera desperdício e salinidade. Consulte sempre um Eng. Agrônomo.
-                        </p>
-                    </div>
+                    1. **Fisiologia:** Estes gráficos mostram a **Marcha de Absorção** (o que a planta consome), **NÃO** a recomendação de adubação.
+                    2. **Lei do Mínimo:** O solo já possui reservas. Aplicar a dose total do gráfico sem descontar a análise de solo causa prejuízo financeiro e salinidade.
+                    
+                    **RECOMENDAÇÃO OFICIAL:** Consulte sempre um Eng. Agrônomo para cálculo baseado na Análise de Solo e Lei de Restituição.
+                    """
+                )
 
-                    <div style="border-top: 1px solid #e5e7eb; padding-top: 10px;">
-                        <b style="color: #1f2937; font-size: 0.85rem; letter-spacing: 0.5px;">📚 BASE CIENTÍFICA UTILIZADA:</b>
-                        <ul style="margin-top: 5px; padding-left: 20px; line-height: 1.6;">
-                            <li><b>CFSEMG (5ª Aproximação):</b> Recomendações para Café (Minas Gerais).</li>
-                            <li><b>Malavolta, E. (2006):</b> Manual de Nutrição Mineral de Plantas.</li>
-                            <li><b>Embrapa:</b> Manuais de Sistemas de Alta Produtividade.</li>
-                            <li><b>IPNI Brasil:</b> Tabelas de extração e exportação de nutrientes.</li>
-                        </ul>
-                    </div>
-
-                </div>
-                """, unsafe_allow_html=True)
+                # Lista de Fontes em Markdown Simples (Limpo e Profissional)
+                st.markdown("### 📚 Referências Bibliográficas")
+                st.markdown(
+                    """
+                    * **CFSEMG (5ª Aproximação):** Recomendações para o Estado de Minas Gerais (Foco em Café).
+                    * **Malavolta, E. (2006):** Manual de Nutrição Mineral de Plantas.
+                    * **Embrapa (Soja/Milho/Algodão):** Circulares Técnicas para Alta Produtividade.
+                    * **IPNI Brasil:** Dados de extração e exportação.
+                    """
+                )
     
     
     # 3. CLIMA (CORRIGIDO E BLINDADO)
