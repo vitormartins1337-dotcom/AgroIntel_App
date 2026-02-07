@@ -904,7 +904,7 @@ if not df_clima.empty:
                                     </div>
                                     """, unsafe_allow_html=True)
 
-            # --- 7. AVISO LEGAL E FONTES (ATUALIZADO COM CFSEMG 5ª APROX) ---
+            # --- 7. AVISO LEGAL E FONTES (CORRIGIDO) ---
             st.markdown("<br>", unsafe_allow_html=True)
             st.markdown("""
             <div style="background-color: #fff7ed; border-left: 5px solid #f97316; padding: 20px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
