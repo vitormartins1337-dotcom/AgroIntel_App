@@ -493,9 +493,9 @@ if not df_clima.empty:
             "Feijão": {
                 "meta": "50 a 65 sacas/ha",
                 "fases": ["V2", "V4", "R5", "R7", "R9"],
-                "macros": {"N": [10, 40, 90, 130, 150], "P": [3, 10, 20, 30, 35], "K": [10, 35, 80, 110, 130], "Ca": [5, 25, 60, 80, 90], "Mg": [3, 12, 25, 35, 40], "S": [2, 8, 15, 20, 25]},
-                "micros": {"Fe": [60, 250, 700, 1100, 1300], "Mn": [25, 100, 250, 350, 400], "Zn": [15, 50, 120, 180, 220]},
-                "totais_display": {"N": "120 – 160", "P": "30 – 45", "K": "100 – 140", "Ca": "70 – 90", "Mg": "30 – 45", "S": "20 – 30"},
+                "macros": {"N": [15, 70, 130, 170, 200], "P": [3, 15, 30, 45, 60], "K": [10, 60, 120, 170, 210], "Ca": [5, 25, 45, 65, 85], "Mg": [3, 12, 25, 38, 50], "S": [2, 10, 20, 30, 40]},
+                "micros": {"B": [5, 30, 60, 100, 150], "Zn": [8, 50, 90, 130, 180], "Mn": [20, 120, 250, 380, 500], "Fe": [60, 300, 600, 900, 1200], "Cu": [3, 18, 35, 55, 75], "Mo": [0.5, 3, 6, 9, 12]},
+                "totais_display": {"N": "170 – 200", "P": "45 – 65", "K": "170 – 210", "Ca": "65 – 85", "Mg": "38 – 50", "S": "30 – 40"},
                 "manejo_tatico": {
                     "N": "<b>TIMING PERFEITO:</b> O ciclo é muito rápido. Aplique 1/3 no plantio e 2/3 em cobertura V3/V4. Passou de V4, o N não recupera mais o potencial produtivo.",
                     "Mo": "<b>MOLIBDÊNIO:</b> Essencial para a enzima Nitrato Redutase. Aplicação foliar em V3/V4 melhora drasticamente o aproveitamento do Nitrogênio aplicado.",
