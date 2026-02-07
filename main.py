@@ -606,7 +606,7 @@ if not df_clima.empty:
                    "Cu": "<b>RESISTÊNCIA A DOENÇAS:</b> Participa da lignificação.",
                    "Mo": "<b>EFICIÊNCIA DO N:</b> Atua na redução do nitrato."
                 }
-            },,
+            },
            "Alho": {
                 "meta": "15 a 18 ton/ha",
                 "fases": ["Emerg", "Veg", "Bulbo", "Mat", "Colheita"],
