@@ -493,13 +493,46 @@ if not df_clima.empty:
             "Feijão": {
                 "meta": "50 a 65 sacas/ha",
                 "fases": ["V2", "V4", "R5", "R7", "R9"],
-                "macros": {"N": [15, 70, 130, 170, 200], "P": [3, 15, 30, 45, 60], "K": [10, 60, 120, 170, 210], "Ca": [5, 25, 45, 65, 85], "Mg": [3, 12, 25, 38, 50], "S": [2, 10, 20, 30, 40]},
-                "micros": {"B": [5, 30, 60, 100, 150], "Zn": [8, 50, 90, 130, 180], "Mn": [20, 120, 250, 380, 500], "Fe": [60, 300, 600, 900, 1200], "Cu": [3, 18, 35, 55, 75], "Mo": [0.5, 3, 6, 9, 12]},
-                "totais_display": {"N": "170 – 200", "P": "45 – 65", "K": "170 – 210", "Ca": "65 – 85", "Mg": "38 – 50", "S": "30 – 40"},
+                "macros": {
+                    "N": [15, 70, 130, 170, 200], 
+                    "P": [3, 15, 30, 45, 60], 
+                    "K": [10, 60, 120, 170, 210], 
+                    "Ca": [5, 25, 45, 65, 85], 
+                    "Mg": [3, 12, 25, 38, 50], 
+                    "S": [2, 10, 20, 30, 40]
+                },
+                "micros": {
+                    "B": [5, 30, 60, 100, 150], 
+                    "Zn": [8, 50, 90, 130, 180], 
+                    "Mn": [20, 120, 250, 380, 500], 
+                    "Fe": [60, 300, 600, 900, 1200], 
+                    "Cu": [3, 18, 35, 55, 75], 
+                    "Mo": [0.5, 3, 6, 9, 12]
+                },
+                "totais_display": {
+                    "N": "170 – 200", "P": "45 – 60", "K": "170 – 210", "Ca": "65 – 85", "Mg": "38 – 50", "S": "30 – 40",
+                    "B": "100 – 150 g", "Zn": "130 – 180 g", "Mn": "380 – 500 g", "Fe": "900 – 1200 g", "Cu": "55 – 75 g", "Mo": "9 – 12 g"
+                },
+                
+                "contexto_solo": {
+                    "tipo": "Latossolo Vermelho ou Argissolo (Textura Média)",
+                    "ideal": ["Argila: 20–40%", "CTC: 8–15 cmolc/dm³", "pH: 5.5–6.2", "V%: 60–70%", "Inoculação Eficiente (Rhizobium)"],
+                    "alerta": "⚠️ SENSIBILIDADE HÍDRICA: O Feijão não tolera encharcamento (asfixia radicular rápida). Sistema radicular superficial (0–30 cm) exige boa drenagem e disponibilidade de Ca/Mg."
+                },
+
                 "manejo_tatico": {
-                    "N": "<b>TIMING PERFEITO:</b> O ciclo é muito rápido. Aplique 1/3 no plantio e 2/3 em cobertura V3/V4. Passou de V4, o N não recupera mais o potencial produtivo.",
-                    "Mo": "<b>MOLIBDÊNIO:</b> Essencial para a enzima Nitrato Redutase. Aplicação foliar em V3/V4 melhora drasticamente o aproveitamento do Nitrogênio aplicado.",
-                    "Micros": "<b>FERRO E MANGANÊS:</b> Feijão é muito sensível a clorose férrica em solos de pH alto. Atenção aos micronutrientes foliares."
+                   "N": "<b>FORMAÇÃO DE TETO PRODUTIVO (V3–R6):</b> Nitrogênio define número de flores e potencial de vagens. Inoculação eficiente reduz necessidade de N mineral. Excesso reduz nodulação e favorece crescimento vegetativo excessivo.",
+                   "P": "<b>ARRANQUE E ENERGIA METABÓLICA:</b> Fundamental no início para formação radicular e desenvolvimento precoce. Deve estar bem disponível no plantio.",
+                   "K": "<b>ENCHIMENTO E TRANSPORTE DE FOTOASSIMILADOS:</b> Essencial na formação e enchimento das vagens. Relação N:K próxima de 1:1 a 1:1,2 para alta performance.",
+                   "Ca": "<b>ESTRUTURA E PEGAMENTO:</b> Importante na formação das paredes celulares e fixação das flores.",
+                   "Mg": "<b>FOTOSSÍNTESE ATIVA:</b> Mantém eficiência da clorofila durante enchimento.",
+                   "S": "<b>EFICIÊNCIA DO N:</b> Atua na síntese proteica e qualidade de grão.",
+                   "B": "<b>FLORAÇÃO E PEGAMENTO:</b> Deficiência causa abortamento floral.",
+                   "Zn": "<b>CRESCIMENTO VEGETATIVO:</b> Atua na síntese hormonal.",
+                   "Mn": "<b>ATIVAÇÃO ENZIMÁTICA:</b> Participa da fotossíntese.",
+                   "Fe": "<b>MANUTENÇÃO DA CLOROFILA:</b> Essencial para vigor.",
+                   "Cu": "<b>RESISTÊNCIA E SANIDADE:</b> Atua na lignificação.",
+                   "Mo": "<b>NODULAÇÃO E FIXAÇÃO BIOLÓGICA:</b> Essencial na redutase do nitrato e eficiência da fixação."
                 }
             },
             "Trigo": {
