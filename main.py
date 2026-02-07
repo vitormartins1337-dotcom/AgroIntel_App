@@ -700,16 +700,48 @@ if not df_clima.empty:
             "Framboesa": {
                 "meta": "Alta Produtividade",
                 "fases": ["Veg", "Flor", "Verde", "Colheita", "Senesc"],
-                "macros": {"N": [20, 60, 100, 140, 170], "P": [3, 12, 22, 35, 45], "K": [15, 55, 100, 160, 210], "Ca": [6, 20, 40, 65, 85], "Mg": [3, 10, 20, 30, 40], "S": [2, 8, 15, 25, 35]},
-                "micros": {"B": [5, 20, 40, 70, 100], "Zn": [8, 35, 65, 110, 150], "Mn": [15, 70, 140, 220, 300], "Fe": [40, 180, 350, 550, 750], "Cu": [3, 12, 25, 40, 60], "Mo": [0.5, 2, 4, 6, 8]},
-                "totais_display": {"N": "140 – 170", "P": "35 – 45", "K": "160 – 210", "Ca": "65 – 85", "Mg": "30 – 40", "S": "25 – 35"},
+                "macros": {
+                    "N": [20, 60, 100, 140, 170], 
+                    "P": [3, 12, 22, 35, 45], 
+                    "K": [15, 55, 100, 160, 210], 
+                    "Ca": [6, 20, 40, 65, 85], 
+                    "Mg": [3, 10, 20, 30, 40], 
+                    "S": [2, 8, 15, 25, 35]
+                },
+                "micros": {
+                    "B": [5, 20, 40, 70, 100], 
+                    "Zn": [8, 35, 65, 110, 150], 
+                    "Mn": [15, 70, 140, 220, 300], 
+                    "Fe": [40, 180, 350, 550, 750], 
+                    "Cu": [3, 12, 25, 40, 60], 
+                    "Mo": [0.5, 2, 4, 6, 8]
+                },
+                "totais_display": {
+                    "N": "140 – 170", "P": "35 – 45", "K": "160 – 210", "Ca": "65 – 85", "Mg": "30 – 40", "S": "25 – 35",
+                    "B": "70 – 100 g", "Zn": "110 – 150 g", "Mn": "220 – 300 g", "Fe": "550 – 750 g", "Cu": "40 – 60 g", "Mo": "6 – 8 g"
+                },
+                
+                "contexto_solo": {
+                    "tipo": "Franco-Arenoso a Franco (Rico em Matéria Orgânica)",
+                    "ideal": ["Argila: 15–30%", "MO: ≥ 3% (Fundamental)", "pH: 5.5–6.5", "CTC: 8–15 cmolc/dm³", "Drenagem Excelente"],
+                    "alerta": "⚠️ ASFIXIA RADICULAR: Framboesa é extremamente sensível a encharcamento (risco de Phytophthora). O sistema radicular é superficial (0–30 cm) e exige solo aerado e irrigação frequente/controlada."
+                },
+
                 "manejo_tatico": {
-                    "N": "<b>EQUILÍBRIO:</b> Parcelar a oferta de nitrogênio principalmente na primavera e início do verão. Excesso tardio gera ramos moles e suscetíveis a doenças.",
-                    "P": "<b>MANUTENÇÃO:</b> Aplicar anualmente no início da primavera para suportar o novo fluxo de raízes e brotos.",
-                    "K": "<b>DOÇURA:</b> Vital para a translocação de açúcares. Aplique potássio consistentemente durante a formação do fruto para garantir sabor e qualidade."
+                   "N": "<b>FORMAÇÃO DE CANAS E SUSTENTAÇÃO DA PRODUÇÃO:</b> Nitrogênio é essencial no crescimento vegetativo inicial. Excesso próximo à colheita reduz firmeza dos frutos e aumenta suscetibilidade a doenças.",
+                   "P": "<b>ESTABELECIMENTO RADICULAR:</b> Importante no início do ciclo e na diferenciação floral.",
+                   "K": "<b>QUALIDADE E ENCHIMENTO DOS FRUTOS:</b> Principal nutriente da framboesa. Atua no transporte de açúcares, calibre e firmeza. Relação N:K próxima de 1:1,2 a 1:1,5.",
+                   "Ca": "<b>FIRMEZA E VIDA PÓS-COLHEITA:</b> Atua na integridade da parede celular. Baixa disponibilidade reduz conservação.",
+                   "Mg": "<b>FOTOSSÍNTESE CONTÍNUA:</b> Mantém produção energética durante colheita prolongada.",
+                   "S": "<b>SÍNTESE PROTEICA:</b> Atua na eficiência do nitrogênio.",
+                   "B": "<b>FLORAÇÃO E PEGAMENTO:</b> Deficiência reduz número de frutos.",
+                   "Zn": "<b>CRESCIMENTO VEGETATIVO:</b> Atua na síntese hormonal.",
+                   "Mn": "<b>ATIVAÇÃO ENZIMÁTICA:</b> Participa da fotossíntese.",
+                   "Fe": "<b>CLOROFILA:</b> Essencial para vigor.",
+                   "Cu": "<b>RESISTÊNCIA ESTRUTURAL:</b> Atua na lignificação.",
+                   "Mo": "<b>METABOLISMO DO N:</b> Atua na redutase do nitrato."
                 }
             }
-        }
 
         dados_nutri = None
         nome_cultura_exibicao = str(cult_sel)
