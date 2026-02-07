@@ -904,27 +904,35 @@ if not df_clima.empty:
                                     </div>
                                     """, unsafe_allow_html=True)
 
-          # --- 7. AVISO LEGAL E FONTES (LAYOUT GOLD MASTER: COLUNAS & CARDS) ---
+          # --- 7. AVISO LEGAL E FONTES (VERSÃO FINAL: LARANJA NATIVO) ---
             st.markdown("---")
             
-            # Barra Expansível Limpa e Profissional
-            with st.expander("⚖️ AVISO LEGAL & REFERÊNCIAS TÉCNICAS (Clique para expandir)", expanded=False):
+            # A ABA (Expander) - Simples e Direta como você pediu
+            with st.expander("⚠️ AVISO LEGAL (Clique para abrir)", expanded=False):
                 
-                # Cria duas colunas para separar visualmente o Alerta das Fontes
-                c_aviso, c_fontes = st.columns([1.3, 1])
+                # O CARD LARANJA (Nativo do Streamlit - À prova de falhas)
+                st.warning(
+                    """
+                    **IMPORTANTE: NÃO É RECOMENDAÇÃO DE ADUBAÇÃO**
+                    
+                    1. **Fisiologia:** Os gráficos mostram a **Marcha de Absorção** (o que a planta consome), não o que você deve aplicar.
+                    2. **Risco:** Aplicar a dose total sem descontar o que já existe no solo gera salinidade e prejuízo.
+                    
+                    **ORIENTAÇÃO:** Consulte sempre um Eng. Agrônomo. Use a Análise de Solo e a Lei de Restituição.
+                    """,
+                    icon="⚠️"
+                )
 
-                # COLUNA 1: O ALERTA (Visual de Importância)
-                with c_aviso:
-                    st.warning("⚠️ **ALERTA: DEMANDA vs. RECOMENDAÇÃO**")
-                    st.markdown(
-                        """
-                        > **1. Fisiologia Pura:** Os gráficos acima mostram a **Marcha de Absorção** (o que a planta consome para viver), e **NÃO** a recomendação de adubação direta.
-                        
-                        > **2. Lei do Mínimo:** O solo já possui reservas. Aplicar a extração total do gráfico sem descontar o estoque do solo gera **salinidade, toxidez e prejuízo financeiro**.
-                        
-                        **CONCLUSÃO:** Os dados servem para balizar a extração. A dose final deve ser calculada por Eng. Agrônomo via **Análise de Solo**.
-                        """
-                    )
+                # AS FONTES (Texto limpo abaixo do alerta)
+                st.markdown(
+                    """
+                    **📚 Referências Bibliográficas (Multiculturas):**
+                    * **CFSEMG (5ª Aproximação):** Recomendações Oficiais para Minas Gerais.
+                    * **Malavolta, E. (2006):** Manual de Nutrição Mineral de Plantas.
+                    * **Embrapa:** Circulares Técnicas (Grãos e Frutíferas).
+                    * **IPNI Brasil:** Tabelas de Extração e Exportação.
+                    """
+                )
 
                 # COLUNA 2: AS FONTES (Visual Técnico/Informativo)
                 with c_fontes:
