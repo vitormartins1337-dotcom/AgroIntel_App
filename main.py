@@ -565,9 +565,9 @@ if not df_clima.empty:
             "Cebola": {
                 "meta": "70 a 90 ton/ha",
                 "fases": ["Mudas", "Cresc", "Bulbo", "Mat", "Estalo"],
-                "macros": {"N": [10, 50, 120, 160, 180], "P": [5, 20, 40, 50, 60], "K": [10, 60, 150, 200, 240], "Ca": [5, 30, 80, 110, 130], "Mg": [3, 12, 30, 45, 55], "S": [10, 30, 60, 80, 100]},
-                "micros": {"Mn": [20, 80, 200, 350, 400], "Zn": [10, 50, 120, 180, 220], "B": [5, 20, 50, 80, 100]},
-                "totais_display": {"N": "160 – 200", "P": "50 – 70", "K": "220 – 280", "Ca": "100 – 140", "Mg": "40 – 60", "S": "60 – 90"},
+                "macros": {"N": [10, 70, 140, 200, 230], "P": [4, 20, 35, 55, 70], "K": [15, 100, 220, 350, 420], "Ca": [6, 25, 50, 75, 100], "Mg": [3, 15, 30, 45, 60], "S": [4, 20, 40, 65, 85]},
+                "micros": {"B": [5, 35, 70, 120, 180], "Zn": [8, 60, 110, 170, 240], "Mn": [20, 150, 300, 500, 700], "Fe": [50, 350, 700, 1100, 1500], "Cu": [3, 20, 40, 65, 90], "Mo": [0.5, 3, 6, 10, 15]},
+                "totais_display": {"N": "200 – 230", "P": "55 – 70", "K": "350 – 420", "Ca": "750 – 100", "Mg": "45 – 60", "S": "65 – 85"},
                 "manejo_tatico": {
                     "N": "<b>ESTALO:</b> O Nitrogênio deve ser suspenso assim que os bulbos começarem a formar ou no início do 'estalo' (tombamento). N tardio causa 'pescoço grosso', rebrota e podridão no armazém.",
                     "S": "<b>PUNGÊNCIA:</b> O Enxofre é responsável pelo cheiro e sabor (ácido pirúvico) da cebola. Em solos pobres em S, a cebola fica 'fraca' e suscetível a ácaros.",
