@@ -565,15 +565,48 @@ if not df_clima.empty:
             "Cebola": {
                 "meta": "70 a 90 ton/ha",
                 "fases": ["Mudas", "Cresc", "Bulbo", "Mat", "Estalo"],
-                "macros": {"N": [10, 70, 140, 200, 230], "P": [4, 20, 35, 55, 70], "K": [15, 100, 220, 350, 420], "Ca": [6, 25, 50, 75, 100], "Mg": [3, 15, 30, 45, 60], "S": [4, 20, 40, 65, 85]},
-                "micros": {"B": [5, 35, 70, 120, 180], "Zn": [8, 60, 110, 170, 240], "Mn": [20, 150, 300, 500, 700], "Fe": [50, 350, 700, 1100, 1500], "Cu": [3, 20, 40, 65, 90], "Mo": [0.5, 3, 6, 10, 15]},
-                "totais_display": {"N": "200 – 230", "P": "55 – 70", "K": "350 – 420", "Ca": "750 – 100", "Mg": "45 – 60", "S": "65 – 85"},
+                "macros": {
+                    "N": [10, 70, 140, 200, 230], 
+                    "P": [4, 20, 35, 55, 70], 
+                    "K": [15, 100, 220, 350, 420], 
+                    "Ca": [6, 25, 50, 75, 100], 
+                    "Mg": [3, 15, 30, 45, 60], 
+                    "S": [4, 20, 40, 65, 85]
+                },
+                "micros": {
+                    "B": [5, 35, 70, 120, 180], 
+                    "Zn": [8, 60, 110, 170, 240], 
+                    "Mn": [20, 150, 300, 500, 700], 
+                    "Fe": [50, 350, 700, 1100, 1500], 
+                    "Cu": [3, 20, 40, 65, 90], 
+                    "Mo": [0.5, 3, 6, 10, 15]
+                },
+                "totais_display": {
+                    "N": "200 – 230", "P": "55 – 70", "K": "350 – 420", "Ca": "75 – 100", "Mg": "45 – 60", "S": "65 – 85",
+                    "B": "120 – 180 g", "Zn": "170 – 240 g", "Mn": "500 – 700 g", "Fe": "1100 – 1500 g", "Cu": "65 – 90 g", "Mo": "10 – 15 g"
+                },
+                
+                "contexto_solo": {
+                    "tipo": "Solo Franco-Arenoso a Franco (Irrigado)",
+                    "ideal": ["Argila: 15–30%", "CTC: 8–15 cmolc/dm³", "pH: 6.0–6.8", "V%: 65–75%", "Drenagem Perfeita"],
+                    "alerta": "⚠️ RAIZ SUPERFICIAL & ENCHARCAMENTO: O sistema radicular concentra-se em 0–25 cm. Qualquer compactação ou encharcamento causa asfixia radicular imediata e perda de estande."
+                },
+
                 "manejo_tatico": {
-                    "N": "<b>ESTALO:</b> O Nitrogênio deve ser suspenso assim que os bulbos começarem a formar ou no início do 'estalo' (tombamento). N tardio causa 'pescoço grosso', rebrota e podridão no armazém.",
-                    "S": "<b>PUNGÊNCIA:</b> O Enxofre é responsável pelo cheiro e sabor (ácido pirúvico) da cebola. Em solos pobres em S, a cebola fica 'fraca' e suscetível a ácaros.",
-                    "K": "<b>PELE:</b> Potássio abundante garante número de cera nas folhas (proteção) e catáfilos (casca) resistentes, melhorando a cura pós-colheita."
+                   "N": "<b>FORMAÇÃO DE ÁREA FOLIAR (30–60 DAS):</b> Nitrogênio define o número de folhas que sustentarão o bulbo. Deficiência precoce reduz potencial. Excesso após início da bulbificação compromete conservação e favorece pescoço grosso.",
+                   "P": "<b>ESTABELECIMENTO E ENERGIA:</b> Essencial na fase inicial para formação radicular e arranque vegetativo. Deve estar bem disponível no plantio.",
+                   "K": "<b>ENCHIMENTO DO BULBO:</b> Principal nutriente da cebola. Atua na translocação de açúcares e aumento do calibre. Relação N:K próxima de 1:1,8 a 1:2 em alta produtividade.",
+                   "Ca": "<b>QUALIDADE E CONSERVAÇÃO:</b> Importante para firmeza do bulbo e menor incidência de podridões. Saturação adequada na camada superficial é fundamental.",
+                   "Mg": "<b>MANUTENÇÃO FOTOSSINTÉTICA:</b> Participa da formação da clorofila e mantém eficiência na fase de enchimento.",
+                   "S": "<b>QUALIDADE E PUNGÊNCIA:</b> Cebola é altamente responsiva ao enxofre. Influencia compostos sulfurados e qualidade comercial.",
+                   "B": "<b>DIVISÃO CELULAR:</b> Importante na formação do bulbo. Deficiência causa deformações.",
+                   "Zn": "<b>CRESCIMENTO INICIAL:</b> Atua na síntese hormonal e expansão foliar.",
+                   "Mn": "<b>METABOLISMO ENERGÉTICO:</b> Importante na fotossíntese e ativação enzimática.",
+                   "Fe": "<b>CLOROFILA:</b> Mantém vigor vegetativo.",
+                   "Cu": "<b>RESISTÊNCIA A DOENÇAS:</b> Participa da lignificação.",
+                   "Mo": "<b>EFICIÊNCIA DO N:</b> Atua na redução do nitrato."
                 }
-            },
+            },,
            "Alho": {
                 "meta": "15 a 18 ton/ha",
                 "fases": ["Emerg", "Veg", "Bulbo", "Mat", "Colheita"],
