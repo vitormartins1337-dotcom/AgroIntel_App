@@ -289,13 +289,46 @@ if not df_clima.empty:
             "Café": { 
                 "meta": "60 a 90 sacas/ha",
                 "fases": ["Veg/Flor", "Chumbinho", "Expansão", "Granação", "Maturação"],
-                "macros": {"N": [30, 80, 140, 220, 300], "P": [5, 15, 30, 45, 65], "K": [25, 90, 180, 300, 420], "Ca": [15, 40, 80, 130, 180], "Mg": [5, 20, 45, 75, 110], "S": [4, 15, 30, 55, 85]},
-                "micros": {"B": [20, 70, 150, 260, 380], "Zn": [15, 50, 110, 190, 280], "Mn": [40, 140, 300, 500, 750], "Fe": [120, 400, 900, 1500, 2200], "Cu": [6, 20, 45, 75, 110], "Mo": [0.5, 2, 4, 7, 10]},
-                "totais_display": {"N": "280 – 300", "P": "45 – 60", "K": "400 – 420", "Ca": "140 – 180", "Mg": "75 – 110", "S": "55 – 85"},
+                "macros": {
+                    "N": [40, 120, 220, 300, 360], 
+                    "P": [6, 20, 40, 60, 80], 
+                    "K": [50, 180, 320, 450, 550], 
+                    "Ca": [15, 50, 90, 130, 170], 
+                    "Mg": [8, 30, 60, 90, 120], 
+                    "S": [5, 18, 35, 50, 65]
+                },
+                "micros": {
+                    "B": [40, 120, 220, 320, 450], 
+                    "Zn": [60, 200, 350, 500, 700], 
+                    "Mn": [120, 400, 800, 1200, 1600], 
+                    "Fe": [300, 900, 1600, 2200, 3000], 
+                    "Cu": [20, 70, 130, 200, 280], 
+                    "Mo": [2, 8, 15, 22, 35]
+                },
+                "totais_display": {
+                    "N": "300 – 360", "P": "60 – 80", "K": "450 – 550", "Ca": "130 – 170", "Mg": "90 – 120", "S": "55 – 65",
+                    "B": "350 – 450 g", "Zn": "500 – 700 g", "Mn": "1200 – 1600 g", "Fe": "2200 – 3000 g", "Cu": "200 – 280 g", "Mo": "25 – 35 g"
+                },
+                
+                "contexto_solo": {
+                    "tipo": "Latossolo Vermelho Distroférrico (Irrigado/Alta Tec)",
+                    "ideal": ["Argila: 30–60%", "CTC: >12 cmolc/dm³", "V%: 65–75%", "pH: 5.5–6.2", "MO: ≥ 3%"],
+                    "alerta": "⚠️ PROFUNDIDADE EFETIVA: Solo profundo (>1m) é determinante para estabilidade produtiva em cargas de 90 sc/ha, garantindo o 'pulmão hídrico' da planta."
+                },
+
                 "manejo_tatico": {
-                    "N": "<b>VEGETAÇÃO E CARGA:</b> Parcelar em 3 ou 4x (Set a Mar). Para altas cargas (>80sc), a demanda na fase de expansão (Dez/Jan) é crítica. Use Nitrato de Amônio se não houver previsão de chuva imediata (menor volatilização).",
-                    "K": "<b>DIE-BACK (SECA DE PONTEIROS):</b> Na fase de Granação (Jan-Mar), o fruto drena todo o K das folhas. Se faltar K no solo, a planta sacrifica as folhas e os ramos secam, prejudicando a safra seguinte.",
-                    "B": "<b>PEGAMENTO DE FLOR:</b> Boro foliar na pré-florada e chumbinho é obrigatório. O Boro é imóvel no floema do café, precisa de aplicações localizadas nas rosetas."
+                   "N": "<b>RECUPERAÇÃO PÓS-COLHEITA E SUSTENTAÇÃO DA CARGA:</b> Nitrogênio é fundamental na recomposição da área foliar após colheita e na sustentação da carga de frutos. Parcelar aplicações ao longo do ciclo. Excesso tardio favorece crescimento vegetativo excessivo e aumenta incidência de doenças.",
+                   "P": "<b>DIFERENCIAÇÃO FLORAL:</b> Importante na indução e formação das gemas florais. Deve estar adequado no solo antes do período de estresse hídrico controlado.",
+                   "K": "<b>NUTRIENTE CHAVE DA PRODUTIVIDADE:</b> Atua no enchimento, translocação de açúcares e qualidade de bebida. Relação N:K deve ser próxima de 1:1,5 a 1:2 para altas produtividades.",
+                   "Ca": "<b>ESTRUTURA E SANIDADE:</b> Importante para integridade de tecidos e resistência a doenças. Saturação adequada na CTC melhora estabilidade produtiva.",
+                   "Mg": "<b>FOTOSSÍNTESE SUSTENTADA:</b> Essencial para manter alta atividade fotossintética durante enchimento. Monitorar antagonismo com K.",
+                   "S": "<b>EFICIÊNCIA DO N:</b> Atua na síntese proteica e melhora aproveitamento do nitrogênio aplicado.",
+                   "B": "<b>FLORAÇÃO E PEGAMENTO:</b> Essencial para fecundação e formação uniforme de frutos. Deficiência causa abortamento floral.",
+                   "Zn": "<b>CRESCIMENTO VEGETATIVO:</b> Atua na síntese de hormônios e expansão de ramos produtivos.",
+                   "Mn": "<b>METABOLISMO ENERGÉTICO:</b> Participa da fotossíntese e ativação enzimática.",
+                   "Fe": "<b>MANUTENÇÃO DA CLOROFILA:</b> Essencial para vigor vegetativo, especialmente em solos com pH mais elevado.",
+                   "Cu": "<b>LIGNIFICAÇÃO E RESISTÊNCIA:</b> Contribui para resistência estrutural e sanidade.",
+                   "Mo": "<b>METABOLISMO DO N:</b> Atua na redução do nitrato e melhora eficiência nutricional."
                 }
             },
             "Batata": {
