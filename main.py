@@ -904,34 +904,42 @@ if not df_clima.empty:
                                     </div>
                                     """, unsafe_allow_html=True)
 
-            # --- 7. AVISO LEGAL E FONTE (MANDATÓRIO) ---
+            # --- 7. AVISO LEGAL E FONTES (ATUALIZADO COM CFSEMG 5ª APROX) ---
             st.markdown("<br>", unsafe_allow_html=True)
             st.markdown("""
-            <div style="background-color: #fff7ed; border-left: 5px solid #f97316; padding: 20px; border-radius: 5px;">
-                <h4 style="color: #9a3412; margin-top: 0;">⚠️ ALERTA AGRONÔMICO (LEIA COM ATENÇÃO)</h4>
-                <p style="color: #7c2d12; font-size: 0.9rem; margin-bottom: 10px;">
-                    <b>1. Demanda vs. Recomendação:</b> Estes gráficos mostram a <i>Marcha de Absorção</i> (o que a planta consome), 
-                    NÃO a recomendação de adubação (o que você deve aplicar).
-                </p>
-                <p style="color: #7c2d12; font-size: 0.9rem; margin-bottom: 10px;">
-                    <b>2. Lei do Mínimo:</b> O solo já possui reservas de nutrientes. Aplicar a quantidade total absorvida sem descontar 
-                    o que já existe no solo pode causar toxicidade, salinidade e prejuízo financeiro.
-                </p>
-                <p style="color: #7c2d12; font-weight: bold; font-size: 0.95rem;">
-                    🧪 RECOMENDAÇÃO OFICIAL: Faça sempre a ANÁLISE DE SOLO antes do plantio. Consulte um Engenheiro Agrônomo 
-                    para calcular a dose exata baseada na "Lei de Restituição".
-                </p>
-                <hr style="border-color: #fdba74;">
-                <p style="color: #9a3412; font-size: 0.7rem; margin-top: 5px;">
-                    <i>Fontes de Dados: Malavolta (2006), Embrapa Soja/Milho/Café, IPNI Brasil. Dados baseados em média para alta produtividade.</i>
-                </p>
+            <div style="background-color: #fff7ed; border-left: 5px solid #f97316; padding: 20px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                <h4 style="color: #9a3412; margin-top: 0; font-size: 1.1rem;">⚠️ ALERTA AGRONÔMICO (LEIA COM ATENÇÃO)</h4>
+                
+                <div style="margin-bottom: 15px;">
+                    <p style="color: #7c2d12; font-size: 0.9rem; margin-bottom: 8px; line-height: 1.5;">
+                        <b>1. Demanda vs. Recomendação:</b> Estes gráficos representam a <i>Marcha de Absorção Fisiológica</i> (o que a planta consome para atingir a meta), 
+                        NÃO a recomendação de adubação (o que você deve aplicar).
+                    </p>
+                    <p style="color: #7c2d12; font-size: 0.9rem; margin-bottom: 0; line-height: 1.5;">
+                        <b>2. Lei do Mínimo:</b> O solo já possui reservas. Aplicar a quantidade total extraída sem descontar o estoque do solo 
+                        pode causar toxidez, salinidade e prejuízo financeiro.
+                    </p>
+                </div>
+
+                <div style="background-color: #ffedd5; padding: 12px; border-radius: 4px; border: 1px solid #fed7aa;">
+                    <p style="color: #c2410c; font-weight: bold; font-size: 0.9rem; margin: 0; display: flex; align-items: center;">
+                        🧪 RECOMENDAÇÃO OFICIAL: Faça sempre a ANÁLISE DE SOLO antes do plantio. Consulte um Engenheiro Agrônomo para calcular a dose exata baseada na "Lei de Restituição".
+                    </p>
+                </div>
+
+                <hr style="border-color: #fdba74; opacity: 0.6; margin: 15px 0;">
+
+                <div style="color: #9a3412; font-size: 0.8rem;">
+                    <b style="text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px;">📚 Fontes de Dados e Referências Técnicas:</b>
+                    <ul style="margin-top: 5px; margin-bottom: 0; padding-left: 20px; color: #7c2d12;">
+                        <li><b>CFSEMG (5ª Aproximação):</b> Recomendações para o Estado de Minas Gerais (Foco em Café).</li>
+                        <li><b>Malavolta, E. (2006):</b> Manual de Nutrição Mineral de Plantas.</li>
+                        <li><b>Embrapa (Soja/Milho/Algodão):</b> Circulares Técnicas para Sistemas de Alta Produtividade.</li>
+                        <li><b>IPNI Brasil:</b> Dados de extração e exportação de nutrientes.</li>
+                    </ul>
+                </div>
             </div>
             """, unsafe_allow_html=True)
-
-        else:
-            st.error("Dados em compilação.")
-
-        st.markdown('</div>', unsafe_allow_html=True)
     
     
     # 3. CLIMA (CORRIGIDO E BLINDADO)
