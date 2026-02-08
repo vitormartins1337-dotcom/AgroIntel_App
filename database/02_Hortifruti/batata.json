@@ -2,58 +2,178 @@
   "Batata (Solanum tuberosum)": {
     "t_base": 7,
     "vars": {
-      "Agata": { "kc": 1.10, "gda_meta": 1450, "info": "Mesa. Pele amarela lisa. Ciclo curto (90 dias). Baixa matéria seca. Muito sensível a Requeima." },
-      "Asterix": { "kc": 1.15, "gda_meta": 1600, "info": "Indústria/Fritura. Pele vermelha. Rústica. Resistência média a viroses." },
-      "Atlantic": { "kc": 1.15, "gda_meta": 1650, "info": "Chips. Exige manejo perfeito de água para evitar 'Coração Oco'." },
-      "Orchestra": { "kc": 1.15, "gda_meta": 1600, "info": "Mercado Premium. Pele brilhante. Exige níveis altos de Cálcio e Boro." },
-      "Cupido": { "kc": 1.10, "gda_meta": 1400, "info": "Ciclo ultra-precoce. Extremamente suscetível à Requeima e Alternaria." }
+      "Agata": { 
+        "kc": 1.10, 
+        "gda_meta": 1450, 
+        "info": "Líder de mercado (Mesa). Pele amarela lisa. Ciclo curto (90 dias). ALERTA: Altíssima sensibilidade a Requeima e Sarna Comum." 
+      },
+      "Asterix": { 
+        "kc": 1.15, 
+        "gda_meta": 1600, 
+        "info": "Indústria/Fritura (Palito). Pele vermelha. Mais rústica. Moderadamente resistente a viroses, mas sensível a Alternaria." 
+      },
+      "Atlantic": { 
+        "kc": 1.15, 
+        "gda_meta": 1650, 
+        "info": "Chips (Redonda). Matéria seca alta. ALERTA: Manejo de água deve ser perfeito para evitar 'Coração Oco' e Mancha Chocolate." 
+      },
+      "Orchestra": { 
+        "kc": 1.15, 
+        "gda_meta": 1600, 
+        "info": "Mercado Premium/Gourmet. Pele muito brilhante. Exige níveis altos de Cálcio e Boro. Resistente a Nematoides (Ro1)." 
+      },
+      "Cupido": { 
+        "kc": 1.10, 
+        "gda_meta": 1400, 
+        "info": "Ciclo ultra-precoce. Boa lavabilidade. Extremamente suscetível à Requeima e Alternaria. Exige colheita rápida." 
+      }
     },
     "fases": {
-      "I - Brotamento": {
-        "desc": "Olhos ativos e emergência.",
-        "fisiologia": "Dependência da batata-mãe. Raízes frágeis.",
-        "manejo": "Aplicação de sulco é vital para Rizoctoniose (Cancro).",
+      "I - Plantio e Emergência": {
+        "desc": "Brotamento e Enraizamento.",
+        "fisiologia": "A planta depende das reservas da batata-mãe. Fase crítica para definir a sanidade inicial (ts).",
+        "manejo": "Tratamento de sulco OBRIGATÓRIO. Controle de Rizoctonia (Cancro), Fusarium e Pragas de Solo.",
         "quimica": [
-          { "Alvo": "Rizoctonia", "Ativo": "Azoxistrobina", "Grupo": "Estrobilurina", "Tipo": "Sulco de Plantio" },
-          { "Alvo": "Pragas de Solo", "Ativo": "Fipronil", "Grupo": "Pirazol", "Tipo": "Sulco" }
+          { 
+            "Alvo": "Rizoctonia (Cancro) e Fusarium", 
+            "imagem": "rizoctonia_fusarium.jpg",
+            "Ativo": "Fludioxonil + Azoxistrobina", 
+            "Grupo": "Fenilpirrol", 
+            "Tipo": "Jato Dirigido no Sulco",
+            "Obs": "Protege contra o 'estrangulamento' da haste e podridão seca da semente. Essencial para estande uniforme."
+          },
+          { 
+            "Alvo": "Pragas de Solo (Larva Alfinete/Arame)", 
+            "imagem": "larva_alfinete.jpg",
+            "Ativo": "Fipronil ou Tiametoxam", 
+            "Grupo": "Pirazol/Neonicotinoide", 
+            "Tipo": "Sistêmico/Contato",
+            "Obs": "A Larva Alfinete (Diabrotica) fura a batata, tirando valor comercial. O controle é preventivo no plantio."
+          },
+          { 
+            "Alvo": "Nematoides (Meloidogyne/Pratylenchus)", 
+            "imagem": "nematoide_galha.jpg",
+            "Ativo": "Fluopyram ou Bacillus firmus", 
+            "Grupo": "Benzamida/Biológico", 
+            "Tipo": "Nematicida de Sulco",
+            "Obs": "Batata com 'pipoca' (galhas) é refugada. Solos arenosos ou áreas velhas exigem atenção redobrada."
+          }
         ]
       },
-      "II - Estolonização": {
+      "II - Vegetativo / Estolonização": {
         "desc": "Formação de hastes e estolões.",
-        "fisiologia": "Alta demanda de Nitrogênio para formar área foliar (IAF).",
-        "manejo": "Controle de Vaquinha (Diabrotica) e Larva Minadora. Início da Amontoa.",
+        "fisiologia": "Alta demanda de Nitrogênio. Início da pressão de vetores de virose.",
+        "manejo": "Controle de Larva Minadora, Pulgões e Tripes (Vira-Cabeça). Início da Amontoa.",
         "quimica": [
-          { "Alvo": "Vaquinha", "Ativo": "Tiametoxam", "Grupo": "Neonicotinoide", "Tipo": "Sistêmico" },
-          { "Alvo": "Minadora", "Ativo": "Ciromazina", "Grupo": "Regulador de Crescimento", "Tipo": "Foliar" },
-          { "Alvo": "Preventivo Doenças", "Ativo": "Mancozebe", "Grupo": "Ditiocarbamato", "Tipo": "Protetor" }
+          { 
+            "Alvo": "Tripes (Vetor de Vira-Cabeça)", 
+            "imagem": "tripes_vira_cabeca.jpg",
+            "Ativo": "Espinosade ou Metomil", 
+            "Grupo": "Espinocina/Carbamato", 
+            "Tipo": "Choque",
+            "Obs": "O vírus Vira-Cabeça (Tospovirus) mata a planta. O vetor (Tripes) fica na flor ou na brotação nova."
+          },
+          { 
+            "Alvo": "Larva Minadora (Liriomyza)", 
+            "imagem": "minadora_batata.jpg",
+            "Ativo": "Ciromazina ou Abamectina", 
+            "Grupo": "Regulador/Avermectina", 
+            "Tipo": "Ingestão/Translaminar",
+            "Obs": "A larva faz galerias nas folhas ('mapa'), reduzindo a fotossíntese. Monitorar folhas baixeiras."
+          },
+          { 
+            "Alvo": "Pinta Preta (Alternaria)", 
+            "imagem": "alternaria_inicial.jpg",
+            "Ativo": "Mancozebe ou Metiram", 
+            "Grupo": "Ditiocarbamato", 
+            "Tipo": "Protetor Multissítio",
+            "Obs": "Aplicação base (Manzate/Polyram) para proteger folhas novas. Alternaria começa mais cedo em cv. Asterix."
+          }
         ]
       },
-      "III - Tuberização (Crítica)": {
-        "desc": "Ponta do estolão vira gancho.",
-        "fisiologia": "Inversão hormonal. A planta para de crescer folha e foca no tubérculo. O solo NÃO PODE secar (risco de Sarna).",
-        "manejo": "Controle rigoroso de Requeima (Phytophthora). Monitorar Pulgão (Vetor de Vírus Y/Enrolamento).",
+      "III - Tuberização (Gancho)": {
+        "desc": "Ponta do estolão incha.",
+        "fisiologia": "Inversão hormonal. O solo NÃO PODE secar (risco de Sarna). Fase crítica para Bactérias.",
+        "manejo": "Controle de Requeima, Ácaro Branco e prevenção de Murchadeira (Ralstonia).",
         "quimica": [
-          { "Alvo": "Requeima (Choque)", "Ativo": "Cimoxanil + Mancozebe", "Grupo": "Acetamida", "Tipo": "Curativo + Protetor" },
-          { "Alvo": "Requeima (Nobre)", "Ativo": "Mandipropamida", "Grupo": "CAA", "Tipo": "Translaminar (Alta fixação)" },
-          { "Alvo": "Pinta Preta", "Ativo": "Boscalida", "Grupo": "Carboxamida", "Tipo": "Sistêmico" }
+          { 
+            "Alvo": "Requeima (Phytophthora infestans)", 
+            "imagem": "requeima_batata.jpg",
+            "Ativo": "Mandipropamida ou Fluazinam", 
+            "Grupo": "CAA/Fenilpiridinilamina", 
+            "Tipo": "Translaminar/Protetor",
+            "Obs": "Doença mais destrutiva da batata. Clima frio e úmido é fatal. Mandipropamida fixa na cera e resiste à chuva."
+          },
+          { 
+            "Alvo": "Murchadeira (Ralstonia/Erwinia)", 
+            "imagem": "murchadeira_ralstonia.jpg",
+            "Ativo": "Cobre + Kasugamicina (ou Bacillus subtilis)", 
+            "Grupo": "Cobre/Biológico", 
+            "Tipo": "Bacteriostático",
+            "Obs": "Não existe cura química. Usar biológicos e cobre para reduzir a disseminação. Evitar trânsito de máquinas em áreas doentes."
+          },
+          { 
+            "Alvo": "Ácaro Branco (Polyphagotarsonemus)", 
+            "imagem": "acaro_branco.jpg",
+            "Ativo": "Abamectina ou Espirofesifeno", 
+            "Grupo": "Avermectina", 
+            "Tipo": "Acaricida",
+            "Obs": "Encarquilha a folha nova ('folha de papel'). O produtor confunde com virose. Olhar com lupa de 20x."
+          }
         ]
       },
-      "IV - Enchimento": {
-        "desc": "Engorda dos tubérculos.",
-        "fisiologia": "Máximo dreno de Potássio. Translocação intensa.",
-        "manejo": "Monitorar Traça (Phthorimaea) e Mosca Branca. Evitar rachaduras com irrigação constante.",
+      "IV - Enchimento de Tubérculos": {
+        "desc": "Engorda e acúmulo de amido.",
+        "fisiologia": "Máximo dreno de Potássio. A planta precisa manter a folha sadia (sem Alternaria).",
+        "manejo": "Monitorar Traça (Phthorimaea) que fura a batata. Controle de Alternaria e Mofo Branco.",
         "quimica": [
-          { "Alvo": "Traça da Batata", "Ativo": "Clorfenapir", "Grupo": "Pirrol", "Tipo": "Ingestão" },
-          { "Alvo": "Traça/Larva", "Ativo": "Benzoato de Emamectina", "Grupo": "Avermectina", "Tipo": "Choque" },
-          { "Alvo": "Mosca Branca", "Ativo": "Ciantraniliprole", "Grupo": "Diamida", "Tipo": "Sistêmico" }
+          { 
+            "Alvo": "Traça da Batata (Tuta/Phthorimaea)", 
+            "imagem": "traca_dano_tuberculo.jpg",
+            "Ativo": "Clorfenapir ou Clorantraniliprole", 
+            "Grupo": "Pirrol/Diamida", 
+            "Tipo": "Ingestão/Contato",
+            "Obs": "A lagarta desce da folha para o tubérculo se o solo rachar. Manter amontoa bem feita e solo úmido."
+          },
+          { 
+            "Alvo": "Pinta Preta (Alternaria)", 
+            "imagem": "alternaria_fase_final.jpg",
+            "Ativo": "Boscalida ou Azoxistrobina", 
+            "Grupo": "Carboxamida/Estrobilurina", 
+            "Tipo": "Sistêmico Premium",
+            "Obs": "A Alternaria explode nesta fase. Se perder a folha agora, a batata para de crescer (perda de produtividade)."
+          },
+          { 
+            "Alvo": "Mofo Branco (Sclerotinia)", 
+            "imagem": "mofo_branco_batata.jpg",
+            "Ativo": "Procimidona ou Fluazinam", 
+            "Grupo": "Dicarboximida", 
+            "Tipo": "Contato",
+            "Obs": "Apodrece a base da haste ('melado') em áreas de baixada ou muito adensadas."
+          }
         ]
       },
-      "V - Maturação": {
-        "desc": "Senescência natural ou Dessecação.",
-        "fisiologia": "Pele do tubérculo firma (suberização).",
-        "manejo": "Dessecação para colheita. Evitar batida (dano mecânico).",
+      "V - Maturação e Dessecação": {
+        "desc": "Senescência e Pele firme.",
+        "fisiologia": "Suberização (formação da casca). Tubérculo para de crescer e fixa a pele.",
+        "manejo": "Dessecação para colheita. Prevenção de Podridão Mole (Canela Preta) na lavagem.",
         "quimica": [
-          { "Alvo": "Dessecação", "Ativo": "Diquat", "Grupo": "Fotossistema I", "Tipo": "Contato" }
+          { 
+            "Alvo": "Dessecação de Rama", 
+            "imagem": "dessecacao_batata.jpg",
+            "Ativo": "Diquat ou Carfentrazone", 
+            "Grupo": "Fotossistema I/PPO", 
+            "Tipo": "Contato",
+            "Obs": "Aplicar pela manhã. Garante que a pele não solte ('pele de vidro'). Aguardar 10-14 dias para colher."
+          },
+          { 
+            "Alvo": "Podridão Mole (Pectobacterium)", 
+            "imagem": "canela_preta.jpg",
+            "Ativo": "Cloro (Pós-colheita) ou Cobre (Campo)", 
+            "Grupo": "Sanitizante", 
+            "Tipo": "Contato",
+            "Obs": "A bactéria entra por ferimentos na colheita. Evitar bater a batata e não lavar batata quente."
+          }
         ]
       }
     }
