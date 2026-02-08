@@ -295,7 +295,7 @@ if not df_clima.empty:
                             <span style="background:{bg_cor}; color:{txt_cor}; padding:3px 8px; border-radius:4px; font-size:0.8rem; font-weight:600; border:1px solid {bg_cor};">{grupo}</span>
                             <span style="background:#f8fafc; color:#475569; padding:3px 8px; border-radius:4px; font-size:0.8rem; border:1px solid #e2e8f0; margin-left:5px;">{tipo}</span>
                         </div>
-                        """, unsafe_allow_html=True))
+                        """, unsafe_allow_html=True)
 
 
                                                        # 2. NUTRIÇÃO (MARCHA DE ABSORÇÃO & MANEJO - CALIBRADO TOTAL HIGH-YIELD)
