@@ -5,68 +5,167 @@
       "BRS Vitoria": { 
         "kc": 0.85, 
         "gda_meta": 1500, 
-        "info": "Uva sem semente (Seedless) preta. Sabor framboesa. Tolerante ao Míldio, mas exige manejo para Podridão da Uva Madura." 
+        "info": "Uva sem semente (Seedless) preta. Sabor framboesa único. Tolerante ao Míldio, mas EXTREMAMENTE sensível à Podridão da Uva Madura (Glomerella) na chuva." 
       },
       "Niagara Rosada": { 
         "kc": 0.85, 
         "gda_meta": 1400, 
-        "info": "Uva de mesa rústica (Labrusca). Muito plantada em SP/RS. Suscetível a Míldio e Antracnose. Mercado interno forte." 
+        "info": "Rústica (Labrusca). Muito plantada em SP/RS. Suscetível a Míldio e Antracnose, mas resistente a doenças de cacho. Mercado interno forte." 
       },
       "Cabernet Sauvignon": { 
         "kc": 0.85, 
         "gda_meta": 1600, 
-        "info": "Vinífera tinta. Cachos pequenos e compactos. Casca grossa (resiste melhor a chuvas na colheita que outras tintas)." 
+        "info": "Vinífera tinta. Cachos pequenos e compactos. Casca grossa (resiste melhor a chuvas na colheita que Merlot). Exige poda mista." 
       },
       "Chardonnay": { 
         "kc": 0.85, 
         "gda_meta": 1550, 
-        "info": "Vinífera branca. Precoce. Brotação antecipada (risco de geada). Muito suscetível ao Oídio." 
+        "info": "Vinífera branca. Precoce. Brotação antecipada (risco de geada). A rainha dos vinhos brancos, mas muito suscetível ao Oídio e Botrytis." 
+      },
+      "Italia": {
+        "kc": 0.90,
+        "gda_meta": 1600,
+        "info": "Uva fina de mesa com semente. Cachos grandes. Exige raleio manual intenso. Muito sensível a Míldio e Rachadura de baga."
       }
     },
     "fases": {
-      "Poda e Quebra de Dormência": {
-        "desc": "Ramos secos (varas). Aplicação de produtos.",
-        "fisiologia": "A videira precisa de estímulo para 'acordar' uniforme em regiões tropicais (falta de frio).",
-        "manejo": "Aplicação de Cianamida Hidrogenada (Dormex) para uniformizar brotação. Tratamento de inverno no lenho.",
+      "Poda / Dormência": {
+        "desc": "Ramos secos (varas) e Poda de Produção.",
+        "fisiologia": "A videira precisa de estímulo para 'acordar' uniforme em regiões tropicais. Momento de infecção de doenças de tronco.",
+        "manejo": "Aplicação de Cianamida (Dormex) para uniformizar brotação. Pincelamento de cortes com pasta fúngica (Trichoderma).",
         "quimica": [
-          { "Alvo": "Quebra de Dormência", "Ativo": "Cianamida Hidrogenada", "Grupo": "Regulador", "Tipo": "Contato (Tóxico)" },
-          { "Alvo": "Limpeza de Tronco (Cochonilha)", "Ativo": "Calda Sulfocálcica", "Grupo": "Inorgânico", "Tipo": "Cáustico" }
+          { 
+            "Alvo": "Quebra de Dormência", 
+            "imagem": "dormencia_uva.jpg",
+            "Ativo": "Cianamida Hidrogenada", 
+            "Grupo": "Regulador de Crescimento", 
+            "Tipo": "Contato (Tóxico)",
+            "Obs": "Obrigatório em clima quente. Aplicar logo após a poda. Cuidado extremo: produto cáustico e tóxico ao aplicador."
+          },
+          { 
+            "Alvo": "Cochonilha de Tronco (Pina)", 
+            "imagem": "cochonilha_tronco.jpg",
+            "Ativo": "Calda Sulfocálcica", 
+            "Grupo": "Inorgânico", 
+            "Tipo": "Cáustico",
+            "Obs": "Limpa o tronco de musgos e mata cochonilhas escondidas na casca. Aplicar apenas no lenho (queima folhas)."
+          },
+          { 
+            "Alvo": "Doenças de Tronco (Esca/Botryosphaeria)", 
+            "imagem": "doenca_tronco.jpg",
+            "Ativo": "Tiofanato Metílico ou Trichoderma", 
+            "Grupo": "Benzimidazol/Biológico", 
+            "Tipo": "Protetor de Ferimentos",
+            "Obs": "Pincelar ou pulverizar imediatamente após a poda. O fungo entra pelo corte e mata o braço da videira em 2 anos."
+          }
         ]
       },
       "Brotação (Lã) a 15cm": {
         "desc": "Folhas novas e tenras.",
-        "fisiologia": "Tecidos jovens muito suscetíveis. A planta gasta reservas do tronco.",
-        "manejo": "Controle rigoroso de Antracnose (Olho de passarinho) e Míldio (Mancha de Óleo) se houver chuva/orvalho.",
+        "fisiologia": "Tecidos jovens sem cera (cutícula). Altíssima suscetibilidade a fungos. A planta gasta reservas do tronco.",
+        "manejo": "Controle rigoroso de Antracnose (Olho de passarinho) e Míldio (Mancha de Óleo).",
         "quimica": [
-          { "Alvo": "Antracnose (Elsinoe)", "Ativo": "Tiofanato Metílico", "Grupo": "Benzimidazol", "Tipo": "Sistêmico" },
-          { "Alvo": "Míldio (Plasmopara)", "Ativo": "Metalaxil-M + Mancozeb", "Grupo": "Fenilamida", "Tipo": "Sistêmico + Protetor" }
+          { 
+            "Alvo": "Antracnose (Elsinoe)", 
+            "imagem": "antracnose_uva.jpg",
+            "Ativo": "Tiofanato Metílico ou Difenoconazol", 
+            "Grupo": "Benzimidazol/Triazol", 
+            "Tipo": "Sistêmico",
+            "Obs": "Causa furos nas folhas e 'olho de passarinho' nos ramos. Se pegar agora, deforma o cacho lá na frente."
+          },
+          { 
+            "Alvo": "Míldio (Plasmopara)", 
+            "imagem": "mildio_uva.jpg",
+            "Ativo": "Metalaxil-M + Mancozeb", 
+            "Grupo": "Fenilamida", 
+            "Tipo": "Sistêmico + Protetor",
+            "Obs": "Mancha de óleo na folha. Ocorre com chuva/neblina. Destrói a folha e o cacho jovem em 48h."
+          },
+          { 
+            "Alvo": "Traça dos Cachos (Cryptoblabes)", 
+            "imagem": "traca_uva.jpg",
+            "Ativo": "Bacillus thuringiensis (Bt)", 
+            "Grupo": "Biológico", 
+            "Tipo": "Ingestão",
+            "Obs": "A lagarta tece teias nos cachos jovens. Aplicar Bt preventivamente ao entardecer."
+          }
         ]
       },
-      "Florada (Chumbinho)": {
+      "Florada / Chumbinho": {
         "desc": "Cachos floridos e limpeza.",
-        "fisiologia": "Abertura da caliptra. Polinização. Se chover, ocorre abortamento ou 'bagoinha'.",
-        "manejo": "Aplicação de Giberelina (em Seedless) para alongamento e raleio. Controle de Botrytis e Tripes.",
+        "fisiologia": "Abertura da caliptra (capuz). Polinização. Se chover na flor, ocorre abortamento ou 'bagoinha' (Míldio).",
+        "manejo": "Aplicação de Giberelina (GA3) em uvas sem semente. Proteção do cacho contra Botrytis.",
         "quimica": [
-          { "Alvo": "Botrytis (Mofo Cinzento)", "Ativo": "Ciprodinil + Fludioxonil", "Grupo": "Anilinopirimidina", "Tipo": "Sistêmico" },
-          { "Alvo": "Oídio (Pó branco)", "Ativo": "Tebuconazol", "Grupo": "Triazol", "Tipo": "Sistêmico" },
-          { "Alvo": "Crescimento (Seedless)", "Ativo": "Ácido Giberélico (GA3)", "Grupo": "Hormônio", "Tipo": "Fisiológico" }
+          { 
+            "Alvo": "Botrytis (Mofo Cinzento)", 
+            "imagem": "botrytis_flor_uva.jpg",
+            "Ativo": "Ciprodinil + Fludioxonil (Switch)", 
+            "Grupo": "Anilinopirimidina", 
+            "Tipo": "Padrão Ouro",
+            "Obs": "O fungo entra pela flor (estigma) e fica latente até a uva madurar. Aplicação crítica na 'limpeza do cacho'."
+          },
+          { 
+            "Alvo": "Oídio (Uncinula)", 
+            "imagem": "oidio_uva.jpg",
+            "Ativo": "Tebuconazol ou Enxofre", 
+            "Grupo": "Triazol/Inorgânico", 
+            "Tipo": "Sistêmico/Vapor",
+            "Obs": "Pó branco/cinza. Ataca em clima seco. O cacho fica com cheiro de mofo e racha quando cresce."
+          },
+          { 
+            "Alvo": "Tripes (Frankliniella)", 
+            "imagem": "tripes_uva.jpg",
+            "Ativo": "Spinosad ou Acetamiprido", 
+            "Grupo": "Espinosina/Neonicotinoide", 
+            "Tipo": "Choque",
+            "Obs": "Causa o 'russeting' (cicatriz) na baga. Monitorar batendo o cacho em papel branco."
+          }
         ]
       },
       "Véraison (Mudança de Cor)": {
-        "desc": "Amolecimento da baga e cor.",
-        "fisiologia": "Parada do crescimento ácido. Início do acúmulo brutal de açúcar (Brix). A casca fica fina e vulnerável.",
-        "manejo": "Manejo da Podridão Ácida (Mosca das Frutas + Leveduras) e Podridão da Uva Madura (Glomerella).",
+        "desc": "Amolecimento da baga.",
+        "fisiologia": "Início do acúmulo de açúcar (Brix). A casca fica fina. Atrativo para moscas e abelhas (Irapuá).",
+        "manejo": "Manejo da Podridão Ácida e Podridão da Uva Madura. Cuidado com excesso de Nitrogênio.",
         "quimica": [
-          { "Alvo": "Podridão Ácida/Mosca", "Ativo": "Etofenproxi", "Grupo": "Éter", "Tipo": "Contato" },
-          { "Alvo": "Podridão Madura", "Ativo": "Difenoconazol", "Grupo": "Triazol", "Tipo": "Curativo" }
+          { 
+            "Alvo": "Podridão da Uva Madura (Glomerella)", 
+            "imagem": "podridao_madura.jpg",
+            "Ativo": "Azoxistrobina ou Difenoconazol", 
+            "Grupo": "Estrobilurina/Triazol", 
+            "Tipo": "Preventivo/Curativo",
+            "Obs": "A 'Gota' que mancha a uva. Ocorre com chuvas na maturação. Uvas brancas e BRS Vitória são muito sensíveis."
+          },
+          { 
+            "Alvo": "Moscas das Frutas (Anastrepha/Ceratitis)", 
+            "imagem": "mosca_fruta.jpg",
+            "Ativo": "Etofenproxi ou Isca Tóxica", 
+            "Grupo": "Éter", 
+            "Tipo": "Contato/Ingestão",
+            "Obs": "A picada abre porta para a Podridão Ácida (vinagre). Usar armadilhas McPhail para monitorar."
+          }
         ]
       },
       "Maturação Final": {
         "desc": "Colheita.",
-        "fisiologia": "Brix ideal (16-18°). Acidez baixa.",
-        "manejo": "Respeitar carência (LMR). Cuidado com manuseio para não tirar a pruína (cera natural).",
+        "fisiologia": "Brix ideal (16-18°). Acidez cai. A pruína (cera) protege a baga.",
+        "manejo": "Respeitar CARÊNCIA (LMR). Evitar tocar nas bagas para não tirar a cera natural.",
         "quimica": [
-          { "Alvo": "Botrytis (Pré-colheita)", "Ativo": "Fenhexamida", "Grupo": "Hidroxianilida", "Tipo": "Contato Específico (Curto PC)" }
+          { 
+            "Alvo": "Botrytis (Pré-colheita)", 
+            "imagem": "botrytis_cacho.jpg",
+            "Ativo": "Fenhexamida", 
+            "Grupo": "Hidroxianilida", 
+            "Tipo": "Específico (Curto PC)",
+            "Obs": "Última defesa. Usar apenas se houver previsão de chuva na colheita. Carência de 1 a 3 dias (verificar bula)."
+          },
+          { 
+            "Alvo": "Traça (Cryptoblabes)", 
+            "imagem": "dano_traca.jpg",
+            "Ativo": "Bacillus thuringiensis (Bt)", 
+            "Grupo": "Biológico", 
+            "Tipo": "Seguro (Sem resíduo)",
+            "Obs": "A lagarta se esconde no meio do cacho fechado. Usar alto volume e pressão para o produto penetrar."
+          }
         ]
       }
     }
