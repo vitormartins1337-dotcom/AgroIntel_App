@@ -1,73 +1,95 @@
 {
-  "Café (Coffea arabica)": {
-    "t_base": 10,
+  "Mirtilo (Blueberry)": {
+    "t_base": 7,
     "vars": {
-      "Catuaí Vermelho/Amarelo": { 
-        "kc": 1.1, 
-        "gda_meta": 3000, 
-        "info": "Cultivar mais plantada no Brasil. Porte baixo, alta produtividade, excelente bebida. Muito suscetível à Ferrugem e Nematoides." 
-      },
-      "Arara": { 
-        "kc": 1.2, 
-        "gda_meta": 2900, 
-        "info": "A revolução da cafeicultura. Imune à Ferrugem, alta produtividade, frutos grandes (peneira alta) e maturação tardia. Exige boa nutrição." 
-      },
-      "Mundo Novo": { 
-        "kc": 1.1, 
-        "gda_meta": 3100, 
-        "info": "Porte alto, vigoroso, rústico. Sistema radicular profundo (resistente a seca). Exige poda mais frequente. Bebida boa." 
-      },
-      "Bourbon": { 
-        "kc": 1.1, 
-        "gda_meta": 3000, 
-        "info": "Mercado de Cafés Especiais. Bebida exótica e adocicada. Baixa produtividade e alta suscetibilidade a doenças." 
-      }
+      "Emerald": { "kc": 0.95, "gda_meta": 1800, "info": "Padrão Brasil. Exige pH 4.5 a 5.2. Alta produtividade." },
+      "Biloxi": { "kc": 0.90, "gda_meta": 1900, "info": "Baixa exigência de frio. Vigorosa, mas suscetível a doenças de madeira." },
+      "Jewel": { "kc": 0.95, "gda_meta": 1800, "info": "Precoce. Fruta muito grande. Sensível a Phytophthora." }
     },
     "fases": {
-      "Vegetativo / Repouso (Jun-Ago)": {
-        "desc": "Período de dormência e indução floral.",
-        "fisiologia": "Dias curtos e noites frias induzem as gemas vegetativas a se tornarem reprodutivas. Acúmulo de reservas (amido) nas raízes e ramos.",
-        "manejo": "Amostragem de solo. Calagem e Gessagem. Poda de limpeza ou esqueletamento. Controle de Bicho Mineiro em regiões quentes.",
+      "Repouso/Poda": {
+        "desc": "Pós-colheita e Poda de Formação.",
+        "fisiologia": "Cicatrização de tecidos. Redução metabólica. Momento crítico para entrada de fungos de madeira.",
+        "manejo": "Sanitização de tesouras a cada planta. Pincelamento de cortes grandes com pasta fúngica. Remoção de ramos com 'die-back' (ponteiros secos).",
         "quimica": [
-          { "Alvo": "Bicho Mineiro", "Ativo": "Clorpirifós", "Grupo": "Organofosforado", "Tipo": "Vapor/Contato" },
-          { "Alvo": "Cochonilhas", "Ativo": "Imidacloprido", "Grupo": "Neonicotinoide", "Tipo": "Sistêmico (Drench/Solo)" }
+          { "Alvo": "Cochonilhas (Escama farinha)", "Ativo": "Óleo Mineral + Clorpirifós (Se permitido)", "Grupo": "Físico/Organofosforado", "Tipo": "Contato (Inverno)" },
+          { "Alvo": "Cancro de Ramos (Lasiodiplodia/Neofusicoccum)", "Ativo": "Tiofanato Metílico", "Grupo": "Benzimidazol", "Tipo": "Sistêmico (Pincelamento/Pulverização)" },
+          { "Alvo": "Musgos e Liquens", "Ativo": "Calda Sulfocálcica", "Grupo": "Inorgânico", "Tipo": "Caustico (Dormência plena)" }
         ]
       },
-      "Florada (Set-Out)": {
-        "desc": "Abertura dos botões florais (Antese).",
-        "fisiologia": "Gatilho hídrico: Chuva de >10mm após período seco faz os botões abrirem em 8-10 dias. Polinização define o pegamento.",
-        "manejo": "Evitar pulverizações sobre as flores abertas. Monitoramento de Phoma e Mancha Aureolada se houver chuvas frias e granizo.",
+      "Brotação/Vegetativo": {
+        "desc": "Emissão de novas folhas e ramos.",
+        "fisiologia": "Tecidos tenros e suculentos. Alta suscetibilidade a sugadores e Oídio.",
+        "manejo": "Monitorar Pulgões (vetores de viroses). Manter ventilação entre ramos para evitar Oídio.",
         "quimica": [
-          { "Alvo": "Phoma/Ascochyta", "Ativo": "Boscalida", "Grupo": "Carboxamida", "Tipo": "Sistêmico" },
-          { "Alvo": "Mancha Aureolada (Bactéria)", "Ativo": "Hidróxido de Cobre", "Grupo": "Cobre", "Tipo": "Protetor Bacteriostático" }
+          { "Alvo": "Oídio (Pó branco)", "Ativo": "Enxofre ou Difenoconazol", "Grupo": "Inorgânico/Triazol", "Tipo": "Preventivo/Curativo" },
+          { "Alvo": "Pulgões (Aphids)", "Ativo": "Acetamiprido", "Grupo": "Neonicotinoide", "Tipo": "Sistêmico" },
+          { "Alvo": "Lagartas Enroladeiras", "Ativo": "Bacillus thuringiensis (Bt)", "Grupo": "Biológico", "Tipo": "Ingestão" },
+          { "Alvo": "Septoriose (Mancha foliar)", "Ativo": "Azoxistrobina", "Grupo": "Estrobilurina", "Tipo": "Preventivo" }
         ]
       },
-      "Chumbinho (Nov-Dez)": {
-        "desc": "Expansão rápida dos frutos (3-4mm).",
-        "fisiologia": "Intensa divisão celular. O tamanho final do grão é definido pela quantidade de água disponível agora. Déficit hídrico causa queda de frutos.",
-        "manejo": "Controle preventivo OBRIGATÓRIO de Ferrugem (Hemileia) e Cercospora. Aplicação de foliares (N, Ca, B).",
+      "Florada": {
+        "desc": "Botões florais e Abertura (Campânulas).",
+        "fisiologia": "Alta sensibilidade a abortamento por fungicidas Triazóis. Dependência de polinizadores.",
+        "manejo": "Proibido inseticidas de amplo espectro durante o dia. Foco total em Botrytis e Antracnose latente.",
         "quimica": [
-          { "Alvo": "Ferrugem do Cafeeiro", "Ativo": "Ciproconazol + Azoxistrobina", "Grupo": "Triazol + Estrob", "Tipo": "Sistêmico (Via Solo ou Foliar)" },
-          { "Alvo": "Cercospora", "Ativo": "Tiofanato Metílico", "Grupo": "Benzimidazol", "Tipo": "Sistêmico" },
-          { "Alvo": "Ácaro Vermelho", "Ativo": "Abamectina", "Grupo": "Avermectina", "Tipo": "Translaminar" }
+          { "Alvo": "Botrytis (Mofo Cinzento)", "Ativo": "Fenhexamida ou Fludioxonil", "Grupo": "Hidroxianilida/Fenilpirrol", "Tipo": "Específico para Botrytis (Seguro)" },
+          { "Alvo": "Antracnose (Colletotrichum)", "Ativo": "Boscalida + Piraclostrobina", "Grupo": "Carboxamida + Estrobilurina", "Tipo": "Padrão Ouro (Bellis)" },
+          { "Alvo": "Tripes (Frankliniella)", "Ativo": "Spinosad ou Beauveria bassiana", "Grupo": "Espinosina/Biológico", "Tipo": "Seguro para abelhas (Noite)" }
         ]
       },
-      "Expansão / Granação (Jan-Mar)": {
-        "desc": "Enchimento dos grãos (Água -> Sólidos).",
-        "fisiologia": "Deposição de matéria seca. Dreno intenso de Potássio e Nitrogênio. O fruto solidifica o endosperma.",
-        "manejo": "Pico de ataque da Broca-do-Café (Hypothenemus hampei). Monitoramento mensal (nível de controle 3%). Bicho Mineiro volta a atacar se parar de chover.",
+      "Frutificação/Colheita": {
+        "desc": "Maturação dos frutos (Véraison).",
+        "fisiologia": "Conversão de amido em açúcar. Atrativo para Drosophilas e pássaros.",
+        "manejo": "Armadilhas de vinagre para SWD. Respeitar Intervalo de Segurança (Carência).",
         "quimica": [
-          { "Alvo": "Broca do Café", "Ativo": "Ciantraniliprole", "Grupo": "Diamida", "Tipo": "Sistêmico (Absorção Raiz ou Folha)" },
-          { "Alvo": "Broca (Alternativa)", "Ativo": "Espinosade", "Grupo": "Espinocina", "Tipo": "Biológico/Contato" },
-          { "Alvo": "Ferrugem Tardia", "Ativo": "Epoxiconazol", "Grupo": "Triazol", "Tipo": "Curativo" }
+          { "Alvo": "Drosophila suzukii (SWD)", "Ativo": "Ciantraniliprole ou Espinetoram", "Grupo": "Diamida/Espinosina", "Tipo": "Choque (Praga Quarentenária)" },
+          { "Alvo": "Ferrugem (Pucciniastrum)", "Ativo": "Tebuconazol (Se carência permitir)", "Grupo": "Triazol", "Tipo": "Curativo" },
+          { "Alvo": "Podridão Pós-Colheita", "Ativo": "Bacillus subtilis (Serenade)", "Grupo": "Biológico", "Tipo": "Resíduo Zero (Pode aplicar no dia)" }
+        ]
+      }
+    }
+  },
+  "Morango (Fragaria)": {
+    "t_base": 7,
+    "vars": {
+      "Albion": { "kc": 0.85, "gda_meta": 1250, "info": "Dia neutro. Alta qualidade. Muito sensível a Antracnose e Neopestalotiopsis." },
+      "San Andreas": { "kc": 0.85, "gda_meta": 1200, "info": "Dia neutro. Rústica. Sensível a Ácaros." },
+      "Fronteras": { "kc": 0.85, "gda_meta": 1150, "info": "Dia curto. Alta produtividade e vigor. Resistente a doenças de solo." }
+    },
+    "fases": {
+      "Plantio/Estabelecimento": {
+        "desc": "0 a 30 dias pós-transplante.",
+        "fisiologia": "Enraizamento crítico. Risco de morte súbita por fungos de solo e nematoides.",
+        "manejo": "Mudas sadias (Vírus-free). Drench (esguicho) no colo da planta. Monitorar Lagarta Rosca.",
+        "quimica": [
+          { "Alvo": "Podridão de Coroa (Phytophthora cactorum)", "Ativo": "Metalaxil-M + Mancozeb", "Grupo": "Fenilamida", "Tipo": "Sistêmico/Contato (Drench)" },
+          { "Alvo": "Rhizoctonia/Fusarium", "Ativo": "Fludioxonil", "Grupo": "Fenilpirrol", "Tipo": "Tratamento de Mudas" },
+          { "Alvo": "Nematoides (Meloidogyne)", "Ativo": "Fluopyram ou Pochonia chlamydosporia", "Grupo": "Benzamida/Biológico", "Tipo": "Nematicida via gotejo" },
+          { "Alvo": "Lagarta Rosca", "Ativo": "Clorantraniliprole", "Grupo": "Diamida", "Tipo": "Drench ou Granulado" }
         ]
       },
-      "Maturação (Abr-Jun)": {
-        "desc": "Mudança de cor (Verde -> Cereja).",
-        "fisiologia": "Degradação da clorofila na casca. Aumento de açúcares (Brix). O grão atinge umidade ideal.",
-        "manejo": "Aplicação de potássio foliar para uniformizar maturação. Planejamento de colheita. Limpeza do terreiro.",
+      "Vegetativo/Pré-Florada": {
+        "desc": "Desenvolvimento da coroa e folhas.",
+        "fisiologia": "Expansão foliar. Início da pressão de Oídio e Manchas Foliares.",
+        "manejo": "Eliminar folhas velhas. Monitorar Ácaro Rajado na face inferior da folha.",
         "quimica": [
-          { "Alvo": "Maturação Uniforme", "Ativo": "Etefon", "Grupo": "Etileno", "Tipo": "Regulador Vegetal (Apenas se necessário)" }
+          { "Alvo": "Oídio (Sphaerotheca)", "Ativo": "Quinoyfen ou Enxofre", "Grupo": "Quinolina/Inorgânico", "Tipo": "Preventivo Específico" },
+          { "Alvo": "Mancha de Mycosphaerella (Ramularia)", "Ativo": "Difenoconazol", "Grupo": "Triazol", "Tipo": "Sistêmico" },
+          { "Alvo": "Ácaro Rajado (Tetranychus)", "Ativo": "Abamectina ou Espirodiclofeno", "Grupo": "Avermectina/Ácido Tetronico", "Tipo": "Rotacionar Mecanismo" },
+          { "Alvo": "Pulgão (Capitophorus)", "Ativo": "Imidacloprido (Apenas se longe da flor)", "Grupo": "Neonicotinoide", "Tipo": "Sistêmico Solo" }
+        ]
+      },
+      "Florada/Frutificação": {
+        "desc": "Flores, Frutos Verdes e Maduros.",
+        "fisiologia": "Alta demanda metabólica. Tecidos florais sensíveis a Botrytis. Frutos sensíveis a Antracnose.",
+        "manejo": "Controle de umidade. Colheita sanitária (retirar podres). Atenção máxima a Neopestalotiopsis (Mancha de Pestalotia) que seca a planta inteira.",
+        "quimica": [
+          { "Alvo": "Botrytis (Mofo Cinzento)", "Ativo": "Iprodiona ou Ciprodinil", "Grupo": "Dicarboximida/Anilinopirimidina", "Tipo": "Alternar ativos (Risco de Resistência)" },
+          { "Alvo": "Neopestalotiopsis (Pestalotia)", "Ativo": "Thiram + Piraclostrobina", "Grupo": "Ditiocarbamato + Estrobilurina", "Tipo": "Preventivo Obrigatório" },
+          { "Alvo": "Antracnose (Flor Preta/Fruto)", "Ativo": "Procloraz ou Azoxistrobina", "Grupo": "Imidazol/Estrobilurina", "Tipo": "Erradicante/Preventivo" },
+          { "Alvo": "Tripes (Bronzeamento)", "Ativo": "Spinetoram ou Beauveria", "Grupo": "Espinosina/Biológico", "Tipo": "Choque (Cuidado com abelhas)" },
+          { "Alvo": "Míldio", "Ativo": "Dimetomorfe", "Grupo": "Morfologia", "Tipo": "Sistêmico Local" }
         ]
       }
     }
