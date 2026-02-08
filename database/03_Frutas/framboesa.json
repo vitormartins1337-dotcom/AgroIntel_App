@@ -5,53 +5,146 @@
       "Heritage": { 
         "kc": 1.1, 
         "gda_meta": 1300, 
-        "info": "Cultivar Remontante (produz no outono e primavera). Rústica. Frutos médios, vermelhos e firmes. Espinhosa." 
+        "info": "Cultivar Remontante (produz outono e primavera). Rústica e Espinhosa. Referência de sabor, mas suscetível a ácaros e podridão de raízes em solos pesados." 
       },
       "Autumn Bliss": { 
         "kc": 1.1, 
         "gda_meta": 1350, 
-        "info": "Produção concentrada no outono. Frutos grandes e saborosos. Menor exigência de horas de frio." 
+        "info": "Produção concentrada no outono (Primocane). Frutos grandes e escuros. Menor exigência de frio. Resistente ao pulgão vetor de virose." 
       },
       "Golden Bliss": { 
         "kc": 1.1, 
         "gda_meta": 1350, 
-        "info": "Framboesa amarela. Nicho de mercado gourmet. Mais sensível ao manuseio." 
+        "info": "Framboesa amarela/dourada. Nicho Gourmet. Fruto muito doce, mas extremamente delicado (não aceita transporte longo)." 
+      },
+      "Tullameen": {
+        "kc": 1.1,
+        "gda_meta": 1400,
+        "info": "Floricane (produz na haste do ano anterior). Fruto gigante e firme. Padrão mundial de qualidade, mas exige muitas horas de frio."
       }
     },
     "fases": {
-      "Brotação de Hastes (Primocanes)": {
-        "desc": "Emergência de novas hastes do solo.",
-        "fisiologia": "A planta renova seu sistema produtivo anualmente. Alta demanda de Nitrogênio.",
-        "manejo": "Seleção de hastes (raleio). Controle de Ferrugem (Pucciniastrum) e Ácaro Rajado.",
+      "Dormência / Início Brotação": {
+        "desc": "Inverno e intumescimento das gemas.",
+        "fisiologia": "Sistema radicular ativo mesmo sem folhas. Momento crítico para sanidade do solo e canas.",
+        "manejo": "Limpeza de canas velhas (foco de doenças). Aplicação via solo para Podridão de Raízes (Phytophthora).",
         "quimica": [
-          { "Alvo": "Ferrugem", "Ativo": "Azoxistrobina", "Grupo": "Estrobilurina", "Tipo": "Preventivo" },
-          { "Alvo": "Ácaro Rajado", "Ativo": "Abamectina", "Grupo": "Avermectina", "Tipo": "Translaminar" }
+          { 
+            "Alvo": "Podridão de Raízes (Phytophthora rubi)", 
+            "imagem": "phytophthora_raiz.jpg",
+            "Ativo": "Metalaxil-M ou Fosetil-Alumínio", 
+            "Grupo": "Fenilamida/Fosfonato", 
+            "Tipo": "Drench (Solo)",
+            "Obs": "A doença nº 1 da framboesa. Ocorre em solos úmidos/argilosos. A planta murcha subitamente. Aplicar preventivamente na brotação."
+          },
+          { 
+            "Alvo": "Cochonilha (Escama Farinha)", 
+            "imagem": "cochonilha_framboesa.jpg",
+            "Ativo": "Óleo Mineral + Calda Sulfocálcica", 
+            "Grupo": "Inorgânico", 
+            "Tipo": "Caustico (Inverno)",
+            "Obs": "Aplicar apenas antes de brotar folhas verdes. Limpa musgos, líquens e ovos de ácaros."
+          }
+        ]
+      },
+      "Crescimento Vegetativo (Primocanes)": {
+        "desc": "Hastes de 30cm a 1m.",
+        "fisiologia": "Rápido crescimento vertical. Alta demanda de N. Tecidos tenros suscetíveis a ácaros.",
+        "manejo": "Raleio de hastes (deixar 10-12 por metro linear). Monitorar face inferior das folhas para Ácaros e Ferrugem.",
+        "quimica": [
+          { 
+            "Alvo": "Ferrugem (Pucciniastrum)", 
+            "imagem": "ferrugem_framboesa.jpg",
+            "Ativo": "Azoxistrobina ou Tebuconazol", 
+            "Grupo": "Estrobilurina/Triazol", 
+            "Tipo": "Preventivo/Curativo",
+            "Obs": "Pó amarelo-alaranjado nas folhas e futuramente nos frutos. Causa desfolha precoce."
+          },
+          { 
+            "Alvo": "Queima dos Ramos (Didymella)", 
+            "imagem": "didymella_ramo.jpg",
+            "Ativo": "Difenoconazol + Azoxistrobina", 
+            "Grupo": "Triazol + Estrobilurina", 
+            "Tipo": "Sistêmico",
+            "Obs": "Manchas roxas ao redor das gemas que depois secam a haste. Entra por ferimentos de poda ou vento."
+          },
+          { 
+            "Alvo": "Ácaro Rajado (Tetranychus)", 
+            "imagem": "acaro_rajado.jpg",
+            "Ativo": "Abamectina ou Bifenazato", 
+            "Grupo": "Avermectina/Éster", 
+            "Tipo": "Contato/Ingestão",
+            "Obs": "Causa amarelamento e teias. Framboesa é muito sensível. Rotacionar ativos para não criar resistência."
+          }
         ]
       },
       "Florada": {
-        "desc": "Botões brancos e polinização.",
-        "fisiologia": "Flores hermafroditas ricas em néctar. A presença de abelhas é OBRIGATÓRIA para evitar frutos deformados.",
-        "manejo": "O fungo Botrytis infecta a flor e fica latente até o fruto madurar. Controle preventivo aqui é vital.",
+        "desc": "Botões brancos e Polinização.",
+        "fisiologia": "Flores ricas em néctar. Dependência TOTAL de abelhas para formação de drupas perfeitas.",
+        "manejo": "Proibido inseticidas tóxicos às abelhas. Controle de Botrytis (infecção latente).",
         "quimica": [
-          { "Alvo": "Botrytis (Mofo Cinzento)", "Ativo": "Ciprodinil + Fludioxonil", "Grupo": "Switch", "Tipo": "Padrão Ouro (Sistêmico)" },
-          { "Alvo": "Besouros (Dano Flor)", "Ativo": "Piretrina Natural", "Grupo": "Botânico", "Tipo": "Contato (Seguro)" }
+          { 
+            "Alvo": "Botrytis (Mofo Cinzento)", 
+            "imagem": "botrytis_flor.jpg",
+            "Ativo": "Ciprodinil + Fludioxonil (Switch) ou Fenhexamida", 
+            "Grupo": "Anilinopirimidina", 
+            "Tipo": "Padrão Ouro (Seguro)",
+            "Obs": "O fungo entra na flor, fica 'dormindo' e apodrece a fruta na caixa. Proteção na florada é vital."
+          },
+          { 
+            "Alvo": "Besouros/Vaquinhas (Dano Flor)", 
+            "imagem": "vaquinha_framboesa.jpg",
+            "Ativo": "Piretrina Natural ou Azadiractina", 
+            "Grupo": "Botânico", 
+            "Tipo": "Contato (Aplicar à noite)",
+            "Obs": "Comem os estames e pistilos, causando frutos deformados (farelentos). Evitar químicos fortes."
+          }
         ]
       },
       "Frutificação Verde": {
         "desc": "Formação das drupas.",
-        "fisiologia": "Crescimento celular. Necessidade de água constante (sistema superficial).",
-        "manejo": "Monitoramento de Percevejos (causam gosto ruim no fruto).",
+        "fisiologia": "Crescimento celular. Fruto ganha tamanho. Necessidade de água constante.",
+        "manejo": "Monitorar Percevejos (Stink bugs) que causam gosto ruim. Controle de Antracnose.",
         "quimica": [
-          { "Alvo": "Antracnose", "Ativo": "Piraclostrobina", "Grupo": "Estrobilurina", "Tipo": "Preventivo" }
+          { 
+            "Alvo": "Antracnose (Elsinoë veneta)", 
+            "imagem": "antracnose_framboesa.jpg",
+            "Ativo": "Piraclostrobina", 
+            "Grupo": "Estrobilurina", 
+            "Tipo": "Preventivo",
+            "Obs": "Pontos brancos afundados nas canas e deformação nos frutos. Favorecida por chuvas."
+          },
+          { 
+            "Alvo": "Percevejos (Maria-Fedida)", 
+            "imagem": "percevejo_framboesa.jpg",
+            "Ativo": "Acetamiprido ou Tiametoxam", 
+            "Grupo": "Neonicotinoide", 
+            "Tipo": "Sistêmico",
+            "Obs": "A picada deixa o fruto com gosto desagradável e consistência dura."
+          }
         ]
       },
       "Maturação e Colheita": {
-        "desc": "Fruto vermelho/amarelo macio.",
-        "fisiologia": "Fruto climatérico extremamente perecível (shelf-life de 3-5 dias).",
-        "manejo": "A Drosophila da Asa Manchada (SWD) põe ovos dentro da fruta madura. É a praga nº 1. Usar iscas e produtos de carência zero.",
+        "desc": "Fruto colorido (Véraison).",
+        "fisiologia": "Fruto climatérico ultra-perecível (Shelf-life 3-5 dias).",
+        "manejo": "Tolerância Zero para Drosophila suzukii (SWD). Evitar resíduos químicos.",
         "quimica": [
-          { "Alvo": "Drosophila (SWD)", "Ativo": "Espinosade", "Grupo": "Espinocina", "Tipo": "Biológico (Carência 1 dia)" },
-          { "Alvo": "Drosophila (Monitoramento)", "Ativo": "Isca Vinagre + Levedura", "Grupo": "Armadilha", "Tipo": "Físico" }
+          { 
+            "Alvo": "Drosophila suzukii (SWD)", 
+            "imagem": "swd_larva.jpg",
+            "Ativo": "Espinosade ou Spinetoram", 
+            "Grupo": "Espinocina", 
+            "Tipo": "Biológico/Choque",
+            "Obs": "Praga Nº 1. A larva nasce dentro da fruta madura. Aplicar produtos com Carência de 1 dia (PC 1)."
+          },
+          { 
+            "Alvo": "Podridão Mole (Rhizopus/Botrytis)", 
+            "imagem": "podridao_mole.jpg",
+            "Ativo": "Bacillus subtilis (Serenade)", 
+            "Grupo": "Biológico", 
+            "Tipo": "Resíduo Zero",
+            "Obs": "Pode ser aplicado no dia da colheita. Evita que o fruto 'melado' contamine a caixa inteira."
+          }
         ]
       }
     }
