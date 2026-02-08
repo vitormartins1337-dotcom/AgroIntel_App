@@ -20,19 +20,19 @@
       "Orchestra": { 
         "kc": 1.15, 
         "gda_meta": 1600, 
-        "info": "Mercado Premium/Gourmet. Pele muito brilhante. Exige níveis altos de Cálcio e Boro. Resistente a Nematoides (Ro1)." 
+        "info": "Mercado Premium. Pele muito brilhante. Exige níveis altos de Cálcio e Boro. Resistente a Nematoides (Ro1)." 
       },
       "Cupido": { 
         "kc": 1.10, 
         "gda_meta": 1400, 
-        "info": "Ciclo ultra-precoce. Boa lavabilidade. Extremamente suscetível à Requeima e Alternaria. Exige colheita rápida." 
+        "info": "Ciclo ultra-precoce. Extremamente suscetível à Requeima e Alternaria. Exige colheita rápida." 
       }
     },
     "fases": {
       "I - Plantio e Emergência": {
         "desc": "Brotamento e Enraizamento.",
-        "fisiologia": "A planta depende das reservas da batata-mãe. Fase crítica para definir a sanidade inicial (ts).",
-        "manejo": "Tratamento de sulco OBRIGATÓRIO. Controle de Rizoctonia (Cancro), Fusarium e Pragas de Solo.",
+        "fisiologia": "Dependência da batata-mãe. Fase crítica para definir a sanidade inicial (TS).",
+        "manejo": "Tratamento de sulco OBRIGATÓRIO. Controle de Rizoctonia (Cancro) e Pragas de Solo.",
         "quimica": [
           { 
             "Alvo": "Rizoctonia (Cancro) e Fusarium", 
@@ -40,7 +40,7 @@
             "Ativo": "Fludioxonil + Azoxistrobina", 
             "Grupo": "Fenilpirrol", 
             "Tipo": "Jato Dirigido no Sulco",
-            "Obs": "Protege contra o 'estrangulamento' da haste e podridão seca da semente. Essencial para estande uniforme."
+            "Obs": "Protege contra o 'estrangulamento' da haste e podridão seca. Essencial para estande uniforme."
           },
           { 
             "Alvo": "Pragas de Solo (Larva Alfinete/Arame)", 
@@ -56,14 +56,14 @@
             "Ativo": "Fluopyram ou Bacillus firmus", 
             "Grupo": "Benzamida/Biológico", 
             "Tipo": "Nematicida de Sulco",
-            "Obs": "Batata com 'pipoca' (galhas) é refugada. Solos arenosos ou áreas velhas exigem atenção redobrada."
+            "Obs": "Batata com 'pipoca' (galhas) é refugada. Solos arenosos exigem atenção redobrada."
           }
         ]
       },
       "II - Vegetativo / Estolonização": {
         "desc": "Formação de hastes e estolões.",
         "fisiologia": "Alta demanda de Nitrogênio. Início da pressão de vetores de virose.",
-        "manejo": "Controle de Larva Minadora, Pulgões e Tripes (Vira-Cabeça). Início da Amontoa.",
+        "manejo": "Controle de Larva Minadora, Pulgões e Tripes (Vira-Cabeça).",
         "quimica": [
           { 
             "Alvo": "Tripes (Vetor de Vira-Cabeça)", 
@@ -79,7 +79,7 @@
             "Ativo": "Ciromazina ou Abamectina", 
             "Grupo": "Regulador/Avermectina", 
             "Tipo": "Ingestão/Translaminar",
-            "Obs": "A larva faz galerias nas folhas ('mapa'), reduzindo a fotossíntese. Monitorar folhas baixeiras."
+            "Obs": "A larva faz galerias nas folhas ('mapa'). Se perder área foliar agora, a produção cai."
           },
           { 
             "Alvo": "Pinta Preta (Alternaria)", 
@@ -93,7 +93,7 @@
       },
       "III - Tuberização (Gancho)": {
         "desc": "Ponta do estolão incha.",
-        "fisiologia": "Inversão hormonal. O solo NÃO PODE secar (risco de Sarna). Fase crítica para Bactérias.",
+        "fisiologia": "Inversão hormonal. O solo NÃO PODE secar (Sarna). Fase crítica para Bactérias.",
         "manejo": "Controle de Requeima, Ácaro Branco e prevenção de Murchadeira (Ralstonia).",
         "quimica": [
           { 
@@ -102,15 +102,15 @@
             "Ativo": "Mandipropamida ou Fluazinam", 
             "Grupo": "CAA/Fenilpiridinilamina", 
             "Tipo": "Translaminar/Protetor",
-            "Obs": "Doença mais destrutiva da batata. Clima frio e úmido é fatal. Mandipropamida fixa na cera e resiste à chuva."
+            "Obs": "Doença mais destrutiva. Monitorar clima: Frio + Umidade = Requeima. Mandipropamida resiste à chuva."
           },
           { 
-            "Alvo": "Murchadeira (Ralstonia/Erwinia)", 
+            "Alvo": "Murchadeira (Ralstonia)", 
             "imagem": "murchadeira_ralstonia.jpg",
-            "Ativo": "Cobre + Kasugamicina (ou Bacillus subtilis)", 
+            "Ativo": "Cobre + Kasugamicina (ou Bacillus)", 
             "Grupo": "Cobre/Biológico", 
             "Tipo": "Bacteriostático",
-            "Obs": "Não existe cura química. Usar biológicos e cobre para reduzir a disseminação. Evitar trânsito de máquinas em áreas doentes."
+            "Obs": "Não existe cura química. Isolar reboleiras. Evitar trânsito de máquinas em áreas doentes."
           },
           { 
             "Alvo": "Ácaro Branco (Polyphagotarsonemus)", 
@@ -118,22 +118,30 @@
             "Ativo": "Abamectina ou Espirofesifeno", 
             "Grupo": "Avermectina", 
             "Tipo": "Acaricida",
-            "Obs": "Encarquilha a folha nova ('folha de papel'). O produtor confunde com virose. Olhar com lupa de 20x."
+            "Obs": "Encarquilha a folha nova ('folha de papel'). O produtor confunde com virose. Olhar com lupa."
           }
         ]
       },
       "IV - Enchimento de Tubérculos": {
         "desc": "Engorda e acúmulo de amido.",
-        "fisiologia": "Máximo dreno de Potássio. A planta precisa manter a folha sadia (sem Alternaria).",
-        "manejo": "Monitorar Traça (Phthorimaea) que fura a batata. Controle de Alternaria e Mofo Branco.",
+        "fisiologia": "Máximo dreno de Potássio. Planta precisa de folha sadia.",
+        "manejo": "Controle de Mosca Branca (Fumagina), Traça e Alternaria.",
         "quimica": [
+          { 
+            "Alvo": "Mosca Branca (Bemisia tabaci)", 
+            "imagem": "mosca_branca_batata.jpg",
+            "Ativo": "Ciantraniliprole (Benevia) ou Acetamiprido", 
+            "Grupo": "Diamida/Neonicotinoide", 
+            "Tipo": "Sistêmico",
+            "Obs": "Transmite Geminivírus e causa Fumagina (folha preta). Difícil controle se houver soja/feijão vizinho."
+          },
           { 
             "Alvo": "Traça da Batata (Tuta/Phthorimaea)", 
             "imagem": "traca_dano_tuberculo.jpg",
             "Ativo": "Clorfenapir ou Clorantraniliprole", 
             "Grupo": "Pirrol/Diamida", 
             "Tipo": "Ingestão/Contato",
-            "Obs": "A lagarta desce da folha para o tubérculo se o solo rachar. Manter amontoa bem feita e solo úmido."
+            "Obs": "A lagarta desce da folha para o tubérculo se o solo rachar. Manter amontoa bem feita."
           },
           { 
             "Alvo": "Pinta Preta (Alternaria)", 
@@ -141,22 +149,14 @@
             "Ativo": "Boscalida ou Azoxistrobina", 
             "Grupo": "Carboxamida/Estrobilurina", 
             "Tipo": "Sistêmico Premium",
-            "Obs": "A Alternaria explode nesta fase. Se perder a folha agora, a batata para de crescer (perda de produtividade)."
-          },
-          { 
-            "Alvo": "Mofo Branco (Sclerotinia)", 
-            "imagem": "mofo_branco_batata.jpg",
-            "Ativo": "Procimidona ou Fluazinam", 
-            "Grupo": "Dicarboximida", 
-            "Tipo": "Contato",
-            "Obs": "Apodrece a base da haste ('melado') em áreas de baixada ou muito adensadas."
+            "Obs": "A Alternaria explode nesta fase. Se perder a folha agora, a batata para de crescer."
           }
         ]
       },
       "V - Maturação e Dessecação": {
         "desc": "Senescência e Pele firme.",
-        "fisiologia": "Suberização (formação da casca). Tubérculo para de crescer e fixa a pele.",
-        "manejo": "Dessecação para colheita. Prevenção de Podridão Mole (Canela Preta) na lavagem.",
+        "fisiologia": "Suberização (formação da casca).",
+        "manejo": "Dessecação para colheita. Prevenção de Podridão Mole.",
         "quimica": [
           { 
             "Alvo": "Dessecação de Rama", 
@@ -164,7 +164,7 @@
             "Ativo": "Diquat ou Carfentrazone", 
             "Grupo": "Fotossistema I/PPO", 
             "Tipo": "Contato",
-            "Obs": "Aplicar pela manhã. Garante que a pele não solte ('pele de vidro'). Aguardar 10-14 dias para colher."
+            "Obs": "Aplicar pela manhã. Garante 'pele de vidro'. Aguardar 10-14 dias para colher."
           },
           { 
             "Alvo": "Podridão Mole (Pectobacterium)", 
@@ -172,7 +172,7 @@
             "Ativo": "Cloro (Pós-colheita) ou Cobre (Campo)", 
             "Grupo": "Sanitizante", 
             "Tipo": "Contato",
-            "Obs": "A bactéria entra por ferimentos na colheita. Evitar bater a batata e não lavar batata quente."
+            "Obs": "A bactéria entra por ferimentos na colheita. Não lavar batata quente em água fria."
           }
         ]
       }
