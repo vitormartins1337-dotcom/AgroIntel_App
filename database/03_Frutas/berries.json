@@ -9,27 +9,31 @@
     "fases": {
       "Repouso/Poda": {
         "desc": "Pós-colheita/Inverno.",
-        "fisiologia": "Acúmulo de reservas nas raízes.",
-        "manejo": "Poda de limpeza. Aplicação de Calda Sulfocálcica (Limpeza).",
+        "fisiologia": "Acúmulo de reservas (CHO) nas raízes. Diferenciação de gemas.",
+        "manejo": "Poda de limpeza e abertura de centro. Aplicação de Cianamida Hidrogenada (Dormex) + Óleo Mineral para uniformizar brotação em regiões de baixo frio. Sanitização de cortes com Cobre.",
         "quimica": [
-          { "Alvo": "Cochonilha/Musgo", "Ativo": "Calda Sulfocálcica", "Grupo": "Inorgânico", "Tipo": "Caustico" }
+          { "Alvo": "Musgo/Liquens/Cochonilha", "Ativo": "Calda Sulfocálcica", "Grupo": "Inorgânico", "Tipo": "Erradicante (Caustico) - Aplicar apenas sem folhas" },
+          { "Alvo": "Bacterioses/Cicatrização", "Ativo": "Oxicloreto de Cobre", "Grupo": "Inorgânico", "Tipo": "Protetor de contato" }
         ]
       },
       "Florada": {
         "desc": "Abertura das flores (Campânulas).",
-        "fisiologia": "Polinização cruzada aumenta tamanho do fruto. Dependência de Mamangavas (Bombus).",
-        "manejo": "Controle de Botrytis (Mofo Cinzento) e Tripes. Cuidado com abelhas.",
+        "fisiologia": "Alta demanda de Boro. Polinização cruzada aumenta calibre. Estresse hídrico aborta flores.",
+        "manejo": "Introdução de Mamangavas (Bombus). Evitar fungicidas triazóis (podem causar fito/abortamento). Priorizar aplicações noturnas (preservação de polinizadores). Monitorar Botrytis em pétalas senescentes.",
         "quimica": [
-          { "Alvo": "Botrytis", "Ativo": "Fludioxonil", "Grupo": "Fenilpirrol", "Tipo": "Contato (Seguro p/ abelhas à noite)" },
-          { "Alvo": "Antracnose", "Ativo": "Piraclostrobina", "Grupo": "Estrobilurina", "Tipo": "Preventivo" }
+          { "Alvo": "Botrytis (Mofo Cinzento)", "Ativo": "Fludioxonil + Ciprodinil", "Grupo": "Fenilpirrol + Anilinopirimidina", "Tipo": "Sistêmico/Contato (Padrão Ouro)" },
+          { "Alvo": "Antracnose (Flor)", "Ativo": "Piraclostrobina", "Grupo": "Estrobilurina", "Tipo": "Preventivo (Efeito fisiológico AgCelence)" },
+          { "Alvo": "Tripes", "Ativo": "Spinosad", "Grupo": "Espinosinas", "Tipo": "Ingestão/Contato (Origem Biológica)" }
         ]
       },
       "Frutificação": {
-        "desc": "Frutos verdes a azuis.",
-        "fisiologia": "Acúmulo de açúcar. Não usar Nitrato (Tóxico), apenas Amônio.",
-        "manejo": "Ferrugem e Lagartas.",
+        "desc": "Frutos verdes a azuis (Véraison).",
+        "fisiologia": "Translocação de açúcares. Não usar Nitrato (Tóxico ao Mirtilo), preferir Sulfato de Amônio. Cálcio via foliar para firmeza.",
+        "manejo": "Monitoramento rigoroso de Drosophila suzukii (SWD) com armadilhas. Ferrugem em folhas velhas. Colheita frequente para evitar sobrematuração.",
         "quimica": [
-          { "Alvo": "Ferrugem", "Ativo": "Difenoconazol", "Grupo": "Triazol", "Tipo": "Curativo" }
+          { "Alvo": "Ferrugem", "Ativo": "Difenoconazol", "Grupo": "Triazol", "Tipo": "Curativo (Cuidado com Período de Carência)" },
+          { "Alvo": "Drosophila suzukii", "Ativo": "Ciantraniliprole", "Grupo": "Diamida", "Tipo": "Ingestão (Alto efeito de choque)" },
+          { "Alvo": "Podridão Pós-Colheita", "Ativo": "Bacillus subtilis", "Grupo": "Biológico", "Tipo": "Protetor (Sem carência/Resíduo Zero)" }
         ]
       }
     }
@@ -44,21 +48,24 @@
     "fases": {
       "Plantio/Pegamento": {
         "desc": "Mudas recém transplantadas.",
-        "fisiologia": "Emissão de raízes novas. Risco de coroa apodrecer.",
-        "manejo": "Imersão de mudas em fungicidas antes do plantio.",
+        "fisiologia": "Emissão de raízes brancas. Alta respiração. Risco crítico de Phytophthora (Podridão de Coroa).",
+        "manejo": "Imersão de mudas (dip) em fungicidas. Aplicação de Trichoderma no sulco/furo. Irrigação frequente mas curta (pulsos) para não afogar a raiz (anóxia).",
         "quimica": [
-          { "Alvo": "Podridão de Coroa", "Ativo": "Metalaxil-M", "Grupo": "Fenilamida", "Tipo": "Drench" }
+          { "Alvo": "Podridão de Coroa/Pythium", "Ativo": "Metalaxil-M", "Grupo": "Fenilamida", "Tipo": "Drench (Solo)" },
+          { "Alvo": "Rhizoctonia/Fusarium", "Ativo": "Fludioxonil", "Grupo": "Fenilpirrol", "Tipo": "Tratamento de Mudas" },
+          { "Alvo": "Estimulo Radicular", "Ativo": "Extrato de Algas (A. nodosum)", "Grupo": "Bioestimulante", "Tipo": "Drench" }
         ]
       },
       "Produção Plena": {
         "desc": "Flores e Frutos simultâneos.",
-        "fisiologia": "Dreno constante de K e Ca. Sensível a salinidade (EC > 1.2).",
-        "manejo": "Controle diário de Ácaro Rajado e Botrytis.",
+        "fisiologia": "Dreno constante de K e Ca. Sensível a salinidade (EC > 1.2 no gotejo). Abortamento por altas temperaturas (>30°C).",
+        "manejo": "Rotação de princípios ativos para Ácaro (resistem rápido). Limpeza sanitária (retirar folhas velhas/doentes). Monitorar Tripes nas flores (bronzeamento do fruto).",
         "quimica": [
-          { "Alvo": "Ácaro Rajado (Adulto)", "Ativo": "Abamectina", "Grupo": "Avermectina", "Tipo": "Contato" },
-          { "Alvo": "Ácaro (Ovos)", "Ativo": "Etoxazol", "Grupo": "Inibidor de Crescimento", "Tipo": "Contato" },
-          { "Alvo": "Botrytis", "Ativo": "Iprodiona", "Grupo": "Dicarboximida", "Tipo": "Contato" },
-          { "Alvo": "Oídio", "Ativo": "Enxofre", "Grupo": "Inorgânico", "Tipo": "Protetor" }
+          { "Alvo": "Ácaro Rajado (Foco Adulto)", "Ativo": "Abamectina", "Grupo": "Avermectina", "Tipo": "Contato/Ingestão (Rodar mecanismo!)" },
+          { "Alvo": "Ácaro (Foco Ovos/Ninfas)", "Ativo": "Etoxazol", "Grupo": "Inibidor de Crescimento", "Tipo": "Contato (Residual longo)" },
+          { "Alvo": "Ácaro (Resistente)", "Ativo": "Clorfenapir", "Grupo": "Pirrol", "Tipo": "Contato (Ação de choque)" },
+          { "Alvo": "Botrytis/Mofo", "Ativo": "Iprodiona ou Procimidona", "Grupo": "Dicarboximida", "Tipo": "Curativo (Alternar com Boscalida)" },
+          { "Alvo": "Oídio", "Ativo": "Enxofre Kumulus", "Grupo": "Inorgânico", "Tipo": "Protetor (Não aplicar em hora quente - Fito)" }
         ]
       }
     }
