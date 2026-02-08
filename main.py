@@ -233,9 +233,69 @@ if not df_clima.empty:
         manejo_txt = AgroBrain.get_info_segura(dados_fase, ['manejo'])
         st.warning(f"🎯 **Recomendação:** {manejo_txt}")
         
-        st.markdown("### 🧪 Defensivos Sugeridos")
-        AgroBrain.render_protocolo_quimico(dados_fase.get('quimica')) 
-        st.markdown('</div>', unsafe_allow_html=True)
+        # --- ÁREA VISUAL DE PRAGAS/DOENÇAS (VERSÃO LOCAL + BADGES) ---
+        st.markdown("### 🧪 Soluções Fitossanitárias & Identificação")
+        
+        lista_quimica = dados_fase.get('quimica', [])
+        
+        if not lista_quimica:
+             st.info("✅ Nenhuma intervenção química necessária nesta fase.")
+        else:
+            for item in lista_quimica:
+                # Cria container para cada praga (Card Profissional)
+                with st.container():
+                    st.markdown("---")
+                    
+                    # Coluna 1: Foto (Menor) | Coluna 2: Dados (Maior)
+                    c_img, c_info = st.columns([1, 2.5])
+                    
+                    # --- LÓGICA DA FOTO (LOCAL OU WEB) ---
+                    with c_img:
+                        nome_arquivo = item.get("imagem", "")
+                        caminho_local = os.path.join("images", nome_arquivo) if nome_arquivo else None
+                        
+                        # 1. Tenta carregar da pasta local 'images'
+                        if nome_arquivo and os.path.exists(caminho_local):
+                            st.image(caminho_local, use_container_width=True)
+                        
+                        # 2. Se não for local, tenta ver se é um Link (http)
+                        elif nome_arquivo and nome_arquivo.startswith("http"):
+                            st.image(nome_arquivo, use_container_width=True)
+                            
+                        # 3. Se não tiver nada, mostra o ícone genérico
+                        else:
+                            st.markdown("""
+                            <div style="background:#f1f5f9; height:80px; display:flex; align-items:center; justify-content:center; border-radius:8px; border: 1px dashed #cbd5e1;">
+                                <span style="font-size:2rem;">🦠</span>
+                            </div>
+                            """, unsafe_allow_html=True)
+
+                    # --- INFORMAÇÕES TÉCNICAS (COM BADGES) ---
+                    with c_info:
+                        st.markdown(f"**🎯 ALVO:** <span style='color:#dc2626; font-weight:bold;'>{item.get('Alvo', 'Geral')}</span>", unsafe_allow_html=True)
+                        st.markdown(f"🧪 **Ativo:** {item.get('Ativo', '-')}")
+                        
+                        # Badges coloridos (Visual Profissional)
+                        grupo = item.get('Grupo', '-')
+                        tipo = item.get('Tipo', '-')
+                        
+                        # Cores dinâmicas baseadas no tipo de produto
+                        bg_cor = "#eff6ff" # Azul (Padrão)
+                        txt_cor = "#1d4ed8"
+                        
+                        if "Biológico" in grupo: 
+                            bg_cor, txt_cor = "#f0fdf4", "#15803d" # Verde (Bio)
+                        elif "Sistêmico" in tipo: 
+                            bg_cor, txt_cor = "#fff7ed", "#c2410c" # Laranja (Sistêmico)
+                        elif "Cobre" in grupo or "Protetor" in tipo:
+                            bg_cor, txt_cor = "#f0f9ff", "#0369a1" # Azul claro (Protetor)
+                        
+                        st.markdown(f"""
+                        <div style="margin-top:5px;">
+                            <span style="background:{bg_cor}; color:{txt_cor}; padding:3px 8px; border-radius:4px; font-size:0.8rem; font-weight:600; border:1px solid {bg_cor};">{grupo}</span>
+                            <span style="background:#f8fafc; color:#475569; padding:3px 8px; border-radius:4px; font-size:0.8rem; border:1px solid #e2e8f0; margin-left:5px;">{tipo}</span>
+                        </div>
+                        """, unsafe_allow_html=True))
 
 
                                                        # 2. NUTRIÇÃO (MARCHA DE ABSORÇÃO & MANEJO - CALIBRADO TOTAL HIGH-YIELD)
