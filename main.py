@@ -773,8 +773,15 @@ if not df_clima.empty:
             c_head_n1, c_head_n2 = st.columns([2.5, 1.5])
             
             with c_head_n1:
-                st.markdown(f"### 🧪 Nutrição High-Yield: **{nome_cultura_exibicao}**")
-                st.caption("Curvas de Absorção para Tetos Produtivos (Fisiologia de Alta Performance)")
+                # Título Principal (Antigo subtítulo promovido)
+                st.markdown(f"""
+                <h3 style='margin-bottom: 5px; color: #1e293b; font-weight: 600;'>
+                    📈 Curvas de Absorção: <span style='color: #16a34a;'>{nome_cultura_exibicao}</span>
+                </h3>
+                <div style='font-size: 0.95rem; color: #64748b; margin-bottom: 15px;'>
+                    Fisiologia de Alta Performance para Tetos Produtivos
+                </div>
+                """, unsafe_allow_html=True)
                 
             with c_head_n2:
                 # CARD DE META (KPI VISUAL)
