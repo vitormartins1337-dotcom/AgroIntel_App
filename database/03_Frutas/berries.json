@@ -2,50 +2,133 @@
   "Mirtilo (Blueberry)": {
     "t_base": 7,
     "vars": {
-      "Emerald": { "kc": 0.95, "gda_meta": 1800, "info": "Padrão Brasil. Exige pH 4.5 a 5.2. Alta produtividade." },
-      "Biloxi": { "kc": 0.90, "gda_meta": 1900, "info": "Baixa exigência de frio. Vigorosa, mas suscetível a doenças de madeira." },
-      "Jewel": { "kc": 0.95, "gda_meta": 1800, "info": "Precoce. Fruta muito grande. Sensível a Phytophthora." }
+      "Emerald": { "kc": 0.95, "gda_meta": 1800, "info": "Padrão Brasil. Exige pH 4.5 a 5.2. Alta produtividade. Sensível a Ferrugem." },
+      "Biloxi": { "kc": 0.90, "gda_meta": 1900, "info": "Baixa exigência de frio. Vigorosa, mas muito suscetível a doenças de madeira (Lasiodiplodia)." },
+      "Jewel": { "kc": 0.95, "gda_meta": 1800, "info": "Precoce. Fruta muito grande. Sensível a Phytophthora (Podridão de Raiz)." }
     },
     "fases": {
       "Repouso/Poda": {
         "desc": "Pós-colheita e Poda de Formação.",
-        "fisiologia": "Cicatrização de tecidos. Redução metabólica. Momento crítico para entrada de fungos de madeira.",
-        "manejo": "Sanitização de tesouras a cada planta. Pincelamento de cortes grandes com pasta fúngica. Remoção de ramos com 'die-back' (ponteiros secos).",
+        "fisiologia": "Cicatrização de tecidos. Redução metabólica. Momento crítico para entrada de fungos de madeira via cortes.",
+        "manejo": "Sanitização de tesouras (Amônia Quaternária). Pincelamento de cortes. Remoção de ramos com 'die-back'.",
         "quimica": [
-          { "Alvo": "Cochonilhas (Escama farinha)", "Ativo": "Óleo Mineral + Clorpirifós (Se permitido)", "Grupo": "Físico/Organofosforado", "Tipo": "Contato (Inverno)" },
-          { "Alvo": "Cancro de Ramos (Lasiodiplodia/Neofusicoccum)", "Ativo": "Tiofanato Metílico", "Grupo": "Benzimidazol", "Tipo": "Sistêmico (Pincelamento/Pulverização)" },
-          { "Alvo": "Musgos e Liquens", "Ativo": "Calda Sulfocálcica", "Grupo": "Inorgânico", "Tipo": "Caustico (Dormência plena)" }
+          { 
+            "Alvo": "Cochonilhas (Escama farinha)", 
+            "imagem": "cochonilha_escama.jpg",
+            "Ativo": "Óleo Mineral + Clorpirifós (ou Acetamiprido)", 
+            "Grupo": "Físico + Organofosforado", 
+            "Tipo": "Contato (Inverno)",
+            "Obs": "Aplicar com alto volume de calda para 'lavar' a planta. A cochonilha se esconde sob a casca solta."
+          },
+          { 
+            "Alvo": "Cancro de Ramos (Lasiodiplodia)", 
+            "imagem": "cancro_mirtilo.jpg",
+            "Ativo": "Tiofanato Metílico ou Tebuconazol", 
+            "Grupo": "Benzimidazol/Triazol", 
+            "Tipo": "Sistêmico (Pincelamento)",
+            "Obs": "Doença silenciosa que mata a planta inteira no verão. Proteger imediatamente após a poda."
+          },
+          { 
+            "Alvo": "Musgos e Liquens", 
+            "imagem": "liquens_mirtilo.jpg",
+            "Ativo": "Calda Sulfocálcica", 
+            "Grupo": "Inorgânico", 
+            "Tipo": "Caustico (Dormência plena)",
+            "Obs": "Apenas para plantas sem folhas. Ajuda a reduzir inóculo de Oídio e Ácaros."
+          }
         ]
       },
       "Brotação/Vegetativo": {
         "desc": "Emissão de novas folhas e ramos.",
-        "fisiologia": "Tecidos tenros e suculentos. Alta suscetibilidade a sugadores e Oídio.",
-        "manejo": "Monitorar Pulgões (vetores de viroses). Manter ventilação entre ramos para evitar Oídio.",
+        "fisiologia": "Tecidos tenros. Alta demanda de Ferro (risco de Clorose se pH > 5.5). Início da pressão de Oídio.",
+        "manejo": "Monitorar Pulgões (vetores de viroses). Manter ventilação. Correção de Ferro via Drench se houver amarelamento.",
         "quimica": [
-          { "Alvo": "Oídio (Pó branco)", "Ativo": "Enxofre ou Difenoconazol", "Grupo": "Inorgânico/Triazol", "Tipo": "Preventivo/Curativo" },
-          { "Alvo": "Pulgões (Aphids)", "Ativo": "Acetamiprido", "Grupo": "Neonicotinoide", "Tipo": "Sistêmico" },
-          { "Alvo": "Lagartas Enroladeiras", "Ativo": "Bacillus thuringiensis (Bt)", "Grupo": "Biológico", "Tipo": "Ingestão" },
-          { "Alvo": "Septoriose (Mancha foliar)", "Ativo": "Azoxistrobina", "Grupo": "Estrobilurina", "Tipo": "Preventivo" }
+          { 
+            "Alvo": "Oídio (Pó branco)", 
+            "imagem": "oidio_mirtilo.jpg",
+            "Ativo": "Enxofre, Difenoconazol ou Bicarbonato de K", 
+            "Grupo": "Inorgânico/Triazol", 
+            "Tipo": "Preventivo/Curativo",
+            "Obs": "Ocorre em dias secos com noites úmidas. O Enxofre pode queimar se aplicado acima de 30°C."
+          },
+          { 
+            "Alvo": "Lagartas Enroladeiras", 
+            "imagem": "lagarta_mirtilo.jpg",
+            "Ativo": "Bacillus thuringiensis (Bt) ou Spinetoram", 
+            "Grupo": "Biológico/Espinosina", 
+            "Tipo": "Ingestão",
+            "Obs": "As lagartas unem as folhas com teia para se proteger. Usar alto volume de calda e pressão."
+          },
+          { 
+            "Alvo": "Septoriose (Mancha foliar)", 
+            "imagem": "septoria_mirtilo.jpg",
+            "Ativo": "Azoxistrobina + Ciproconazol", 
+            "Grupo": "Estrobilurina + Triazol", 
+            "Tipo": "Preventivo",
+            "Obs": "Manchas avermelhadas que causam desfolha precoce. Manter a planta enfolhada é vital para a próxima safra."
+          }
         ]
       },
       "Florada": {
         "desc": "Botões florais e Abertura (Campânulas).",
-        "fisiologia": "Alta sensibilidade a abortamento por fungicidas Triazóis. Dependência de polinizadores.",
-        "manejo": "Proibido inseticidas de amplo espectro durante o dia. Foco total em Botrytis e Antracnose latente.",
+        "fisiologia": "Alta sensibilidade a abortamento por Triazóis. Dependência de polinizadores (Mamangavas).",
+        "manejo": "PROIBIDO inseticidas letais às abelhas. Foco total em Botrytis e Antracnose latente.",
         "quimica": [
-          { "Alvo": "Botrytis (Mofo Cinzento)", "Ativo": "Fenhexamida ou Fludioxonil", "Grupo": "Hidroxianilida/Fenilpirrol", "Tipo": "Específico para Botrytis (Seguro)" },
-          { "Alvo": "Antracnose (Colletotrichum)", "Ativo": "Boscalida + Piraclostrobina", "Grupo": "Carboxamida + Estrobilurina", "Tipo": "Padrão Ouro (Bellis)" },
-          { "Alvo": "Tripes (Frankliniella)", "Ativo": "Spinosad ou Beauveria bassiana", "Grupo": "Espinosina/Biológico", "Tipo": "Seguro para abelhas (Noite)" }
+          { 
+            "Alvo": "Botrytis (Mofo Cinzento)", 
+            "imagem": "botrytis_flor.jpg",
+            "Ativo": "Fenhexamida, Fludioxonil ou Ciprodinil", 
+            "Grupo": "Hidroxianilida/Fenilpirrol", 
+            "Tipo": "Específico (Seguro p/ Flor)",
+            "Obs": "O fungo entra pela flor e apodrece o fruto na colheita. Alternar ativos para evitar resistência."
+          },
+          { 
+            "Alvo": "Antracnose (Colletotrichum)", 
+            "imagem": "antracnose_flor.jpg",
+            "Ativo": "Boscalida + Piraclostrobina", 
+            "Grupo": "Carboxamida + Estrobilurina", 
+            "Tipo": "Padrão Ouro (Bellis)",
+            "Obs": "Efeito 'AgCelence' (fisiológico). Protege a flor contra a queima (abortamento)."
+          },
+          { 
+            "Alvo": "Tripes (Frankliniella)", 
+            "imagem": "tripes_mirtilo.jpg",
+            "Ativo": "Beauveria bassiana ou Spinosad", 
+            "Grupo": "Biológico/Espinosina", 
+            "Tipo": "Seguro para abelhas (Noite)",
+            "Obs": "O Tripes raspa a flor e o fruto nasce deformado/cicatrizado. Monitorar batendo a flor em papel branco."
+          }
         ]
       },
       "Frutificação/Colheita": {
-        "desc": "Maturação dos frutos (Véraison).",
-        "fisiologia": "Conversão de amido em açúcar. Atrativo para Drosophilas e pássaros.",
-        "manejo": "Armadilhas de vinagre para SWD. Respeitar Intervalo de Segurança (Carência).",
+        "desc": "Maturação (Véraison).",
+        "fisiologia": "Atrativo para Drosophila suzukii (SWD). Fruto mole = menor post-harvest.",
+        "manejo": "Armadilhas de vinagre para SWD. Respeitar Carência. Colheita frequente.",
         "quimica": [
-          { "Alvo": "Drosophila suzukii (SWD)", "Ativo": "Ciantraniliprole ou Espinetoram", "Grupo": "Diamida/Espinosina", "Tipo": "Choque (Praga Quarentenária)" },
-          { "Alvo": "Ferrugem (Pucciniastrum)", "Ativo": "Tebuconazol (Se carência permitir)", "Grupo": "Triazol", "Tipo": "Curativo" },
-          { "Alvo": "Podridão Pós-Colheita", "Ativo": "Bacillus subtilis (Serenade)", "Grupo": "Biológico", "Tipo": "Resíduo Zero (Pode aplicar no dia)" }
+          { 
+            "Alvo": "Drosophila suzukii (SWD)", 
+            "imagem": "swd_mirtilo.jpg",
+            "Ativo": "Ciantraniliprole, Espinetoram ou Acetamiprido", 
+            "Grupo": "Diamida/Espinosina", 
+            "Tipo": "Choque (Praga Quarentenária)",
+            "Obs": "A fêmea põe ovo no fruto maduro. Se encontrar larva, a carga é rejeitada. Tolerância Zero."
+          },
+          { 
+            "Alvo": "Ferrugem (Pucciniastrum)", 
+            "imagem": "ferrugem_mirtilo.jpg",
+            "Ativo": "Tebuconazol (Checar Carência)", 
+            "Grupo": "Triazol", 
+            "Tipo": "Curativo",
+            "Obs": "Pó laranja na face inferior da folha. Causa desfolha severa no verão."
+          },
+          { 
+            "Alvo": "Podridão Pós-Colheita", 
+            "imagem": "podridao_mirtilo.jpg",
+            "Ativo": "Bacillus subtilis", 
+            "Grupo": "Biológico", 
+            "Tipo": "Resíduo Zero",
+            "Obs": "Pode aplicar no dia da colheita. Aumenta o tempo de prateleira (Shelf-life)."
+          }
         ]
       }
     }
@@ -53,43 +136,110 @@
   "Morango (Fragaria)": {
     "t_base": 7,
     "vars": {
-      "Albion": { "kc": 0.85, "gda_meta": 1250, "info": "Dia neutro. Alta qualidade. Muito sensível a Antracnose e Neopestalotiopsis." },
-      "San Andreas": { "kc": 0.85, "gda_meta": 1200, "info": "Dia neutro. Rústica. Sensível a Ácaros." },
-      "Fronteras": { "kc": 0.85, "gda_meta": 1150, "info": "Dia curto. Alta produtividade e vigor. Resistente a doenças de solo." }
+      "Albion": { "kc": 0.85, "gda_meta": 1250, "info": "Dia neutro. Sabor excelente. ALERTA: Altamente sensível a Neopestalotiopsis e Antracnose." },
+      "San Andreas": { "kc": 0.85, "gda_meta": 1200, "info": "Dia neutro. Mais rústica. Fruto firme, ideal para transporte. Sensível a Ácaros." },
+      "Fronteras": { "kc": 0.85, "gda_meta": 1150, "info": "Dia curto. Vigorosa. Resistente a doenças de solo, mas exige manejo preventivo." }
     },
     "fases": {
       "Plantio/Estabelecimento": {
         "desc": "0 a 30 dias pós-transplante.",
-        "fisiologia": "Enraizamento crítico. Risco de morte súbita por fungos de solo e nematoides.",
-        "manejo": "Mudas sadias (Vírus-free). Drench (esguicho) no colo da planta. Monitorar Lagarta Rosca.",
+        "fisiologia": "Enraizamento crítico. Risco de 'Morte Súbita' por fungos de solo.",
+        "manejo": "Mudas sadias. Drench (esguicho) no colo. Evitar excesso de água (hipoxia).",
         "quimica": [
-          { "Alvo": "Podridão de Coroa (Phytophthora cactorum)", "Ativo": "Metalaxil-M + Mancozeb", "Grupo": "Fenilamida", "Tipo": "Sistêmico/Contato (Drench)" },
-          { "Alvo": "Rhizoctonia/Fusarium", "Ativo": "Fludioxonil", "Grupo": "Fenilpirrol", "Tipo": "Tratamento de Mudas" },
-          { "Alvo": "Nematoides (Meloidogyne)", "Ativo": "Fluopyram ou Pochonia chlamydosporia", "Grupo": "Benzamida/Biológico", "Tipo": "Nematicida via gotejo" },
-          { "Alvo": "Lagarta Rosca", "Ativo": "Clorantraniliprole", "Grupo": "Diamida", "Tipo": "Drench ou Granulado" }
+          { 
+            "Alvo": "Podridão de Coroa (Phytophthora)", 
+            "imagem": "phytophthora_morango.jpg",
+            "Ativo": "Metalaxil-M + Mancozeb", 
+            "Grupo": "Fenilamida", 
+            "Tipo": "Sistêmico/Contato (Drench)",
+            "Obs": "O fungo 'nada' na água. Solos encharcados são fatais. Aplicar logo após o plantio."
+          },
+          { 
+            "Alvo": "Rhizoctonia/Fusarium", 
+            "imagem": "fusarium_morango.jpg",
+            "Ativo": "Fludioxonil ou Carboxina", 
+            "Grupo": "Fenilpirrol", 
+            "Tipo": "Tratamento de Mudas",
+            "Obs": "Causa tombamento e morte de plantas jovens. Imersão das raízes antes do plantio é o melhor controle."
+          },
+          { 
+            "Alvo": "Lagarta Rosca (Agrotis)", 
+            "imagem": "lagarta_rosca.jpg",
+            "Ativo": "Clorantraniliprole ou Metomil", 
+            "Grupo": "Diamida/Carbamato", 
+            "Tipo": "Drench ou Isca",
+            "Obs": "Corta a planta rente ao solo à noite. Procurar lagartas enterradas na base da planta cortada."
+          }
         ]
       },
       "Vegetativo/Pré-Florada": {
         "desc": "Desenvolvimento da coroa e folhas.",
-        "fisiologia": "Expansão foliar. Início da pressão de Oídio e Manchas Foliares.",
-        "manejo": "Eliminar folhas velhas. Monitorar Ácaro Rajado na face inferior da folha.",
+        "fisiologia": "Expansão foliar. Início da pressão de Oídio e Ácaros.",
+        "manejo": "Eliminar folhas velhas. Monitorar Ácaro Rajado na face inferior.",
         "quimica": [
-          { "Alvo": "Oídio (Sphaerotheca)", "Ativo": "Quinoyfen ou Enxofre", "Grupo": "Quinolina/Inorgânico", "Tipo": "Preventivo Específico" },
-          { "Alvo": "Mancha de Mycosphaerella (Ramularia)", "Ativo": "Difenoconazol", "Grupo": "Triazol", "Tipo": "Sistêmico" },
-          { "Alvo": "Ácaro Rajado (Tetranychus)", "Ativo": "Abamectina ou Espirodiclofeno", "Grupo": "Avermectina/Ácido Tetronico", "Tipo": "Rotacionar Mecanismo" },
-          { "Alvo": "Pulgão (Capitophorus)", "Ativo": "Imidacloprido (Apenas se longe da flor)", "Grupo": "Neonicotinoide", "Tipo": "Sistêmico Solo" }
+          { 
+            "Alvo": "Oídio (Sphaerotheca)", 
+            "imagem": "oidio_morango.jpg",
+            "Ativo": "Quinoyfen, Metrafenona ou Enxofre", 
+            "Grupo": "Quinolina/Inorgânico", 
+            "Tipo": "Preventivo Específico",
+            "Obs": "Folhas encarquilhadas com pó branco. Inicia nas folhas mais baixas. O enxofre ajuda no controle de ácaros."
+          },
+          { 
+            "Alvo": "Mancha de Mycosphaerella", 
+            "imagem": "mycosphaerella.jpg",
+            "Ativo": "Difenoconazol ou Azoxistrobina", 
+            "Grupo": "Triazol/Estrobilurina", 
+            "Tipo": "Sistêmico",
+            "Obs": "Mancha com centro branco e borda roxa. Muito comum em variedades de dia curto."
+          },
+          { 
+            "Alvo": "Ácaro Rajado (Tetranychus)", 
+            "imagem": "acaro_rajado.jpg",
+            "Ativo": "Abamectina, Clorfenapir ou Bifenazato", 
+            "Grupo": "Rotacionar Mecanismo", 
+            "Tipo": "Contato/Ingestão",
+            "Obs": "Cria resistência muito rápido. NUNCA usar o mesmo produto 2x seguidas. Molhar bem a face inferior da folha."
+          }
         ]
       },
       "Florada/Frutificação": {
         "desc": "Flores, Frutos Verdes e Maduros.",
-        "fisiologia": "Alta demanda metabólica. Tecidos florais sensíveis a Botrytis. Frutos sensíveis a Antracnose.",
-        "manejo": "Controle de umidade. Colheita sanitária (retirar podres). Atenção máxima a Neopestalotiopsis (Mancha de Pestalotia) que seca a planta inteira.",
+        "fisiologia": "Tecidos sensíveis a Botrytis e Neopestalotiopsis.",
+        "manejo": "Controle de umidade. Colheita sanitária. Retirar frutos podres da lavoura.",
         "quimica": [
-          { "Alvo": "Botrytis (Mofo Cinzento)", "Ativo": "Iprodiona ou Ciprodinil", "Grupo": "Dicarboximida/Anilinopirimidina", "Tipo": "Alternar ativos (Risco de Resistência)" },
-          { "Alvo": "Neopestalotiopsis (Pestalotia)", "Ativo": "Thiram + Piraclostrobina", "Grupo": "Ditiocarbamato + Estrobilurina", "Tipo": "Preventivo Obrigatório" },
-          { "Alvo": "Antracnose (Flor Preta/Fruto)", "Ativo": "Procloraz ou Azoxistrobina", "Grupo": "Imidazol/Estrobilurina", "Tipo": "Erradicante/Preventivo" },
-          { "Alvo": "Tripes (Bronzeamento)", "Ativo": "Spinetoram ou Beauveria", "Grupo": "Espinosina/Biológico", "Tipo": "Choque (Cuidado com abelhas)" },
-          { "Alvo": "Míldio", "Ativo": "Dimetomorfe", "Grupo": "Morfologia", "Tipo": "Sistêmico Local" }
+          { 
+            "Alvo": "Neopestalotiopsis (Pestalotia)", 
+            "imagem": "neopestalotiopsis.jpg",
+            "Ativo": "Thiram + Piraclostrobina (ou Fludioxonil)", 
+            "Grupo": "Ditiocarbamato", 
+            "Tipo": "Preventivo Obrigatório",
+            "Obs": "A doença mais destrutiva do momento. Sintoma de queima nas folhas e podridão mole no fruto. Espalha com chuva/mão."
+          },
+          { 
+            "Alvo": "Botrytis (Mofo Cinzento)", 
+            "imagem": "botrytis_morango.jpg",
+            "Ativo": "Iprodiona, Procimidona ou Ciprodinil", 
+            "Grupo": "Dicarboximida", 
+            "Tipo": "Curativo",
+            "Obs": "Ataca em períodos úmidos/frios. O mofo cinza cobre o fruto rapidamente."
+          },
+          { 
+            "Alvo": "Tripes (Bronzeamento)", 
+            "imagem": "tripes_morango.jpg",
+            "Ativo": "Spinetoram ou Beauveria bassiana", 
+            "Grupo": "Espinosina/Biológico", 
+            "Tipo": "Choque",
+            "Obs": "Fruto fica bronzeado e sem brilho. O tripes se esconde dentro da flor."
+          },
+          { 
+            "Alvo": "Mancha Angular (Bactéria)", 
+            "imagem": "mancha_angular.jpg",
+            "Ativo": "Cobre + Kasugamicina", 
+            "Grupo": "Cobre/Antibiótico", 
+            "Tipo": "Protetor",
+            "Obs": "Manchas oleosas que ficam translúcidas contra a luz. Comum em chuvas de verão."
+          }
         ]
       }
     }
