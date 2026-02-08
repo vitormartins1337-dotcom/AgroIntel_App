@@ -2,84 +2,142 @@
   "Café (Coffea arabica)": {
     "t_base": 10,
     "vars": {
-      "Catuaí (Vermelho/Amarelo)": { 
-        "kc": 1.1, 
-        "gda_meta": 3000, 
-        "info": "A base da cafeicultura. Alta carga, porte baixo. Ponto fraco: Altíssima suscetibilidade a Nematoides (Meloidogyne exígua), Ferrugem e Cercospora. Exige 'plano de saúde' robusto." 
-      },
-      "Arara": { 
-        "kc": 1.2, 
-        "gda_meta": 2900, 
-        "info": "Alta Tecnologia. Imune à Ferrugem (pode reduzir fungicidas). ALERTA: Extremamente suscetível a Phoma, Mancha Aureolada (Bactéria) e Botrytis na florada. Maturação tardia." 
-      },
-      "Mundo Novo": { 
-        "kc": 1.1, 
-        "gda_meta": 3100, 
-        "info": "Rústico e sistema radicular profundo (tolera seca e Fusariose melhor que Catuaí). Porte alto. Exige poda frequente para não fechar a rua." 
-      },
-      "Bourbon Amarelo": { 
-        "kc": 1.1, 
-        "gda_meta": 3000, 
-        "info": "Cafés Especiais (>85 pontos). Bebida adocicada. Delicado: Baixa produtividade e suscetível a todas as doenças (incluindo Phoma e Ferrugem). Exige altitude >1000m." 
-      },
-      "Catucaí 2SL / 785": {
-        "kc": 1.1,
-        "gda_meta": 3000,
-        "info": "Vigor Híbrido. O 785 é resistente a Bicho Mineiro e Nematoides. O 2SL tem tolerância a Phoma. Ótimos para replantio em áreas com histórico de Fusarium."
-      }
+      "Catuaí (Vermelho/Amarelo)": { "kc": 1.1, "gda_meta": 3000, "info": "Base da cafeicultura. Alta suscetibilidade a Nematoides e Ferrugem. Exige manejo rigoroso." },
+      "Arara": { "kc": 1.2, "gda_meta": 2900, "info": "Alta Tecnologia. Imune à Ferrugem. ALERTA: Muito suscetível a Phoma e Botrytis na florada." },
+      "Mundo Novo": { "kc": 1.1, "gda_meta": 3100, "info": "Rústico. Sistema radicular profundo. Porte alto. Exige poda frequente." },
+      "Bourbon": { "kc": 1.1, "gda_meta": 3000, "info": "Cafés Especiais. Delicado: Baixa produtividade e alta suscetibilidade a doenças." },
+      "Catucaí 2SL / 785": { "kc": 1.1, "gda_meta": 3000, "info": "Vigor Híbrido. 785 é resistente a nematoides. 2SL tolerante a Phoma." }
     },
     "fases": {
       "Pós-Colheita / Repouso (Jul-Ago)": {
         "desc": "Dormência, Poda e Cicatrização.",
-        "fisiologia": "Raízes retomam crescimento (absorção de Ca e B). Diferenciação floral. Planta estressada pela colheita mecânica.",
-        "manejo": "Amostragem de Solo/Raiz (Nematoides). Controle de Cochonilhas (associação com formigas). Poda sanitária (retirar ramos com Mal Rosado).",
+        "fisiologia": "Raízes retomam crescimento. Diferenciação floral. Planta estressada pela colheita.",
+        "manejo": "Amostragem de Solo e Raiz (Nematoides). Controle de Cochonilhas. Poda sanitária.",
         "quimica": [
-          { "Alvo": "Bicho Mineiro (Pico de Seca)", "Ativo": "Cartape ou Lufenurom", "Grupo": "Bloqueador/Inibidor de Quitina", "Tipo": "Rotação (Evitar piretroides para não explodir ácaros)" },
-          { "Alvo": "Ácaro Vermelho e Leprose (Virose)", "Ativo": "Espirodiclofeno ou Enxofre", "Grupo": "Ácido Tetronico/Inorgânico", "Tipo": "Específico (Foco em reboleiras)" },
-          { "Alvo": "Percevejo de Renda (Vatiga)", "Ativo": "Imidacloprido", "Grupo": "Neonicotinoide", "Tipo": "Sistêmico Foliar ou Solo" },
-          { "Alvo": "Cochonilha de Raiz/Roseta", "Ativo": "Tiametoxam", "Grupo": "Neonicotinoide", "Tipo": "Drench (Esguicho no tronco)" },
-          { "Alvo": "Rosellinia/Fusariose (Pé-Preto)", "Ativo": "Trichoderma harzianum (Cêpas agressivas)", "Grupo": "Biológico", "Tipo": "Drench saturado na cova" }
+          { 
+            "Alvo": "Bicho Mineiro (Leucoptera coffeella)", 
+            "imagem": "bicho_mineiro.jpg",
+            "Ativo": "Cartape ou Lufenurom", 
+            "Grupo": "Bloqueador/Inibidor de Quitina", 
+            "Tipo": "Rotação de Ativos",
+            "Obs": "Pico de ataque em períodos secos. Alternar princípios ativos para evitar resistência. Monitorar terço superior da planta."
+          },
+          { 
+            "Alvo": "Ácaro da Leprose (Brevipalpus)", 
+            "imagem": "acaro_leprose.jpg",
+            "Ativo": "Espirodiclofeno ou Enxofre", 
+            "Grupo": "Ácido Tetronico/Inorgânico", 
+            "Tipo": "Específico (Foco em reboleiras)",
+            "Obs": "O ácaro transmite a virose da Leprose (anéis no fruto). Aplicação deve molhar bem o interior da planta."
+          },
+          { 
+            "Alvo": "Cochonilha de Raiz (Dysmicoccus)", 
+            "imagem": "cochonilha_raiz.jpg",
+            "Ativo": "Tiametoxam + Ciproconazol", 
+            "Grupo": "Neonicotinoide + Triazol", 
+            "Tipo": "Drench (Esguicho)",
+            "Obs": "Aplicar no solo úmido. Controla também a ferrugem inicial. Combater formigas cortadeiras que protegem a cochonilha."
+          }
         ]
       },
       "Pré-Florada / Botão Azul (Set-Out)": {
-        "desc": "Intumescimento dos botões e Antese.",
-        "fisiologia": "Chuva >10mm quebra dormência. Botão 'Cotonete' é o estágio mais sensível. Ventos frios favorecem bactérias.",
-        "manejo": "Monitorar Trânsito da Broca (fêmeas voando). Proteção contra o complexo de Manchas (Phoma/Ascochyta/Aureolada).",
+        "desc": "Intumescimento dos botões.",
+        "fisiologia": "Chuva >10mm quebra dormência. Botão 'Cotonete' é sensível a fungos.",
+        "manejo": "Monitorar Trânsito da Broca. Proteção contra Phoma e Mancha Aureolada.",
         "quimica": [
-          { "Alvo": "Phoma/Ascochyta (Seca de Ponteiros)", "Ativo": "Boscalida + Piraclostrobina", "Grupo": "Carboxamida + Estrobilurina", "Tipo": "Preventivo Premium (Cantus/Bellis)" },
-          { "Alvo": "Mancha Aureolada (Pseudomonas)", "Ativo": "Hidróxido de Cobre + Casugamicina", "Grupo": "Cobre + Antibiótico", "Tipo": "Específico para Bactéria (Pós-chuva/vento)" },
-          { "Alvo": "Broca-do-Café (Voo de Trânsito)", "Ativo": "Beauveria bassiana ou Cyantraniliprole", "Grupo": "Biológico/Diamida", "Tipo": "Aplicação na reboleira" },
-          { "Alvo": "Mal Rosado (Corticium)", "Ativo": "Tebuconazol", "Grupo": "Triazol", "Tipo": "Curativo (Foco em ramos internos)" }
+          { 
+            "Alvo": "Phoma / Ascochyta", 
+            "imagem": "phoma_cafe.jpg",
+            "Ativo": "Boscalida + Piraclostrobina", 
+            "Grupo": "Carboxamida + Estrobilurina", 
+            "Tipo": "Preventivo Premium",
+            "Obs": "Obrigatório se houver frentes frias ou ventos fortes. A doença entra por ferimentos nos ramos."
+          },
+          { 
+            "Alvo": "Mancha Aureolada (Bactéria)", 
+            "imagem": "mancha_aureolada.jpg",
+            "Ativo": "Hidróxido de Cobre + Casugamicina", 
+            "Grupo": "Cobre + Antibiótico", 
+            "Tipo": "Bactericida Específico",
+            "Obs": "Não misturar com produtos muito ácidos. Aplicar imediatamente após chuvas de granizo ou ventania."
+          },
+          { 
+            "Alvo": "Broca-do-Café (Trânsito)", 
+            "imagem": "broca_cafe.jpg",
+            "Ativo": "Beauveria bassiana", 
+            "Grupo": "Biológico", 
+            "Tipo": "Aplicação na reboleira",
+            "Obs": "Aplicar no fim da tarde (umidade alta favorece o fungo). Foca nas fêmeas que estão voando buscando frutos."
+          }
         ]
       },
       "Chumbinho / Expansão (Nov-Dez)": {
         "desc": "Frutos de 3 a 5mm.",
-        "fisiologia": "Máxima divisão celular. Raízes absorvendo o adubo nitrogenado das chuvas. Fase crítica para doenças de solo.",
-        "manejo": "Aplicação 'Via Solo' (Sistêmico) para Ferrugem e Cigarra. Início do controle de Cercospora. Alerta para Lagartas.",
+        "fisiologia": "Máxima divisão celular. Definição da peneira. Raízes absorvendo o N.",
+        "manejo": "Aplicação 'Via Solo' (Sistêmico) OBRIGATÓRIA. Controle de Cercospora.",
         "quimica": [
-          { "Alvo": "Ferrugem + Cigarra (Quesada)", "Ativo": "Ciproconazol + Tiametoxam", "Grupo": "Triazol + Neonicotinoide", "Tipo": "Via Solo (Drench/Jato Dirigido) - OBRIGATÓRIO" },
-          { "Alvo": "Cercospora (Olho Pardo)", "Ativo": "Tiofanato Metílico + Cobre", "Grupo": "Benzimidazol + Inorgânico", "Tipo": "Foliar Sistêmico" },
-          { "Alvo": "Lagartas Desfolhadoras", "Ativo": "Metomil ou Bt", "Grupo": "Carbamato/Biológico", "Tipo": "Contato/Ingestão (Se houver ataque)" }
+          { 
+            "Alvo": "Ferrugem + Cigarra (Quesada)", 
+            "imagem": "ferrugem_cafe.jpg",
+            "Ativo": "Tiametoxam + Ciproconazol (ou Azoxistrobina)", 
+            "Grupo": "Neonicotinoide + Triazol", 
+            "Tipo": "Via Solo (Drench)",
+            "Obs": "Principal aplicação do ano. Protege contra ferrugem por 60-90 dias e controla a Cigarra que suga a raiz."
+          },
+          { 
+            "Alvo": "Cercospora (Olho Pardo)", 
+            "imagem": "cercospora_cafe.jpg",
+            "Ativo": "Tiofanato Metílico + Cobre", 
+            "Grupo": "Benzimidazol + Inorgânico", 
+            "Tipo": "Sistêmico Foliar",
+            "Obs": "A Cercospora ataca plantas com desequilíbrio nutricional (N/K). Corrigir a adubação junto com o fungicida."
+          }
         ]
       },
       "Granação / Enchimento (Jan-Mar)": {
-        "desc": "Solidificação do endosperma.",
-        "fisiologia": "Dreno intenso de Potássio (K). Risco de 'Die-Back' (Palteira) se faltar nutrição. Fruto atrativo para a Broca.",
-        "manejo": "Monitoramento da Broca (Nível de Dano 3%). Controle de Ferrugem Tardia (Tardieira).",
+        "desc": "Solidificação do grão.",
+        "fisiologia": "Dreno de Potássio. Risco de Palteira. Fruto atraente para Broca.",
+        "manejo": "Monitoramento da Broca (Nível 3%). Controle de Ferrugem Tardia.",
         "quimica": [
-          { "Alvo": "Broca-do-Café (Ataque nos frutos)", "Ativo": "Ciantraniliprole (Benevia) ou Espinosade", "Grupo": "Diamida/Espinocina", "Tipo": "Sistêmico/Ingestão (Alto Choque)" },
-          { "Alvo": "Ferrugem (Reinfecção)", "Ativo": "Fluxapiroxade + Piraclostrobina", "Grupo": "Carboxamida + Estrobilurina", "Tipo": "Foliar Premium (Protetor de área foliar)" },
-          { "Alvo": "Bicho Mineiro (Veranico)", "Ativo": "Clorantraniliprole", "Grupo": "Diamida", "Tipo": "Sistêmico Longo Residual" }
+          { 
+            "Alvo": "Broca-do-Café (Foco)", 
+            "imagem": "dano_broca.jpg",
+            "Ativo": "Ciantraniliprole (Benevia)", 
+            "Grupo": "Diamida", 
+            "Tipo": "Sistêmico de Choque",
+            "Obs": "Produto de alto custo e alta eficiência. Usar apenas se o monitoramento indicar nível de dano econômico."
+          },
+          { 
+            "Alvo": "Ferrugem (Tardieira)", 
+            "imagem": "ferrugem_tardia.jpg",
+            "Ativo": "Fluxapiroxade + Piraclostrobina", 
+            "Grupo": "Carboxamida + Estrobilurina", 
+            "Tipo": "Foliar Premium",
+            "Obs": "Essencial para segurar o enfolhamento para a safra seguinte. Planta sem folha agora não produz ano que vem."
+          }
         ]
       },
       "Maturação / Pré-Colheita (Abr-Jun)": {
-        "desc": "Verde cana -> Cereja -> Passa.",
-        "fisiologia": "Degradação de clorofila. Casca fica permeável a fungos fermentadores (perda de qualidade de bebida).",
-        "manejo": "Respeitar CARÊNCIA (Intervalo de Segurança). Controle de Phoma de fim de ciclo (derruba frutos maduros).",
+        "desc": "Cereja e Passa.",
+        "fisiologia": "Casca permeável. Risco de fermentação.",
+        "manejo": "Respeitar CARÊNCIA. Evitar resíduos.",
         "quimica": [
-          { "Alvo": "Cercospora/Phoma (Queda de frutos)", "Ativo": "Tebuconazol", "Grupo": "Triazol", "Tipo": "Curativo (Checar carência de 30 dias)" },
-          { "Alvo": "Uniformização de Maturação", "Ativo": "Etefon", "Grupo": "Regulador Vegetal (Etileno)", "Tipo": "Hormonal (Aplicar com >85% granado)" },
-          { "Alvo": "Broca (Limpeza de inóculo)", "Ativo": "Beauveria bassiana", "Grupo": "Biológico", "Tipo": "Redução de população para safra seguinte" }
+          { 
+            "Alvo": "Phoma de fim de ciclo", 
+            "imagem": "phoma_fruto.jpg",
+            "Ativo": "Tebuconazol", 
+            "Grupo": "Triazol", 
+            "Tipo": "Curativo",
+            "Obs": "Cuidado com o Período de Carência (PC). Parar aplicações 30 dias antes da colheita para evitar resíduo no grão."
+          },
+          { 
+            "Alvo": "Uniformização", 
+            "imagem": "cafe_maduro.jpg",
+            "Ativo": "Etefon", 
+            "Grupo": "Hormonal (Etileno)", 
+            "Tipo": "Regulador Vegetal",
+            "Obs": "Aplicar apenas quando a lavoura tiver >85% de granação completa. Antecipa a queda se colher com máquina."
+          }
         ]
       }
     }
