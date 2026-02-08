@@ -233,7 +233,7 @@ if not df_clima.empty:
         manejo_txt = AgroBrain.get_info_segura(dados_fase, ['manejo'])
         st.warning(f"🎯 **Recomendação:** {manejo_txt}")
         
-        # --- ÁREA VISUAL DE PRAGAS/DOENÇAS (VERSÃO LOCAL + BADGES) ---
+        # --- ÁREA VISUAL DE PRAGAS/DOENÇAS (VERSÃO DIAMANTE: FOTO + BADGES + NOTA TÉCNICA) ---
         st.markdown("### 🧪 Soluções Fitossanitárias & Identificação")
         
         lista_quimica = dados_fase.get('quimica', [])
@@ -254,15 +254,10 @@ if not df_clima.empty:
                         nome_arquivo = item.get("imagem", "")
                         caminho_local = os.path.join("images", nome_arquivo) if nome_arquivo else None
                         
-                        # 1. Tenta carregar da pasta local 'images'
                         if nome_arquivo and os.path.exists(caminho_local):
                             st.image(caminho_local, use_container_width=True)
-                        
-                        # 2. Se não for local, tenta ver se é um Link (http)
                         elif nome_arquivo and nome_arquivo.startswith("http"):
                             st.image(nome_arquivo, use_container_width=True)
-                            
-                        # 3. Se não tiver nada, mostra o ícone genérico
                         else:
                             st.markdown("""
                             <div style="background:#f1f5f9; height:80px; display:flex; align-items:center; justify-content:center; border-radius:8px; border: 1px dashed #cbd5e1;">
@@ -270,32 +265,43 @@ if not df_clima.empty:
                             </div>
                             """, unsafe_allow_html=True)
 
-                    # --- INFORMAÇÕES TÉCNICAS (COM BADGES) ---
+                    # --- INFORMAÇÕES TÉCNICAS (COM BADGES E NOTAS) ---
                     with c_info:
+                        # Título do Alvo
                         st.markdown(f"**🎯 ALVO:** <span style='color:#dc2626; font-weight:bold;'>{item.get('Alvo', 'Geral')}</span>", unsafe_allow_html=True)
+                        
+                        # Ativo Químico
                         st.markdown(f"🧪 **Ativo:** {item.get('Ativo', '-')}")
                         
-                        # Badges coloridos (Visual Profissional)
+                        # Badges Coloridos
                         grupo = item.get('Grupo', '-')
                         tipo = item.get('Tipo', '-')
                         
-                        # Cores dinâmicas baseadas no tipo de produto
                         bg_cor = "#eff6ff" # Azul (Padrão)
                         txt_cor = "#1d4ed8"
                         
                         if "Biológico" in grupo: 
-                            bg_cor, txt_cor = "#f0fdf4", "#15803d" # Verde (Bio)
+                            bg_cor, txt_cor = "#f0fdf4", "#15803d" # Verde
                         elif "Sistêmico" in tipo: 
-                            bg_cor, txt_cor = "#fff7ed", "#c2410c" # Laranja (Sistêmico)
+                            bg_cor, txt_cor = "#fff7ed", "#c2410c" # Laranja
                         elif "Cobre" in grupo or "Protetor" in tipo:
-                            bg_cor, txt_cor = "#f0f9ff", "#0369a1" # Azul claro (Protetor)
+                            bg_cor, txt_cor = "#f0f9ff", "#0369a1" # Azul claro
                         
                         st.markdown(f"""
-                        <div style="margin-top:5px;">
+                        <div style="margin-top:5px; margin-bottom:8px;">
                             <span style="background:{bg_cor}; color:{txt_cor}; padding:3px 8px; border-radius:4px; font-size:0.8rem; font-weight:600; border:1px solid {bg_cor};">{grupo}</span>
                             <span style="background:#f8fafc; color:#475569; padding:3px 8px; border-radius:4px; font-size:0.8rem; border:1px solid #e2e8f0; margin-left:5px;">{tipo}</span>
                         </div>
                         """, unsafe_allow_html=True)
+
+                        # --- NOVIDADE: NOTA TÉCNICA (Obs) ---
+                        obs = item.get('Obs', '')
+                        if obs:
+                            st.markdown(f"""
+                            <div style="font-size: 0.85rem; color: #475569; background-color: #f8fafc; padding: 8px; border-radius: 4px; border-left: 3px solid #94a3b8; margin-top: 5px;">
+                                <b>💡 Nota Técnica:</b> {obs}
+                            </div>
+                            """, unsafe_allow_html=True)
 
 
                                                        # 2. NUTRIÇÃO (MARCHA DE ABSORÇÃO & MANEJO - CALIBRADO TOTAL HIGH-YIELD)
