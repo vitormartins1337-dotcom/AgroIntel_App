@@ -843,7 +843,7 @@ if not df_clima.empty:
         if dados_nutri:
             
            # --- 4. PAINEL QUÍMICO (ATUALIZADO PARA RANGES/FAIXAS) ---
-            st.markdown(f"#### ⚛️ Demanda Total (Extração High-Yield: {nome_cultura_exibicao})")
+            st.markdown(f"#### ⚛️ Extração Nutricional para alta performance: {nome_cultura_exibicao})")
             st.caption("Quantidade total extraída (Kg/ha) para atingir o teto produtivo.")
 
             # Função auxiliar para pegar a faixa ou o último valor do gráfico
