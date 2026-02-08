@@ -2,172 +2,133 @@
   "Tomate (Solanum lycopersicum)": {
     "t_base": 10,
     "vars": {
-      "Italiano (Saladete)": { 
-        "kc": 1.2, 
-        "gda_meta": 1600, 
-        "info": "Hábito Determinado (rasteiro ou tutorado curto). Frutos alongados. Alta produtividade concentrada. ALERTA: Muito sensível a Fundo Preto (Deficiência de Ca) e Viroses." 
-      },
-      "Grape / Cherry": { 
-        "kc": 1.1, 
-        "gda_meta": 1500, 
-        "info": "Hábito Indeterminado. Frutos pequenos, alto Brix (Doçura). Exige mão de obra intensiva (desbrota semanal). Valor agregado alto, mas sensível a rachaduras." 
-      },
-      "Longa Vida (Carmen)": { 
-        "kc": 1.2, 
-        "gda_meta": 1700, 
-        "info": "Tomate redondo tradicional. Gene Rin/Nor retarda maturação. Resistente ao transporte. Mais rústico, mas exige controle rigoroso de Pinta Preta." 
-      },
-      "Industrial (Rasteiro)": { 
-        "kc": 1.15, 
-        "gda_meta": 1550, 
-        "info": "Para molhos/extratos. Colheita mecanizada única. Parede grossa, alto Brix. O foco é sanidade foliar para garantir Brix." 
-      }
+      "Italiano (Saladete)": { "kc": 1.2, "gda_meta": 1600, "info": "Hábito Determinado/Indeterminado. Fruto alongado. Firme e produtivo. Sensível a Fundo Preto e Geminivírus." },
+      "Grape / Cherry": { "kc": 1.1, "gda_meta": 1500, "info": "Indeterminado. Alto Brix. Exige desbrota intensa. Suscetível a Rachaduras e Ácaro do Bronzeamento." },
+      "Caqui (Salada)": { "kc": 1.2, "gda_meta": 1700, "info": "Multilocular (Grande). Mercado de mesa premium. Pele fina: muito sensível ao transporte e à falta de Cálcio." },
+      "Pink (Tomate Rosa)": { "kc": 1.15, "gda_meta": 1600, "info": "Nicho Gourmet. Sabor superior (baixa acidez). Suscetível a Pinta Preta e exige nutrição foliar precisa." },
+      "Industrial (Rasteiro)": { "kc": 1.15, "gda_meta": 1550, "info": "Colheita única. Parede grossa. Foco em sanidade foliar (Septoria/Alternaria) para garantir Brix." }
     },
     "fases": {
       "I - Transplante e Pegamento": {
-        "desc": "0 a 10 dias após transplante (DAT).",
-        "fisiologia": "Estresse pós-plantio. Risco de morte de mudas por 'Canela Preta' e Murcha Bacteriana.",
-        "manejo": "Drench (esguicho) no pé é OBRIGATÓRIO. Proteção contra Mosca Branca (Viroses) começa agora.",
+        "desc": "0 a 10 DAT.",
+        "fisiologia": "Enraizamento e superação do estresse. Risco de Damping-off e Nematoides.",
+        "manejo": "Drench no colo e sulco. Proteção sistêmica contra vetores (Mosca Branca/Tripes).",
         "quimica": [
           { 
-            "Alvo": "Mosca Branca e Pulgão (Vetores)", 
-            "imagem": "mosca_branca_tomate.jpg",
-            "Ativo": "Tiametoxam + Clorantraniliprole (ou Imidacloprido)", 
-            "Grupo": "Neonicotinoide + Diamida", 
+            "Alvo": "Nematoides (Meloidogyne)", 
+            "imagem": "nematoide_tomate.jpg",
+            "Ativo": "Fluopyram ou Purpureocillium lilacinum", 
+            "Grupo": "Benzamida/Biológico", 
+            "Tipo": "Drench/Gotejo",
+            "Obs": "Nematoides causam galhas e murcha. O controle deve ser feito ANTES ou NO transplante. Áreas velhas exigem biológicos."
+          },
+          { 
+            "Alvo": "Mosca Branca (Vetor Geminivírus)", 
+            "imagem": "mosca_branca_muda.jpg",
+            "Ativo": "Cyantraniliprole + Tiametoxam", 
+            "Grupo": "Diamida/Neo", 
             "Tipo": "Drench (Sistêmico)",
-            "Obs": "A planta absorve pela raiz e fica protegida por 20-30 dias. Essencial para evitar Geminivírus e Vira-Cabeça logo no início."
-          },
-          { 
-            "Alvo": "Doenças de Solo (Pythium/Rhizoctonia)", 
-            "imagem": "canela_preta_tomate.jpg",
-            "Ativo": "Metalaxil-M + Fludioxonil", 
-            "Grupo": "Fenilamida/Fenilpirrol", 
-            "Tipo": "Drench",
-            "Obs": "Protege o colo da planta contra tombamento (Damping-off). Aplicar na muda ou logo após o plantio."
-          },
-          { 
-            "Alvo": "Murchadeira (Ralstonia)", 
-            "imagem": "murchadeira_ralstonia.jpg",
-            "Ativo": "Bacillus subtilis + Trichoderma", 
-            "Grupo": "Biológico", 
-            "Tipo": "Inoculação de Solo",
-            "Obs": "Cria uma barreira biológica nas raízes. Ralstonia não tem cura química, a prevenção é biológica."
+            "Obs": "Protege a planta contra a virose do 'Topo Amarelo' desde o primeiro dia. O vírus na muda zera a produção."
           }
         ]
       },
-      "II - Vegetativo (Crescimento)": {
-        "desc": "10 a 35 DAT (Hastes e Folhas).",
-        "fisiologia": "Definição da estrutura. Alta demanda de N. Tecidos tenros atraem Traça e Bactérias.",
-        "manejo": "Guerra aos Vetores (Mosca/Tripes). Prevenção de Bacterioses (Xanthomonas). Desbrota lateral.",
+      "II - Desenvolvimento Vegetativo": {
+        "desc": "10 a 35 DAT.",
+        "fisiologia": "Formação do IAF (Área Foliar). Início da desbrota (Indeterminados).",
+        "manejo": "Monitorar Tripes, Minadora e Septoriose. Atenção à Mancha Bacteriana em clima chuvoso.",
         "quimica": [
           { 
-            "Alvo": "Tripes (Vira-Cabeça)", 
-            "imagem": "tripes_vira_cabeca.jpg",
-            "Ativo": "Espinetoram ou Formetanato", 
-            "Grupo": "Espinocina/Carbamato", 
-            "Tipo": "Choque/Ingestão",
-            "Obs": "O Tripes fica dentro do broto. O vírus Vira-Cabeça (Tospovirus) mata o ponteiro e paralisa a planta."
+            "Alvo": "Septoriose (Mancha foliar)", 
+            "imagem": "septoriose_tomate.jpg",
+            "Ativo": "Azoxistrobina + Mancozebe", 
+            "Grupo": "Estrob/Ditiocarbamato", 
+            "Tipo": "Preventivo",
+            "Obs": "Manchas pequenas com centro claro. Desfolha a planta de baixo para cima, cozinhando os frutos no sol."
           },
           { 
-            "Alvo": "Larva Minadora (Liriomyza)", 
-            "imagem": "minadora_tomate.jpg",
-            "Ativo": "Abamectina ou Ciromazina", 
-            "Grupo": "Avermectina/Regulador", 
-            "Tipo": "Translaminar",
-            "Obs": "A larva faz o 'mapa' na folha. Se a população explodir, seca a baixeira da planta."
-          },
-          { 
-            "Alvo": "Mancha Bacteriana/Cancro", 
-            "imagem": "mancha_bacteriana.jpg",
-            "Ativo": "Hidróxido de Cobre + Mancozeb", 
-            "Grupo": "Cobre/Ditiocarbamato", 
-            "Tipo": "Protetor (Bacteriostático)",
-            "Obs": "Obrigatório aplicar preventivamente, especialmente após desbrotas ou chuvas."
+            "Alvo": "Murcha Bacteriana (Ralstonia)", 
+            "imagem": "ralstonia_tomate.jpg",
+            "Ativo": "Bacillus amyloliquefaciens", 
+            "Grupo": "Biológico", 
+            "Tipo": "Gotejo",
+            "Obs": "Não há cura química. O Bacillus compete com a bactéria no solo. Isolar plantas murchas imediatamente."
           }
         ]
       },
       "III - Florada e Fixação": {
-        "desc": "Cachos florais abertos.",
-        "fisiologia": "Polinização. Abortamento ocorre se T > 30°C ou falta de Boro. Fase crítica para Cálcio.",
-        "manejo": "Aplicação de Cálcio/Boro. Controle de Requeima e Oídio. Evitar inseticidas que abortam flor.",
+        "desc": "Início da emissão de cachos.",
+        "fisiologia": "Definição do número de frutos. Alta demanda de Boro para tubo polínico.",
+        "manejo": "Equilíbrio N/K. Prevenção de Requeima e Oídio. Manejo de Cálcio.",
         "quimica": [
           { 
             "Alvo": "Requeima (Phytophthora)", 
-            "imagem": "requeima_tomate.jpg",
+            "imagem": "requeima_tomate_haste.jpg",
             "Ativo": "Mandipropamida ou Dimetomorfe", 
-            "Grupo": "CAA/Morfologia", 
-            "Tipo": "Translaminar (Resiste à chuva)",
-            "Obs": "A 'Queima' destrói a lavoura em 3 dias se estiver frio e úmido. Proteger antes da chuva."
+            "Grupo": "CAA", 
+            "Tipo": "Sistêmico Local",
+            "Obs": "A 'Mela' do tomate. Ataca folhas e hastes. Se atingir a haste principal, a planta morre."
           },
           { 
             "Alvo": "Oídio (Oidiopsis)", 
-            "imagem": "oidio_tomate.jpg",
-            "Ativo": "Azoxistrobina + Difenoconazol", 
-            "Grupo": "Estrob/Triazol", 
-            "Tipo": "Sistêmico",
-            "Obs": "Mancha amarela na face superior e pó branco na inferior. Comum em estufas e clima seco."
-          },
-          { 
-            "Alvo": "Fundo Preto (Fisiológico)", 
-            "imagem": "fundo_preto_tomate.jpg",
-            "Ativo": "Cálcio Quelatizado + Boro", 
-            "Grupo": "Nutricional", 
-            "Tipo": "Foliar Dirigido no Cacho",
-            "Obs": "O Fundo Preto NÃO é doença, é falta de Cálcio no fruto. Manter irrigação constante é mais importante que o produto."
+            "imagem": "oidio_folha_tomate.jpg",
+            "Ativo": "Bicarbonato de K ou Difenoconazol", 
+            "Grupo": "Inorgânico/Triazol", 
+            "Tipo": "Contato/Sistêmico",
+            "Obs": "Pó branco embaixo da folha. Comum em épocas secas. Reduz drasticamente o Brix (açúcar)."
           }
         ]
       },
-      "IV - Frutificação (O Desafio)": {
-        "desc": "Frutos verdes (Maçã).",
-        "fisiologia": "O fruto é o dreno principal. Máxima translocação.",
-        "manejo": "Controle total da Traça (Tuta) e Broca-Pequena. Monitorar Ácaro do Bronzeamento.",
+      "IV - Frutificação (Enchimento)": {
+        "desc": "Frutos crescendo (estágio maçã).",
+        "fisiologia": "Translocação massiva de fotoassimilados. Período crítico para Traça e Brocas.",
+        "manejo": "Tolerância Zero para Tuta absoluta. Monitorar Ácaro do Bronzeamento e Mofo Branco.",
         "quimica": [
           { 
             "Alvo": "Traça-do-Tomate (Tuta absoluta)", 
-            "imagem": "traca_tuta_dano.jpg",
-            "Ativo": "Clorfenapir, Indoxacarbe ou Benzoato", 
-            "Grupo": "Rotação Obrigatória", 
-            "Tipo": "Contato/Ingestão",
-            "Obs": "A praga mais difícil. Ataca folha, haste e fruto. Rotacionar grupos químicos a cada aplicação para não criar resistência."
+            "imagem": "tuta_absoluta_folha.jpg",
+            "Ativo": "Clorfenapir ou Indoxacarbe", 
+            "Grupo": "Pirrol/Oxadiazina", 
+            "Tipo": "Ingestão/Contato",
+            "Obs": "A praga mais agressiva. Faz minas largas na folha e fura o fruto. Rotacionar grupos químicos (IRAC) é vital."
           },
           { 
-            "Alvo": "Broca-Pequena (Neoleucinodes)", 
-            "imagem": "broca_pequena.jpg",
-            "Ativo": "Triflumuron ou Teflubenzuron", 
-            "Grupo": "Fisiológico", 
-            "Tipo": "Inibidor de Quitina",
-            "Obs": "A borboleta põe o ovo na sépala e a lagarta entra no fruto 'invisível'. O fruto apodrece por dentro."
-          },
-          { 
-            "Alvo": "Ácaro do Bronzeamento (Aculops)", 
-            "imagem": "acaro_bronzeamento.jpg",
-            "Ativo": "Abamectina ou Enxofre", 
-            "Grupo": "Avermectina/Inorgânico", 
+            "Alvo": "Mofo Branco (Sclerotinia)", 
+            "imagem": "mofo_branco_tomate.jpg",
+            "Ativo": "Procimidona ou Fluazinam", 
+            "Grupo": "Dicarboximida", 
             "Tipo": "Contato",
-            "Obs": "O caule e o fruto ficam marrons/bronzeados e a pele fica áspera. Ocorre no calor."
+            "Obs": "Aparece como um algodão branco na haste ou fruto. Comum em plantios adensados e úmidos."
+          },
+          { 
+            "Alvo": "Broca Pequena (Neoleucinodes)", 
+            "imagem": "broca_pequena_fruto.jpg",
+            "Ativo": "Teflubenzuron ou Spinetoram", 
+            "Grupo": "Fisiológico/Espinocina", 
+            "Tipo": "Sistêmico/Ingestão",
+            "Obs": "A lagarta entra por baixo da sépala. O controle deve ser feito na postura dos ovos ou logo na eclosão."
           }
         ]
       },
       "V - Maturação e Colheita": {
-        "desc": "Pintando a Vermelho.",
-        "fisiologia": "Produção de etileno. Casca sensível.",
-        "manejo": "Respeitar Carência (LMR). Controle de doenças de pós-colheita (Geotrichum/Rhizopus).",
+        "desc": "Mudança de cor e Colheita.",
+        "fisiologia": "Fruto sensível a podridões de ferimento.",
+        "manejo": "Respeitar Carência. Cuidado com Bacterioses de fruto. Limpeza de caixaria.",
         "quimica": [
           { 
-            "Alvo": "Pragas (Resíduo Baixo)", 
-            "imagem": "tuta_fruto.jpg",
-            "Ativo": "Espinosade ou Bt", 
-            "Grupo": "Espinocina/Biológico", 
-            "Tipo": "PC 1 dia",
-            "Obs": "Para segurar a traça na colheita sem deixar resíduo tóxico no tomate de mesa."
+            "Alvo": "Mancha Bacteriana no Fruto", 
+            "imagem": "mancha_fruto_tomate.jpg",
+            "Ativo": "Hidróxido de Cobre", 
+            "Grupo": "Inorgânico", 
+            "Tipo": "Protetor (Baixa Carência)",
+            "Obs": "Causa pontuações pretas (crostas) no fruto, inviabilizando para mercado de mesa."
           },
           { 
-            "Alvo": "Pinta Preta e Alternaria", 
-            "imagem": "pinta_preta_fruto.jpg",
-            "Ativo": "Azoxistrobina", 
-            "Grupo": "Estrobilurina", 
-            "Tipo": "Sistêmico",
-            "Obs": "Protege o fruto e aumenta o tempo de prateleira (shelf-life). Atenção à carência."
+            "Alvo": "Podridão Mole (Erwinia)", 
+            "imagem": "podridao_mole_tomate.jpg",
+            "Ativo": "Kasugamicina", 
+            "Grupo": "Antibiótico", 
+            "Tipo": "Curativo (PC Baixo)",
+            "Obs": "O fruto 'derrete' e cheira mal. Comum em colheitas sob chuva. Kasugamicina ajuda a segurar o avanço."
           }
         ]
       }
