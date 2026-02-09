@@ -233,8 +233,9 @@ if not df_clima.empty:
         manejo_txt = AgroBrain.get_info_segura(dados_fase, ['manejo'])
         st.warning(f"🎯 **Recomendação:** {manejo_txt}")
         
-        # --- ÁREA VISUAL DE PRAGAS/DOENÇAS (VERSÃO MASTER: CARDS, BADGES & ROTAÇÃO) ---
-        st.markdown("### 🧪 Soluções Fitossanitárias & Manejo de Resistência")
+        
+                        # --- ÁREA VISUAL DE PRAGAS/DOENÇAS (VERSÃO MASTER + PRODUTOS COMERCIAIS) ---
+        st.markdown("### 🧪 Soluções Fitossanitárias & Produtos Recomendados")
         
         lista_quimica = dados_fase.get('quimica', [])
         
@@ -242,80 +243,50 @@ if not df_clima.empty:
              st.success("✅ Nenhuma intervenção química necessária nesta fase.")
         else:
             for item in lista_quimica:
-                # Início do Card
                 with st.container():
-                    st.markdown("---") # Linha separadora elegante
-                    
-                    # Layout: Coluna 1 (Foto) | Coluna 2 (Informações)
+                    st.markdown("---")
                     c_img, c_info = st.columns([1, 2.5])
                     
-                    # --- 1. LÓGICA DA FOTO (Busca na pasta images > Link > Ícone) ---
+                    # --- FOTO ---
                     with c_img:
                         nome_arquivo = item.get("imagem", "")
                         caminho_local = os.path.join("images", nome_arquivo) if nome_arquivo else None
-                        
-                        # Tenta carregar imagem local, depois link, senão ícone
                         if nome_arquivo and os.path.exists(caminho_local):
                             st.image(caminho_local, use_container_width=True)
                         elif nome_arquivo and nome_arquivo.startswith("http"):
                             st.image(nome_arquivo, use_container_width=True)
                         else:
-                            # Ícone Genérico Profissional (Placeholder)
-                            st.markdown("""
-                            <div style="background:#f8fafc; height:90px; display:flex; align-items:center; justify-content:center; border-radius:8px; border: 1px dashed #cbd5e1;">
-                                <span style="font-size:2.5rem;">🦠</span>
-                            </div>""", unsafe_allow_html=True)
+                            st.markdown("""<div style="background:#f8fafc; height:90px; display:flex; align-items:center; justify-content:center; border-radius:8px; border: 1px dashed #cbd5e1;"><span style="font-size:2.5rem;">🦠</span></div>""", unsafe_allow_html=True)
 
-                    # --- 2. DADOS TÉCNICOS E BADGES ---
+                    # --- DADOS TÉCNICOS ---
                     with c_info:
-                        # Título do Alvo (Em destaque Vermelho/Escuro)
                         st.markdown(f"**🎯 ALVO:** <span style='color:#b91c1c; font-weight:bold; font-size:1.05rem;'>{item.get('Alvo', 'Geral')}</span>", unsafe_allow_html=True)
+                        st.markdown(f"🧪 **Ativo Base:** {item.get('Ativo', '-')}")
                         
-                        # Ativo Químico
-                        st.markdown(f"🧪 **Ativo:** {item.get('Ativo', '-')}")
-                        
-                        # --- LÓGICA DOS BADGES COLORIDOS ---
+                        # Lista de Produtos Comerciais (Novo)
+                        produtos = item.get('Produtos', [])
+                        if produtos:
+                            lista_prod = ", ".join([f"`{p}`" for p in produtos])
+                            st.markdown(f"🛒 **Sugestões Comerciais:** {lista_prod}", unsafe_allow_html=True)
+
+                        # Badges
                         grupo = item.get('Grupo', '-')
                         tipo = item.get('Tipo', '-')
-                        
-                        # Cores Padrão (Azul)
                         bg_cor, txt_cor, border_cor = "#eff6ff", "#1d4ed8", "#dbeafe"
+                        if "Biológico" in grupo: bg_cor, txt_cor, border_cor = "#f0fdf4", "#15803d", "#dcfce7"
+                        elif "Sistêmico" in tipo: bg_cor, txt_cor, border_cor = "#fff7ed", "#c2410c", "#ffedd5"
                         
-                        # Cores Condicionais
-                        if "Biológico" in grupo or "Bactéria" in grupo: 
-                            bg_cor, txt_cor, border_cor = "#f0fdf4", "#15803d", "#dcfce7" # Verde
-                        elif "Sistêmico" in tipo or "Translaminar" in tipo: 
-                            bg_cor, txt_cor, border_cor = "#fff7ed", "#c2410c", "#ffedd5" # Laranja
-                        elif "Protetor" in tipo or "Contato" in tipo:
-                            bg_cor, txt_cor, border_cor = "#f1f5f9", "#475569", "#e2e8f0" # Cinza
-                        
-                        # Renderiza os Badges (Tags)
-                        st.markdown(f"""
-                        <div style="margin-top:4px; margin-bottom:10px;">
-                            <span style="background:{bg_cor}; color:{txt_cor}; padding:4px 10px; border-radius:6px; font-size:0.75rem; font-weight:700; border:1px solid {border_cor}; letter-spacing: 0.5px;">{grupo.upper()}</span>
-                            <span style="background:#ffffff; color:#64748b; padding:4px 10px; border-radius:6px; font-size:0.75rem; border:1px solid #e2e8f0; margin-left:6px; font-weight:600;">{tipo}</span>
-                        </div>
-                        """, unsafe_allow_html=True)
+                        st.markdown(f"""<div style="margin-top:4px; margin-bottom:10px;"><span style="background:{bg_cor}; color:{txt_cor}; padding:4px 10px; border-radius:6px; font-size:0.75rem; font-weight:700; border:1px solid {border_cor};">{grupo.upper()}</span><span style="background:#ffffff; color:#64748b; padding:4px 10px; border-radius:6px; font-size:0.75rem; border:1px solid #e2e8f0; margin-left:6px; font-weight:600;">{tipo}</span></div>""", unsafe_allow_html=True)
 
-                        # --- 3. BOX AZUL: ROTAÇÃO (NOVIDADE) ---
+                        # Rotação
                         rotacao = item.get('Rotacao', '')
                         if rotacao:
-                            st.markdown(f"""
-                            <div style="font-size: 0.85rem; color: #0369a1; background-color: #f0f9ff; padding: 10px; border-radius: 6px; border-left: 4px solid #0ea5e9; margin-bottom: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
-                                <strong style="display:block; margin-bottom:2px;">🔄 Rotação Sugerida:</strong>
-                                {rotacao}
-                            </div>
-                            """, unsafe_allow_html=True)
+                            st.markdown(f"""<div style="font-size: 0.85rem; color: #0369a1; background-color: #f0f9ff; padding: 10px; border-radius: 6px; border-left: 4px solid #0ea5e9; margin-bottom: 8px;"><strong>🔄 Rotação:</strong> {rotacao}</div>""", unsafe_allow_html=True)
 
-                        # --- 4. BOX CINZA: NOTA TÉCNICA ---
+                        # Nota Técnica
                         obs = item.get('Obs', '')
                         if obs:
-                            st.markdown(f"""
-                            <div style="font-size: 0.85rem; color: #334155; background-color: #f8fafc; padding: 10px; border-radius: 6px; border-left: 4px solid #94a3b8;">
-                                <strong style="display:block; margin-bottom:2px;">💡 Nota Técnica:</strong>
-                                {obs}
-                            </div>
-                            """, unsafe_allow_html=True)
+                            st.markdown(f"""<div style="font-size: 0.85rem; color: #334155; background-color: #f8fafc; padding: 10px; border-radius: 6px; border-left: 4px solid #94a3b8;"><strong>💡 Nota:</strong> {obs}</div>""", unsafe_allow_html=True)
 
 
                                                        # 2. NUTRIÇÃO (MARCHA DE ABSORÇÃO & MANEJO - CALIBRADO TOTAL HIGH-YIELD)
