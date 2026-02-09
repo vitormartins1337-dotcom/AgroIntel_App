@@ -384,47 +384,65 @@ if not df_clima.empty:
             },
             "Batata": {
                 "meta": "45 a 60 ton/ha",
-                "fases": ["Emerg", "Estolon", "Tuber", "Enchimento", "Maturação"],
+                "fonte": "Baseado em Fernandes & Soratto (Embrapa, 2012)",
+                "fases": ["Emergência", "Estolonização", "Tuberização", "Enchimento", "Maturação"],
+                
                 "macros": {
-                    "N": [15, 80, 140, 190, 220], 
-                    "P": [5, 25, 45, 65, 80], 
-                    "K": [20, 120, 220, 320, 380], 
-                    "Ca": [4, 20, 40, 65, 85], 
-                    "Mg": [3, 15, 30, 45, 55], 
-                    "S": [2, 10, 18, 28, 35]
+                    "N": [15, 70, 150, 230, 265], 
+                    "P": [2, 10, 20, 32, 40], 
+                    "K": [30, 140, 280, 390, 430], 
+                    "Ca": [5, 25, 50, 75, 90], 
+                    "Mg": [2, 8, 16, 24, 30], 
+                    "S": [3, 12, 22, 35, 45]
                 },
+                
                 "micros": {
-                    "B": [5, 40, 90, 150, 220], 
-                    "Zn": [8, 60, 120, 180, 250], 
-                    "Mn": [20, 150, 300, 450, 600], 
-                    "Fe": [50, 400, 800, 1200, 1600], 
-                    "Cu": [3, 20, 45, 70, 100], 
-                    "Mo": [0.5, 3, 6, 9, 12]
+                    "B": [15, 70, 160, 220, 260], 
+                    "Zn": [20, 90, 210, 320, 400], 
+                    "Mn": [30, 180, 420, 650, 800], 
+                    "Fe": [150, 900, 2200, 3500, 4300], 
+                    "Cu": [5, 25, 60, 95, 120],
+                    "Mo": [0.5, 2, 5, 8, 10]
                 },
+
                 "totais_display": {
-                    "N": "200 – 220", "P": "65 – 80", "K": "320 – 380", "Ca": "65 – 85", "Mg": "45 – 55", "S": "28 – 35",
-                    "B": "150 – 220 g", "Zn": "180 – 250 g", "Mn": "450 – 600 g", "Fe": "1200 – 1600 g", "Cu": "70 – 100 g", "Mo": "9 – 12 g"
+                    "N": "250 – 270 kg/ha", 
+                    "P": "35 – 45 kg/ha (Absorvido)", 
+                    "K": "400 – 450 kg/ha", 
+                    "Ca": "80 – 95 kg/ha", 
+                    "Mg": "25 – 35 kg/ha", 
+                    "S": "40 – 50 kg/ha",
+                    "B": "240 – 300 g/ha", 
+                    "Zn": "350 – 450 g/ha", 
+                    "Mn": "700 – 850 g/ha", 
+                    "Fe": "4.0 – 4.5 kg/ha", 
+                    "Cu": "100 – 130 g/ha",
+                    "Mo": "8 – 12 g/ha"
                 },
                 
                 "contexto_solo": {
-                    "tipo": "Solo Franco-Arenoso a Franco (Irrigado)",
-                    "ideal": ["Argila: 15–30%", "CTC: 8–15 cmolc/dm³", "pH: 5.2–6.0 (Controle de Sarna)", "V%: 60–70%", "Alta aeração"],
-                    "alerta": "⚠️ SENSIBILIDADE FÍSICA: Batata é altamente sensível a encharcamento (lenticelas abertas/podridão) e compactação. Exige solo solto para expansão dos tubérculos."
+                    "tipo": "Solo Franco-Arenoso a Franco (Bem Drenado)",
+                    "ideal": [
+                        "Argila: 15–35% (Solos leves favorecem formato)",
+                        "pH: 5.5–6.0 (Abaixo de 5.0 perde P/Mg, acima de 6.0 aumenta Sarna)",
+                        "V%: 60–70%",
+                        "Ca/Mg: Relação 3:1 é ideal",
+                        "Matéria Orgânica: > 2.5% (Retenção de água)"
+                    ],
+                    "alerta": "⚠️ PONTO CRÍTICO: A batata extrai 430kg de K mas exporta (leva embora) 68% disso. A reposição de Potássio para a próxima safra é obrigatória. Cuidado com pH > 6.0 que favorece Streptomyces (Sarna)."
                 },
 
                 "manejo_tatico": {
-                    "N": "<b>DEFINIÇÃO DE TETO (20–40 DAS):</b> Nitrogênio determina a construção da área foliar que sustentará a tuberização. Deficiência precoce reduz número de tubérculos. Excesso após início da tuberização favorece parte aérea em detrimento do enchimento.",
-                    "P": "<b>ARRANQUE RADICULAR E INÍCIO DA TUBERIZAÇÃO:</b> Fundamental na fase inicial. Deve estar bem disponível no sulco. Baixa disponibilidade reduz formação inicial de estolões e tubérculos.",
-                    "K": "<b>ENCHIMENTO E QUALIDADE:</b> Principal nutriente da batata. Atua no transporte de carboidratos para os tubérculos, regula pressão osmótica e influencia teor de matéria seca. Relação N:K deve ser próxima de 1:1,8 a 1:2.",
-                    "Ca": "<b>QUALIDADE INTERNA E RESISTÊNCIA:</b> Essencial para firmeza, redução de distúrbios fisiológicos (ex: coração oco). Deve estar presente na camada de formação dos tubérculos.",
-                    "Mg": "<b>FOTOSSÍNTESE EFICIENTE:</b> Mantém atividade fotossintética elevada durante enchimento. Relação K:Mg deve ser equilibrada para evitar antagonismo.",
-                    "S": "<b>SÍNTESE PROTEICA:</b> Atua na eficiência do uso do nitrogênio.",
-                    "B": "<b>FORMAÇÃO DE TECIDOS:</b> Atua na divisão celular e integridade estrutural dos tubérculos.",
-                    "Zn": "<b>DESENVOLVIMENTO VEGETATIVO:</b> Participa da síntese de auxinas e crescimento inicial.",
-                    "Mn": "<b>ATIVAÇÃO ENZIMÁTICA:</b> Importante no metabolismo energético durante enchimento.",
-                    "Fe": "<b>CLOROFILA E ENERGIA:</b> Deficiência reduz capacidade fotossintética.",
-                    "Cu": "<b>RESISTÊNCIA ESTRUTURAL:</b> Participa da lignificação e sanidade da planta.",
-                    "Mo": "<b>EFICIÊNCIA DO N:</b> Essencial na redução do nitrato."
+                   "N": "<b>PICO DE ABSORÇÃO (45-70 DAP):</b> A demanda máxima ocorre no início do enchimento. O parcelamento deve garantir N disponível até os 60 dias. Excesso tardio atrasa a maturação e reduz a pele.",
+                   "P": "<b>ALTA EXPORTAÇÃO (78%):</b> A maior parte do Fósforo absorvido vai para o tubérculo e sai da lavoura. Aplicar alta dose no sulco para garantir o arranque e número de tubérculos.",
+                   "K": "<b>ANTECIPAÇÃO (40-60 DAP):</b> Segundo a Embrapa, a absorção de K é violentamente concentrada entre 40 e 60 dias. Se faltar K na tuberização, o calibre despenca. Não deixe o K apenas para o final.",
+                   "Ca": "<b>O GARGALO DA MOBILIDADE:</b> A planta absorve ~90kg, mas <b>apenas 9%</b> chega ao tubérculo (o resto fica na folha). Para evitar 'Coração Oco' e ter pele firme, é obrigatório Cálcio via solo constante e foliar frequente durante a tuberização.",
+                   "Mg": "<b>FOTOSSÍNTESE:</b> 33% é exportado. O Magnésio deve acompanhar o K (relação K/Mg) para evitar antagonismo. Deficiência causa amarelamento entre nervuras nas folhas velhas e reduz Brix.",
+                   "B": "<b>PELE E FORMAÇÃO (35-50 DAP):</b> Maior demanda logo após o início da formação de tubérculos. Essencial para divisão celular. Deficiência causa tubérculos rachados e coração oco.",
+                   "Cu": "<b>ABSORÇÃO TARDIA:</b> Diferente dos outros, o Cobre é absorvido em maiores proporções na segunda metade do ciclo. Além de nutriente, atua na indução de resistência a doenças (lignificação).",
+                   "Zn": "<b>CRESCIMENTO FINAL:</b> Assim como o Cobre, tem absorção forte na segunda metade do ciclo para garantir o enchimento e metabolismo de auxinas.",
+                   "Fe": "<b>DEMANDA MASSIVA:</b> A batata extrai mais de 4kg de Ferro. Em solos com pH corrigido (>6.0), o Fe pode ficar indisponível, exigindo aplicação foliar quelatizada.",
+                   "Mn": "<b>METABOLISMO (45-65 DAP):</b> Pico de exigência junto com o enchimento. Solos muito calcariados bloqueiam o Manganês."
                 }
             },
             "Algodão": {
