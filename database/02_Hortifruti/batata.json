@@ -6,167 +6,202 @@
       "Asterix": { "kc": 1.15, "gda_meta": 1600, "info": "Indústria/Fritura. Pele vermelha. Mais rústica. Moderadamente resistente a viroses, mas sensível a Alternaria." },
       "Atlantic": { "kc": 1.15, "gda_meta": 1650, "info": "Chips (Redonda). Matéria seca alta. Manejo de água perfeito para evitar 'Coração Oco'." },
       "Orchestra": { "kc": 1.15, "gda_meta": 1600, "info": "Mercado Premium. Pele brilhante. Exige níveis altos de Cálcio e Boro. Resistente a Nematoides (Ro1)." },
-      "Cupido": { "kc": 1.10, "gda_meta": 1400, "info": "Ciclo ultra-precoce. Extremamente suscetível à Requeima e Alternaria. Exige colheita rápida." }
+      "Cupido": { "kc": 1.10, "gda_meta": 1400, "info": "Ciclo ultra-precoce. Extremamente suscetível à Requeima e Alternaria. Exige colheita rápida." },
+      "Camila": { "kc": 1.15, "gda_meta": 1550, "info": "Dupla aptidão (Mesa/Fritura). Pele amarela, polpa creme. Alta produtividade e boa resistência a PVY (Vírus Y), mas exige manejo preventivo para Sarna." }
     },
     "fases": {
       "I - Plantio e Emergência": {
         "desc": "Brotamento e Enraizamento.",
-        "fisiologia": "Dependência da batata-mãe. Fase única para proteger o tubérculo-semente e o estande inicial.",
+        "fisiologia": "Dependência da batata-mãe. Fase única para proteger o tubérculo-semente e o estande inicial. O vigor inicial define o potencial produtivo.",
         "manejo": "Tratamento de sulco OBRIGATÓRIO (TS). O controle da Larva Alfinete e Rizoctonia só funciona se feito AGORA.",
         "quimica": [
           { 
             "Alvo": "Rizoctonia (Cancro) e Fusarium", 
             "imagem": "rizoctonia_fusarium.jpg",
             "Ativo": "Fludioxonil + Azoxistrobina", 
-            "Rotacao": "Alternativa: PCNB ou Tiofanato Metílico (em áreas de menor pressão).",
+            "Produtos": ["Dynasty (Syngenta)", "Maxim Advanced (Syngenta)", "Monceren (Bayer)", "Spectro (Adama)", "Maestro (UPL)"],
+            "Rotacao": "Alternativa em áreas de menor pressão: PCNB (Terraclor) ou Tiofanato Metílico (Cercobin).",
             "Grupo": "Fenilpirrol + Estrobilurina", 
             "Tipo": "Jato Dirigido no Sulco",
-            "Obs": "Aplicação deve cobrir a batata-semente e o solo ao redor. Essencial para evitar falhas no estande."
+            "Obs": "A aplicação deve formar uma barreira química ao redor da semente. O Fusarium entra por ferimentos e a Rhizoctonia estrangula o broto ('Canela de vidro')."
           },
           { 
             "Alvo": "Larva Alfinete/Arame (Preventivo)", 
             "imagem": "larva_alfinete.jpg",
             "Ativo": "Fipronil", 
-            "Rotacao": "Alternativa: Tiametoxam ou Bifentrina (Sulco).",
+            "Produtos": ["Regent 800 WG (BASF)", "Fipronil Nortox", "Standak Top (BASF)", "Klorpan (Adama)", "Evidence (Bayer)"],
+            "Rotacao": "Alternativa: Tiametoxam (Actara) ou Bifentrina (Talstar) aplicados no sulco.",
             "Grupo": "Pirazol", 
             "Tipo": "Sistêmico/Contato",
-            "Obs": "ÚNICA oportunidade de controle eficiente. Depois que a larva entra no solo, o químico não atinge mais."
+            "Obs": "ÚNICA oportunidade de controle eficiente. A larva eclode no solo e fura a batata-mãe e os novos tubérculos. Não existe resgate pós-emergência."
           },
           { 
-            "Alvo": "Nematoides (Gullas)", 
+            "Alvo": "Nematoides (Galhas/Lesões)", 
             "imagem": "nematoide_galha.jpg",
             "Ativo": "Fluopyram", 
-            "Rotacao": "Alternativa: Bacillus firmus ou Cadusafós.",
+            "Produtos": ["Verango Prime (Bayer)", "Velum (Bayer)", "Nimitz (Adama)", "Cadusafós (Rugby)", "Pochonia (Biológico)"],
+            "Rotacao": "Alternativa Biológica: Bacillus firmus (Votivo) ou Paecilomyces.",
             "Grupo": "Benzamida", 
             "Tipo": "Nematicida de Sulco",
-            "Obs": "Essencial em solos arenosos ou áreas de repetição de batata/tomate."
+            "Obs": "Essencial em solos arenosos ou áreas de repetição (Batata sobre Batata/Tomate). O dano é irreversível ('pipoca' nos tubérculos)."
           }
         ]
       },
       "II - Vegetativo / Estolonização": {
         "desc": "Formação de hastes e estolões.",
-        "fisiologia": "Alta demanda de N. Início da pressão de Requeima e Vetores.",
-        "manejo": "Monitorar Adultos de Vaquinha (pais da Larva Alfinete). Início do programa preventivo de fungicidas.",
+        "fisiologia": "Alta demanda de N. Início da pressão de Requeima e Vetores de Virose.",
+        "manejo": "Monitorar Adultos de Vaquinha (pais da Larva Alfinete). Início do programa preventivo de fungicidas (Base Protetora).",
         "quimica": [
           { 
-            "Alvo": "Requeima (Preventivo)", 
+            "Alvo": "Requeima (Preventivo/Base)", 
             "imagem": "requeima_inicial.jpg",
             "Ativo": "Mancozebe ou Metiram", 
-            "Rotacao": "Alternar com: Clorotalonil ou Cobre (Protetores).",
+            "Produtos": ["Manzate (UPL)", "Dithane (Corteva)", "Polyram (BASF)", "Unizeb Gold (UPL)", "Bravo (Syngenta)"],
+            "Rotacao": "Alternar com: Clorotalonil ou Cobre Fixo (Kocide/Recop).",
             "Grupo": "Ditiocarbamato", 
             "Tipo": "Protetor Multissítio",
-            "Obs": "Criar a 'camada protetora' nas folhas novas antes da doença chegar. Aplicar a cada 5-7 dias."
+            "Obs": "Criar a 'camada protetora' nas folhas novas antes da doença chegar. Aplicar a cada 5-7 dias. Não tem efeito curativo."
           },
           { 
             "Alvo": "Vaquinha (Adulto da Larva Alfinete)", 
             "imagem": "vaquinha_diabrotica.jpg",
             "Ativo": "Tiametoxam + Lambda-Cialotrina", 
-            "Rotacao": "Alternar com: Acefato ou Metomil.",
+            "Produtos": ["Engeo Pleno (Syngenta)", "Karate Zeon (Syngenta)", "Connect (Bayer)", "Curyom (Syngenta)", "Ampligo (Syngenta)"],
+            "Rotacao": "Alternar com: Acefato (Orthene) ou Metomil (Lannate).",
             "Grupo": "Neo + Piretroide", 
             "Tipo": "Choque",
-            "Obs": "Controlar o adulto agora impede que ele ponha ovos no solo, reduzindo a larva alfinete na próxima fase."
+            "Obs": "Manejo de Adultos: Matar a vaquinha agora impede que ela ponha ovos no solo, reduzindo a pressão de larva alfinete na fase de tubérculo."
           },
           { 
             "Alvo": "Larva Minadora", 
             "imagem": "minadora_batata.jpg",
             "Ativo": "Ciromazina", 
-            "Rotacao": "Alternar com: Abamectina ou Cartape.",
+            "Produtos": ["Trigard (Syngenta)", "Vertimec (Syngenta)", "Abamex (Adama)", "Cartap (Sumitomo)", "Delegate (Corteva)"],
+            "Rotacao": "Alternar com: Abamectina ou Espinetoram.",
             "Grupo": "Regulador de Crescimento", 
             "Tipo": "Translaminar",
-            "Obs": "Focar em quebrar o ciclo da larva antes que vire pupa no solo."
+            "Obs": "A larva faz o 'mapa' na folha. Ciromazina quebra o ciclo impedindo a pupa. Se a infestação for alta, usar Abamectina."
+          },
+          {
+            "Alvo": "Pulgões (Vetores de Vírus PLRV/PVY)",
+            "imagem": "pulgao_batata.jpg",
+            "Ativo": "Flonicamida ou Acetamiprido",
+            "Produtos": ["Teppeki (Ihara)", "Mospilan (Ihara)", "Evidence (Bayer)", "Pirat (BASF)", "Closer (Corteva)"],
+            "Rotacao": "Alternar com: Sulfoxaflor ou Pimetrozina (Chess).",
+            "Grupo": "Modulador de Canal/Neo",
+            "Tipo": "Sistêmico",
+            "Obs": "Tolerância ZERO para produção de semente. O pulgão transmite o Enrolamento da Folha. O controle deve ser sistêmico."
           }
         ]
       },
       "III - Tuberização (Gancho)": {
         "desc": "Ponta do estolão incha.",
-        "fisiologia": "Fase crítica. Inversão hormonal. Risco máximo de Requeima e Sarna.",
-        "manejo": "Entrar com fungicidas NOBRES para Requeima. Monitorar Ácaro Branco (Lupa 20x).",
+        "fisiologia": "Fase crítica. Inversão hormonal. Risco máximo de Requeima e Sarna. Fechamento das linhas.",
+        "manejo": "Entrar com fungicidas NOBRES para Requeima. Monitorar Ácaro Branco (Lupa 20x). Prevenção de Mofo Branco.",
         "quimica": [
           { 
-            "Alvo": "Requeima (Fase Crítica)", 
+            "Alvo": "Requeima (Fase Crítica - O Desafio)", 
             "imagem": "requeima_batata.jpg",
             "Ativo": "Mandipropamida", 
-            "Rotacao": "Alternar com: Fluazinam, Dimetomorfe ou Propamocarbe.",
+            "Produtos": ["Revus Opti (Syngenta)", "Infinito (Bayer)", "Ranman (Ihara)", "Curzate (Corteva)", "Zorvec (Corteva)"],
+            "Rotacao": "Alternar mecanismo (CAA vs Acetamida vs Benzamida).",
             "Grupo": "CAA", 
             "Tipo": "Translaminar (Resiste à chuva)",
-            "Obs": "Se o tempo fechar (frio/úmido), não confie apenas em protetores. Use produtos que penetram na folha."
+            "Obs": "Se o tempo fechar (frio/úmido), não confie em protetores. Use produtos que penetram na cera da folha e travam a esporulação."
           },
           { 
             "Alvo": "Ácaro Branco e Rajado", 
             "imagem": "acaro_branco.jpg",
             "Ativo": "Abamectina", 
-            "Rotacao": "Alternar com: Espirofesifeno ou Diafentiurom.",
+            "Produtos": ["Vertimec (Syngenta)", "Oberon (Bayer)", "Envidor (Bayer)", "Abamex (Adama)", "Sanmite (Ihara)"],
+            "Rotacao": "Alternar com: Espirofesifeno ou Diafentiurom (Polo).",
             "Grupo": "Avermectina", 
             "Tipo": "Translaminar",
-            "Obs": "O Ácaro Branco encarquilha o ponteiro (falsa virose). O controle deve molhar bem o 'olho' da planta."
+            "Obs": "Praga 'invisível'. Encarquilha o ponteiro e a folha fica brilhante/dura. O produtor confunde com virose. Molhar bem o 'olho'."
+          },
+          { 
+            "Alvo": "Mofo Branco (Sclerotinia)", 
+            "imagem": "mofo_branco_batata.jpg",
+            "Ativo": "Procimidona ou Fluazinam", 
+            "Produtos": ["Sumilex (Sumitomo)", "Frowncide (Ihara)", "Shirlan (Syngenta)", "Cantus (BASF)", "Rovral (FMC)"],
+            "Rotacao": "Alternar com: Boscalida ou Iprodiona.",
+            "Grupo": "Dicarboximida/Fenilpiridinilamina",
+            "Tipo": "Contato/Preventivo",
+            "Obs": "Ocorre no fechamento das linhas se houver alta umidade. Apodrece a base da haste ('melado')."
           },
           { 
             "Alvo": "Murchadeira (Ralstonia)", 
             "imagem": "murchadeira_ralstonia.jpg",
             "Ativo": "Cobre + Kasugamicina", 
+            "Produtos": ["Kasumin (UPL)", "Recop (Atanor)", "Kocide (Corteva)", "Serenade (Bayer - Bio)"],
             "Rotacao": "Alternar com: Bacillus subtilis (Via Gotejo).",
             "Grupo": "Inorgânico + Antibiótico", 
             "Tipo": "Bacteriostático",
-            "Obs": "Se aparecer murcha, isole a área. Não transite com máquinas. Aplique cobre para reduzir inóculo."
+            "Obs": "Se aparecer murcha, isole a área. Não transite com máquinas. Aplique cobre para 'cauterizar' e reduzir inóculo."
           }
         ]
       },
       "IV - Enchimento de Tubérculos": {
         "desc": "Engorda e acúmulo de amido.",
         "fisiologia": "A planta precisa manter a folha sadia. Risco de Alternaria e Traça.",
-        "manejo": "Rotação agressiva para Traça e Mosca Branca. Proteção contra Pinta Preta.",
+        "manejo": "Rotação agressiva para Traça e Mosca Branca. Proteção contra Pinta Preta (Alternaria).",
         "quimica": [
           { 
             "Alvo": "Traça da Batata (Tuta)", 
             "imagem": "traca_dano_tuberculo.jpg",
             "Ativo": "Clorfenapir", 
-            "Rotacao": "IMPORTANTE: Alternar com Diamidas (Benevia/Premio) ou Indoxacarbe.",
+            "Produtos": ["Pirate (BASF)", "Benevia (FMC)", "Premio (FMC)", "Proclaim (Syngenta)", "Exalt (Corteva)"],
+            "Rotacao": "IMPORTANTE: Alternar Diamidas (Grupo 28) com Pirróis (Grupo 13) e Espinosinas (Grupo 5).",
             "Grupo": "Pirrol", 
             "Tipo": "Ingestão/Contato",
-            "Obs": "A praga mais resistente. Nunca usar o mesmo grupo químico 2x seguidas. Manter o solo úmido ajuda a evitar que a larva desça."
+            "Obs": "A praga mais resistente. Nunca usar o mesmo grupo químico 2x seguidas. Manter o solo úmido e bem amontoado."
           },
           { 
             "Alvo": "Pinta Preta (Alternaria)", 
             "imagem": "alternaria_fase_final.jpg",
             "Ativo": "Boscalida", 
-            "Rotacao": "Alternar com: Azoxistrobina ou Metconazol.",
+            "Produtos": ["Cantus (BASF)", "Amistar Top (Syngenta)", "Score (Syngenta)", "Nativo (Bayer)", "Brio (UPL)"],
+            "Rotacao": "Alternar com: Azoxistrobina ou Difenoconazol.",
             "Grupo": "Carboxamida", 
             "Tipo": "Sistêmico Premium",
-            "Obs": "Doença de 'velhice'. Mantém a folha verde por mais tempo, garantindo maior peso de tubérculo."
+            "Obs": "Doença de 'velhice'. Mantém a folha verde por mais tempo (Greening effect), garantindo maior peso e calibre."
           },
           { 
             "Alvo": "Mosca Branca (Fumagina)", 
             "imagem": "mosca_branca_batata.jpg",
             "Ativo": "Ciantraniliprole (Benevia)", 
-            "Rotacao": "Alternar com: Acetamiprido ou Piriproxifen.",
+            "Produtos": ["Benevia (FMC)", "Oberon (Bayer)", "Sivanto (Bayer)", "Trivor (Adama)", "Mospilan (Ihara)"],
+            "Rotacao": "Alternar com: Espirotetramate (Movento) ou Piriproxifen.",
             "Grupo": "Diamida", 
             "Tipo": "Sistêmico",
-            "Obs": "Evitar a 'melada' e fumagina no final do ciclo, que sujam as folhas e reduzem a fotossíntese."
+            "Obs": "Evitar a 'melada' e fumagina no final do ciclo, que sujam as folhas, reduzem fotossíntese e dificultam a colheita."
           }
         ]
       },
       "V - Maturação e Dessecação": {
         "desc": "Senescência e Pele firme.",
-        "fisiologia": "Suberização. Tubérculo para de crescer.",
-        "manejo": "Dessecação para colheita. Sanitização final.",
+        "fisiologia": "Suberização. Tubérculo para de crescer. Momento de 'cimentar' a pele.",
+        "manejo": "Dessecação para colheita. Sanitização final para Pós-Colheita.",
         "quimica": [
           { 
             "Alvo": "Dessecação de Rama", 
             "imagem": "dessecacao_batata.jpg",
             "Ativo": "Diquat", 
-            "Rotacao": "Alternativa: Carfentrazone ou Saflufenacil.",
+            "Produtos": ["Reglone (Syngenta)", "Diquat Nortox", "Aurora (FMC)", "Heat (BASF)", "Finale (BASF)"],
+            "Rotacao": "Alternativa: Carfentrazone + Óleo ou Glufosinato.",
             "Grupo": "Fotossistema I", 
             "Tipo": "Contato",
-            "Obs": "Garante a formação da 'pele de vidro'. Aguardar a rama secar completamente antes de colher."
+            "Obs": "Aplicar pela manhã. Garante a formação da 'pele de vidro'. Aguardar a rama secar completamente (10-14 dias) antes de colher."
           },
           { 
             "Alvo": "Canela Preta (Pectobacterium)", 
             "imagem": "canela_preta.jpg",
             "Ativo": "Hidróxido de Cobre", 
+            "Produtos": ["Kocide WDG (Corteva)", "Recop (Atanor)", "Super Cobre", "Cuprozeb (UPL)"],
             "Rotacao": "-",
             "Grupo": "Cobre", 
             "Tipo": "Protetor",
-            "Obs": "Aplicação final para 'secar' ferimentos e reduzir bactérias que apodrecem a batata no caminhão."
+            "Obs": "Aplicação final para 'secar' ferimentos e reduzir a carga bacteriana que apodrece a batata no caminhão/sacaria."
           }
         ]
       }
