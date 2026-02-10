@@ -234,7 +234,7 @@ if not df_clima.empty:
         st.warning(f"🎯 **Recomendação:** {manejo_txt}")
         
             # --- LOOP DE SOLUÇÕES FITOSSANITÁRIAS (PRAGAS E DOENÇAS) ---
-                quimicos = dados_fase.get('quimica', [])
+            quimicos = dados_fase.get('quimica', [])
             
             if quimicos:
                 st.markdown("### 🛡️ Estratégia de Defesa e Proteção")
