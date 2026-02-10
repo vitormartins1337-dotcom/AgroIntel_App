@@ -236,7 +236,7 @@ if not df_clima.empty:
         # --- VISUAL DOS CARDS (PRAGAS E DOENÇAS) ---
         quimicos = dados_fase.get('quimica', [])
             
-            if quimicos:
+        if quimicos:
                 st.markdown("### 🛡️ Estratégia de Defesa e Proteção")
                 
                 for item in quimicos:
