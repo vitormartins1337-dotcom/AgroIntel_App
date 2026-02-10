@@ -194,103 +194,185 @@ if not df_clima.empty:
     # Removemos IA e Laudo, adicionamos Gestão em destaque
     tabs = st.tabs(["🧬 TÉCNICO", "🧪 NUTRIÇÃO", "☁️ CLIMA", "📡 RADAR", "🗺️ MAPA", "💰 GESTÃO", "🔔 ALERTAS"])
 
-    # 1. TÉCNICO
+    # --- ABA 1: TÉCNICO (FENOLOGIA & MANEJO MASTER PREMIUM) ---
     with tabs[0]:
-        st.markdown('<div class="app-card">', unsafe_allow_html=True)
+        # --- CABEÇALHO VISUAL ---
+        st.markdown(f"### 🧬 Fenologia e Manejo: <span style='color:#15803d'>{cultura_selecionada}</span>", unsafe_allow_html=True)
+        
+        # Barra de Progresso
         st.caption(f"Evolução do Ciclo: {progresso*100:.1f}%")
         st.progress(progresso)
 
-        # Imagem da Cultura
-        nome_cultura = str(cult_sel).lower()
-        mapa_img = {"soja": "soja", "milho": "milho", "algodão": "algodao", "algodao": "algodao", "café": "cafe", "cafe": "cafe", "feijão": "feijao", "feijao": "feijao", "trigo": "trigo", "tomate": "tomate", "batata": "batata", "uva": "uva", "banana": "banana", "citros": "citros", "manga": "manga"}
-        arquivo_base = next((v for k, v in mapa_img.items() if k in nome_cultura), None)
-        img_path = None
-        if arquivo_base:
-            p_jpg = os.path.join("images", f"{arquivo_base}.jpg")
-            p_png = os.path.join("images", f"{arquivo_base}.png")
-            if os.path.exists(p_jpg): img_path = p_jpg
-            elif os.path.exists(p_png): img_path = p_png
+        # --- CARREGAMENTO DE DADOS ---
+        # Garante que 'info' existe. Se não existir, 'info' será um dicionário vazio.
+        # 'dados' é o dicionário principal importado do JSON.
+        info = dados.get(cultura_selecionada, {})
+        
+        # Recupera as fases. Se não encontrar, retorna dicionário vazio para não quebrar.
+        fases = info.get('fases', {})
 
-        st.markdown("<br>", unsafe_allow_html=True)
-        c_i1, c_i2, c_i3 = st.columns([1,2,1])
-        with c_i2:
-            if img_path: st.image(img_path, caption=f"Fase: {fase_sel}", use_container_width=True)
-            else: st.image("https://images.unsplash.com/photo-1625246333195-58197bd47d26?q=80&w=1000&auto=format&fit=crop", caption="Imagem Ilustrativa", use_container_width=True)
-
-        st.divider()
-        c_t1, c_t2 = st.columns(2)
-        with c_t1:
-            st.markdown('<div class="section-title">🧬 GENÉTICA</div>', unsafe_allow_html=True)
-            info_txt = AgroBrain.get_info_segura(info, ['info', 'desc'])
-            st.markdown(f'<div class="info-text"><b>{var_sel}</b><br>{info_txt}</div>', unsafe_allow_html=True)
-        with c_t2:
-            st.markdown('<div class="section-title">🌱 FISIOLOGIA</div>', unsafe_allow_html=True)
-            fisio_txt = AgroBrain.get_info_segura(dados_fase, ['fisiologia'])
-            st.markdown(f'<div class="info-text">{fisio_txt}</div>', unsafe_allow_html=True)
-
-        st.divider()
-        st.markdown('<div class="section-title">🛡️ MANEJO</div>', unsafe_allow_html=True)
-        manejo_txt = AgroBrain.get_info_segura(dados_fase, ['manejo'])
-        st.warning(f"🎯 **Recomendação:** {manejo_txt}")
-
-        # --- VISUAL DOS CARDS (PRAGAS E DOENÇAS) ---
-        quimicos = dados_fase.get('quimica', [])
+        if fases:
+            # --- SELETOR DE FASE ---
+            lista_fases = list(fases.keys())
+            fase_selecionada = st.selectbox("📍 Selecione a Fase de Desenvolvimento:", lista_fases)
             
-        if quimicos:
-                st.markdown("### 🛡️ Estratégia de Defesa e Proteção")
+            # Pega os dados específicos da fase escolhida
+            dados_fase = fases[fase_selecionada]
+
+            # --- IMAGEM DA CULTURA (Dinâmica) ---
+            # Tenta mapear o nome da cultura para um arquivo de imagem
+            nome_cultura = str(cultura_selecionada).lower()
+            mapa_img = {
+                "soja": "soja", "milho": "milho", "algodão": "algodao", "algodao": "algodao",
+                "café": "cafe", "cafe": "cafe", "feijão": "feijao", "feijao": "feijao",
+                "trigo": "trigo", "tomate": "tomate", "batata": "batata", 
+                "uva": "uva", "banana": "banana", "citros": "citros", "manga": "manga"
+            }
+            # Procura a chave parcial no nome da cultura
+            arquivo_base = next((v for k, v in mapa_img.items() if k in nome_cultura), None)
+            
+            img_path = None
+            if arquivo_base:
+                p_jpg = os.path.join("images", f"{arquivo_base}.jpg")
+                p_png = os.path.join("images", f"{arquivo_base}.png")
+                if os.path.exists(p_jpg): img_path = p_jpg
+                elif os.path.exists(p_png): img_path = p_png
+
+            st.markdown("<br>", unsafe_allow_html=True)
+            c_i1, c_i2, c_i3 = st.columns([1, 2, 1])
+            with c_i2:
+                if img_path:
+                    st.image(img_path, caption=f"Fase Atual: {fase_selecionada}", use_container_width=True)
+                else:
+                    # Imagem genérica bonita se não achar a específica
+                    st.image("https://images.unsplash.com/photo-1625246333195-58197bd47d26?q=80&w=1000&auto=format&fit=crop", caption="Agricultura de Precisão", use_container_width=True)
+
+            st.divider()
+
+            # --- BLOCO DE INTELIGÊNCIA TÉCNICA (Genética e Fisiologia) ---
+            c_t1, c_t2 = st.columns(2)
+            
+            # Genética / Info da Variedade
+            with c_t1:
+                st.markdown("#### 🧬 Perfil Genético")
+                # Tenta pegar info específica da variedade selecionada no sidebar (var_sel), se existir
+                info_var = info.get('vars', {}).get(var_sel, {}).get('info', 'Informação não disponível.')
+                
+                st.markdown(f"""
+                <div style="background-color:#f8fafc; border-left:4px solid #3b82f6; padding:12px; border-radius:4px; font-size:0.9rem; height:100%;">
+                    <b>{var_sel}:</b> {info_var}
+                </div>
+                """, unsafe_allow_html=True)
+
+            # Fisiologia da Fase
+            with c_t2:
+                st.markdown("#### 🌱 Fisiologia da Fase")
+                fisio_txt = dados_fase.get('fisiologia', 'Dados fisiológicos não cadastrados.')
+                
+                st.markdown(f"""
+                <div style="background-color:#f0fdf4; border-left:4px solid #22c55e; padding:12px; border-radius:4px; font-size:0.9rem; height:100%;">
+                    {fisio_txt}
+                </div>
+                """, unsafe_allow_html=True)
+
+            st.divider()
+
+            # --- MANEJO AGRONÔMICO GERAL ---
+            st.markdown("### 🚜 Manejo Agronômico Recomendado")
+            manejo_txt = dados_fase.get('manejo', 'Nenhuma recomendação específica cadastrada.')
+            
+            st.markdown(f"""
+            <div style="background-color:#fff7ed; padding:15px; border-radius:8px; border:1px solid #ffedd5; border-left:6px solid #f97316; margin-bottom:25px;">
+                <span style="font-size:1.1rem; color:#c2410c;">🎯 <b>Foco do Agrônomo:</b></span><br>
+                <span style="color:#431407;">{manejo_txt}</span>
+            </div>
+            """, unsafe_allow_html=True)
+
+            # --- SOLUÇÕES FITOSSANITÁRIAS (CARDS PREMIUM) ---
+            # Recupera a lista de produtos químicos/biológicos
+            quimicos = dados_fase.get('quimica', [])
+            
+            if quimicos:
+                st.markdown("### 🛡️ Estratégia de Defesa (Pragas e Doenças)")
+                st.caption("Soluções para os alvos biológicos desta fase.")
                 
                 for item in quimicos:
-                    # Início do CARD (Container com borda)
+                    # CONTAINER PRINCIPAL DO CARD (Borda arredondada e sombra suave simulada)
                     with st.container(border=True):
-                        # Cabeçalho do Card
-                        st.markdown(f"#### 🎯 Alvo: <span style='color:#b91c1c;'>{item['Alvo']}</span>", unsafe_allow_html=True)
                         
-                        # Divisão: Coluna da Foto (Esq) e Coluna de Dados (Dir)
-                        c_foto, c_info = st.columns([1.2, 3])
+                        # --- CABEÇALHO DO CARD (Vermelho para Alerta) ---
+                        st.markdown(f"""
+                        <h4 style="margin:0; padding-bottom:10px; border-bottom:1px solid #e5e7eb; color:#991b1b;">
+                            🎯 Alvo: {item['Alvo']}
+                        </h4>
+                        """, unsafe_allow_html=True)
                         
-                        # --- COLUNA 1: FOTO ---
+                        st.write("") # Espaçamento simples
+                        
+                        # Layout: Foto (30%) | Informações (70%)
+                        c_foto, c_info = st.columns([1, 2.2])
+                        
+                        # --- COLUNA 1: FOTO DO ALVO ---
                         with c_foto:
                             nome_img = item.get("imagem", "")
                             caminho_img = os.path.join("images", nome_img)
                             
-                            # Verifica se a imagem existe e exibe
+                            # Verifica e exibe imagem
                             if nome_img and os.path.exists(caminho_img):
                                 st.image(caminho_img, use_container_width=True)
                             else:
-                                # Placeholder Profissional (Caso falte a foto)
+                                # Placeholder Profissional e Elegante
                                 st.markdown("""
-                                <div style="background-color:#f3f4f6; height:150px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-radius:8px; border:2px dashed #d1d5db;">
-                                    <span style="font-size:2rem;">🦠</span>
-                                    <span style="font-size:0.8rem; color:#6b7280;">Sem Imagem</span>
+                                <div style="background-color:#f9fafb; height:160px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-radius:8px; border:1px dashed #9ca3af;">
+                                    <div style="font-size:2.5rem;">🦠</div>
+                                    <div style="font-size:0.8rem; color:#6b7280; margin-top:5px;">Imagem Indisponível</div>
                                 </div>
                                 """, unsafe_allow_html=True)
 
-                        # --- COLUNA 2: INFORMAÇÕES TÉCNICAS ---
+                        # --- COLUNA 2: DADOS TÉCNICOS ---
                         with c_info:
-                            # 1. Princípio Ativo e Grupo
+                            # Princípio Ativo e Mecanismo
                             st.markdown(f"**🧪 Princípio Ativo:** `{item['Ativo']}`")
                             st.markdown(f"**⚙️ Mecanismo:** {item.get('Grupo', '-')} | *{item.get('Tipo', '-')}*")
                             
-                            # 2. Produtos (Tags Visuais Azuis)
+                            # Produtos Comerciais (Visual de Botões/Tags)
                             produtos = item.get('Produtos', [])
                             if produtos:
-                                html_prods = " ".join([
-                                    f"<span style='background-color:#eff6ff; color:#1e40af; padding:4px 8px; border-radius:12px; font-size:0.85rem; border:1px solid #bfdbfe; margin-right:5px; display:inline-block; margin-bottom:5px;'>🛒 {p}</span>" 
-                                    for p in produtos
-                                ])
-                                st.markdown(f"<div style='margin-top:8px; margin-bottom:10px;'>{html_prods}</div>", unsafe_allow_html=True)
-
-                            # 3. Box de Rotação/Obs (Amarelo)
+                                # Cria HTML para as tags azuis
+                                html_tags = ""
+                                for p in produtos:
+                                    html_tags += f"""
+                                    <span style="
+                                        display: inline-block;
+                                        background-color: #e0f2fe;
+                                        color: #0369a1;
+                                        border: 1px solid #bae6fd;
+                                        padding: 4px 10px;
+                                        border-radius: 15px;
+                                        font-size: 0.85rem;
+                                        font-weight: 500;
+                                        margin-right: 6px;
+                                        margin-bottom: 6px;">
+                                        🛒 {p}
+                                    </span>
+                                    """
+                                st.markdown(f"<div style='margin-top:10px; margin-bottom:12px;'>{html_tags}</div>", unsafe_allow_html=True)
+                            
+                            # Box de Observação / Rotação (Destaque Amarelo)
                             st.markdown(f"""
-                            <div style="background-color:#fffbeb; border-left:4px solid #f59e0b; padding:10px; border-radius:4px; font-size:0.9rem;">
-                                <div>🔄 <b>Rotação:</b> {item.get('Rotacao', '-')}</div>
-                                <div style="margin-top:4px;">📝 <b>Nota Técnica:</b> <i>{item.get('Obs', '-')}</i></div>
+                            <div style="background-color: #fffbeb; border-radius: 6px; padding: 10px; border-left: 4px solid #f59e0b; font-size: 0.9rem; color: #78350f;">
+                                <div style="margin-bottom: 4px;">🔄 <b>Rotação:</b> {item.get('Rotacao', '-')}</div>
+                                <div>📝 <b>Nota Técnica:</b> <i>{item.get('Obs', '-')}</i></div>
                             </div>
                             """, unsafe_allow_html=True)
-                    else:
-                st.info("ℹ️ Nenhuma intervenção química cadastrada para esta fase.")
+
+            else:
+                # Caso não tenha produtos químicos cadastrados na fase
+                st.info("ℹ️ Nenhuma intervenção química necessária ou cadastrada para esta fase específica.")
+
         else:
-            st.warning("⚠️ Dados de fases não encontrados para esta cultura.")
+            # Caso a cultura não tenha fases cadastradas ou o JSON esteja incompleto
+            st.warning(f"⚠️ As informações técnicas para **{cultura_selecionada}** estão sendo atualizadas. Verifique o banco de dados.")
                 
                                                        # 2. NUTRIÇÃO (MARCHA DE ABSORÇÃO & MANEJO - CALIBRADO TOTAL HIGH-YIELD)
     with tabs[1]:
