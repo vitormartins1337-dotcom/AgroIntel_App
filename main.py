@@ -194,103 +194,107 @@ if not df_clima.empty:
     # Removemos IA e Laudo, adicionamos Gestão em destaque
     tabs = st.tabs(["🧬 TÉCNICO", "🧪 NUTRIÇÃO", "☁️ CLIMA", "📡 RADAR", "🗺️ MAPA", "💰 GESTÃO", "🔔 ALERTAS"])
 
-   # --- ABA 1: TÉCNICO (COM CARDS PREMIUM E CORREÇÃO DE ERRO) ---
+ # --- ABA 1: TÉCNICO (CORRIGIDO E VISUAL MASTER) ---
     with tabs[0]:
         import json
         import os
 
         # ==============================================================================
-        # 🚨 CORREÇÃO DE EMERGÊNCIA: SE A VARIÁVEL 'DADOS' SUMIU, CARREGA ELA AGORA
+        # 1. RECUPERAÇÃO DE DADOS (BLINDAGEM CONTRA ERRO)
         # ==============================================================================
-        if 'dados' not in locals() and 'dados' not in globals():
-            dados = {}
-            # Tenta carregar da pasta database
-            pasta_db = "database" 
-            if os.path.exists(pasta_db):
-                for f in os.listdir(pasta_db):
-                    if f.endswith(".json"):
-                        with open(os.path.join(pasta_db, f), "r", encoding="utf-8") as file:
-                            dados.update(json.load(file))
-        # ==============================================================================
-
-        # 1. CABEÇALHO
-        st.markdown(f"### 🧬 Fenologia e Manejo: <span style='color:#15803d'>{cult_sel}</span>", unsafe_allow_html=True)
+        # Tenta pegar as variáveis globais. Se falhar, define padrões para não quebrar.
+        c_selecionada = locals().get('cult_sel', globals().get('cult_sel', 'Batata (Solanum tuberosum)'))
+        v_selecionada = locals().get('var_sel', globals().get('var_sel', 'Padrão'))
+        p_progresso = locals().get('progresso', globals().get('progresso', 0.5))
         
-        # Garante que progresso existe, senão define padrão
-        p_atual = globals().get('progresso', 0.5)
-        st.caption(f"Evolução do Ciclo: {p_atual*100:.1f}%")
-        st.progress(p_atual)
-
-        # 2. RECUPERAÇÃO DAS INFORMAÇÕES
-        info = dados.get(cult_sel, {})
+        # Recarrega o banco de dados da pasta database para garantir que 'dados' existe
+        db_dados = {}
+        pasta_db = "database"
+        if os.path.exists(pasta_db):
+            for f in os.listdir(pasta_db):
+                if f.endswith(".json"):
+                    try:
+                        with open(os.path.join(pasta_db, f), "r", encoding="utf-8") as file:
+                            db_dados.update(json.load(file))
+                    except: pass
+        
+        # Pega as informações da cultura atual
+        info = db_dados.get(c_selecionada, {})
         fases = info.get('fases', {})
 
-        # 3. IMAGEM DA CULTURA (Mapeamento Automático)
-        nome_cultura = str(cult_sel).lower()
+        # ==============================================================================
+        # 2. CABEÇALHO E VISUAL DA CULTURA (COMO ERA ANTES)
+        # ==============================================================================
+        st.markdown(f"### 🧬 Fenologia e Manejo: <span style='color:#15803d'>{c_selecionada}</span>", unsafe_allow_html=True)
+        st.caption(f"Evolução do Ciclo: {p_progresso*100:.1f}%")
+        st.progress(p_progresso)
+
+        # Mapeamento de Imagem (Restaurado)
+        nome_cultura_lower = str(c_selecionada).lower()
         mapa_img = {
             "soja": "soja", "milho": "milho", "algodão": "algodao", 
             "café": "cafe", "feijão": "feijao", "batata": "batata", 
             "tomate": "tomate", "trigo": "trigo", "uva": "uva"
         }
-        # Busca parcial (ex: 'batata' acha 'batata.jpg')
-        arquivo_base = next((v for k, v in mapa_img.items() if k in nome_cultura), None)
+        arquivo_base = next((v for k, v in mapa_img.items() if k in nome_cultura_lower), None)
         
-        img_path = None
-        if arquivo_base:
-            p1 = os.path.join("images", f"{arquivo_base}.jpg")
-            p2 = os.path.join("images", f"{arquivo_base}.png")
-            if os.path.exists(p1): img_path = p1
-            elif os.path.exists(p2): img_path = p2
-
-        st.markdown("<br>", unsafe_allow_html=True)
         c_i1, c_i2, c_i3 = st.columns([1, 2, 1])
         with c_i2:
+            img_path = None
+            if arquivo_base:
+                p1 = os.path.join("images", f"{arquivo_base}.jpg")
+                p2 = os.path.join("images", f"{arquivo_base}.png")
+                if os.path.exists(p1): img_path = p1
+                elif os.path.exists(p2): img_path = p2
+            
             if img_path:
-                st.image(img_path, caption=f"Cultura: {cult_sel}", use_container_width=True)
+                st.image(img_path, caption=c_selecionada, use_container_width=True)
             else:
-                st.info("Imagem da cultura não encontrada na pasta images.")
+                st.info("Imagem da cultura não encontrada.")
 
         st.divider()
 
-        # 4. SELETOR DE FASES E DADOS TÉCNICOS
+        # ==============================================================================
+        # 3. DADOS TÉCNICOS DA FASE
+        # ==============================================================================
         if fases:
             lista_fases = list(fases.keys())
             fase_sel = st.selectbox("📍 Selecione a Fase de Desenvolvimento:", lista_fases)
             dados_fase = fases[fase_sel]
 
-            # Colunas Genética / Fisiologia
+            # Genética e Fisiologia
             c_t1, c_t2 = st.columns(2)
             with c_t1:
                 st.markdown('<div class="section-title">🧬 GENÉTICA</div>', unsafe_allow_html=True)
                 # Tenta pegar info da variedade com segurança
                 try:
-                    info_var = info['vars'][var_sel]['info']
+                    txt_genetica = info['vars'][v_selecionada]['info']
                 except:
-                    info_var = "Info não disponível."
+                    txt_genetica = "Informação genética indisponível."
                 
                 st.markdown(f"""
                 <div style="background-color:#f8fafc; border-left:4px solid #3b82f6; padding:10px; border-radius:5px; font-size:0.9rem;">
-                    <b>{var_sel}:</b> {info_var}
+                    <b>{v_selecionada}:</b> {txt_genetica}
                 </div>""", unsafe_allow_html=True)
 
             with c_t2:
                 st.markdown('<div class="section-title">🌱 FISIOLOGIA</div>', unsafe_allow_html=True)
-                fisio_txt = dados_fase.get('fisiologia', '-')
+                txt_fisio = dados_fase.get('fisiologia', '-')
                 st.markdown(f"""
                 <div style="background-color:#f0fdf4; border-left:4px solid #22c55e; padding:10px; border-radius:5px; font-size:0.9rem;">
-                    {fisio_txt}
+                    {txt_fisio}
                 </div>""", unsafe_allow_html=True)
 
             st.divider()
 
-            # 5. MANEJO TÁTICO
+            # Manejo Tático
             st.markdown('<div class="section-title">🛡️ MANEJO</div>', unsafe_allow_html=True)
-            manejo_txt = dados_fase.get('manejo', '-')
-            st.warning(f"🎯 **Recomendação:** {manejo_txt}")
+            txt_manejo = dados_fase.get('manejo', '-')
+            st.warning(f"🎯 **Recomendação:** {txt_manejo}")
 
-            # ============================================================
-            # 6. VISUAL DOS CARDS PREMIUM (O QUE VOCÊ QUERIA)
-            # ============================================================
+            # ==============================================================================
+            # 4. CARDS PREMIUM DE DEFESA (VISUAL NOVO)
+            # ==============================================================================
             quimicos = dados_fase.get('quimica', [])
             
             if quimicos:
@@ -328,7 +332,7 @@ if not df_clima.empty:
                         # --- DADOS TÉCNICOS ---
                         with c_info:
                             # Ativo
-                            st.markdown(f"**🧪 Princípio Ativo:** `{item['Ativo']}`")
+                            st.markdown(f"**🧪 Princípio Ativo:** `{item.get('Ativo', '-')}`")
                             st.markdown(f"**⚙️ Mecanismo:** {item.get('Grupo', '-')} | *{item.get('Tipo', '-')}*")
                             
                             # Produtos (Tags Visuais Azuis)
@@ -351,10 +355,10 @@ if not df_clima.empty:
                             </div>
                             """, unsafe_allow_html=True)
             else:
-                st.info("ℹ️ Nenhuma intervenção química cadastrada para esta fase.")
+                st.info("ℹ️ Nenhuma intervenção química necessária para esta fase.")
 
         else:
-            st.warning(f"⚠️ As informações para **{cult_sel}** não foram encontradas. Verifique se o arquivo JSON está na pasta 'database'.")
+            st.warning(f"⚠️ As informações para **{c_selecionada}** não foram encontradas. Verifique se o arquivo JSON está na pasta 'database'.")
     
    # 2. NUTRIÇÃO (MARCHA DE ABSORÇÃO & MANEJO - CALIBRADO TOTAL HIGH-YIELD)
     with tabs[1]:
