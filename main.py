@@ -194,107 +194,119 @@ if not df_clima.empty:
     # Removemos IA e Laudo, adicionamos Gestão em destaque
     tabs = st.tabs(["🧬 TÉCNICO", "🧪 NUTRIÇÃO", "☁️ CLIMA", "📡 RADAR", "🗺️ MAPA", "💰 GESTÃO", "🔔 ALERTAS"])
 
-  # --- ABA 1: TÉCNICO (VISUAL PREMIUM & FILTRAGEM DE DADOS) ---
+  
+                    # --- ABA 1: TÉCNICO (PROTEÇÃO & MANEJO - CONSULTORIA MASTER) ---
     with tabs[0]:
         import os
         import json
 
-        # 1. VARREDURA E CARREGAMENTO (Focado apenas em Manejo e Proteção)
-        db_tecnico = {}
+        # 1. VARREDURA EXCLUSIVA DA DATABASE (Somente para Manejo e Pragas)
+        # O sistema busca apenas o que está nos arquivos JSON
+        dados_tecnicos_locais = {}
         if os.path.exists("database"):
             for root, dirs, files in os.walk("database"):
                 for file in files:
                     if file.endswith(".json"):
                         try:
                             with open(os.path.join(root, file), "r", encoding="utf-8") as f:
-                                db_tecnico.update(json.load(f))
+                                # Carrega os dados específicos do JSON (Variedades, Fases, Pragas)
+                                dados_tecnicos_locais.update(json.load(f))
                         except: pass
         
-        # Recupera dados da cultura e fase (Usa cult_sel e fase_sel globais)
-        info_master = db_tecnico.get(cult_sel, {})
-        dados_fase = info_master.get('fases', {}).get(fase_sel, {})
+        # Recupera o dicionário da cultura selecionada (vindo do JSON)
+        # cult_sel e var_sel são as variáveis de seleção do seu app
+        info_json = dados_tecnicos_locais.get(cult_sel, {})
+        fases_json = info_json.get('fases', {})
+        
+        # fase_sel é a variável que o usuário escolheu no seletor global do topo
+        dados_fase = fases_json.get(fase_sel, {})
 
         if dados_fase:
-            st.markdown(f"<h2 style='color:#0f172a; text-align:center;'>Diagnóstico Fitossanitário: {cult_sel}</h2>", unsafe_allow_html=True)
-            
-            # --- SEÇÃO 1: GENÉTICA E FISIOLOGIA (BOXES EQUILIBRADOS) ---
+            st.markdown(f"<h2 style='color:#0f172a; text-align:center; font-size:1.8rem;'>Diagnóstico Fitossanitário: {cult_sel}</h2>", unsafe_allow_html=True)
+            st.markdown(f"<p style='text-align:center; color:#64748b; font-size:1rem; margin-top:-15px;'>Consultoria Premium - Fase: <b>{fase_sel}</b></p>", unsafe_allow_html=True)
+
+            # --- SEÇÃO 1: GENÉTICA E FISIOLOGIA (LEITURA ESCURA E CLARA) ---
             col_gen, col_fis = st.columns(2)
             
             with col_gen:
-                txt_var = info_master.get('vars', {}).get(var_sel, {}).get('info', 'Dados não localizados.')
+                txt_var = info_json.get('vars', {}).get(var_sel, {}).get('info', 'Diretrizes genéticas não localizadas.')
                 st.markdown(f"""
-                <div style="background-color:#ffffff; border:1px solid #e2e8f0; border-top:5px solid #3b82f6; padding:20px; border-radius:10px; min-height:180px; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
-                    <h5 style="color:#1e40af; margin-top:0;">🧬 POSICIONAMENTO GENÉTICO</h5>
-                    <p style="color:#334155; font-size:1rem; line-height:1.4;"><b>{var_sel}:</b> {txt_var}</p>
+                <div style="background-color:#ffffff; border:1px solid #e2e8f0; border-top:5px solid #3b82f6; padding:20px; border-radius:12px; min-height:160px; box-shadow: 2px 2px 10px rgba(0,0,0,0.05);">
+                    <h5 style="color:#1e40af; margin-top:0; font-size:1.1rem; border-bottom:1px solid #f1f5f9; padding-bottom:8px;">🧬 GENÉTICA</h5>
+                    <p style="color:#1e293b; font-size:0.95rem; line-height:1.5; margin-top:10px;"><b>{var_sel}:</b> {txt_var}</p>
                 </div>""", unsafe_allow_html=True)
 
             with col_fis:
-                txt_fisio = dados_fase.get('fisiologia', 'Análise não cadastrada.')
+                txt_fisio = dados_fase.get('fisiologia', 'Dinâmica fisiológica em processamento.')
                 st.markdown(f"""
-                <div style="background-color:#ffffff; border:1px solid #e2e8f0; border-top:5px solid #22c55e; padding:20px; border-radius:10px; min-height:180px; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
-                    <h5 style="color:#15803d; margin-top:0;">🌱 FISIOLOGIA DA FASE</h5>
-                    <p style="color:#334155; font-size:1rem; line-height:1.4;">{txt_fisio}</p>
+                <div style="background-color:#ffffff; border:1px solid #e2e8f0; border-top:5px solid #22c55e; padding:20px; border-radius:12px; min-height:160px; box-shadow: 2px 2px 10px rgba(0,0,0,0.05);">
+                    <h5 style="color:#15803d; margin-top:0; font-size:1.1rem; border-bottom:1px solid #f1f5f9; padding-bottom:8px;">🌱 FISIOLOGIA</h5>
+                    <p style="color:#1e293b; font-size:0.95rem; line-height:1.5; margin-top:10px;">{txt_fisio}</p>
                 </div>""", unsafe_allow_html=True)
 
             st.markdown("<br>", unsafe_allow_html=True)
 
-            # --- SEÇÃO 2: MANEJO TÁTICO ---
-            txt_manejo = dados_fase.get('manejo', 'Consulte o suporte técnico.')
+            # --- SEÇÃO 2: MANEJO TÁTICO (BOX LARANJA) ---
+            txt_manejo = dados_fase.get('manejo', 'Nenhuma recomendação cadastrada para esta fase.')
             st.markdown(f"""
-            <div style="background-color:#fff7ed; padding:18px; border-radius:10px; border-left:8px solid #f97316; color:#431407; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
-                <h5 style="margin-top:0; color:#c2410c;">🚜 DIRETRIZES DE MANEJO</h5>
-                <p style="font-size:1.05rem; margin-bottom:0;">{txt_manejo}</p>
+            <div style="background-color:#fff7ed; padding:20px; border-radius:12px; border-left:8px solid #f97316; color:#431407; box-shadow: 2px 2px 8px rgba(0,0,0,0.05);">
+                <h5 style="margin-top:0; color:#c2410c; font-size:1.1rem;">🚜 DIRETRIZES DE MANEJO</h5>
+                <p style="font-size:1rem; margin-bottom:0; line-height:1.6;">{txt_manejo}</p>
             </div>""", unsafe_allow_html=True)
 
             st.divider()
 
-            # --- SEÇÃO 3: CARDS DE DEFESA (VISUAL DE ALTA PERFORMANCE) ---
+            # --- SEÇÃO 3: CARDS DE DEFESA (VISUAL PREMIUM) ---
             quimicos = dados_fase.get('quimica', [])
             if quimicos:
-                st.markdown("<h3 style='color:#0f172a;'>🏹 Protocolo de Defesa Ativa</h3>", unsafe_allow_html=True)
+                st.markdown("<h3 style='color:#0f172a; margin-bottom:20px;'>🏹 Protocolo de Defesa Ativa</h3>", unsafe_allow_html=True)
                 
                 for item in quimicos:
                     with st.container(border=True):
                         # Cabeçalho do Card
                         st.markdown(f"""
-                        <div style="background:#f8fafc; padding:10px; border-radius:8px 8px 0 0; border-bottom:2px solid #ef4444; margin:-10px -10px 15px -10px; display:flex; justify-content:space-between;">
-                            <b style="color:#b91c1c; font-size:1.1rem;">🎯 ALVO: {item['Alvo']}</b>
-                            <span style="color:#64748b; font-size:0.8rem;">REF: {cult_sel}</span>
+                        <div style="background:#f8fafc; padding:12px; border-radius:8px 8px 0 0; border-bottom:3px solid #ef4444; margin:-10px -10px 15px -10px; display:flex; justify-content:space-between; align-items:center;">
+                            <b style="color:#b91c1c; font-size:1.2rem;">🎯 ALVO: {item['Alvo']}</b>
+                            <span style="background:#fee2e2; color:#b91c1c; padding:3px 12px; border-radius:20px; font-size:0.75rem; font-weight:bold; border:1px solid #fecaca;">MONITORAMENTO ATIVO</span>
                         </div>""", unsafe_allow_html=True)
                         
-                        col_img, col_txt = st.columns([1.2, 2.8])
+                        col_img, col_txt = st.columns([1.3, 2.7])
                         
+                        # FOTO DA DOENÇA/PRAGA
                         with col_img:
                             nome_img = item.get("imagem", "")
                             path_img = os.path.join("images", nome_img)
                             if nome_img and os.path.exists(path_img):
                                 st.image(path_img, use_container_width=True)
                             else:
-                                st.markdown("""<div style="background:#f1f5f9; height:150px; display:flex; align-items:center; justify-content:center; border-radius:10px; color:#94a3b8;">🔬 Sem Imagem</div>""", unsafe_allow_html=True)
+                                st.markdown("""<div style="background:#f1f5f9; height:180px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-radius:12px; color:#94a3b8; border:1px dashed #cbd5e1;"><span style="font-size:3rem;">🔬</span><p style="font-size:0.8rem; margin-top:10px;">Foto Pendente</p></div>""", unsafe_allow_html=True)
 
+                        # CONTEÚDO TÉCNICO (LETRA ESCURA)
                         with col_txt:
-                            # Ativo e Grupo com fontes equilibradas
                             st.markdown(f"""
                             <div style="color:#1e293b;">
-                                <p style="margin-bottom:5px;"><b>🧪 Ativo:</b> <code style="color:#0f172a; background:#e2e8f0; padding:2px 6px; border-radius:4px;">{item.get('Ativo', '-')}</code></p>
-                                <p style="margin-bottom:10px; font-size:0.9rem;"><b>⚙️ Mecanismo:</b> {item.get('Grupo', '-')} | <i>{item.get('Tipo', '-')}</i></p>
+                                <p style="margin-bottom:8px; font-size:1.05rem;"><b>🧪 Ingrediente Ativo:</b> <code style="color:#0f172a; background:#e2e8f0; padding:3px 8px; border-radius:5px; font-weight:bold;">{item.get('Ativo', '-')}</code></p>
+                                <p style="margin-bottom:12px; font-size:0.95rem; color:#475569;"><b>⚙️ Mecanismo:</b> {item.get('Grupo', '-')} | <i>{item.get('Tipo', '-')}</i></p>
                             </div>""", unsafe_allow_html=True)
                             
-                            # Produtos (Tags)
+                            # Produtos (Tags Azuis Premium)
                             prods = item.get('Produtos', [])
                             if prods:
-                                tags = "".join([f"<span style='background:#dbeafe; color:#1e40af; border:1px solid #bfdbfe; padding:4px 10px; border-radius:8px; font-size:0.85rem; margin:0 6px 6px 0; display:inline-block; font-weight:bold;'>🛒 {p}</span>" for p in prods])
-                                st.markdown(f"<div>{tags}</div>", unsafe_allow_html=True)
+                                tags = "".join([f"<span style='background:#dbeafe; color:#1e40af; border:1px solid #bfdbfe; padding:5px 12px; border-radius:8px; font-size:0.85rem; margin:0 8px 8px 0; display:inline-block; font-weight:bold;'>🛒 {p}</span>" for p in prods])
+                                st.markdown(f"<div style='margin-bottom:15px;'>{tags}</div>", unsafe_allow_html=True)
                             
-                            # Rotação e Notas (Box)
+                            # Box de Rotação e Observação
                             st.markdown(f"""
-                            <div style="background-color:#fefce8; padding:12px; border-radius:8px; border-left:5px solid #eab308; color:#713f12; font-size:0.9rem; margin-top:10px;">
-                                <b>🔄 Rotação:</b> {item.get('Rotacao', '-')}<br>
-                                <div style="margin-top:5px;"><b>📝 Parecer:</b> <i>{item.get('Obs', '-')}</i></div>
+                            <div style="background-color:#fefce8; padding:15px; border-radius:10px; border-left:5px solid #eab308; color:#713f12; font-size:0.9rem; box-shadow: inset 1px 1px 3px rgba(0,0,0,0.02);">
+                                <b style="color:#854d0e;">🔄 ESTRATÉGIA ANTI-RESISTÊNCIA:</b><br>{item.get('Rotacao', '-')}<br>
+                                <div style="margin-top:10px; border-top:1px solid #fef08a; padding-top:8px;">
+                                    <b>📝 PARECER DO CONSULTOR:</b> <i>{item.get('Obs', '-')}</i>
+                                </div>
                             </div>""", unsafe_allow_html=True)
             else:
-                st.info("Nenhuma prescrição fitossanitária para esta fase.")
-                            
+                st.info("✅ **Sanidade Plena:** Nenhuma intervenção química necessária para esta fase.")
+        else:
+            st.error("🚨 **Erro de Sincronização:** Não foi possível localizar os dados técnicos no Database. Verifique se o arquivo JSON da cultura está correto.")        
 
       # --- 2. BANCO DE DADOS MASTER (COM META DE PRODUTIVIDADE EXPLÍCITA) ---
         DB_NUTRI_MASTER = {
