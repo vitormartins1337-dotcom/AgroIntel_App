@@ -383,111 +383,55 @@ if not df_clima.empty:
                 }
             },
             "Batata": {
-                "meta": "45 a 60 ton/ha",
-                "fonte": "Baseado em Fernandes & Soratto (Embrapa, 2012)",
-                "fases": ["Emergência", "Estolonização", "Tuberização", "Enchimento", "Maturação"],
-                
-                "macros": {
-                    "N": [15, 70, 150, 230, 265], 
-                    "P": [2, 10, 20, 32, 40], 
-                    "K": [30, 140, 280, 390, 430], 
-                    "Ca": [5, 25, 50, 75, 90], 
-                    "Mg": [2, 8, 16, 24, 30], 
-                    "S": [3, 12, 22, 35, 45]
-                },
-                
-                "micros": {
-                    "B": [15, 70, 160, 220, 260], 
-                    "Zn": [20, 90, 210, 320, 400], 
-                    "Mn": [30, 180, 420, 650, 800], 
-                    "Fe": [150, 900, 2200, 3500, 4300], 
-                    "Cu": [5, 25, 60, 95, 120],
-                    "Mo": [0.5, 2, 5, 8, 10]
-                },
+        "meta": "45 a 60 ton/ha",
+        "fonte": "Baseado em Fernandes & Soratto (Embrapa, 2012)",
+        "fases": ["Emergência", "Estolonização", "Tuberização", "Enchimento", "Maturação"],
+        
+        "macros": {
+            "N": [15, 70, 150, 230, 265],
+            "P": [2, 10, 20, 32, 40],
+            "K": [30, 140, 280, 390, 430],
+            "Ca": [5, 25, 50, 75, 90],
+            "Mg": [2, 8, 16, 24, 30],
+            "S": [3, 12, 22, 35, 45]
+        },
+        
+        "micros": {
+            "B": [15, 70, 160, 220, 260],
+            "Zn": [20, 90, 210, 320, 400],
+            "Mn": [30, 180, 420, 650, 800],
+            "Fe": [150, 900, 2200, 3500, 4300],
+            "Cu": [5, 25, 60, 95, 120],
+            "Mo": [0.5, 2, 5, 8, 10]
+        },
 
-                "totais_display": {
-                    "N": "250 – 270", 
-                    "P": "35 – 45", 
-                    "K": "400 – 450", 
-                    "Ca": "80 – 95", 
-                    "Mg": "25 – 35", 
-                    "S": "40 – 50",
-                    "B": "240 – 300", 
-                    "Zn": "350 – 450", 
-                    "Mn": "700 – 850", 
-                    "Fe": "4000 – 4500", 
-                    "Cu": "100 – 130",
-                    "Mo": "8 – 12"
-                },
-                
-                "contexto_solo": {
-                    "tipo": "Solo Franco-Arenoso a Franco (Bem Drenado)",
-                    "ideal": [
-                        "Argila: 15–35% (Solos leves favorecem formato)",
-                        "pH: 5.5–6.0 (Abaixo de 5.0 perde P/Mg, acima de 6.0 aumenta Sarna)",
-                        "V%: 60–70%",
-                        "Ca/Mg: Relação 3:1 é ideal",
-                        "Matéria Orgânica: > 2.5% (Retenção de água)"
-                    ],
-                    "alerta": "⚠️ PONTO CRÍTICO: A batata extrai 430kg de K mas exporta (leva embora) 68% disso. A reposição de Potássio para a próxima safra é obrigatória. Cuidado com pH > 6.0 que favorece Streptomyces (Sarna)."
-                },
-
-                "manejo_tatico": {
-                    "N": "<b>PICO 45-70 DAP:</b> A absorção máxima ocorre no início do enchimento. O parcelamento deve focar em disponibilizar nitrato antes dessa fase. Excesso tardio atrasa a maturação.",
-                    "P": "<b>ACÚMULO NO TUBÉRCULO:</b> 78% do Fósforo absorvido é exportado. Fundamental aplicar alta carga no sulco de plantio para garantir arranque e número de tubérculos.",
-                    "K": "<b>DEMANDA PRECOCE (40-60 DAP):</b> Absorção violentamente concentrada. Se faltar K na tuberização, o calibre despenca. Não deixe para aplicar K muito tarde.",
-                    "Ca": "<b>BAIXA MOBILIDADE:</b> Apenas 9% do Ca absorvido chega na batata. Obrigatório Cálcio via solo constante e foliar frequente para evitar 'Coração Oco'.",
-                    "Mg": "<b>FOTOSSÍNTESE:</b> O magnésio deve acompanhar o K para evitar competição. Deficiência causa amarelamento entre nervuras nas folhas velhas.",
-                    "S": "<b>SÍNTESE PROTEICA:</b> Essencial para a eficiência do Nitrogênio.",
-                    "B": "<b>PELE E FORMAÇÃO (35-50 DAP):</b> Maior demanda logo após o início da formação de tubérculos. Essencial para divisão celular. Deficiência causa tubérculos rachados e coração oco.",
-                    "Cu": "<b>ABSORÇÃO TARDIA:</b> Diferente dos outros, o Cobre é absorvido em maiores proporções na segunda metade do ciclo. Além de nutriente, atua na indução de resistência a doenças (lignificação).",
-                    "Zn": "<b>CRESCIMENTO FINAL:</b> Assim como o Cobre, tem absorção forte na segunda metade do ciclo para garantir o enchimento e metabolismo de auxinas.",
-                    "Fe": "<b>DEMANDA MASSIVA:</b> A batata extrai mais de 4kg de Ferro. Em solos com pH corrigido (>6.0), o Fe pode ficar indisponível, exigindo aplicação foliar quelatizada.",
-                    "Mn": "<b>METABOLISMO (45-65 DAP):</b> Pico de exigência junto com o enchimento. Solos muito calcariados bloqueiam o Manganês."
-                },
-                "deficiencias": [
-                    {
-                        "Nutriente": "Nitrogênio (N)",
-                        "imagem": "deficiencia_N_batata.jpg",
-                        "Sintoma": "Plantas pálidas (verde-claro). Folhas velhas ficam amarelas uniformemente e caem. Crescimento travado.",
-                        "Causa": "Lixiviação por chuva forte ou subdose no plantio.",
-                        "Correcao": "Ureia ou Nitrato de Amônio (Cobertura). Se for urgente: Ureia Foliar (Baixa biureta).",
-                        "Produtos": ["Nitrato de Cálcio (YaraLiva)", "Ureia Premium", "NitroMais"]
-                    },
-                    {
-                        "Nutriente": "Potássio (K)",
-                        "imagem": "deficiencia_K_batata.jpg",
-                        "Sintoma": "Queima das bordas das folhas velhas ('Margem de fogo'). Folhas ficam com aspecto de bronzeadas/escuras.",
-                        "Causa": "Solo pobre ou competição com excesso de Cálcio/Magnésio.",
-                        "Correcao": "Cloreto de Potássio (Fertirrigação) ou Nitrato de Potássio (Foliar para resgate).",
-                        "Produtos": ["Krista K", "K-Leaf", "K-Fol"]
-                    },
-                    {
-                        "Nutriente": "Cálcio (Ca) - Fundo Preto",
-                        "imagem": "deficiencia_Ca_batata.jpg",
-                        "Sintoma": "Folhas novas encarquilhadas (concha). No tubérculo, causa o 'Coração Oco' e necrose interna.",
-                        "Causa": "Falta de água (O Ca só sobe com água) ou excesso de N/K.",
-                        "Correcao": "NÃO ADIANTA só jogar no solo agora. Aplicar Cálcio Quelatizado via foliar direto no alvo.",
-                        "Produtos": ["Calbit C", "Aminofol Ca", "Calcium 24", "YaraVita Stopit"]
-                    },
-                    {
-                        "Nutriente": "Magnésio (Mg)",
-                        "imagem": "deficiencia_Mg_batata.jpg",
-                        "Sintoma": "Clorose internerval (nervuras verdes, meio amarelo) nas folhas velhas (baixeira).",
-                        "Causa": "Solos ácidos ou excesso de Potássio (Antagonismo K x Mg).",
-                        "Correcao": "Sulfato de Magnésio (Sal Amargo) via foliar é o mais rápido.",
-                        "Produtos": ["Magnésio Quelato", "Sal Amargo", "Epso Top"]
-                    },
-                    {
-                        "Nutriente": "Ferro (Fe) - Clorose Férrica",
-                        "imagem": "deficiencia_Fe_batata.jpg",
-                        "Sintoma": "Folhas NOVAS nascem totalmente amarelas/brancas. Nervuras ficam verdes fininhas.",
-                        "Causa": "pH do solo muito alto (>6.5) ou excesso de calcário travando o ferro.",
-                        "Correcao": "Ferro EDDHA (Quelato de alta estabilidade) via solo ou foliar.",
-                        "Produtos": ["Ferrilene", "Librel Fe", "YaraVita Rexolin"]
-                    }
-                ]
-            },
+        "totais_display": {
+            "N": "250 – 270 kg/ha",
+            "P": "35 – 45 kg/ha",
+            "K": "400 – 450 kg/ha",
+            "Ca": "80 – 95 kg/ha",
+            "Mg": "25 – 35 kg/ha",
+            "S": "40 – 50 kg/ha",
+            "B": "240 – 300 g/ha",
+            "Zn": "350 – 450 g/ha",
+            "Mn": "700 – 850 g/ha",
+            "Fe": "4.0 – 4.5 kg/ha",
+            "Cu": "100 – 130 g/ha",
+            "Mo": "8 – 12 g/ha"
+        },
+        
+        "contexto_solo": {
+            "tipo": "Solo Franco-Arenoso a Franco (Bem Drenado)",
+            "ideal": [
+                "Argila: 15–35% (Solos leves favorecem formato)",
+                "pH: 5.5–6.0 (Abaixo de 5.0 perde P/Mg, acima de 6.0 aumenta Sarna)",
+                "V%: 60–70%",
+                "Ca/Mg: Relação 3:1 é ideal",
+                "Matéria Orgânica: > 2.5% (Retenção de água)"
+            ],
+            "alerta": "⚠️ PONTO CRÍTICO: A batata extrai 430kg de K mas exporta (leva embora) 68% disso. A reposição de Potássio para a próxima safra é obrigatória. Cuidado com pH > 6.0 que favorece Streptomyces (Sarna)."
+        }
+    },
             
             "Algodão": {
                 "meta": "350 a 450 @/ha",
