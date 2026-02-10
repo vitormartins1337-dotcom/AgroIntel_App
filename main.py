@@ -236,58 +236,63 @@ if not df_clima.empty:
         
                         # --- ÁREA VISUAL DE PRAGAS/DOENÇAS (VERSÃO MASTER + PRODUTOS COMERCIAIS) ---
         st.markdown("### 🧪 Soluções Fitossanitárias & Produtos Recomendados")
-        
-        lista_quimica = dados_fase.get('quimica', [])
-        
-        if not lista_quimica:
-             st.success("✅ Nenhuma intervenção química necessária nesta fase.")
-        else:
-            for item in lista_quimica:
-                with st.container():
-                    st.markdown("---")
-                    c_img, c_info = st.columns([1, 2.5])
-                    
-                    # --- FOTO ---
-                    with c_img:
-                        nome_arquivo = item.get("imagem", "")
-                        caminho_local = os.path.join("images", nome_arquivo) if nome_arquivo else None
-                        if nome_arquivo and os.path.exists(caminho_local):
-                            st.image(caminho_local, use_container_width=True)
-                        elif nome_arquivo and nome_arquivo.startswith("http"):
-                            st.image(nome_arquivo, use_container_width=True)
-                        else:
-                            st.markdown("""<div style="background:#f8fafc; height:90px; display:flex; align-items:center; justify-content:center; border-radius:8px; border: 1px dashed #cbd5e1;"><span style="font-size:2.5rem;">🦠</span></div>""", unsafe_allow_html=True)
-
-                    # --- DADOS TÉCNICOS ---
-                    with c_info:
-                        st.markdown(f"**🎯 ALVO:** <span style='color:#b91c1c; font-weight:bold; font-size:1.05rem;'>{item.get('Alvo', 'Geral')}</span>", unsafe_allow_html=True)
-                        st.markdown(f"🧪 **Ativo Base:** {item.get('Ativo', '-')}")
+            quimicos = dados_fase.get('quimica', [])
+            
+            if quimicos:
+                st.markdown("### 🛡️ Estratégia de Defesa e Proteção")
+                
+                for item in quimicos:
+                    # Início do CARD (Container com borda)
+                    with st.container(border=True):
+                        # Cabeçalho do Card com Ícone e Nome do Alvo
+                        st.markdown(f"#### 🎯 Alvo: <span style='color:#b91c1c;'>{item['Alvo']}</span>", unsafe_allow_html=True)
                         
-                        # Lista de Produtos Comerciais (Novo)
-                        produtos = item.get('Produtos', [])
-                        if produtos:
-                            lista_prod = ", ".join([f"`{p}`" for p in produtos])
-                            st.markdown(f"🛒 **Sugestões Comerciais:** {lista_prod}", unsafe_allow_html=True)
-
-                        # Badges
-                        grupo = item.get('Grupo', '-')
-                        tipo = item.get('Tipo', '-')
-                        bg_cor, txt_cor, border_cor = "#eff6ff", "#1d4ed8", "#dbeafe"
-                        if "Biológico" in grupo: bg_cor, txt_cor, border_cor = "#f0fdf4", "#15803d", "#dcfce7"
-                        elif "Sistêmico" in tipo: bg_cor, txt_cor, border_cor = "#fff7ed", "#c2410c", "#ffedd5"
+                        # Divisão: Coluna da Foto (Esq) e Coluna de Dados (Dir)
+                        c_foto, c_info = st.columns([1.2, 3])
                         
-                        st.markdown(f"""<div style="margin-top:4px; margin-bottom:10px;"><span style="background:{bg_cor}; color:{txt_cor}; padding:4px 10px; border-radius:6px; font-size:0.75rem; font-weight:700; border:1px solid {border_cor};">{grupo.upper()}</span><span style="background:#ffffff; color:#64748b; padding:4px 10px; border-radius:6px; font-size:0.75rem; border:1px solid #e2e8f0; margin-left:6px; font-weight:600;">{tipo}</span></div>""", unsafe_allow_html=True)
+                        # --- COLUNA 1: FOTO ---
+                        with c_foto:
+                            nome_img = item.get("imagem", "")
+                            caminho_img = os.path.join("images", nome_img)
+                            
+                            # Verifica se a imagem existe
+                            if nome_img and os.path.exists(caminho_img):
+                                st.image(caminho_img, use_container_width=True)
+                            else:
+                                # Placeholder bonito se não tiver foto
+                                st.markdown("""
+                                <div style="background-color:#f3f4f6; height:150px; display:flex; align-items:center; justify-content:center; border-radius:8px; border:2px dashed #d1d5db;">
+                                    <span style="font-size:2rem;">🦠</span>
+                                </div>
+                                """, unsafe_allow_html=True)
+                                st.caption("Imagem não localizada")
 
-                        # Rotação
-                        rotacao = item.get('Rotacao', '')
-                        if rotacao:
-                            st.markdown(f"""<div style="font-size: 0.85rem; color: #0369a1; background-color: #f0f9ff; padding: 10px; border-radius: 6px; border-left: 4px solid #0ea5e9; margin-bottom: 8px;"><strong>🔄 Rotação:</strong> {rotacao}</div>""", unsafe_allow_html=True)
+                        # --- COLUNA 2: INFORMAÇÕES TÉCNICAS ---
+                        with c_info:
+                            # 1. Princípio Ativo (Destaque)
+                            st.markdown(f"**🧪 Princípio Ativo:** `{item['Ativo']}`")
+                            
+                            # 2. Grupo e Modo de Ação
+                            st.markdown(f"**⚙️ Mecanismo:** {item.get('Grupo', '-')} | *{item.get('Tipo', '-')}*")
+                            
+                            # 3. Produtos Comerciais (Estilo Tags Visuais)
+                            produtos = item.get('Produtos', [])
+                            if produtos:
+                                # Transforma a lista em etiquetas visuais HTML
+                                html_prods = " ".join([
+                                    f"<span style='background-color:#eff6ff; color:#1e40af; padding:4px 8px; border-radius:12px; font-size:0.85rem; border:1px solid #bfdbfe; margin-right:5px; display:inline-block; margin-bottom:5px;'>🛒 {p}</span>" 
+                                    for p in produtos
+                                ])
+                                st.markdown(f"<div style='margin-top:5px; margin-bottom:10px;'>{html_prods}</div>", unsafe_allow_html=True)
 
-                        # Nota Técnica
-                        obs = item.get('Obs', '')
-                        if obs:
-                            st.markdown(f"""<div style="font-size: 0.85rem; color: #334155; background-color: #f8fafc; padding: 10px; border-radius: 6px; border-left: 4px solid #94a3b8;"><strong>💡 Nota:</strong> {obs}</div>""", unsafe_allow_html=True)
-
+                            # 4. Box de Consultoria (Rotação e Observação)
+                            # Cria uma caixinha colorida suave para as dicas finais
+                            st.markdown(f"""
+                            <div style="background-color:#fffbeb; border-left:4px solid #f59e0b; padding:10px; border-radius:4px; font-size:0.9rem;">
+                                <div>🔄 <b>Rotação:</b> {item.get('Rotacao', '-')}</div>
+                                <div style="margin-top:4px;">📝 <b>Nota Técnica:</b> <i>{item.get('Obs', '-')}</i></div>
+                            </div>
+                            """, unsafe_allow_html=True)
 
                                                        # 2. NUTRIÇÃO (MARCHA DE ABSORÇÃO & MANEJO - CALIBRADO TOTAL HIGH-YIELD)
     with tabs[1]:
