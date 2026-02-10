@@ -382,6 +382,7 @@ if not df_clima.empty:
                    "Mo": "<b>METABOLISMO DO N:</b> Atua na redução do nitrato e melhora eficiência nutricional."
                 }
             },
+            
             "Batata": {
         "meta": "45 a 60 ton/ha",
         "fonte": "Baseado em Fernandes & Soratto (Embrapa, 2012)",
@@ -1097,79 +1098,6 @@ if not df_clima.empty:
                     * **IPNI Brasil:** Tabelas de Extração e Exportação de Nutrientes.
                     """
                 )
-
-
-    # --- INÍCIO DO GUIA VISUAL DE DEFICIÊNCIAS (ATLAS NUTRICIONAL) ---
-        
-        # 1. Recupera os dados da cultura atual novamente para garantir segurança
-        # Certifique-se que a variável do seu dicionário principal se chama 'dados'
-        # e a variável do selectbox se chama 'cultura_selecionada'
-        dados_cultura_atual = dados[cultura_selecionada]
-        lista_deficiencias = dados_cultura_atual.get('deficiencias', [])
-
-        # Só renderiza se houver deficiências cadastradas no JSON
-        if lista_deficiencias:
-            st.markdown("---")
-            st.markdown("### 🚑 Atlas de Deficiências & Correção Tática")
-            st.markdown("""
-            <div style='background-color: #f8fafc; border-left: 4px solid #3b82f6; padding: 12px; border-radius: 4px; font-size: 0.9rem; color: #475569; margin-bottom: 20px;'>
-                <b>💡 Como usar:</b> Compare os sintomas visuais em campo com as fotos abaixo. 
-                A correção sugerida foca no <b>resgate rápido</b> da produtividade.
-            </div>
-            """, unsafe_allow_html=True)
-
-            for item in lista_deficiencias:
-                with st.container():
-                    # Layout: Coluna 1 (Foto) | Coluna 2 (Dados)
-                    # Ajustei para [1, 2] para a foto não ficar muito pequena
-                    c_img, c_dados = st.columns([1, 2])
-                    
-                    # --- COLUNA DA FOTO ---
-                    with c_img:
-                        nome_arquivo = item.get("imagem", "")
-                        # Ajuste "images" se sua pasta tiver outro nome
-                        caminho_local = os.path.join("images", nome_arquivo)
-                        
-                        if nome_arquivo and os.path.exists(caminho_local):
-                            st.image(caminho_local, caption=f"Sintoma: {item['Nutriente']}", use_container_width=True)
-                        else:
-                            # Placeholder Profissional (Caso falte a foto)
-                            st.markdown(f"""
-                            <div style="background:#fff7ed; height:140px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-radius:8px; border: 1px dashed #fdba74;">
-                                <span style="font-size:2.5rem;">🍂</span>
-                                <span style="font-size:0.8rem; color:#c2410c; margin-top:5px;">Foto Indisponível</span>
-                            </div>""", unsafe_allow_html=True)
-
-                    # --- COLUNA DOS DADOS ---
-                    with c_dados:
-                        # Título do Nutriente com Ícone Químico
-                        st.markdown(f"<h4 style='margin-top:0; color:#1e293b;'>🧪 {item['Nutriente']}</h4>", unsafe_allow_html=True)
-                        
-                        # Sintoma e Causa
-                        st.markdown(f"**👁️ Sintoma Visual:** {item['Sintoma']}")
-                        st.markdown(f"**⚠️ Causa Provável:** *{item['Causa']}*")
-                        
-                        # Box de Correção (Design Clean e Profissional)
-                        st.markdown(f"""
-                        <div style="background-color: #f0fdf4; padding: 12px; border-radius: 6px; border: 1px solid #bbf7d0; margin-top: 10px;">
-                            <strong style="color: #166534; display:block; margin-bottom:4px;">✅ Correção Tática (Resgate):</strong>
-                            <span style="color: #14532d;">{item['Correcao']}</span>
-                        </div>
-                        """, unsafe_allow_html=True)
-                        
-                        # Lista de Produtos (Estilo Tag/Carrinho)
-                        produtos = item.get('Produtos', [])
-                        if produtos:
-                            # Formata os produtos como pequenas tags de código
-                            lista_prod_fmt = " ".join([f"<code style='color:#ea580c; background:#fff7ed; border:1px solid #fdba74;'>{p}</code>" for p in produtos])
-                            st.markdown(f"""
-                            <div style="margin-top:10px; font-size:0.85rem; display:flex; align-items:center;">
-                                <span style="font-size:1.2rem; margin-right:5px;">🛒</span> 
-                                <b>Opções Comerciais:</b>&nbsp; {lista_prod_fmt}
-                            </div>
-                            """, unsafe_allow_html=True)
-
-                    st.markdown("---") # Linha separadora elegante entre um nutriente e outro
     
     # 3. CLIMA (CORRIGIDO E BLINDADO)
     with tabs[2]:
