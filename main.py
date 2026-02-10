@@ -235,8 +235,6 @@ if not df_clima.empty:
         
             
         quimicos = dados_fase.get('quimica', [])
-            
-            if quimicos:
                 st.markdown("### 🛡️ Estratégia de Defesa e Proteção")
                 
                 for item in quimicos:
