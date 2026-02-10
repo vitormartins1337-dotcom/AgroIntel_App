@@ -1,4 +1,4 @@
-{
+
   "Batata (Solanum tuberosum)": {
     "t_base": 7,
     "vars": {
@@ -259,4 +259,3 @@
             }
         ]
     }
-}
