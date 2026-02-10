@@ -487,8 +487,8 @@ if not df_clima.empty:
                         "Produtos": ["Ferrilene", "Librel Fe", "YaraVita Rexolin"]
                     }
                 ]
-            }
-}
+            },
+            
             "Algodão": {
                 "meta": "350 a 450 @/ha",
                 "fases": ["Emerg", "Botão", "Flor", "Maçã", "Abertura"],
