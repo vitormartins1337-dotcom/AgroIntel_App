@@ -289,7 +289,7 @@ if not df_clima.empty:
                             """, unsafe_allow_html=True)
             else:
                 st.info("Nenhuma intervenção química cadastrada para esta fase.")
-        else:
+            else:
             st.warning("Dados de fases não encontrados para esta cultura.")
                                                        # 2. NUTRIÇÃO (MARCHA DE ABSORÇÃO & MANEJO - CALIBRADO TOTAL HIGH-YIELD)
     with tabs[1]:
