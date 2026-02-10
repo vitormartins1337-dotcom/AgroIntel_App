@@ -384,8 +384,7 @@ if not df_clima.empty:
             },
             
             "Batata": {
-        "meta": "45 a 60 ton/ha",
-        "fonte": "Baseado em Fernandes & Soratto (Embrapa, 2012)",
+        "meta": "45 a 60 ton/ha (High Yield)",
         "fases": ["Emergência", "Estolonização", "Tuberização", "Enchimento", "Maturação"],
         
         "macros": {
@@ -407,30 +406,34 @@ if not df_clima.empty:
         },
 
         "totais_display": {
-            "N": "250 – 270 kg/ha",
-            "P": "35 – 45 kg/ha",
-            "K": "400 – 450 kg/ha",
-            "Ca": "80 – 95 kg/ha",
-            "Mg": "25 – 35 kg/ha",
-            "S": "40 – 50 kg/ha",
-            "B": "240 – 300 g/ha",
-            "Zn": "350 – 450 g/ha",
-            "Mn": "700 – 850 g/ha",
-            "Fe": "4.0 – 4.5 kg/ha",
-            "Cu": "100 – 130 g/ha",
-            "Mo": "8 – 12 g/ha"
+            "N": "250 – 270",
+            "P": "35 – 45",
+            "K": "400 – 450",
+            "Ca": "80 – 95",
+            "Mg": "25 – 35",
+            "S": "40 – 50"
         },
         
+        # NOVA CHAVE: Especificação do Solo Ideal
         "contexto_solo": {
             "tipo": "Solo Franco-Arenoso a Franco (Bem Drenado)",
-            "ideal": [
-                "Argila: 15–35% (Solos leves favorecem formato)",
-                "pH: 5.5–6.0 (Abaixo de 5.0 perde P/Mg, acima de 6.0 aumenta Sarna)",
-                "V%: 60–70%",
-                "Ca/Mg: Relação 3:1 é ideal",
-                "Matéria Orgânica: > 2.5% (Retenção de água)"
-            ],
+            "ideal": ["Argila: 15–35% (Solos leves favorecem formato)", "pH: 5.5–6.0 (Abaixo de 5.0 perde P/Mg, acima de 6.0 aumenta Sarna)", "V%: 60–70%", "Ca/Mg: Relação 3:1 é ideal", "Matéria Orgânica: > 2.5% (Retenção de água)"],
             "alerta": "⚠️ PONTO CRÍTICO: A batata extrai 430kg de K mas exporta (leva embora) 68% disso. A reposição de Potássio para a próxima safra é obrigatória. Cuidado com pH > 6.0 que favorece Streptomyces (Sarna)."
+        },
+
+        "manejo_tatico": {
+            "N": "<b>PICO 45-70 DAP (Início do Enchimento):</b> A demanda máxima ocorre aqui. O parcelamento deve focar em disponibilizar nitrato antes dessa fase. Excesso tardio atrasa a maturação e reduz a pele.",
+            "P": "<b>ALTA EXPORTAÇÃO (78%):</b> A maior parte do Fósforo absorvido vai para o tubérculo e sai da lavoura. Aplicar alta dose no sulco para garantir o arranque e número de tubérculos.",
+            "K": "<b>ANTECIPAÇÃO (40-60 DAP):</b> Absorção violentamente concentrada. Se faltar K na tuberização, o calibre despenca. Não deixe o K apenas para o final.",
+            "Ca": "<b>O GARGALO DA MOBILIDADE:</b> Apenas 9% chega ao tubérculo (o resto fica na folha). Para evitar 'Coração Oco' e ter pele firme, é obrigatório Cálcio via solo constante e foliar frequente.",
+            "Mg": "<b>FOTOSSÍNTESE:</b> 33% é exportado. O Magnésio deve acompanhar o K (relação K/Mg) para evitar antagonismo. Deficiência causa amarelamento entre nervuras nas folhas velhas.",
+            "S": "<b>SÍNTESE PROTEICA:</b> Essencial para a eficiência do Nitrogênio e qualidade da proteína do tubérculo.",
+            "B": "<b>PELE E FORMAÇÃO (35-50 DAP):</b> Maior demanda logo após o início da formação de tubérculos. Essencial para divisão celular. Deficiência causa tubérculos rachados e coração oco.",
+            "Cu": "<b>ABSORÇÃO TARDIA:</b> Cobre é absorvido em maiores proporções na segunda metade do ciclo. Além de nutriente, atua na indução de resistência a doenças (lignificação).",
+            "Zn": "<b>CRESCIMENTO FINAL:</b> Assim como o Cobre, tem absorção forte na segunda metade do ciclo para garantir o enchimento e metabolismo de auxinas.",
+            "Fe": "<b>DEMANDA MASSIVA:</b> A batata extrai mais de 4kg de Ferro. Em solos com pH corrigido (>6.0), o Fe pode ficar indisponível, exigindo aplicação foliar quelatizada.",
+            "Mn": "<b>METABOLISMO (45-65 DAP):</b> Pico de exigência junto com o enchimento. Solos muito calcariados bloqueiam o Manganês.",
+            "Mo": "<b>EFICIÊNCIA DO N:</b> Essencial na redução do nitrato. Importante em áreas com alta adubação nitrogenada."
         }
     },
             
