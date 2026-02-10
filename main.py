@@ -236,7 +236,8 @@ if not df_clima.empty:
         
                         # --- ÁREA VISUAL DE PRAGAS/DOENÇAS (VERSÃO MASTER + PRODUTOS COMERCIAIS) ---
         st.markdown("### 🧪 Soluções Fitossanitárias & Produtos Recomendados")
-            quimicos = dados_fase.get('quimica', [])
+            
+        quimicos = dados_fase.get('quimica', [])
             
             if quimicos:
                 st.markdown("### 🛡️ Estratégia de Defesa e Proteção")
