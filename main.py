@@ -1123,6 +1123,59 @@ if not df_clima.empty:
                                     </div>
                                     """, unsafe_allow_html=True)
 
+            # --- DENTRO DA ABA NUTRIÇÃO ---
+
+# 1. Parte dos Gráficos (Mantenha seu código atual de gráficos aqui)
+# ... st.line_chart(...)
+
+st.markdown("---")
+st.markdown("### 🚑 Guia de Identificação & Correção Nutricional")
+st.info("Identifique visualmente a fome da planta e veja como corrigir rápido.")
+
+# Pega a lista de deficiências do JSON
+lista_deficiencias = dados_nutricao.get('deficiencias', [])
+
+if lista_deficiencias:
+    for item in lista_deficiencias:
+        with st.container():
+            st.markdown("---")
+            c_img, c_info = st.columns([1, 2.5])
+            
+            # FOTO DA FOLHA COM DEFICIÊNCIA
+            with c_img:
+                nome_arquivo = item.get("imagem", "")
+                caminho_local = os.path.join("images", nome_arquivo)
+                
+                if nome_arquivo and os.path.exists(caminho_local):
+                    st.image(caminho_local, caption=f"Sintoma Típico: {item['Nutriente']}", use_container_width=True)
+                else:
+                    # Placeholder se não tiver foto
+                    st.markdown("""
+                    <div style="background:#fff7ed; height:100px; display:flex; align-items:center; justify-content:center; border-radius:8px; border: 1px dashed #fdba74;">
+                        <span style="font-size:2rem;">🍂</span>
+                    </div>""", unsafe_allow_html=True)
+
+            # INFORMAÇÕES TÉCNICAS
+            with c_info:
+                st.markdown(f"#### 🧪 {item['Nutriente']}")
+                
+                # Sintoma e Causa
+                st.markdown(f"**👁️ Sintoma Visual:** {item['Sintoma']}")
+                st.markdown(f"**⚠️ Causa Provável:** *{item['Causa']}*")
+                
+                # Correção (Box Verde para Solução)
+                st.markdown(f"""
+                <div style="background-color: #f0fdf4; padding: 10px; border-radius: 6px; border-left: 4px solid #16a34a; margin-top: 5px;">
+                    <strong>✅ Correção Tática:</strong> {item['Correcao']}
+                </div>
+                """, unsafe_allow_html=True)
+                
+                # Produtos (Box Cinza com Carrinho)
+                produtos = item.get('Produtos', [])
+                if produtos:
+                    lista_prod = ", ".join([f"`{p}`" for p in produtos])
+                    st.markdown(f"<div style='margin-top:5px; font-size:0.9rem;'>🛒 <b>Opções Comerciais:</b> {lista_prod}</div>", unsafe_allow_html=True)
+
           # --- 7. AVISO LEGAL E FONTES (VERSÃO FINAL BLINDADA) ---
             st.markdown("---")
             
