@@ -232,8 +232,6 @@ if not df_clima.empty:
         st.markdown('<div class="section-title">🛡️ MANEJO</div>', unsafe_allow_html=True)
         manejo_txt = AgroBrain.get_info_segura(dados_fase, ['manejo'])
         st.warning(f"🎯 **Recomendação:** {manejo_txt}")
-        
-            st.markdown("---")
 
             # --- VISUAL DOS CARDS (PRAGAS E DOENÇAS) ---
             quimicos = dados_fase.get('quimica', [])
