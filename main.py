@@ -233,8 +233,10 @@ if not df_clima.empty:
         manejo_txt = AgroBrain.get_info_segura(dados_fase, ['manejo'])
         st.warning(f"🎯 **Recomendação:** {manejo_txt}")
         
+            # --- LOOP DE SOLUÇÕES FITOSSANITÁRIAS (PRAGAS E DOENÇAS) ---
+            quimicos = dados_fase.get('quimica', [])
             
-        quimicos = dados_fase.get('quimica', [])
+            if quimicos:
                 st.markdown("### 🛡️ Estratégia de Defesa e Proteção")
                 
                 for item in quimicos:
@@ -289,7 +291,7 @@ if not df_clima.empty:
                                 <div style="margin-top:4px;">📝 <b>Nota Técnica:</b> <i>{item.get('Obs', '-')}</i></div>
                             </div>
                             """, unsafe_allow_html=True)
-
+        
                                                        # 2. NUTRIÇÃO (MARCHA DE ABSORÇÃO & MANEJO - CALIBRADO TOTAL HIGH-YIELD)
     with tabs[1]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
