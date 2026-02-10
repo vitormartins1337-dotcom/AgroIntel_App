@@ -1,13 +1,37 @@
-
+{
   "Batata (Solanum tuberosum)": {
     "t_base": 7,
     "vars": {
-      "Agata": { "kc": 1.10, "gda_meta": 1450, "info": "Líder de mercado (Mesa). Pele amarela lisa. Ciclo curto (90 dias). ALERTA: Altíssima sensibilidade a Requeima e Sarna Comum." },
-      "Asterix": { "kc": 1.15, "gda_meta": 1600, "info": "Indústria/Fritura. Pele vermelha. Mais rústica. Moderadamente resistente a viroses, mas sensível a Alternaria." },
-      "Atlantic": { "kc": 1.15, "gda_meta": 1650, "info": "Chips (Redonda). Matéria seca alta. Manejo de água perfeito para evitar 'Coração Oco'." },
-      "Orchestra": { "kc": 1.15, "gda_meta": 1600, "info": "Mercado Premium. Pele brilhante. Exige níveis altos de Cálcio e Boro. Resistente a Nematoides (Ro1)." },
-      "Cupido": { "kc": 1.10, "gda_meta": 1400, "info": "Ciclo ultra-precoce. Extremamente suscetível à Requeima e Alternaria. Exige colheita rápida." },
-      "Camila": { "kc": 1.15, "gda_meta": 1550, "info": "Dupla aptidão (Mesa/Fritura). Pele amarela, polpa creme. Alta produtividade e boa resistência a PVY (Vírus Y), mas exige manejo preventivo para Sarna." }
+      "Agata": {
+        "kc": 1.1,
+        "gda_meta": 1450,
+        "info": "Líder de mercado (Mesa). Pele amarela lisa. Ciclo curto (90 dias). ALERTA: Altíssima sensibilidade a Requeima e Sarna Comum."
+      },
+      "Asterix": {
+        "kc": 1.15,
+        "gda_meta": 1600,
+        "info": "Indústria/Fritura. Pele vermelha. Mais rústica. Moderadamente resistente a viroses, mas sensível a Alternaria."
+      },
+      "Atlantic": {
+        "kc": 1.15,
+        "gda_meta": 1650,
+        "info": "Chips (Redonda). Matéria seca alta. Manejo de água perfeito para evitar 'Coração Oco'."
+      },
+      "Orchestra": {
+        "kc": 1.15,
+        "gda_meta": 1600,
+        "info": "Mercado Premium. Pele brilhante. Exige níveis altos de Cálcio e Boro. Resistente a Nematoides (Ro1)."
+      },
+      "Cupido": {
+        "kc": 1.1,
+        "gda_meta": 1400,
+        "info": "Ciclo ultra-precoce. Extremamente suscetível à Requeima e Alternaria. Exige colheita rápida."
+      },
+      "Camila": {
+        "kc": 1.15,
+        "gda_meta": 1550,
+        "info": "Dupla aptidão (Mesa/Fritura). Pele amarela, polpa creme. Alta produtividade e boa resistência a PVY (Vírus Y), mas exige manejo preventivo para Sarna."
+      }
     },
     "fases": {
       "I - Plantio e Emergência": {
@@ -15,33 +39,51 @@
         "fisiologia": "Dependência da batata-mãe. Fase única para proteger o tubérculo-semente e o estande inicial. O vigor inicial define o potencial produtivo.",
         "manejo": "Tratamento de sulco OBRIGATÓRIO (TS). O controle da Larva Alfinete e Rizoctonia só funciona se feito AGORA.",
         "quimica": [
-          { 
-            "Alvo": "Rizoctonia (Cancro) e Fusarium", 
+          {
+            "Alvo": "Rizoctonia (Cancro) e Fusarium",
             "imagem": "rizoctonia_fusarium.jpg",
-            "Ativo": "Fludioxonil + Azoxistrobina", 
-            "Produtos": ["Dynasty (Syngenta)", "Maxim Advanced (Syngenta)", "Monceren (Bayer)", "Spectro (Adama)", "Maestro (UPL)"],
+            "Ativo": "Fludioxonil + Azoxistrobina",
+            "Produtos": [
+              "Dynasty (Syngenta)",
+              "Maxim Advanced (Syngenta)",
+              "Monceren (Bayer)",
+              "Spectro (Adama)",
+              "Maestro (UPL)"
+            ],
             "Rotacao": "Alternativa em áreas de menor pressão: PCNB (Terraclor) ou Tiofanato Metílico (Cercobin).",
-            "Grupo": "Fenilpirrol + Estrobilurina", 
+            "Grupo": "Fenilpirrol + Estrobilurina",
             "Tipo": "Jato Dirigido no Sulco",
             "Obs": "A aplicação deve formar uma barreira química ao redor da semente. O Fusarium entra por ferimentos e a Rhizoctonia estrangula o broto ('Canela de vidro')."
           },
-          { 
-            "Alvo": "Larva Alfinete/Arame (Preventivo)", 
+          {
+            "Alvo": "Larva Alfinete/Arame (Preventivo)",
             "imagem": "larva_alfinete.jpg",
-            "Ativo": "Fipronil", 
-            "Produtos": ["Regent 800 WG (BASF)", "Fipronil Nortox", "Standak Top (BASF)", "Klorpan (Adama)", "Evidence (Bayer)"],
+            "Ativo": "Fipronil",
+            "Produtos": [
+              "Regent 800 WG (BASF)",
+              "Fipronil Nortox",
+              "Standak Top (BASF)",
+              "Klorpan (Adama)",
+              "Evidence (Bayer)"
+            ],
             "Rotacao": "Alternativa: Tiametoxam (Actara) ou Bifentrina (Talstar) aplicados no sulco.",
-            "Grupo": "Pirazol", 
+            "Grupo": "Pirazol",
             "Tipo": "Sistêmico/Contato",
             "Obs": "ÚNICA oportunidade de controle eficiente. A larva eclode no solo e fura a batata-mãe e os novos tubérculos. Não existe resgate pós-emergência."
           },
-          { 
-            "Alvo": "Nematoides (Galhas/Lesões)", 
+          {
+            "Alvo": "Nematoides (Galhas/Lesões)",
             "imagem": "nematoide_galha.jpg",
-            "Ativo": "Fluopyram", 
-            "Produtos": ["Verango Prime (Bayer)", "Velum (Bayer)", "Nimitz (Adama)", "Cadusafós (Rugby)", "Pochonia (Biológico)"],
+            "Ativo": "Fluopyram",
+            "Produtos": [
+              "Verango Prime (Bayer)",
+              "Velum (Bayer)",
+              "Nimitz (Adama)",
+              "Cadusafós (Rugby)",
+              "Pochonia (Biológico)"
+            ],
             "Rotacao": "Alternativa Biológica: Bacillus firmus (Votivo) ou Paecilomyces.",
-            "Grupo": "Benzamida", 
+            "Grupo": "Benzamida",
             "Tipo": "Nematicida de Sulco",
             "Obs": "Essencial em solos arenosos ou áreas de repetição (Batata sobre Batata/Tomate). O dano é irreversível ('pipoca' nos tubérculos)."
           }
@@ -52,33 +94,51 @@
         "fisiologia": "Alta demanda de N. Início da pressão de Requeima e Vetores de Virose.",
         "manejo": "Monitorar Adultos de Vaquinha (pais da Larva Alfinete). Início do programa preventivo de fungicidas (Base Protetora).",
         "quimica": [
-          { 
-            "Alvo": "Requeima (Preventivo/Base)", 
+          {
+            "Alvo": "Requeima (Preventivo/Base)",
             "imagem": "requeima_inicial.jpg",
-            "Ativo": "Mancozebe ou Metiram", 
-            "Produtos": ["Manzate (UPL)", "Dithane (Corteva)", "Polyram (BASF)", "Unizeb Gold (UPL)", "Bravo (Syngenta)"],
+            "Ativo": "Mancozebe ou Metiram",
+            "Produtos": [
+              "Manzate (UPL)",
+              "Dithane (Corteva)",
+              "Polyram (BASF)",
+              "Unizeb Gold (UPL)",
+              "Bravo (Syngenta)"
+            ],
             "Rotacao": "Alternar com: Clorotalonil ou Cobre Fixo (Kocide/Recop).",
-            "Grupo": "Ditiocarbamato", 
+            "Grupo": "Ditiocarbamato",
             "Tipo": "Protetor Multissítio",
             "Obs": "Criar a 'camada protetora' nas folhas novas antes da doença chegar. Aplicar a cada 5-7 dias. Não tem efeito curativo."
           },
-          { 
-            "Alvo": "Vaquinha (Adulto da Larva Alfinete)", 
+          {
+            "Alvo": "Vaquinha (Adulto da Larva Alfinete)",
             "imagem": "vaquinha_diabrotica.jpg",
-            "Ativo": "Tiametoxam + Lambda-Cialotrina", 
-            "Produtos": ["Engeo Pleno (Syngenta)", "Karate Zeon (Syngenta)", "Connect (Bayer)", "Curyom (Syngenta)", "Ampligo (Syngenta)"],
+            "Ativo": "Tiametoxam + Lambda-Cialotrina",
+            "Produtos": [
+              "Engeo Pleno (Syngenta)",
+              "Karate Zeon (Syngenta)",
+              "Connect (Bayer)",
+              "Curyom (Syngenta)",
+              "Ampligo (Syngenta)"
+            ],
             "Rotacao": "Alternar com: Acefato (Orthene) ou Metomil (Lannate).",
-            "Grupo": "Neo + Piretroide", 
+            "Grupo": "Neo + Piretroide",
             "Tipo": "Choque",
             "Obs": "Manejo de Adultos: Matar a vaquinha agora impede que ela ponha ovos no solo, reduzindo a pressão de larva alfinete na fase de tubérculo."
           },
-          { 
-            "Alvo": "Larva Minadora", 
+          {
+            "Alvo": "Larva Minadora",
             "imagem": "minadora_batata.jpg",
-            "Ativo": "Ciromazina", 
-            "Produtos": ["Trigard (Syngenta)", "Vertimec (Syngenta)", "Abamex (Adama)", "Cartap (Sumitomo)", "Delegate (Corteva)"],
+            "Ativo": "Ciromazina",
+            "Produtos": [
+              "Trigard (Syngenta)",
+              "Vertimec (Syngenta)",
+              "Abamex (Adama)",
+              "Cartap (Sumitomo)",
+              "Delegate (Corteva)"
+            ],
             "Rotacao": "Alternar com: Abamectina ou Espinetoram.",
-            "Grupo": "Regulador de Crescimento", 
+            "Grupo": "Regulador de Crescimento",
             "Tipo": "Translaminar",
             "Obs": "A larva faz o 'mapa' na folha. Ciromazina quebra o ciclo impedindo a pupa. Se a infestação for alta, usar Abamectina."
           },
@@ -86,7 +146,13 @@
             "Alvo": "Pulgões (Vetores de Vírus PLRV/PVY)",
             "imagem": "pulgao_batata.jpg",
             "Ativo": "Flonicamida ou Acetamiprido",
-            "Produtos": ["Teppeki (Ihara)", "Mospilan (Ihara)", "Evidence (Bayer)", "Pirat (BASF)", "Closer (Corteva)"],
+            "Produtos": [
+              "Teppeki (Ihara)",
+              "Mospilan (Ihara)",
+              "Evidence (Bayer)",
+              "Pirat (BASF)",
+              "Closer (Corteva)"
+            ],
             "Rotacao": "Alternar com: Sulfoxaflor ou Pimetrozina (Chess).",
             "Grupo": "Modulador de Canal/Neo",
             "Tipo": "Sistêmico",
@@ -99,43 +165,66 @@
         "fisiologia": "Fase crítica. Inversão hormonal. Risco máximo de Requeima e Sarna. Fechamento das linhas.",
         "manejo": "Entrar com fungicidas NOBRES para Requeima. Monitorar Ácaro Branco (Lupa 20x). Prevenção de Mofo Branco.",
         "quimica": [
-          { 
-            "Alvo": "Requeima (Fase Crítica - O Desafio)", 
+          {
+            "Alvo": "Requeima (Fase Crítica - O Desafio)",
             "imagem": "requeima_batata.jpg",
-            "Ativo": "Mandipropamida", 
-            "Produtos": ["Revus Opti (Syngenta)", "Infinito (Bayer)", "Ranman (Ihara)", "Curzate (Corteva)", "Zorvec (Corteva)"],
+            "Ativo": "Mandipropamida",
+            "Produtos": [
+              "Revus Opti (Syngenta)",
+              "Infinito (Bayer)",
+              "Ranman (Ihara)",
+              "Curzate (Corteva)",
+              "Zorvec (Corteva)"
+            ],
             "Rotacao": "Alternar mecanismo (CAA vs Acetamida vs Benzamida).",
-            "Grupo": "CAA", 
+            "Grupo": "CAA",
             "Tipo": "Translaminar (Resiste à chuva)",
             "Obs": "Se o tempo fechar (frio/úmido), não confie em protetores. Use produtos que penetram na cera da folha e travam a esporulação."
           },
-          { 
-            "Alvo": "Ácaro Branco e Rajado", 
+          {
+            "Alvo": "Ácaro Branco e Rajado",
             "imagem": "acaro_branco.jpg",
-            "Ativo": "Abamectina", 
-            "Produtos": ["Vertimec (Syngenta)", "Oberon (Bayer)", "Envidor (Bayer)", "Abamex (Adama)", "Sanmite (Ihara)"],
+            "Ativo": "Abamectina",
+            "Produtos": [
+              "Vertimec (Syngenta)",
+              "Oberon (Bayer)",
+              "Envidor (Bayer)",
+              "Abamex (Adama)",
+              "Sanmite (Ihara)"
+            ],
             "Rotacao": "Alternar com: Espirofesifeno ou Diafentiurom (Polo).",
-            "Grupo": "Avermectina", 
+            "Grupo": "Avermectina",
             "Tipo": "Translaminar",
             "Obs": "Praga 'invisível'. Encarquilha o ponteiro e a folha fica brilhante/dura. O produtor confunde com virose. Molhar bem o 'olho'."
           },
-          { 
-            "Alvo": "Mofo Branco (Sclerotinia)", 
+          {
+            "Alvo": "Mofo Branco (Sclerotinia)",
             "imagem": "mofo_branco_batata.jpg",
-            "Ativo": "Procimidona ou Fluazinam", 
-            "Produtos": ["Sumilex (Sumitomo)", "Frowncide (Ihara)", "Shirlan (Syngenta)", "Cantus (BASF)", "Rovral (FMC)"],
+            "Ativo": "Procimidona ou Fluazinam",
+            "Produtos": [
+              "Sumilex (Sumitomo)",
+              "Frowncide (Ihara)",
+              "Shirlan (Syngenta)",
+              "Cantus (BASF)",
+              "Rovral (FMC)"
+            ],
             "Rotacao": "Alternar com: Boscalida ou Iprodiona.",
             "Grupo": "Dicarboximida/Fenilpiridinilamina",
             "Tipo": "Contato/Preventivo",
             "Obs": "Ocorre no fechamento das linhas se houver alta umidade. Apodrece a base da haste ('melado')."
           },
-          { 
-            "Alvo": "Murchadeira (Ralstonia)", 
+          {
+            "Alvo": "Murchadeira (Ralstonia)",
             "imagem": "murchadeira_ralstonia.jpg",
-            "Ativo": "Cobre + Kasugamicina", 
-            "Produtos": ["Kasumin (UPL)", "Recop (Atanor)", "Kocide (Corteva)", "Serenade (Bayer - Bio)"],
+            "Ativo": "Cobre + Kasugamicina",
+            "Produtos": [
+              "Kasumin (UPL)",
+              "Recop (Atanor)",
+              "Kocide (Corteva)",
+              "Serenade (Bayer - Bio)"
+            ],
             "Rotacao": "Alternar com: Bacillus subtilis (Via Gotejo).",
-            "Grupo": "Inorgânico + Antibiótico", 
+            "Grupo": "Inorgânico + Antibiótico",
             "Tipo": "Bacteriostático",
             "Obs": "Se aparecer murcha, isole a área. Não transite com máquinas. Aplique cobre para 'cauterizar' e reduzir inóculo."
           }
@@ -146,33 +235,51 @@
         "fisiologia": "A planta precisa manter a folha sadia. Risco de Alternaria e Traça.",
         "manejo": "Rotação agressiva para Traça e Mosca Branca. Proteção contra Pinta Preta (Alternaria).",
         "quimica": [
-          { 
-            "Alvo": "Traça da Batata (Tuta)", 
+          {
+            "Alvo": "Traça da Batata (Tuta)",
             "imagem": "traca_dano_tuberculo.jpg",
-            "Ativo": "Clorfenapir", 
-            "Produtos": ["Pirate (BASF)", "Benevia (FMC)", "Premio (FMC)", "Proclaim (Syngenta)", "Exalt (Corteva)"],
+            "Ativo": "Clorfenapir",
+            "Produtos": [
+              "Pirate (BASF)",
+              "Benevia (FMC)",
+              "Premio (FMC)",
+              "Proclaim (Syngenta)",
+              "Exalt (Corteva)"
+            ],
             "Rotacao": "IMPORTANTE: Alternar Diamidas (Grupo 28) com Pirróis (Grupo 13) e Espinosinas (Grupo 5).",
-            "Grupo": "Pirrol", 
+            "Grupo": "Pirrol",
             "Tipo": "Ingestão/Contato",
             "Obs": "A praga mais resistente. Nunca usar o mesmo grupo químico 2x seguidas. Manter o solo úmido e bem amontoado."
           },
-          { 
-            "Alvo": "Pinta Preta (Alternaria)", 
+          {
+            "Alvo": "Pinta Preta (Alternaria)",
             "imagem": "alternaria_fase_final.jpg",
-            "Ativo": "Boscalida", 
-            "Produtos": ["Cantus (BASF)", "Amistar Top (Syngenta)", "Score (Syngenta)", "Nativo (Bayer)", "Brio (UPL)"],
+            "Ativo": "Boscalida",
+            "Produtos": [
+              "Cantus (BASF)",
+              "Amistar Top (Syngenta)",
+              "Score (Syngenta)",
+              "Nativo (Bayer)",
+              "Brio (UPL)"
+            ],
             "Rotacao": "Alternar com: Azoxistrobina ou Difenoconazol.",
-            "Grupo": "Carboxamida", 
+            "Grupo": "Carboxamida",
             "Tipo": "Sistêmico Premium",
             "Obs": "Doença de 'velhice'. Mantém a folha verde por mais tempo (Greening effect), garantindo maior peso e calibre."
           },
-          { 
-            "Alvo": "Mosca Branca (Fumagina)", 
+          {
+            "Alvo": "Mosca Branca (Fumagina)",
             "imagem": "mosca_branca_batata.jpg",
-            "Ativo": "Ciantraniliprole (Benevia)", 
-            "Produtos": ["Benevia (FMC)", "Oberon (Bayer)", "Sivanto (Bayer)", "Trivor (Adama)", "Mospilan (Ihara)"],
+            "Ativo": "Ciantraniliprole (Benevia)",
+            "Produtos": [
+              "Benevia (FMC)",
+              "Oberon (Bayer)",
+              "Sivanto (Bayer)",
+              "Trivor (Adama)",
+              "Mospilan (Ihara)"
+            ],
             "Rotacao": "Alternar com: Espirotetramate (Movento) ou Piriproxifen.",
-            "Grupo": "Diamida", 
+            "Grupo": "Diamida",
             "Tipo": "Sistêmico",
             "Obs": "Evitar a 'melada' e fumagina no final do ciclo, que sujam as folhas, reduzem fotossíntese e dificultam a colheita."
           }
@@ -183,79 +290,107 @@
         "fisiologia": "Suberização. Tubérculo para de crescer. Momento de 'cimentar' a pele.",
         "manejo": "Dessecação para colheita. Sanitização final para Pós-Colheita.",
         "quimica": [
-          { 
-            "Alvo": "Dessecação de Rama", 
+          {
+            "Alvo": "Dessecação de Rama",
             "imagem": "dessecacao_batata.jpg",
-            "Ativo": "Diquat", 
-            "Produtos": ["Reglone (Syngenta)", "Diquat Nortox", "Aurora (FMC)", "Heat (BASF)", "Finale (BASF)"],
+            "Ativo": "Diquat",
+            "Produtos": [
+              "Reglone (Syngenta)",
+              "Diquat Nortox",
+              "Aurora (FMC)",
+              "Heat (BASF)",
+              "Finale (BASF)"
+            ],
             "Rotacao": "Alternativa: Carfentrazone + Óleo ou Glufosinato.",
-            "Grupo": "Fotossistema I", 
+            "Grupo": "Fotossistema I",
             "Tipo": "Contato",
             "Obs": "Aplicar pela manhã. Garante a formação da 'pele de vidro'. Aguardar a rama secar completamente (10-14 dias) antes de colher."
           },
-          { 
-            "Alvo": "Canela Preta (Pectobacterium)", 
+          {
+            "Alvo": "Canela Preta (Pectobacterium)",
             "imagem": "canela_preta.jpg",
-            "Ativo": "Hidróxido de Cobre", 
-            "Produtos": ["Kocide WDG (Corteva)", "Recop (Atanor)", "Super Cobre", "Cuprozeb (UPL)"],
+            "Ativo": "Hidróxido de Cobre",
+            "Produtos": [
+              "Kocide WDG (Corteva)",
+              "Recop (Atanor)",
+              "Super Cobre",
+              "Cuprozeb (UPL)"
+            ],
             "Rotacao": "-",
-            "Grupo": "Cobre", 
+            "Grupo": "Cobre",
             "Tipo": "Protetor",
             "Obs": "Aplicação final para 'secar' ferimentos e reduzir a carga bacteriana que apodrece a batata no caminhão/sacaria."
-
-            "manejo_tatico": {
-            "N": "<b>PICO 45-70 DAP:</b> A absorção máxima ocorre no início do enchimento. O parcelamento deve focar em disponibilizar nitrato antes dessa fase. Excesso tardio atrasa a maturação.",
-            "P": "<b>ACÚMULO NO TUBÉRCULO:</b> 78% do Fósforo absorvido é exportado. Fundamental aplicar alta carga no sulco de plantio para garantir arranque e número de tubérculos.",
-            "K": "<b>DEMANDA PRECOCE (40-60 DAP):</b> Absorção violentamente concentrada. Se faltar K na tuberização, o calibre despenca. Não deixe para aplicar K muito tarde.",
-            "Ca": "<b>BAIXA MOBILIDADE:</b> Apenas 9% do Ca absorvido chega na batata. Obrigatório Cálcio via solo constante e foliar frequente para evitar 'Coração Oco'.",
-            "Mg": "<b>FOTOSSÍNTESE:</b> O magnésio deve acompanhar o K para evitar competição. Deficiência causa amarelamento entre nervuras nas folhas velhas.",
-            "S": "<b>SÍNTESE PROTEICA:</b> Essencial para a eficiência do Nitrogênio.",
-            "B": "<b>PELE E FORMAÇÃO (35-50 DAP):</b> Maior demanda logo após o início da formação de tubérculos. Essencial para divisão celular. Deficiência causa tubérculos rachados e coração oco.",
-            "Cu": "<b>ABSORÇÃO TARDIA:</b> Diferente dos outros, o Cobre é absorvido em maiores proporções na segunda metade do ciclo. Além de nutriente, atua na indução de resistência a doenças (lignificação).",
-            "Zn": "<b>CRESCIMENTO FINAL:</b> Assim como o Cobre, tem absorção forte na segunda metade do ciclo para garantir o enchimento e metabolismo de auxinas.",
-            "Fe": "<b>DEMANDA MASSIVA:</b> A batata extrai mais de 4kg de Ferro. Em solos com pH corrigido (>6.0), o Fe pode ficar indisponível, exigindo aplicação foliar quelatizada.",
-            "Mn": "<b>METABOLISMO (45-65 DAP):</b> Pico de exigência junto com o enchimento. Solos muito calcariados bloqueiam o Manganês."
-        },
-        "deficiencias": [
-            {
-                "Nutriente": "Nitrogênio (N)",
-                "imagem": "deficiencia_N_batata.jpg",
-                "Sintoma": "Clorose (amarelecimento) generalizada iniciando nas folhas velhas. Planta raquítica e hastes finas.",
-                "Causa": "Lixiviação por chuva excessiva, subdose no plantio ou matéria orgânica baixa.",
-                "Correcao": "Aplicação imediata de Nitrato de Amônio ou Ureia em cobertura. Via foliar (Ureia Baixa Biureta) apenas como paliativo.",
-                "Produtos": ["Nitrato de Cálcio (YaraLiva)", "Ureia Premium", "NitroMais", "Sulfato de Amônio"]
-            },
-            {
-                "Nutriente": "Potássio (K)",
-                "imagem": "deficiencia_K_batata.jpg",
-                "Sintoma": "Necrose marginal ('Queima das bordas') nas folhas velhas. Folhas com aspecto bronzeado/escuro e enrugado.",
-                "Causa": "Solo pobre ou antagonismo por excesso de Calcário (Ca/Mg bloqueando K).",
-                "Correcao": "Fertirrigação com Cloreto/Nitrato de Potássio. Foliar com K-Acetato ou Nitrato para segurar a planta.",
-                "Produtos": ["Krista K (Nitrato)", "K-Leaf", "K-Fol", "Cloreto Vermelho/Branco"]
-            },
-            {
-                "Nutriente": "Cálcio (Ca) - Coração Oco",
-                "imagem": "deficiencia_Ca_batata.jpg",
-                "Sintoma": "Morte do broto terminal (Ponteiro). Folhas novas encarquilhadas (formato concha/gancho). Tubérculo com necrose interna.",
-                "Causa": "Falta de água (Ca não se move sem fluxo de transpiração) ou excesso de N/K (Competição).",
-                "Correcao": "Manejo de irrigação é o principal. Aplicação foliar de Cálcio Quelatizado ou Cloreto de Cálcio semanalmente.",
-                "Produtos": ["Calbit C", "Aminofol Ca", "Calcium 24", "YaraVita Stopit", "Calcinit"]
-            },
-            {
-                "Nutriente": "Magnésio (Mg)",
-                "imagem": "deficiencia_Mg_batata.jpg",
-                "Sintoma": "Clorose internerval (esqueleto verde, meio amarelo) nas folhas velhas (Baixeira). Queda prematura de folhas.",
-                "Causa": "pH ácido (<5.0) ou excesso de Potássio na adubação de base.",
-                "Correcao": "Sulfato de Magnésio (Sal Amargo) via foliar é a resposta mais rápida. Óxido de Mg no solo tem resposta lenta.",
-                "Produtos": ["Magnésio Quelato", "Sal Amargo (Sulfato)", "Epso Top", "YaraVita Magtrac"]
-            },
-            {
-                "Nutriente": "Ferro (Fe) - Clorose Férrica",
-                "imagem": "deficiencia_Fe_batata.jpg",
-                "Sintoma": "Folhas NOVAS (topo) nascem totalmente amarelas/brancas. Nervuras permanecem verdes finas.",
-                "Causa": "pH do solo alcalino (>6.5) ou excesso de calagem travando a absorção do ferro.",
-                "Correcao": "Uso obrigatório de Ferro Quelatizado (EDDHA) via solo ou foliar. Sulfato ferroso comum oxida e não funciona bem.",
-                "Produtos": ["Ferrilene (EDDHA)", "Librel Fe", "YaraVita Rexolin", "Fe-Quelato"]
-            }
+          }
         ]
-    }
+      }
+    },
+    "deficiencias": [
+      {
+        "Nutriente": "Nitrogênio (N)",
+        "imagem": "deficiencia_N_batata.jpg",
+        "Sintoma": "Clorose (amarelecimento) generalizada iniciando nas folhas velhas. Planta raquítica e hastes finas.",
+        "Causa": "Lixiviação por chuva excessiva, subdose no plantio ou matéria orgânica baixa.",
+        "Correcao": "Aplicação imediata de Nitrato de Amônio ou Ureia em cobertura. Via foliar (Ureia Baixa Biureta) apenas como paliativo.",
+        "Produtos": [
+          "Nitrato de Cálcio (YaraLiva)",
+          "Ureia Premium",
+          "NitroMais",
+          "Sulfato de Amônio"
+        ]
+      },
+      {
+        "Nutriente": "Potássio (K)",
+        "imagem": "deficiencia_K_batata.jpg",
+        "Sintoma": "Necrose marginal ('Queima das bordas') nas folhas velhas. Folhas com aspecto bronzeado/escuro e enrugado.",
+        "Causa": "Solo pobre ou antagonismo por excesso de Calcário (Ca/Mg bloqueando K).",
+        "Correcao": "Fertirrigação com Cloreto/Nitrato de Potássio. Foliar com K-Acetato ou Nitrato para segurar a planta.",
+        "Produtos": [
+          "Krista K (Nitrato)",
+          "K-Leaf",
+          "K-Fol",
+          "Cloreto Vermelho/Branco"
+        ]
+      },
+      {
+        "Nutriente": "Cálcio (Ca)",
+        "imagem": "deficiencia_Ca_batata.jpg",
+        "Sintoma": "Morte do broto terminal (Ponteiro). Folhas novas encarquilhadas (formato concha/gancho). Tubérculo com necrose interna.",
+        "Causa": "Falta de água (Ca não se move sem fluxo de transpiração) ou excesso de N/K (Competição).",
+        "Correcao": "Manejo de irrigação é o principal. Aplicação foliar de Cálcio Quelatizado ou Cloreto de Cálcio semanalmente.",
+        "Produtos": [
+          "Calbit C",
+          "Aminofol Ca",
+          "Calcium 24",
+          "YaraVita Stopit",
+          "Calcinit"
+        ]
+      },
+      {
+        "Nutriente": "Magnésio (Mg)",
+        "imagem": "deficiencia_Mg_batata.jpg",
+        "Sintoma": "Clorose internerval (esqueleto verde, meio amarelo) nas folhas velhas (Baixeira). Queda prematura de folhas.",
+        "Causa": "pH ácido (<5.0) ou excesso de Potássio na adubação de base.",
+        "Correcao": "Sulfato de Magnésio (Sal Amargo) via foliar é a resposta mais rápida. Óxido de Mg no solo tem resposta lenta.",
+        "Produtos": [
+          "Magnésio Quelato",
+          "Sal Amargo (Sulfato)",
+          "Epso Top",
+          "YaraVita Magtrac"
+        ]
+      },
+      {
+        "Nutriente": "Ferro (Fe)",
+        "imagem": "deficiencia_Fe_batata.jpg",
+        "Sintoma": "Folhas NOVAS (topo) nascem totalmente amarelas/brancas. Nervuras permanecem verdes finas.",
+        "Causa": "pH do solo alcalino (>6.5) ou excesso de calagem travando a absorção do ferro.",
+        "Correcao": "Uso obrigatório de Ferro Quelatizado (EDDHA) via solo ou foliar. Sulfato ferroso comum oxida e não funciona bem.",
+        "Produtos": [
+          "Ferrilene (EDDHA)",
+          "Librel Fe",
+          "YaraVita Rexolin",
+          "Fe-Quelato"
+        ]
+      }
+    ]
+  }
+}
