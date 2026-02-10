@@ -233,7 +233,9 @@ if not df_clima.empty:
         manejo_txt = AgroBrain.get_info_segura(dados_fase, ['manejo'])
         st.warning(f"🎯 **Recomendação:** {manejo_txt}")
         
-            # --- LOOP DE SOLUÇÕES FITOSSANITÁRIAS (PRAGAS E DOENÇAS) ---
+            st.markdown("---")
+
+            # --- VISUAL DOS CARDS (PRAGAS E DOENÇAS) ---
             quimicos = dados_fase.get('quimica', [])
             
             if quimicos:
@@ -242,7 +244,7 @@ if not df_clima.empty:
                 for item in quimicos:
                     # Início do CARD (Container com borda)
                     with st.container(border=True):
-                        # Cabeçalho do Card com Ícone e Nome do Alvo
+                        # Cabeçalho do Card
                         st.markdown(f"#### 🎯 Alvo: <span style='color:#b91c1c;'>{item['Alvo']}</span>", unsafe_allow_html=True)
                         
                         # Divisão: Coluna da Foto (Esq) e Coluna de Dados (Dir)
@@ -253,45 +255,44 @@ if not df_clima.empty:
                             nome_img = item.get("imagem", "")
                             caminho_img = os.path.join("images", nome_img)
                             
-                            # Verifica se a imagem existe
+                            # Verifica se a imagem existe e exibe
                             if nome_img and os.path.exists(caminho_img):
                                 st.image(caminho_img, use_container_width=True)
                             else:
-                                # Placeholder bonito se não tiver foto
+                                # Placeholder Profissional (Caso falte a foto)
                                 st.markdown("""
-                                <div style="background-color:#f3f4f6; height:150px; display:flex; align-items:center; justify-content:center; border-radius:8px; border:2px dashed #d1d5db;">
+                                <div style="background-color:#f3f4f6; height:150px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-radius:8px; border:2px dashed #d1d5db;">
                                     <span style="font-size:2rem;">🦠</span>
+                                    <span style="font-size:0.8rem; color:#6b7280;">Sem Imagem</span>
                                 </div>
                                 """, unsafe_allow_html=True)
-                                st.caption("Imagem não localizada")
 
                         # --- COLUNA 2: INFORMAÇÕES TÉCNICAS ---
                         with c_info:
-                            # 1. Princípio Ativo (Destaque)
+                            # 1. Princípio Ativo e Grupo
                             st.markdown(f"**🧪 Princípio Ativo:** `{item['Ativo']}`")
-                            
-                            # 2. Grupo e Modo de Ação
                             st.markdown(f"**⚙️ Mecanismo:** {item.get('Grupo', '-')} | *{item.get('Tipo', '-')}*")
                             
-                            # 3. Produtos Comerciais (Estilo Tags Visuais)
+                            # 2. Produtos (Tags Visuais Azuis)
                             produtos = item.get('Produtos', [])
                             if produtos:
-                                # Transforma a lista em etiquetas visuais HTML
                                 html_prods = " ".join([
                                     f"<span style='background-color:#eff6ff; color:#1e40af; padding:4px 8px; border-radius:12px; font-size:0.85rem; border:1px solid #bfdbfe; margin-right:5px; display:inline-block; margin-bottom:5px;'>🛒 {p}</span>" 
                                     for p in produtos
                                 ])
-                                st.markdown(f"<div style='margin-top:5px; margin-bottom:10px;'>{html_prods}</div>", unsafe_allow_html=True)
+                                st.markdown(f"<div style='margin-top:8px; margin-bottom:10px;'>{html_prods}</div>", unsafe_allow_html=True)
 
-                            # 4. Box de Consultoria (Rotação e Observação)
-                            # Cria uma caixinha colorida suave para as dicas finais
+                            # 3. Box de Rotação/Obs (Amarelo)
                             st.markdown(f"""
                             <div style="background-color:#fffbeb; border-left:4px solid #f59e0b; padding:10px; border-radius:4px; font-size:0.9rem;">
                                 <div>🔄 <b>Rotação:</b> {item.get('Rotacao', '-')}</div>
                                 <div style="margin-top:4px;">📝 <b>Nota Técnica:</b> <i>{item.get('Obs', '-')}</i></div>
                             </div>
                             """, unsafe_allow_html=True)
-        
+            else:
+                st.info("Nenhuma intervenção química cadastrada para esta fase.")
+        else:
+            st.warning("Dados de fases não encontrados para esta cultura.")
                                                        # 2. NUTRIÇÃO (MARCHA DE ABSORÇÃO & MANEJO - CALIBRADO TOTAL HIGH-YIELD)
     with tabs[1]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
