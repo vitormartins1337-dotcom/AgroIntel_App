@@ -202,6 +202,64 @@
             "Grupo": "Cobre", 
             "Tipo": "Protetor",
             "Obs": "Aplicação final para 'secar' ferimentos e reduzir a carga bacteriana que apodrece a batata no caminhão/sacaria."
+
+            "manejo_tatico": {
+                    "N": "<b>PICO 45-70 DAP:</b> A absorção máxima ocorre no início do enchimento. O parcelamento deve focar em disponibilizar nitrato antes dessa fase. Excesso tardio atrasa a maturação.",
+                    "P": "<b>ACÚMULO NO TUBÉRCULO:</b> 78% do Fósforo absorvido é exportado. Fundamental aplicar alta carga no sulco de plantio para garantir arranque e número de tubérculos.",
+                    "K": "<b>DEMANDA PRECOCE (40-60 DAP):</b> Absorção violentamente concentrada. Se faltar K na tuberização, o calibre despenca. Não deixe para aplicar K muito tarde.",
+                    "Ca": "<b>BAIXA MOBILIDADE:</b> Apenas 9% do Ca absorvido chega na batata. Obrigatório Cálcio via solo constante e foliar frequente para evitar 'Coração Oco'.",
+                    "Mg": "<b>FOTOSSÍNTESE:</b> O magnésio deve acompanhar o K para evitar competição. Deficiência causa amarelamento entre nervuras nas folhas velhas.",
+                    "S": "<b>SÍNTESE PROTEICA:</b> Essencial para a eficiência do Nitrogênio.",
+                    "B": "<b>PELE E FORMAÇÃO (35-50 DAP):</b> Maior demanda logo após o início da formação de tubérculos. Essencial para divisão celular. Deficiência causa tubérculos rachados e coração oco.",
+                    "Cu": "<b>ABSORÇÃO TARDIA:</b> Diferente dos outros, o Cobre é absorvido em maiores proporções na segunda metade do ciclo. Além de nutriente, atua na indução de resistência a doenças (lignificação).",
+                    "Zn": "<b>CRESCIMENTO FINAL:</b> Assim como o Cobre, tem absorção forte na segunda metade do ciclo para garantir o enchimento e metabolismo de auxinas.",
+                    "Fe": "<b>DEMANDA MASSIVA:</b> A batata extrai mais de 4kg de Ferro. Em solos com pH corrigido (>6.0), o Fe pode ficar indisponível, exigindo aplicação foliar quelatizada.",
+                    "Mn": "<b>METABOLISMO (45-65 DAP):</b> Pico de exigência junto com o enchimento. Solos muito calcariados bloqueiam o Manganês."
+                },
+                "deficiencias": [
+                    {
+                        "Nutriente": "Nitrogênio (N)",
+                        "imagem": "deficiencia_N_batata.jpg",
+                        "Sintoma": "Plantas pálidas (verde-claro). Folhas velhas ficam amarelas uniformemente e caem. Crescimento travado.",
+                        "Causa": "Lixiviação por chuva forte ou subdose no plantio.",
+                        "Correcao": "Ureia ou Nitrato de Amônio (Cobertura). Se for urgente: Ureia Foliar (Baixa biureta).",
+                        "Produtos": ["Nitrato de Cálcio (YaraLiva)", "Ureia Premium", "NitroMais"]
+                    },
+                    {
+                        "Nutriente": "Potássio (K)",
+                        "imagem": "deficiencia_K_batata.jpg",
+                        "Sintoma": "Queima das bordas das folhas velhas ('Margem de fogo'). Folhas ficam com aspecto de bronzeadas/escuras.",
+                        "Causa": "Solo pobre ou competição com excesso de Cálcio/Magnésio.",
+                        "Correcao": "Cloreto de Potássio (Fertirrigação) ou Nitrato de Potássio (Foliar para resgate).",
+                        "Produtos": ["Krista K", "K-Leaf", "K-Fol"]
+                    },
+                    {
+                        "Nutriente": "Cálcio (Ca) - Fundo Preto",
+                        "imagem": "deficiencia_Ca_batata.jpg",
+                        "Sintoma": "Folhas novas encarquilhadas (concha). No tubérculo, causa o 'Coração Oco' e necrose interna.",
+                        "Causa": "Falta de água (O Ca só sobe com água) ou excesso de N/K.",
+                        "Correcao": "NÃO ADIANTA só jogar no solo agora. Aplicar Cálcio Quelatizado via foliar direto no alvo.",
+                        "Produtos": ["Calbit C", "Aminofol Ca", "Calcium 24", "YaraVita Stopit"]
+                    },
+                    {
+                        "Nutriente": "Magnésio (Mg)",
+                        "imagem": "deficiencia_Mg_batata.jpg",
+                        "Sintoma": "Clorose internerval (nervuras verdes, meio amarelo) nas folhas velhas (baixeira).",
+                        "Causa": "Solos ácidos ou excesso de Potássio (Antagonismo K x Mg).",
+                        "Correcao": "Sulfato de Magnésio (Sal Amargo) via foliar é o mais rápido.",
+                        "Produtos": ["Magnésio Quelato", "Sal Amargo", "Epso Top"]
+                    },
+                    {
+                        "Nutriente": "Ferro (Fe) - Clorose Férrica",
+                        "imagem": "deficiencia_Fe_batata.jpg",
+                        "Sintoma": "Folhas NOVAS nascem totalmente amarelas/brancas. Nervuras ficam verdes fininhas.",
+                        "Causa": "pH do solo muito alto (>6.5) ou excesso de calcário travando o ferro.",
+                        "Correcao": "Ferro EDDHA (Quelato de alta estabilidade) via solo ou foliar.",
+                        "Produtos": ["Ferrilene", "Librel Fe", "YaraVita Rexolin"]
+                    }
+                ]
+            }
+}
           }
         ]
       }
