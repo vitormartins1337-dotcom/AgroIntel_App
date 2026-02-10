@@ -287,9 +287,10 @@ if not df_clima.empty:
                                 <div style="margin-top:4px;">📝 <b>Nota Técnica:</b> <i>{item.get('Obs', '-')}</i></div>
                             </div>
                             """, unsafe_allow_html=True)
-                          else:
+                            
+                        else:
                                 st.info("Nenhuma intervenção química cadastrada para esta fase.")
-                          else:
+                        else:
                                 st.warning("Dados de fases não encontrados para esta cultura.")
                 
                                                        # 2. NUTRIÇÃO (MARCHA DE ABSORÇÃO & MANEJO - CALIBRADO TOTAL HIGH-YIELD)
