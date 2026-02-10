@@ -233,9 +233,6 @@ if not df_clima.empty:
         manejo_txt = AgroBrain.get_info_segura(dados_fase, ['manejo'])
         st.warning(f"🎯 **Recomendação:** {manejo_txt}")
         
-        
-                        # --- ÁREA VISUAL DE PRAGAS/DOENÇAS (VERSÃO MASTER + PRODUTOS COMERCIAIS) ---
-        st.markdown("### 🧪 Soluções Fitossanitárias & Produtos Recomendados")
             
         quimicos = dados_fase.get('quimica', [])
             
