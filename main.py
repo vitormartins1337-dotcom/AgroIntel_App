@@ -194,42 +194,48 @@ if not df_clima.empty:
     # Removemos IA e Laudo, adicionamos Gestão em destaque
     tabs = st.tabs(["🧬 TÉCNICO", "🧪 NUTRIÇÃO", "☁️ CLIMA", "📡 RADAR", "🗺️ MAPA", "💰 GESTÃO", "🔔 ALERTAS"])
 
- # --- ABA 1: TÉCNICO (CORRIGIDO E VISUAL MASTER) ---
+ 
+        # --- ABA 1: TÉCNICO (VARREDURA COMPLETA DE SUBPASTAS + VISUAL CARDS) ---
     with tabs[0]:
         import json
         import os
 
         # ==============================================================================
-        # 1. RECUPERAÇÃO DE DADOS (BLINDAGEM CONTRA ERRO)
+        # 1. RECUPERAÇÃO DE DADOS (VARREDURA PROFUNDA EM SUBPASTAS)
         # ==============================================================================
-        # Tenta pegar as variáveis globais. Se falhar, define padrões para não quebrar.
+        # Tenta pegar as variáveis globais do sistema
         c_selecionada = locals().get('cult_sel', globals().get('cult_sel', 'Batata (Solanum tuberosum)'))
         v_selecionada = locals().get('var_sel', globals().get('var_sel', 'Padrão'))
         p_progresso = locals().get('progresso', globals().get('progresso', 0.5))
         
-        # Recarrega o banco de dados da pasta database para garantir que 'dados' existe
         db_dados = {}
         pasta_db = "database"
+
+        # AQUI ESTÁ A MÁGICA: os.walk DESCE EM TODAS AS SUBPASTAS
         if os.path.exists(pasta_db):
-            for f in os.listdir(pasta_db):
-                if f.endswith(".json"):
-                    try:
-                        with open(os.path.join(pasta_db, f), "r", encoding="utf-8") as file:
-                            db_dados.update(json.load(file))
-                    except: pass
+            for root, dirs, files in os.walk(pasta_db):
+                for file in files:
+                    if file.endswith(".json"):
+                        caminho_completo = os.path.join(root, file)
+                        try:
+                            with open(caminho_completo, "r", encoding="utf-8") as f:
+                                conteudo = json.load(f)
+                                db_dados.update(conteudo)
+                        except:
+                            pass # Ignora arquivos corrompidos para não travar
         
         # Pega as informações da cultura atual
         info = db_dados.get(c_selecionada, {})
         fases = info.get('fases', {})
 
         # ==============================================================================
-        # 2. CABEÇALHO E VISUAL DA CULTURA (COMO ERA ANTES)
+        # 2. CABEÇALHO E VISUAL DA CULTURA
         # ==============================================================================
         st.markdown(f"### 🧬 Fenologia e Manejo: <span style='color:#15803d'>{c_selecionada}</span>", unsafe_allow_html=True)
         st.caption(f"Evolução do Ciclo: {p_progresso*100:.1f}%")
         st.progress(p_progresso)
 
-        # Mapeamento de Imagem (Restaurado)
+        # Mapeamento de Imagem
         nome_cultura_lower = str(c_selecionada).lower()
         mapa_img = {
             "soja": "soja", "milho": "milho", "algodão": "algodao", 
@@ -266,9 +272,10 @@ if not df_clima.empty:
             c_t1, c_t2 = st.columns(2)
             with c_t1:
                 st.markdown('<div class="section-title">🧬 GENÉTICA</div>', unsafe_allow_html=True)
-                # Tenta pegar info da variedade com segurança
                 try:
-                    txt_genetica = info['vars'][v_selecionada]['info']
+                    # Tenta pegar info da variedade com segurança
+                    vars_dict = info.get('vars', {})
+                    txt_genetica = vars_dict.get(v_selecionada, {}).get('info', 'Info da variedade indisponível.')
                 except:
                     txt_genetica = "Informação genética indisponível."
                 
@@ -358,12 +365,16 @@ if not df_clima.empty:
                 st.info("ℹ️ Nenhuma intervenção química necessária para esta fase.")
 
         else:
-            st.warning(f"⚠️ As informações para **{c_selecionada}** não foram encontradas. Verifique se o arquivo JSON está na pasta 'database'.")
-    
-   # 2. NUTRIÇÃO (MARCHA DE ABSORÇÃO & MANEJO - CALIBRADO TOTAL HIGH-YIELD)
-    with tabs[1]:
-        st.markdown('<div class="app-card">', unsafe_allow_html=True)
-        
+            # Mensagem de erro mais detalhada para ajudar a debugar
+            st.warning(f"⚠️ As informações para **{c_selecionada}** não foram encontradas.")
+            st.markdown(f"""
+            <small style='color:gray'>
+            Diagnóstico:<br>
+            1. Verifique se existe um arquivo .json dentro de 'database' ou suas subpastas.<br>
+            2. Verifique se dentro desse JSON existe a chave exata: <b>"{c_selecionada}"</b>.<br>
+            3. Culturas carregadas no momento: {list(db_dados.keys())}
+            </small>
+            """, unsafe_allow_html=True)
 
       # --- 2. BANCO DE DADOS MASTER (COM META DE PRODUTIVIDADE EXPLÍCITA) ---
         DB_NUTRI_MASTER = {
