@@ -233,8 +233,8 @@ if not df_clima.empty:
         manejo_txt = AgroBrain.get_info_segura(dados_fase, ['manejo'])
         st.warning(f"🎯 **Recomendação:** {manejo_txt}")
 
-            # --- VISUAL DOS CARDS (PRAGAS E DOENÇAS) ---
-            quimicos = dados_fase.get('quimica', [])
+        # --- VISUAL DOS CARDS (PRAGAS E DOENÇAS) ---
+        quimicos = dados_fase.get('quimica', [])
             
             if quimicos:
                 st.markdown("### 🛡️ Estratégia de Defesa e Proteção")
