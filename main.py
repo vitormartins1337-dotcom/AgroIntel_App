@@ -197,9 +197,7 @@ if not df_clima.empty:
   
             # --- ABA 1: TÉCNICO (CONSULTORIA FITOSSANITÁRIA) ---
     with tabs[0]:
-        import os
-        import json
-
+        
         # 1. Carregamento Seguro (Lê os dados locais do JSON)
         db_agro = {}
         if os.path.exists("database"):
