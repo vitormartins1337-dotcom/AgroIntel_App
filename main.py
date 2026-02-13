@@ -806,7 +806,7 @@ dados_nutri = None
 nome_cultura_exibicao = str(cult_sel)
         
         # Lógica de Busca Inteligente
-            for chave in DB_NUTRI_MASTER:
+for chave in DB_NUTRI_MASTER:
             if chave.lower() in str(cult_sel).lower() or str(cult_sel).lower() in chave.lower():
                 dados_nutri = DB_NUTRI_MASTER[chave]
                 nome_cultura_exibicao = chave
