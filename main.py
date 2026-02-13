@@ -283,7 +283,8 @@ if not df_clima.empty:
         else:
             st.error("🚨 Dados técnicos não encontrados. Verifique se o banco de dados está atualizado.")
 
-      # --- 2. BANCO DE DADOS MASTER (COM META DE PRODUTIVIDADE EXPLÍCITA) ---
+        # ==============================================================================
+        # --- 2. BANCO DE DADOS MASTER (COM META DE PRODUTIVIDADE EXPLÍCITA) ---
         DB_NUTRI_MASTER = {
             "Soja": {
                 "meta": "75 a 90 sacas/ha", # <--- ADICIONEI ISSO AQUI EM TODAS
