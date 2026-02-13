@@ -292,7 +292,7 @@ with tabs[1]:
     st.caption("Gráficos de marcha de absorção e exigências nutricionais.")
         
     # --- 2. BANCO DE DADOS MASTER (COM META DE PRODUTIVIDADE EXPLÍCITA) ---
-        DB_NUTRI_MASTER = {
+DB_NUTRI_MASTER = {
             "Soja": {
                 "meta": "75 a 90 sacas/ha", # <--- ADICIONEI ISSO AQUI EM TODAS
                 "fases": ["V1", "V4", "R1 (Flor)", "R5.1 (Ench)", "R8 (Mat)"],
@@ -799,7 +799,8 @@ with tabs[1]:
                    "Cu": "<b>RESISTÊNCIA ESTRUTURAL:</b> Atua na lignificação.",
                    "Mo": "<b>METABOLISMO DO N:</b> Atua na redutase do nitrato."
                 }
-            },  }
+            },  
+        }
 
         dados_nutri = None
         nome_cultura_exibicao = str(cult_sel)
