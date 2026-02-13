@@ -284,7 +284,14 @@ if not df_clima.empty:
             st.error("🚨 Dados técnicos não encontrados. Verifique se o banco de dados está atualizado.")
 
         # ==============================================================================
-        # --- 2. BANCO DE DADOS MASTER (COM META DE PRODUTIVIDADE EXPLÍCITA) ---
+        # ==============================================================================
+# 🟦 ABA 2: NUTRIÇÃO (Lê do código que você já digitou no main.py)
+# ==============================================================================
+with tabs[1]:
+    st.markdown(f"### 📊 Plano Nutricional: {cult_sel}")
+    st.caption("Gráficos de marcha de absorção e exigências nutricionais.")
+        
+    # --- 2. BANCO DE DADOS MASTER (COM META DE PRODUTIVIDADE EXPLÍCITA) ---
         DB_NUTRI_MASTER = {
             "Soja": {
                 "meta": "75 a 90 sacas/ha", # <--- ADICIONEI ISSO AQUI EM TODAS
