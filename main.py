@@ -1214,7 +1214,7 @@ with tabs[3]:
         st.markdown('</div>', unsafe_allow_html=True)
 
     # 5. MAPA (MIP SYNGENTA STYLE - COM MODAL FLUTUANTE)
-    with tabs[4]:
+with tabs[4]:
         import json
         import base64
         from io import BytesIO
