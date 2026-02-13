@@ -1101,7 +1101,7 @@ for chave in DB_NUTRI_MASTER:
     
     # 3. CLIMA (CORRIGIDO E BLINDADO)
         with tabs[2]:
-        st.markdown('<div class="app-card">', unsafe_allow_html=True)
+           st.markdown('<div class="app-card">', unsafe_allow_html=True)
         
         c_clim1, c_clim2 = st.columns([3, 1])
         with c_clim1:
