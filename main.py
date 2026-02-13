@@ -803,7 +803,7 @@ DB_NUTRI_MASTER = {
         }
 
 dados_nutri = None
-        nome_cultura_exibicao = str(cult_sel)
+nome_cultura_exibicao = str(cult_sel)
         
         # Lógica de Busca Inteligente
         for chave in DB_NUTRI_MASTER:
