@@ -751,125 +751,65 @@ if not df_clima.empty:
             }
         }
 
-dados_nutri = None
-nome_cultura_exibicao = str(cult_sel)
-        
-        # Lógica de Busca Inteligente
-for chave in DB_NUTRI_MASTER:
-        if chave.lower() in str(cult_sel).lower() or str(cult_sel).lower() in chave.lower():
-                dados_nutri = DB_NUTRI_MASTER[chave]
-                nome_cultura_exibicao = chave
-                break
-        
-        # Fallbacks (Cítricos e Frutas Vermelhas)
-        if not dados_nutri and ("citrus" in str(cult_sel).lower() or "limão" in str(cult_sel).lower() or "laranja" in str(cult_sel).lower()):
-            dados_nutri = DB_NUTRI_MASTER["Citros"]
-            nome_cultura_exibicao = "Citros"
-        
-        if not dados_nutri and ("berry" in str(cult_sel).lower() or "framboesa" in str(cult_sel).lower()):
-             dados_nutri = DB_NUTRI_MASTER["Framboesa"]
-             nome_cultura_exibicao = "Framboesa"
-
-
-        if dados_nutri:
-            
-            # Recupera a meta do banco de dados (COM SEGURANÇA)
-            meta_produtividade = dados_nutri.get("meta", "Consulte Agrônomo")
-
-            # Layout do Cabeçalho com KPI
-            c_head_n1, c_head_n2 = st.columns([2.5, 1.5])
-            
-            with c_head_n1:
-                # Título Principal (Antigo subtítulo promovido)
-                st.markdown(f"""
-                <h3 style='margin-bottom: 5px; color: #1e293b; font-weight: 600;'>
-                    📈 Curvas de Absorção: <span style='color: #16a34a;'>{nome_cultura_exibicao}</span>
-                </h3>
-                <div style='font-size: 0.95rem; color: #64748b; margin-bottom: 15px;'>
-                    Fisiologia de Alta Performance para Tetos Produtivos
-                </div>
-                """, unsafe_allow_html=True)
-                
-            with c_head_n2:
-                # CARD DE META (KPI VISUAL)
-                st.markdown(f"""
-                <div style="
-                    background-color: #fef2f2; 
-                    border: 1px solid #ef4444; 
-                    border-radius: 8px; 
-                    padding: 8px 12px; 
-                    text-align: right; 
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-                    <div style="color: #ef4444; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
-                        🎯 META ALVO
-                    </div>
-                    <div style="color: #991b1b; font-size: 1.1rem; font-weight: 800;">
-                        {meta_produtividade}
-                    </div>
-                </div>
-                """, unsafe_allow_html=True)
-                # ... (Código do Card de Meta que você já tem fica aqui acima) ...
-
-            # --- NOVO: EXIBIÇÃO DO CONTEXTO DE SOLO (SE EXISTIR) ---
-            # Verifica se a cultura tem a chave 'contexto_solo' cadastrada
-            ctx_solo = dados_nutri.get("contexto_solo")
-            
-            if ctx_solo:
-                st.markdown("<br>", unsafe_allow_html=True) # Espaçamento
-                # Cria um container visual elegante (Azul Profissional)
-                with st.expander(f"🌍 Requisito de Solo: **{ctx_solo['tipo']}**", expanded=False):
-                    c_solo1, c_solo2 = st.columns([2, 1])
-                    
-                    with c_solo1:
-                        st.markdown("**Parâmetros Ideais:**")
-                        for item in ctx_solo['ideal']:
-                            st.markdown(f"✅ {item}")
-                    
-                    with c_solo2:
-                        st.markdown(f"""
-                        <div style="background-color:#fffbeb; border-left:3px solid #f59e0b; padding:10px; border-radius:4px; font-size:0.85rem; color:#92400e;">
-                            {ctx_solo['alerta']}
-                        </div>
-                        """, unsafe_allow_html=True)
-                st.markdown("<br>", unsafe_allow_html=True)
-
-            # ... (O código do Painel Químico continua daqui para baixo) ...
-        
-        # --- 3. SELEÇÃO DA CULTURA ---
+# --- LÓGICA DE BUSCA E VISUALIZAÇÃO (O CÓDIGO QUE VOCÊ PEDIU) ---
         dados_nutri = None
         nome_cultura_exibicao = str(cult_sel)
-        
+
+        # Lógica de Busca Inteligente
         for chave in DB_NUTRI_MASTER:
             if chave.lower() in str(cult_sel).lower() or str(cult_sel).lower() in chave.lower():
                 dados_nutri = DB_NUTRI_MASTER[chave]
                 nome_cultura_exibicao = chave
                 break
-        
+
+        # Fallbacks (Cítricos e Frutas Vermelhas)
         if not dados_nutri and ("citrus" in str(cult_sel).lower() or "limão" in str(cult_sel).lower() or "laranja" in str(cult_sel).lower()):
             dados_nutri = DB_NUTRI_MASTER["Citros"]
             nome_cultura_exibicao = "Citros"
-        
-        # Fallback genérico para Framboesa ou outras frutas vermelhas se não achar
+
         if not dados_nutri and ("berry" in str(cult_sel).lower() or "framboesa" in str(cult_sel).lower()):
              dados_nutri = DB_NUTRI_MASTER["Framboesa"]
              nome_cultura_exibicao = "Framboesa"
 
         if dados_nutri:
-            
-           # --- 4. PAINEL QUÍMICO (ATUALIZADO PARA RANGES/FAIXAS) ---
+            # Recupera a meta do banco de dados (COM SEGURANÇA)
+            meta_produtividade = dados_nutri.get("meta", "Consulte Agrônomo")
+
+            # Layout do Cabeçalho com KPI
+            c_head_n1, c_head_n2 = st.columns([2.5, 1.5])
+            with c_head_n1:
+                st.markdown(f"""
+                <h3 style='margin-bottom: 5px; color: #1e293b; font-weight: 600;'>📈 Curvas de Absorção: <span style='color: #16a34a;'>{nome_cultura_exibicao}</span></h3>
+                <div style='font-size: 0.95rem; color: #64748b; margin-bottom: 15px;'>Fisiologia de Alta Performance para Tetos Produtivos</div>""", unsafe_allow_html=True)
+            with c_head_n2:
+                st.markdown(f"""
+                <div style="background-color: #fef2f2; border: 1px solid #ef4444; border-radius: 8px; padding: 8px 12px; text-align: right; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                    <div style="color: #ef4444; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">🎯 META ALVO</div>
+                    <div style="color: #991b1b; font-size: 1.1rem; font-weight: 800;">{meta_produtividade}</div>
+                </div>""", unsafe_allow_html=True)
+
+            # Contexto de Solo
+            ctx_solo = dados_nutri.get("contexto_solo")
+            if ctx_solo:
+                st.markdown("<br>", unsafe_allow_html=True)
+                with st.expander(f"🌍 Requisito de Solo: **{ctx_solo['tipo']}**", expanded=False):
+                    c_solo1, c_solo2 = st.columns([2, 1])
+                    with c_solo1:
+                        st.markdown("**Parâmetros Ideais:**")
+                        for item in ctx_solo['ideal']: st.markdown(f"✅ {item}")
+                    with c_solo2:
+                        st.markdown(f"""<div style="background-color:#fffbeb; border-left:3px solid #f59e0b; padding:10px; border-radius:4px; font-size:0.85rem; color:#92400e;">{ctx_solo['alerta']}</div>""", unsafe_allow_html=True)
+                st.markdown("<br>", unsafe_allow_html=True)
+
+            # Painel Químico
             st.markdown(f"#### ⚛️ Extração Nutricional: {nome_cultura_exibicao}")
             st.caption("Quantidade total extraída (Kg/ha) para atingir o teto produtivo.")
 
-            # Função auxiliar para pegar a faixa ou o último valor do gráfico
             def get_range(nutriente, default_list):
-                # Tenta pegar a string "220 - 300" do dicionário novo
                 range_str = dados_nutri.get('totais_display', {}).get(nutriente)
-                if range_str:
-                    return range_str
-                # Se não existir, pega o último número da lista (ex: 200) e formata
+                if range_str: return range_str
                 return f"{default_list[-1]}"
 
-            # Busca os valores (agora são Faixas Strings ou Números)
             n_val = get_range('N', dados_nutri['macros'].get('N', [0]))
             p_val = get_range('P', dados_nutri['macros'].get('P', [0]))
             k_val = get_range('K', dados_nutri['macros'].get('K', [0]))
@@ -877,43 +817,17 @@ for chave in DB_NUTRI_MASTER:
             mg_val = get_range('Mg', dados_nutri['macros'].get('Mg', [0]))
             s_val = get_range('S', dados_nutri['macros'].get('S', [0]))
 
-            # CSS CORRIGIDO (LETRA ESCURA E VISUAL LIMPO)
             st.markdown(f"""
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin-bottom: 25px;">
-                <div style="background:#f0fdf4; border:1px solid #16a34a; border-radius:8px; padding:10px; text-align:center; color:#0f172a;">
-                    <div style="font-weight:900; color:#16a34a; font-size:1.3rem;">N</div>
-                    <div style="font-size:0.9rem; font-weight:bold;">{n_val}</div>
-                    <div style="font-size:0.7rem;">kg/ha</div>
-                </div>
-                <div style="background:#eff6ff; border:1px solid #2563eb; border-radius:8px; padding:10px; text-align:center; color:#0f172a;">
-                    <div style="font-weight:900; color:#2563eb; font-size:1.3rem;">P</div>
-                    <div style="font-size:0.9rem; font-weight:bold;">{p_val}</div>
-                    <div style="font-size:0.7rem;">kg/ha</div>
-                </div>
-                <div style="background:#fef2f2; border:1px solid #dc2626; border-radius:8px; padding:10px; text-align:center; color:#0f172a;">
-                    <div style="font-weight:900; color:#dc2626; font-size:1.3rem;">K</div>
-                    <div style="font-size:0.9rem; font-weight:bold;">{k_val}</div>
-                    <div style="font-size:0.7rem;">kg/ha</div>
-                </div>
-                <div style="background:#fffbeb; border:1px solid #d97706; border-radius:8px; padding:10px; text-align:center; color:#0f172a;">
-                    <div style="font-weight:900; color:#d97706; font-size:1.3rem;">Ca</div>
-                    <div style="font-size:0.9rem; font-weight:bold;">{ca_val}</div>
-                    <div style="font-size:0.7rem;">kg/ha</div>
-                </div>
-                <div style="background:#faf5ff; border:1px solid #9333ea; border-radius:8px; padding:10px; text-align:center; color:#0f172a;">
-                    <div style="font-weight:900; color:#9333ea; font-size:1.3rem;">Mg</div>
-                    <div style="font-size:0.9rem; font-weight:bold;">{mg_val}</div>
-                    <div style="font-size:0.7rem;">kg/ha</div>
-                </div>
-                <div style="background:#fff7ed; border:1px solid #ea580c; border-radius:8px; padding:10px; text-align:center; color:#0f172a;">
-                    <div style="font-weight:900; color:#ea580c; font-size:1.3rem;">S</div>
-                    <div style="font-size:0.9rem; font-weight:bold;">{s_val}</div>
-                    <div style="font-size:0.7rem;">kg/ha</div>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+                <div style="background:#f0fdf4; border:1px solid #16a34a; border-radius:8px; padding:10px; text-align:center; color:#0f172a;"><div style="font-weight:900; color:#16a34a; font-size:1.3rem;">N</div><div style="font-size:0.9rem; font-weight:bold;">{n_val}</div><div style="font-size:0.7rem;">kg/ha</div></div>
+                <div style="background:#eff6ff; border:1px solid #2563eb; border-radius:8px; padding:10px; text-align:center; color:#0f172a;"><div style="font-weight:900; color:#2563eb; font-size:1.3rem;">P</div><div style="font-size:0.9rem; font-weight:bold;">{p_val}</div><div style="font-size:0.7rem;">kg/ha</div></div>
+                <div style="background:#fef2f2; border:1px solid #dc2626; border-radius:8px; padding:10px; text-align:center; color:#0f172a;"><div style="font-weight:900; color:#dc2626; font-size:1.3rem;">K</div><div style="font-size:0.9rem; font-weight:bold;">{k_val}</div><div style="font-size:0.7rem;">kg/ha</div></div>
+                <div style="background:#fffbeb; border:1px solid #d97706; border-radius:8px; padding:10px; text-align:center; color:#0f172a;"><div style="font-weight:900; color:#d97706; font-size:1.3rem;">Ca</div><div style="font-size:0.9rem; font-weight:bold;">{ca_val}</div><div style="font-size:0.7rem;">kg/ha</div></div>
+                <div style="background:#faf5ff; border:1px solid #9333ea; border-radius:8px; padding:10px; text-align:center; color:#0f172a;"><div style="font-weight:900; color:#9333ea; font-size:1.3rem;">Mg</div><div style="font-size:0.9rem; font-weight:bold;">{mg_val}</div><div style="font-size:0.7rem;">kg/ha</div></div>
+                <div style="background:#fff7ed; border:1px solid #ea580c; border-radius:8px; padding:10px; text-align:center; color:#0f172a;"><div style="font-weight:900; color:#ea580c; font-size:1.3rem;">S</div><div style="font-size:0.9rem; font-weight:bold;">{s_val}</div><div style="font-size:0.7rem;">kg/ha</div></div>
+            </div>""", unsafe_allow_html=True)
 
-            # --- 5. GRÁFICOS ---
+            # GRÁFICOS
             st.markdown("#### 1. Macronutrientes Primários (N, K)")
             fig_big = go.Figure()
             colors_big = {'N': '#16a34a', 'K': '#dc2626'}
@@ -934,119 +848,141 @@ for chave in DB_NUTRI_MASTER:
             st.markdown("#### 3. Micronutrientes (g/ha)")
             fig_mic = go.Figure()
             colors_mic = {'B': '#ec4899', 'Zn': '#06b6d4', 'Mn': '#8b5cf6', 'Cu': '#f59e0b', 'Fe': '#64748b'}
-            for nutri, vals in dados_nutri['micros'].items():
-                fig_mic.add_trace(go.Scatter(x=dados_nutri['fases'], y=vals, mode='lines+markers', name=nutri, line=dict(width=2, dash='dot', color=colors_mic.get(nutri, '#555'))))
-            fig_mic.update_layout(height=300, margin=dict(l=20, r=20, t=10, b=20), yaxis=dict(title="g/ha"))
-            st.plotly_chart(fig_mic, use_container_width=True)
+            if 'micros' in dados_nutri:
+                for nutri, vals in dados_nutri['micros'].items():
+                    fig_mic.add_trace(go.Scatter(x=dados_nutri['fases'], y=vals, mode='lines+markers', name=nutri, line=dict(width=2, dash='dot', color=colors_mic.get(nutri, '#555'))))
+                fig_mic.update_layout(height=300, margin=dict(l=20, r=20, t=10, b=20), yaxis=dict(title="g/ha"))
+                st.plotly_chart(fig_mic, use_container_width=True)
 
             st.divider()
 
-            # --- 6. MANEJO ESPECÍFICO (SMART LAYOUT: MACROS ABERTOS / MICROS NA ABA) ---
+            # MANEJO
             st.markdown("### 🚜 Estratégia de Manejo Específica")
             st.caption(f"Recomendações técnicas para atingir o potencial genético do(a) **{nome_cultura_exibicao}**.")
-            
-            # Recupera o dicionário
             manejo = dados_nutri.get('manejo_tatico', {})
             
-            # LISTAS DE SEPARAÇÃO (AGRONOMIA)
             lista_macros = ['N', 'P', 'K', 'Ca', 'Mg', 'S']
-            
-            # Dicionários separados
             macros_para_exibir = {k:v for k,v in manejo.items() if k in lista_macros}
             micros_para_exibir = {k:v for k,v in manejo.items() if k not in lista_macros}
 
-            # --- PARTE A: EXIBIÇÃO DOS MACROS (ABERTO) ---
-            # Define cores específicas para cada Macro para ficar visualmente rico
-            cores_macros = {
-                'N': {'bg': '#f0fdf4', 'border': '#16a34a', 'text': '#14532d'}, # Verde
-                'P': {'bg': '#eff6ff', 'border': '#2563eb', 'text': '#1e3a8a'}, # Azul
-                'K': {'bg': '#fef2f2', 'border': '#dc2626', 'text': '#7f1d1d'}, # Vermelho
-                'Ca': {'bg': '#fffbeb', 'border': '#d97706', 'text': '#78350f'}, # Amarelo/Laranja
-                'Mg': {'bg': '#faf5ff', 'border': '#9333ea', 'text': '#581c87'}, # Roxo
-                'S': {'bg': '#fff7ed', 'border': '#ea580c', 'text': '#7c2d12'}  # Laranja Escuro
-            }
+            cores_macros = {'N': {'bg': '#f0fdf4', 'border': '#16a34a', 'text': '#14532d'}, 'P': {'bg': '#eff6ff', 'border': '#2563eb', 'text': '#1e3a8a'}, 'K': {'bg': '#fef2f2', 'border': '#dc2626', 'text': '#7f1d1d'}, 'Ca': {'bg': '#fffbeb', 'border': '#d97706', 'text': '#78350f'}, 'Mg': {'bg': '#faf5ff', 'border': '#9333ea', 'text': '#581c87'}, 'S': {'bg': '#fff7ed', 'border': '#ea580c', 'text': '#7c2d12'}}
 
-            # Lógica de Grid Dinâmico (3 colunas por linha)
             items_macro = list(macros_para_exibir.items())
-            
-            # Itera em passos de 3 em 3 (Cria linhas conforme necessário)
             for i in range(0, len(items_macro), 3):
                 cols = st.columns(3)
-                # Preenche as 3 colunas da linha atual
                 for j in range(3):
                     if i + j < len(items_macro):
                         chave, texto = items_macro[i+j]
-                        style = cores_macros.get(chave, {'bg': '#f8fafc', 'border': '#64748b', 'text': '#0f172a'}) # Fallback cinza
-                        
+                        style = cores_macros.get(chave, {'bg': '#f8fafc', 'border': '#64748b', 'text': '#0f172a'})
                         with cols[j]:
-                            st.markdown(f"""
-                            <div style="background:{style['bg']}; border-top: 4px solid {style['border']}; padding:15px; border-radius:8px; color:#0f172a; height:100%; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-                                <div style="display:flex; justify-content:space-between; align-items:center;">
-                                    <b style="color:{style['text']}; font-size:1.1rem;">{chave}</b>
-                                    <span style="font-size:0.7rem; background:white; padding:2px 6px; border-radius:4px; border:1px solid {style['border']}; color:{style['text']};">MACRO</span>
-                                </div>
-                                <hr style="margin:8px 0; border-color:{style['border']}; opacity:0.3;">
-                                <div style="font-size:0.85rem; line-height:1.4;">{texto}</div>
-                            </div>""", unsafe_allow_html=True)
+                            st.markdown(f"""<div style="background:{style['bg']}; border-top: 4px solid {style['border']}; padding:15px; border-radius:8px; color:#0f172a; height:100%; box-shadow: 0 1px 3px rgba(0,0,0,0.1);"><div style="display:flex; justify-content:space-between; align-items:center;"><b style="color:{style['text']}; font-size:1.1rem;">{chave}</b><span style="font-size:0.7rem; background:white; padding:2px 6px; border-radius:4px; border:1px solid {style['border']}; color:{style['text']};">MACRO</span></div><hr style="margin:8px 0; border-color:{style['border']}; opacity:0.3;"><div style="font-size:0.85rem; line-height:1.4;">{texto}</div></div>""", unsafe_allow_html=True)
 
-            # --- PARTE B: EXIBIÇÃO DOS MICROS (ABA EXPANSÍVEL "BONITA") ---
             if micros_para_exibir:
                 st.markdown("<br>", unsafe_allow_html=True)
-                
-                # O EXPANDER (A "ABA FECHADA")
                 with st.expander(f"🧩 Micronutrientes & Elementos Traço ({len(micros_para_exibir)} elementos)", expanded=False):
-                    
-                    st.markdown("""<div style="font-size:0.85rem; color:#64748b; margin-bottom:15px;">
-                    <i>*Elementos essenciais para ativação enzimática e qualidade final do produto. A Lei do Mínimo aplica-se rigorosamente aqui.</i>
-                    </div>""", unsafe_allow_html=True)
-
                     items_micro = list(micros_para_exibir.items())
-                    
-                    # Grid de 2 colunas para os Micros (ficam melhores mais largos)
                     for i in range(0, len(items_micro), 2):
                         cols_m = st.columns(2)
                         for j in range(2):
                             if i + j < len(items_micro):
                                 chave_m, texto_m = items_micro[i+j]
                                 with cols_m[j]:
-                                    # Card Visual Clean para Micros
-                                    st.markdown(f"""
-                                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #64748b; padding: 12px; border-radius: 6px; margin-bottom: 10px;">
-                                        <b style="color: #334155;">{chave_m}</b>
-                                        <div style="font-size: 0.85rem; color: #475569; margin-top: 5px;">{texto_m}</div>
-                                    </div>
-                                    """, unsafe_allow_html=True)
+                                    st.markdown(f"""<div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #64748b; padding: 12px; border-radius: 6px; margin-bottom: 10px;"><b style="color: #334155;">{chave_m}</b><div style="font-size: 0.85rem; color: #475569; margin-top: 5px;">{texto_m}</div></div>""", unsafe_allow_html=True)
 
-
-          # --- 7. AVISO LEGAL E FONTES (VERSÃO FINAL BLINDADA) ---
             st.markdown("---")
-            
-            # ABA DE AVISO (EXPANDER)
             with st.expander("⚠️ AVISO LEGAL", expanded=False):
-                
-                # 1. O CARD DE ALERTA (Nativo do Streamlit -> Fundo Amarelo/Laranja Automático)
-                st.warning(
-                    """
-                    **IMPORTANTE: DEMANDA vs. RECOMENDAÇÃO**
-                    
-                    1. **Fisiologia:** Os gráficos acima mostram a **Marcha de Absorção** (o que a planta consome para viver e produzir), e **NÃO** a recomendação de adubação direta.
-                    2. **Risco:** O solo já possui reservas. Aplicar a dose total do gráfico sem descontar o estoque do solo (Análise) gera salinidade, toxidez e prejuízo financeiro.
-                    
-                    **ORIENTAÇÃO:** Consulte sempre um Eng. Agrônomo. A adubação deve seguir a **Lei de Restituição** baseada na Análise de Solo.
-                    """,
-                    icon="⚠️"
-                )
+                st.warning("""**IMPORTANTE:** Os gráficos acima mostram a **Marcha de Absorção**, NÃO a recomendação. Consulte sempre um Eng. Agrônomo.""", icon="⚠️")
+                st.markdown("""### 📚 Base Científica (Multiculturas)\n* **CFSEMG (5ª Aproximação)**\n* **Malavolta, E. (2006)**\n* **Embrapa**\n* **IPNI Brasil**""")
 
-                # 2. AS FONTES (Texto Limpo e Profissional logo abaixo)
-                st.markdown(
-                    """
-                    ### 📚 Base Científica (Multiculturas)
-                    * **CFSEMG (5ª Aproximação):** Recomendações Oficiais para Minas Gerais.
-                    * **Malavolta, E. (2006):** Manual de Nutrição Mineral de Plantas.
-                    * **Embrapa:** Circulares Técnicas (Soja, Milho, Algodão, Frutíferas).
-                    * **IPNI Brasil:** Tabelas de Extração e Exportação de Nutrientes.
-                    """
-                )
+    # ==============================================================================
+    # 🧮 ABA 3: CALCULADORA AGRONÔMICA
+    # ==============================================================================
+    with tabs[2]:
+        st.header("🧮 Calculadoras de Campo")
+        calc_selecionada = st.selectbox("Selecione:", ["Calagem (Saturação por Bases)", "Conversão de Adubo (Formulado)"])
+        st.divider()
+
+        if calc_selecionada == "Calagem (Saturação por Bases)":
+            c1, c2 = st.columns(2)
+            with c1:
+                v2 = st.number_input("V% Desejada (Meta):", value=70.0)
+                v1 = st.number_input("V% Atual (Solo):", value=40.0)
+            with c2:
+                ctc = st.number_input("CTC (cmolc/dm³):", value=10.0)
+                prnt = st.number_input("PRNT do Calcário (%):", value=85.0)
+            if st.button("Calcular Calagem", type="primary"):
+                if prnt > 0:
+                    nc = ((v2 - v1) * ctc) / prnt
+                    st.success(f"⚖️ Necessidade de Calagem: **{nc:.2f} ton/ha**")
+                else: st.error("PRNT deve ser maior que zero.")
+
+        elif calc_selecionada == "Conversão de Adubo (Formulado)":
+            st.info("Calcula quanto aplicar de um formulado para atingir a meta de um nutriente.")
+            meta_kg = st.number_input("Meta do Nutriente (kg/ha):", value=100.0)
+            teor = st.number_input("Teor do Nutriente no Adubo (%):", value=20.0)
+            if st.button("Calcular Dose"):
+                if teor > 0:
+                    dose = (meta_kg * 100) / teor
+                    st.success(f"📦 Aplicar **{dose:.1f} kg/ha** do adubo.")
+                else: st.error("Teor deve ser maior que zero.")
+
+    # ==============================================================================
+    # ☁️ ABA 4: CLIMA & RADAR
+    # ==============================================================================
+    with tabs[3]:
+        st.markdown('<div class="app-card">', unsafe_allow_html=True)
+        c_clim1, c_clim2 = st.columns([3, 1])
+        with c_clim1: st.markdown("### 📅 Previsão & Radar")
+        with c_clim2: 
+            hora = datetime.now().strftime("%H:%M")
+            st.markdown(f"<div style='text-align:right; color:#64748b;'>Atualizado: <b>{hora}</b></div>", unsafe_allow_html=True)
+
+        fig_clima = go.Figure()
+        fig_clima.add_trace(go.Bar(x=df_clima['Data'], y=df_clima['Chuva'], name='Chuva (mm)', marker_color='#3b82f6'))
+        fig_clima.add_trace(go.Scatter(x=df_clima['Data'], y=df_clima['ETc'], name='Consumo (ETc)', line=dict(color='#ef4444', width=3)))
+        fig_clima.update_layout(height=280, margin=dict(l=20, r=20, t=10, b=20), legend=dict(orientation="h", y=1.1))
+        st.plotly_chart(fig_clima, use_container_width=True)
+        
+        st.divider()
+        st.markdown("#### 📡 Radar Regional")
+        df_radar = WeatherConn.get_radar_simulation(url_w, st.session_state['loc_lat'], st.session_state['loc_lon'])
+        if not df_radar.empty:
+            cols_r = st.columns(4)
+            for i, r in df_radar.iterrows():
+                cor_bg = "#fef2f2" if r['Chuva'] == "Sim" else "#f0fdf4"
+                icon = "🌧️" if r['Chuva'] == "Sim" else "☀️"
+                with cols_r[i % 4]:
+                    st.markdown(f"""<div style="background:{cor_bg}; border-radius:8px; padding:10px; text-align:center; box-shadow:0 2px 4px rgba(0,0,0,0.05);"><div style="font-size:0.7rem; font-weight:bold; color:#64748b;">📍 {r['Direcao']}</div><div style="font-size:1.5rem; font-weight:800; color:#0f172a;">{r['Temp']:.0f}°</div><div style="font-size:0.8rem;">{icon} {r['Chuva']}</div></div>""", unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    # ==============================================================================
+    # 🗺️ ABA 5: MAPA
+    # ==============================================================================
+    with tabs[4]:
+        st.markdown('<div class="app-card" style="padding:0;">', unsafe_allow_html=True)
+        m = folium.Map(location=[st.session_state['loc_lat'], st.session_state['loc_lon']], zoom_start=15)
+        folium.TileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', attr='Esri', name='Satélite').add_to(m)
+        folium.Marker([st.session_state['loc_lat'], st.session_state['loc_lon']], popup="Sede", icon=folium.Icon(color="blue", icon="home")).add_to(m)
+        st_folium(m, height=500, use_container_width=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    # ==============================================================================
+    # 🔔 ABA 6: ALERTAS
+    # ==============================================================================
+    with tabs[5]:
+        st.markdown('<div class="app-card">', unsafe_allow_html=True)
+        st.header("🔔 Central de Alertas")
+        with st.form("config_alertas"):
+            nome = st.text_input("Nome do Responsável")
+            email = st.text_input("E-mail para Relatórios")
+            c1, c2 = st.columns(2)
+            c1.checkbox("Alertar Chuva (>10mm)", value=True)
+            c1.checkbox("Alertar Risco de Doenças", value=True)
+            c2.checkbox("Relatório Semanal", value=True)
+            if st.form_submit_button("💾 Salvar Preferências", type="primary"):
+                NotificationSystem.salvar_assinatura(nome, email, [cult_sel])
+                st.success("✅ Salvo com sucesso!")
+        st.markdown('</div>', unsafe_allow_html=True)
     
     # 3. CLIMA (CORRIGIDO E BLINDADO)
         with tabs[2]:
