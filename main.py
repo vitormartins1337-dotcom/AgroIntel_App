@@ -1,6 +1,6 @@
 # ARQUIVO: main.py
 # SISTEMA: AGRO SDI | ENTERPRISE EDITION
-# VERSÃO: V-GESTÃO-360 (Estimativa de Safra + Financeiro Real)
+# VERSÃO: V-MASTER-AGRO (Técnico + Nutrição + Calculadora + Clima Integrado)
 
 import streamlit as st
 import pandas as pd
@@ -30,13 +30,11 @@ load_css()
 # --- 2. VARIÁVEIS DE SESSÃO (PERSISTÊNCIA) ---
 if 'loc_lat' not in st.session_state: st.session_state['loc_lat'] = -13.414
 if 'loc_lon' not in st.session_state: st.session_state['loc_lon'] = -41.285
-if 'pontos_mapa' not in st.session_state: st.session_state['pontos_mapa'] = [] # MIP
-if 'custos_safra' not in st.session_state: st.session_state['custos_safra'] = [] # Gestão
+if 'pontos_mapa' not in st.session_state: st.session_state['pontos_mapa'] = []
 if 'd_plantio' not in st.session_state: st.session_state['d_plantio'] = date(2025, 11, 25)
 
 BANCO_MASTER = get_database()
 url_w = st.query_params.get("w_key", None)
-url_g = st.query_params.get("g_key", None)
 
 # --- 3. LOGIN ---
 if not url_w:
@@ -46,14 +44,12 @@ if not url_w:
         st.markdown("""
         <div class="app-card" style="text-align:center; padding:40px;">
             <h1 style="color:#064e3b; margin:0; font-size:2.5rem;">AGRO SDI</h1>
-            <p style="color:#6b7280; font-weight:bold; margin-top:10px; letter-spacing:1px;">PLATAFORMA INTEGRADA DE GESTÃO</p>
+            <p style="color:#6b7280; font-weight:bold; margin-top:10px; letter-spacing:1px;">PLATAFORMA INTEGRADA</p>
         </div>""", unsafe_allow_html=True)
         kw = st.text_input("CHAVE OPENWEATHER", type="password")
-        kg = st.text_input("CHAVE GEMINI (Opcional)", type="password") # Deixei opcional pois tiramos a aba IA
         if st.button("ACESSAR PAINEL", type="primary", use_container_width=True):
             if kw: 
                 st.query_params["w_key"] = kw
-                st.query_params["g_key"] = kg
                 st.rerun()
     st.stop()
 
@@ -83,88 +79,50 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # ==============================================================================
-# 💎 FILTROS GLOBAIS (SISTEMA DE MEMÓRIA PERSISTENTE & GPS)
+# 💎 FILTROS GLOBAIS (GPS E CULTURA)
 # ==============================================================================
 st.markdown('<div class="app-card">', unsafe_allow_html=True)
 c1, c2, c3, c4 = st.columns([2, 2, 1.5, 1])
 
-# --- 1. MÓDULO GPS (MEMÓRIA DE LOCALIZAÇÃO) ---
 with c1:
     st.markdown("### 📍 Unidade")
-    # Tenta recuperar o último local digitado, senão usa vazio
     default_gps = st.session_state.get('last_city', '')
-    city = st.text_input("GPS", value=default_gps, placeholder="Digitar Cidade ou Fazenda...", label_visibility="collapsed")
-    
-    # Botão de Sincronia com Feedback
-    if st.button("📡 Sincronizar Local", use_container_width=True):
+    city = st.text_input("GPS", value=default_gps, placeholder="Digitar Cidade...", label_visibility="collapsed")
+    if st.button("📡 Sincronizar", use_container_width=True):
         if city:
-            # Busca Coordenadas
             lat, lon = WeatherConn.get_coords(city, url_w)
             if lat: 
                 st.session_state['loc_lat'] = lat
                 st.session_state['loc_lon'] = lon
-                st.session_state['last_city'] = city # Salva na memória para não sumir
+                st.session_state['last_city'] = city
                 st.toast(f"✅ GPS Calibrado: {city.upper()}", icon="🛰️")
-                # Não usamos st.rerun() aqui desnecessariamente para evitar piscar, 
-                # o fluxo segue e atualiza os dados abaixo naturalmente.
             else:
-                st.toast("⚠️ Local não encontrado. Tente cidade próxima.", icon="❌")
-        else:
-            st.toast("⚠️ Digite o nome da fazenda ou cidade.", icon="⌨️")
+                st.toast("⚠️ Local não encontrado.", icon="❌")
 
-# --- 2. SELETOR DE CULTURA (COM MEMÓRIA KEY) ---
 with c2:
     st.markdown("### 🚜 Cultura")
     if BANCO_MASTER:
-        # AQUI ESTÁ O SEGREDO: key="sessao_cultura"
-        # Isso impede que o valor volte para 'Algodão' quando o GPS roda.
-        cult_sel = st.selectbox(
-            "Cultura", 
-            sorted(list(BANCO_MASTER.keys())), 
-            label_visibility="collapsed",
-            key="sessao_cultura" 
-        )
-        
-        # Atualiza as listas baseadas na cultura selecionada
+        cult_sel = st.selectbox("Cultura", sorted(list(BANCO_MASTER.keys())), label_visibility="collapsed", key="sessao_cultura")
         vars_disp = list(BANCO_MASTER[cult_sel].get('vars', {}).keys())
         fases_disp = list(BANCO_MASTER[cult_sel].get('fases', {}).keys())
-        
-        var_sel = st.selectbox(
-            "Genética", 
-            vars_disp,
-            key="sessao_genetica" # Memória para a Genética
-        )
+        var_sel = st.selectbox("Genética", vars_disp, key="sessao_genetica")
     else: 
-        st.error("Banco de Dados Offline")
+        st.error("Banco Offline")
         st.stop()
 
-# --- 3. SELETOR DE FASE (COM MEMÓRIA KEY) ---
 with c3:
     st.markdown("### 📊 Fase")
-    fase_sel = st.selectbox(
-        "Estádio", 
-        fases_disp, 
-        label_visibility="collapsed",
-        key="sessao_fase" # Memória para a Fase
-    )
+    fase_sel = st.selectbox("Estádio", fases_disp, label_visibility="collapsed", key="sessao_fase")
 
-# --- 4. DATA DE PLANTIO (COM MEMÓRIA KEY) ---
 with c4:
     st.markdown("### 📆 Safra")
-    # Se não tiver data na sessão, define hoje
     if 'd_plantio' not in st.session_state: st.session_state['d_plantio'] = date.today()
-    
-    st.session_state['d_plantio'] = st.date_input(
-        "Plantio", 
-        st.session_state['d_plantio'], 
-        label_visibility="collapsed",
-        key="sessao_data"
-    )
+    st.session_state['d_plantio'] = st.date_input("Plantio", st.session_state['d_plantio'], label_visibility="collapsed", key="sessao_data")
     dias = (date.today() - st.session_state['d_plantio']).days
 
 st.markdown('</div>', unsafe_allow_html=True)
 
-# --- PROCESSAMENTO PRINCIPAL ---
+# --- PROCESSAMENTO CLIMÁTICO GLOBAL ---
 info = BANCO_MASTER[cult_sel]['vars'][var_sel]
 dados_fase = BANCO_MASTER[cult_sel]['fases'][fase_sel]
 df_clima = WeatherConn.get_forecast_dataframe(url_w, st.session_state['loc_lat'], st.session_state['loc_lon'], info.get('kc', 1.0), BANCO_MASTER[cult_sel].get('t_base', 10))
@@ -176,7 +134,6 @@ if not df_clima.empty:
     temp, umid, delta_t = hoje['Temp'], hoje['Umid'], hoje['Delta T']
     vpd = AgroBrain.calcular_vpd(temp, umid)
     
-    # Cores KPI
     t_st, t_cor = ("Ótima ✅", "#16a34a") if 18 <= temp <= 32 else ("Crítica 🔥", "#dc2626")
     d_st, d_cor = ("APTO ✅", "#16a34a") if 2 <= delta_t <= 8 else ("PARE 🛑", "#dc2626")
     v_st, v_cor = ("Ideal 💧", "#2563eb") if 0.5 <= vpd <= 1.5 else ("Estresse 🌵", "#dc2626")
@@ -188,109 +145,103 @@ if not df_clima.empty:
     with c4: st.markdown(AgroBrain.gerar_cartao_kpi("☀️ GDA Acumulado", f"{gda_acum:.0f}", "°GD", f"Ciclo: {dias}d", "#1e293b"), unsafe_allow_html=True)
 
     # ==============================================================================
-    # 💎 ABAS DE NAVEGAÇÃO (NOVA ORDEM)
+    # 💎 ABAS DE NAVEGAÇÃO (ESTRUTURA LIMPA)
     # ==============================================================================
     st.markdown("<br>", unsafe_allow_html=True)
-    # Removemos IA e Laudo, adicionamos Gestão em destaque
-    tabs = st.tabs(["🧬 TÉCNICO", "🧪 NUTRIÇÃO", "☁️ CLIMA", "📡 RADAR", "🗺️ MAPA", "💰 GESTÃO", "🔔 ALERTAS"])
+    tabs = st.tabs(["🧬 Técnico", "🧪 Nutrição", "🧮 Calculadora", "☁️ Clima/Radar", "🗺️ Mapa", "🔔 Alertas"])
 
-  
-            # --- ABA 1: TÉCNICO (CONSULTORIA FITOSSANITÁRIA) ---
+    # ==============================================================================
+    # 🟩 ABA 1: TÉCNICO (PROTEÇÃO E MANEJO)
+    # ==============================================================================
     with tabs[0]:
-        
-        # 1. Carregamento Seguro (Lê os dados locais do JSON)
-        db_agro = {}
+        db_tecnico = {}
         if os.path.exists("database"):
             for root, dirs, files in os.walk("database"):
                 for file in files:
                     if file.endswith(".json"):
                         try:
                             with open(os.path.join(root, file), "r", encoding="utf-8") as f:
-                                db_agro.update(json.load(f))
+                                db_tecnico.update(json.load(f))
                         except: pass
         
-        info_cultura = db_agro.get(cult_sel, {})
-        dados_fase = info_cultura.get('fases', {}).get(fase_sel, {})
+        info_json = db_tecnico.get(cult_sel, {})
+        dados_fase_tec = info_json.get('fases', {}).get(fase_sel, {})
 
-        if dados_fase:
-            st.header(f"Diagnóstico Fitossanitário: {cult_sel}")
-            st.caption(f"Fase Fenológica Atual: **{fase_sel}**")
+        if dados_fase_tec:
+            st.markdown(f"### 📋 Diagnóstico Fitossanitário: <span style='color:#15803d'>{cult_sel}</span>", unsafe_allow_html=True)
+            st.caption(f"Fase Fenológica: **{fase_sel}**")
 
-            # --- GENÉTICA E FISIOLOGIA ---
-            col1, col2 = st.columns(2)
-            with col1:
-                st.subheader("🧬 Genética")
-                info_var = info_cultura.get('vars', {}).get(var_sel, {}).get('info', 'Informação não disponível.')
-                st.info(f"**Variedade {var_sel}:**\n\n{info_var}")
+            col_gen, col_fis = st.columns(2)
+            with col_gen:
+                txt_var = info_json.get('vars', {}).get(var_sel, {}).get('info', 'Diretrizes não localizadas.')
+                st.markdown(f"""
+                <div style="background-color:#ffffff; border-top:4px solid #3b82f6; padding:20px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.05); height:100%;">
+                    <h5 style="color:#1e40af; margin-top:0;">🧬 GENÉTICA</h5>
+                    <p style="color:#1e293b; font-size:0.95rem;"><b>{var_sel}:</b> {txt_var}</p>
+                </div>""", unsafe_allow_html=True)
 
-            with col2:
-                st.subheader("🌱 Fisiologia")
-                info_fisio = dados_fase.get('fisiologia', 'Análise não cadastrada.')
-                st.success(f"**Dinâmica da Planta:**\n\n{info_fisio}")
+            with col_fis:
+                txt_fisio = dados_fase_tec.get('fisiologia', 'Análise não cadastrada.')
+                st.markdown(f"""
+                <div style="background-color:#ffffff; border-top:4px solid #22c55e; padding:20px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.05); height:100%;">
+                    <h5 style="color:#15803d; margin-top:0;">🌱 FISIOLOGIA</h5>
+                    <p style="color:#1e293b; font-size:0.95rem;">{txt_fisio}</p>
+                </div>""", unsafe_allow_html=True)
 
-            st.divider()
+            st.markdown("<br>", unsafe_allow_html=True)
 
-            # --- MANEJO TÁTICO ---
-            st.subheader("🚜 Diretrizes de Manejo")
-            info_manejo = dados_fase.get('manejo', 'Consulte o departamento técnico.')
-            st.warning(f"**Recomendação Estratégica:** {info_manejo}")
+            txt_manejo = dados_fase_tec.get('manejo', 'Consulte o departamento técnico.')
+            st.markdown(f"""
+            <div style="background-color:#fff7ed; border-left:6px solid #f97316; padding:20px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.05); margin-bottom:20px;">
+                <h5 style="color:#c2410c; margin-top:0;">🚜 DIRETRIZES DE MANEJO</h5>
+                <p style="color:#431407; font-size:1rem; margin-bottom:0;">{txt_manejo}</p>
+            </div>""", unsafe_allow_html=True)
 
-            st.divider()
-
-            # --- PROTOCOLO DE DEFESA (CARDS PROFISSIONAIS) ---
-            quimicos = dados_fase.get('quimica', [])
+            quimicos = dados_fase_tec.get('quimica', [])
             if quimicos:
-                st.subheader("🏹 Protocolo de Defesa Ativa")
-                
+                st.markdown("### 🏹 Protocolo de Defesa Ativa")
                 for item in quimicos:
                     with st.container(border=True):
-                        # Cabeçalho do Card
-                        st.error(f"**🎯 ALVO:** {item['Alvo']}")
+                        st.markdown(f"""
+                        <div style="background:#f8fafc; padding:12px; border-bottom:2px solid #ef4444; border-radius:8px 8px 0 0; margin:-15px -15px 15px -15px;">
+                            <b style="color:#b91c1c; font-size:1.1rem; margin-left:10px;">🎯 ALVO: {item['Alvo']}</b>
+                        </div>""", unsafe_allow_html=True)
                         
                         c_img, c_txt = st.columns([1, 2.5])
-                        
-                        # Coluna da Foto
                         with c_img:
                             nome_img = item.get("imagem", "")
                             path_img = os.path.join("images", nome_img)
                             if nome_img and os.path.exists(path_img):
                                 st.image(path_img, use_container_width=True)
                             else:
-                                st.info("📸 Foto da praga/doença pendente no banco de dados.")
+                                st.info("📸 Foto pendente.")
 
-                        # Coluna da Receita Agronômica
                         with c_txt:
-                            st.markdown(f"**🧪 Ingrediente Ativo:** `{item.get('Ativo', '-')}`")
-                            st.markdown(f"**⚙️ Grupo e Mecanismo:** {item.get('Grupo', '-')} | *{item.get('Tipo', '-')}*")
+                            st.markdown(f"<p style='color:#1e293b; margin-bottom:5px;'><b>🧪 Ingrediente Ativo:</b> <code style='color:#0f172a;'>{item.get('Ativo', '-')}</code></p>", unsafe_allow_html=True)
+                            st.markdown(f"<p style='color:#475569; margin-bottom:10px;'><b>⚙️ Mecanismo:</b> {item.get('Grupo', '-')} | <i>{item.get('Tipo', '-')}</i></p>", unsafe_allow_html=True)
                             
-                            # Produtos (Tags Nativas)
                             prods = item.get('Produtos', [])
                             if prods:
-                                st.markdown("**🛒 Soluções Comerciais:**")
-                                # Usando colunas nativas para criar "tags" organizadas
-                                cols_prods = st.columns(len(prods) if len(prods) < 5 else 4)
-                                for i, p in enumerate(prods):
-                                    with cols_prods[i % len(cols_prods)]:
-                                        st.button(p, key=f"btn_{item['Alvo']}_{p}", disabled=True, use_container_width=True)
+                                tags = "".join([f"<span style='background:#dbeafe; color:#1e40af; border:1px solid #bfdbfe; padding:4px 10px; border-radius:8px; font-size:0.85rem; margin:0 5px 5px 0; display:inline-block; font-weight:bold;'>🛒 {p}</span>" for p in prods])
+                                st.markdown(f"<div style='margin-bottom:15px;'>{tags}</div>", unsafe_allow_html=True)
                             
-                            # Observações
-                            st.markdown(f"**🔄 Rotação de Ativos:** {item.get('Rotacao', '-')}")
-                            st.info(f"**📝 Parecer Técnico:** {item.get('Obs', '-')}")
+                            st.markdown(f"""
+                            <div style="background-color:#fefce8; padding:12px; border-radius:8px; border-left:5px solid #eab308; color:#713f12; font-size:0.9rem;">
+                                <b style="color:#854d0e;">🔄 ESTRATÉGIA ANTI-RESISTÊNCIA:</b><br>{item.get('Rotacao', '-')}<br>
+                                <div style="margin-top:8px; border-top:1px solid #fef08a; padding-top:8px;">
+                                    <b>📝 PARECER:</b> <i>{item.get('Obs', '-')}</i>
+                                </div>
+                            </div>""", unsafe_allow_html=True)
             else:
-                st.success("✅ **Sanidade Plena:** Nenhuma intervenção química cadastrada para esta fase.")
+                st.success("✅ Sanidade Plena: Nenhuma intervenção química necessária.")
         else:
-            st.error("🚨 Dados técnicos não encontrados. Verifique se o banco de dados está atualizado.")
-
+            st.error("🚨 Dados de manejo não localizados.")
 # ==============================================================================
-# ==============================================================================
-# 🟦 ABA 2: NUTRIÇÃO (Lê do código que você já digitou no main.py)
-# ==============================================================================
-with tabs[1]:
-    st.markdown(f"### 📊 Plano Nutricional: {cult_sel}")
-    st.caption("Gráficos de marcha de absorção e exigências nutricionais.")
-        
-    # --- 2. BANCO DE DADOS MASTER (COM META DE PRODUTIVIDADE EXPLÍCITA) ---
-DB_NUTRI_MASTER = {
+    # 🟦 ABA 2: NUTRIÇÃO
+    # ==============================================================================
+    with tabs[1]:
+        # --- BANCO DE DADOS GIGANTE DA NUTRIÇÃO AQUI DENTRO ---
+        DB_NUTRI_MASTER = {
             "Soja": {
                 "meta": "75 a 90 sacas/ha", # <--- ADICIONEI ISSO AQUI EM TODAS
                 "fases": ["V1", "V4", "R1 (Flor)", "R5.1 (Ench)", "R8 (Mat)"],
@@ -797,7 +748,7 @@ DB_NUTRI_MASTER = {
                    "Cu": "<b>RESISTÊNCIA ESTRUTURAL:</b> Atua na lignificação.",
                    "Mo": "<b>METABOLISMO DO N:</b> Atua na redutase do nitrato."
                 }
-            },  
+            }
         }
 
 dados_nutri = None
