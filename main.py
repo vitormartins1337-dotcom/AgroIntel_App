@@ -1435,7 +1435,7 @@ with tabs[4]:
 
                                 
     # 6. GESTÃO (SIMULADOR DE NEGÓCIO - CORRIGIDO E PRÁTICO)
-    with tabs[5]:
+with tabs[5]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         
         # --- 1. BANCO DE DADOS INTELIGENTE (CORRIGIDO) ---
