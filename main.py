@@ -1188,7 +1188,7 @@ for chave in DB_NUTRI_MASTER:
         st.markdown('</div>', unsafe_allow_html=True)
 
     # 4. RADAR (VISUAL MASTER)
-    with tabs[3]:
+with tabs[3]:
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         st.markdown("### 📡 Monitoramento Regional")
         st.caption("Dados em tempo real das estações meteorológicas vizinhas.")
