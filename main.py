@@ -800,7 +800,7 @@ with tabs[1]:
                    "Mo": "<b>METABOLISMO DO N:</b> Atua na redutase do nitrato."
                 }
             },
-            }
+        }
 
         dados_nutri = None
         nome_cultura_exibicao = str(cult_sel)
