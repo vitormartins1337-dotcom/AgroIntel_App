@@ -943,17 +943,7 @@ if not df_clima.empty:
         fig_clima.update_layout(height=280, margin=dict(l=20, r=20, t=10, b=20), legend=dict(orientation="h", y=1.1))
         st.plotly_chart(fig_clima, use_container_width=True)
         
-        st.divider()
-        st.markdown("#### 📡 Radar Regional")
-        df_radar = WeatherConn.get_radar_simulation(url_w, st.session_state['loc_lat'], st.session_state['loc_lon'])
-        if not df_radar.empty:
-            cols_r = st.columns(4)
-            for i, r in df_radar.iterrows():
-                cor_bg = "#fef2f2" if r['Chuva'] == "Sim" else "#f0fdf4"
-                icon = "🌧️" if r['Chuva'] == "Sim" else "☀️"
-                with cols_r[i % 4]:
-                    st.markdown(f"""<div style="background:{cor_bg}; border-radius:8px; padding:10px; text-align:center; box-shadow:0 2px 4px rgba(0,0,0,0.05);"><div style="font-size:0.7rem; font-weight:bold; color:#64748b;">📍 {r['Direcao']}</div><div style="font-size:1.5rem; font-weight:800; color:#0f172a;">{r['Temp']:.0f}°</div><div style="font-size:0.8rem;">{icon} {r['Chuva']}</div></div>""", unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+    
 
     # ==============================================================================
     # 🗺️ ABA 5: MAPA
