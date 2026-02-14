@@ -25,7 +25,106 @@ except ImportError as e:
     st.stop()
 
 st.set_page_config(page_title="Agro SDI", page_icon="🌱", layout="wide")
-load_css() 
+def load_css():
+    st.markdown("""
+        <style>
+        /* --- 1. FUNDO GERAL E FONTES --- */
+        .stApp {
+            background-color: #0e1611; /* Fundo Verde Quase Preto (Profundo) */
+            color: #ecfdf5; /* Texto Claro (Menta Suave) */
+        }
+        
+        /* --- 2. SIDEBAR (BARRA LATERAL) --- */
+        [data-testid="stSidebar"] {
+            background-color: #064e3b; /* Verde Escuro "Agro SDI" */
+            border-right: 1px solid #059669;
+        }
+        [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3 {
+            color: #a7f3d0 !important; /* Títulos da Sidebar em Verde Claro */
+        }
+        
+        /* --- 3. CABEÇALHO (HEADER) --- */
+        .header-wrapper {
+            background: linear-gradient(90deg, #064e3b 0%, #065f46 100%);
+            padding: 20px;
+            border-radius: 12px;
+            border-bottom: 4px solid #10b981;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* --- 4. CARDS (CAIXAS DE CONTEÚDO) --- */
+        .app-card {
+            background-color: #111814; /* Fundo do Card Escuro */
+            border: 1px solid #1f2923; /* Borda sutil */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        
+        /* ESTILO DOS INPUTS (CAIXAS DE TEXTO/NÚMERO) */
+        .stTextInput input, .stNumberInput input, .stSelectbox div[data-baseweb="select"] > div {
+            background-color: #1f2923 !important; /* Fundo do Input */
+            color: #ffffff !important;
+            border: 1px solid #34d399 !important; /* Borda Verde Neon */
+        }
+        
+        /* --- 5. BOTÕES (PRIMARY) --- */
+        .stButton > button {
+            background-color: #10b981 !important; /* Verde Vibrante */
+            color: #022c22 !important; /* Texto Escuro para contraste */
+            font-weight: bold;
+            border-radius: 8px;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .stButton > button:hover {
+            background-color: #34d399 !important; /* Verde mais claro no mouse over */
+            transform: scale(1.02);
+        }
+
+        /* --- 6. ABAS (TABS) --- */
+        .stTabs [data-baseweb="tab-list"] {
+            gap: 10px;
+        }
+        .stTabs [data-baseweb="tab"] {
+            background-color: #064e3b;
+            border-radius: 6px 6px 0 0;
+            color: #a7f3d0;
+            padding: 10px 20px;
+        }
+        .stTabs [aria-selected="true"] {
+            background-color: #10b981 !important;
+            color: #064e3b !important;
+            font-weight: bold;
+        }
+
+        /* --- 7. TICKER E DETALHES --- */
+        .status-dot {
+            height: 10px;
+            width: 10px;
+            background-color: #10b981; /* Verde Online */
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 5px #10b981;
+        }
+        .status-badge {
+            background-color: rgba(6, 78, 59, 0.8);
+            color: #ecfdf5;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid #10b981;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        </style>
+    """, unsafe_allow_html=True) 
 
 # --- 2. VARIÁVEIS DE SESSÃO (PERSISTÊNCIA) ---
 if 'loc_lat' not in st.session_state: st.session_state['loc_lat'] = -13.414
