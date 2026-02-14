@@ -1,5 +1,5 @@
 # ARQUIVO: main.py
-# AGRO SDI | VISUAL PRO + TICKER BLOOMBERG (FINAL)
+# AGRO SDI | VISUAL PRO + CAPA GIGANTE + TICKER BALÃO
 import streamlit as st
 from core_logic import AgroEngine 
 
@@ -7,7 +7,7 @@ from core_logic import AgroEngine
 st.set_page_config(page_title="Agro SDI", page_icon="🌱", layout="wide")
 engine = AgroEngine()
 
-# --- 2. CSS PROFISSIONAL (SEM ALTERAÇÕES NO QUE JÁ FUNCIONA) ---
+# --- 2. CSS PROFISSIONAL ---
 def load_css():
     st.markdown("""
         <style>
@@ -26,25 +26,26 @@ def load_css():
             border-right: 1px solid #1e3a2f;
         }
 
-        /* --- NOVO TICKER BLOOMBERG (FINO E ELEGANTE) --- */
+        /* --- TICKER BLOOMBERG (ESTILO BALÃOZINHO) --- */
         .ticker-container {
             width: 100%;
             background-color: #020403; /* Preto Profundo */
-            border-bottom: 1px solid #15803d;
-            border-top: 1px solid #14532d;
+            border: 1px solid #15803d; /* Borda completa */
+            border-radius: 20px; /* ARREDONDADO (BALÃO) */
             overflow: hidden;
             white-space: nowrap;
-            height: 32px; /* Altura fixa fina */
+            height: 36px;
             display: flex;
             align-items: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.4);
-            margin-bottom: 20px; /* Espaço para o conteúdo abaixo */
+            margin-bottom: 25px; /* Espaço abaixo */
+            margin-top: 5px;
         }
         .ticker-text {
             display: inline-block;
             animation: ticker 35s linear infinite;
-            font-family: 'Courier New', monospace; /* Fonte Financeira */
-            font-size: 0.85rem; 
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem; 
             font-weight: bold;
         }
         @keyframes ticker {
@@ -55,16 +56,17 @@ def load_css():
         .up { color: #4ade80; } /* Verde Neon */
         .down { color: #f87171; } /* Vermelho */
 
-        /* --- HEADER --- */
+        /* --- HEADER (CAPA GIGANTE) --- */
         .header-box {
             background: linear-gradient(180deg, #14281d 0%, #0b120d 100%);
             border: 1px solid #1e3a2f;
-            border-radius: 8px;
-            padding: 15px 25px;
+            border-radius: 12px;
+            padding: 30px 40px; /* AUMENTEI O ESPAÇAMENTO */
             display: flex;
             justify-content: space-between;
             align-items: center;
-            /* margin-bottom removido para colar no ticker */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            margin-bottom: 10px;
         }
 
         /* --- CARDS DE FASES --- */
@@ -103,24 +105,24 @@ def load_css():
 
 load_css()
 
-# --- 3. HEADER (CAPA) ---
+# --- 3. HEADER (CAPA AUMENTADA) ---
 st.markdown("""
 <div class="header-box">
     <div>
-        <h1 style="margin:0; font-family:'Arial', sans-serif; font-weight:900; font-size:1.8rem; letter-spacing:-1px; color:#fff;">
+        <h1 style="margin:0; font-family:'Arial', sans-serif; font-weight:900; font-size:3.5rem; letter-spacing:-2px; color:#fff; line-height: 1;">
             AGRO <span style="color:#22c55e;">SDI</span>
         </h1>
-        <div style="font-size:0.7rem; letter-spacing:2px; color:#86efac; margin-top:2px; font-weight:600; opacity:0.8;">
+        <div style="font-size:1rem; letter-spacing:4px; color:#86efac; margin-top:8px; font-weight:600; opacity:0.9;">
             SISTEMA DE DECISÃO INTEGRADA
         </div>
     </div>
-    <div style="background:rgba(22,163,74,0.2); border:1px solid #22c55e; color:#4ade80; padding:4px 12px; border-radius:20px; font-size:0.7rem; display:flex; align-items:center; gap:8px; font-weight:bold;">
-        <div style="width:8px; height:8px; background:#22c55e; border-radius:50%; box-shadow:0 0 8px #22c55e;"></div> ONLINE
+    <div style="background:rgba(22,163,74,0.2); border:1px solid #22c55e; color:#4ade80; padding:6px 16px; border-radius:30px; font-size:0.85rem; display:flex; align-items:center; gap:10px; font-weight:bold;">
+        <div style="width:10px; height:10px; background:#22c55e; border-radius:50%; box-shadow:0 0 10px #22c55e;"></div> ONLINE
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-# --- 4. TICKER BLOOMBERG (INSERIDO AQUI) ---
+# --- 4. TICKER BLOOMBERG (ESTILO BALÃOZINHO) ---
 ticker_html = """
 <div class="ticker-container">
     <div class="ticker-text">
@@ -137,7 +139,7 @@ ticker_html = """
 st.markdown(ticker_html, unsafe_allow_html=True)
 
 # ==============================================================================
-# 🧠 CÉREBRO DO APLICATIVO
+# 🧠 CÉREBRO DO APLICATIVO (INTACTO)
 # ==============================================================================
 
 culturas = engine.listar_culturas()
@@ -155,7 +157,6 @@ if cultura_sel:
         st.caption(f"Guia estratégico para {cultura_sel}.")
         
         for sigla, dados in fases.items():
-            # HTML Montado
             html_content = f"""
 <div class="phase-box">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
