@@ -1445,7 +1445,7 @@ with tabs[5]:
             termos_preco = f"preço kg {cult_sel} hoje {local_user} ceasa"
             st.link_button(f"💰 Cotação Hoje no Google", f"https://www.google.com/search?q={termos_preco}", use_container_width=True)
             
-        st.markdown('</div>', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
 
     # 7. ALERTAS (CENTRAL DE CONFIGURAÇÃO)
 with tabs[6]:
