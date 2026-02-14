@@ -1449,6 +1449,7 @@ with tabs[5]:
 
     # 7. ALERTAS (CENTRAL DE CONFIGURAÇÃO)
 with tabs[6]:
+
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
         st.markdown("### 🔔 Central de Automação")
         st.info("Configure aqui os alertas automáticos. No App Mobile, estas notificações chegarão como Push Notification.")
