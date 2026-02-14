@@ -258,4 +258,23 @@ with tab_doctor:
             <div style="background:#1a0505; border:1px solid #450a0a; padding:15px; border-radius:8px; margin-bottom:10px;">
                 <div style="color:#f87171; font-weight:bold;">{nome}</div>
                 <div style="font-size:0.9rem; color:#ccc;">{dados['identificacao']}</div>
-                <div style="font-size:0
+                <div style="font-size:0.85rem; color:#aaa; margin-top:5px;">☠️ {dados['dano']}</div>
+                <div style="margin-top:8px;">
+                     {' '.join([f'<span style="background:#450a0a; color:#fca5a5; padding:2px 6px; border-radius:4px; font-size:0.8rem;">🛡️ {s}</span>' for s in dados['solucao']])}
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+    with c_doc2:
+        st.markdown("#### 🍄 Fungos e Doenças")
+        for nome, dados in doc_db["Doencas"].items():
+             st.markdown(f"""
+            <div style="background:#1a1005; border:1px solid #431407; padding:15px; border-radius:8px; margin-bottom:10px;">
+                <div style="color:#fdba74; font-weight:bold;">{nome}</div>
+                <div style="font-size:0.9rem; color:#ccc;">{dados['identificacao']}</div>
+                <div style="font-size:0.85rem; color:#aaa; margin-top:5px;">☠️ {dados['dano']}</div>
+                <div style="margin-top:8px;">
+                     {' '.join([f'<span style="background:#431407; color:#fdba74; padding:2px 6px; border-radius:4px; font-size:0.8rem;">🛡️ {s}</span>' for s in dados['solucao']])}
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
