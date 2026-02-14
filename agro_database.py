@@ -307,4 +307,182 @@ def get_agro_db():
                 }
             }
         }
+    "Algodão": {
+            "nome_cientifico": "Gossypium hirsutum",
+            "fases_fenologicas": {
+                "V1-V4": {
+                    "fase": "Vegetativo Inicial",
+                    "foco": "Raiz, Tripes e Regulador",
+                    "visao_pratica": "O jogo do algodão é 'arquitetura'. Se a planta 'disparar' aqui por excesso de chuva ou N, você perde o baixeiro. Tripes nessa fase encarquilha a folha e atrasa o desenvolvimento. Comece o monitoramento do Bicudo nas bordaduras (iscas).",
+                    "alerta": "Pulgão na fase inicial transmite viroses que ananicão a planta."
+                },
+                "B1 (Botão Floral)": {
+                    "fase": "Esquadratura",
+                    "foco": "Retenção de Botões (Bicudo)",
+                    "visao_pratica": "Cada botão que cai é menos peso na colheita. O Bicudo entra agora para ovipositar nos botões. Se encontrar botão furado no chão, inicie a 'Bateria': 3 aplicações sequenciais (intervalo de 3 a 5 dias). O regulador de crescimento deve ser parcelado e contínuo.",
+                    "alerta": "Lagarta das maçãs (Heliothis) ataca direto a estrutura reprodutiva."
+                },
+                "F1 (Florada)": {
+                    "fase": "Florescimento",
+                    "foco": "Mancha Ramulária e Cut-out",
+                    "visao_pratica": "Definição de carga. O alvo principal vira a Ramulária (a 'ferrugem' do algodão). Aplicação de fungicida deve ser preventiva, rotacionando triazóis e estrobilurinas. Monitore o 'Cut-out' (nós acima da última flor branca) para saber quando a planta parou de vegetar.",
+                    "alerta": "Mosca-branca na florada = mela na fibra (prejuízo industrial)."
+                },
+                "C1 (Maçãs)": {
+                    "fase": "Enchimento de Maçãs",
+                    "foco": "Qualidade de Fibra e Peso",
+                    "visao_pratica": "Proteção das maçãs do ponteiro. O Bicudo migra para as maçãs se não houver botão. Percevejo manchador entra para estragar a fibra. O foco aqui é manter a folha sadia para encher a maçã.",
+                    "alerta": "Apodrecimento de maçãs em baixadas úmidas."
+                }
+            },
+            "problemas": {
+                "Pragas": {
+                    "Bicudo-do-algodoeiro": {
+                        "tipo": "Praga",
+                        "nome_cientifico": "Anthonomus grandis",
+                        "fases_criticas": ["B1 (Botão) até Colheita"],
+                        "nivel_dano": "Zero Tolerância. Praga Chave.",
+                        "identificacao_campo": "Besouro cinza/negro com 'bico' longo. Botões com pontuações de oviposição ou alimentação (amarelam e caem).",
+                        "sintomas": "Queda massiva de botões florais (botoeira no chão). Maçãs 'carimã' (não abrem).",
+                        "manejo_quimico": [
+                            {"ativo": "Malationa", "grupo_quimico": "Organofosforado", "sugestao_produtos": ["Malathion"], "mecanismo": "Acetilcolinesterase", "observacao": "Padrão para baterias de choque e final de ciclo."},
+                            {"ativo": "Fipronil", "grupo_quimico": "Pirazol", "sugestao_produtos": ["Regent"], "mecanismo": "GABA (Cloro)", "observacao": "Excelente residual. Usar no início (esquadratura)."},
+                            {"ativo": "Beta-ciflutrina", "grupo_quimico": "Piretroide", "sugestao_produtos": ["Bulldock"], "mecanismo": "Modulador de Sódio", "observacao": "Efeito de choque rápido ('Knock-down')."}
+                        ]
+                    },
+                    "Pulgão-do-algodoeiro": {
+                        "tipo": "Praga",
+                        "nome_cientifico": "Aphis gossypii",
+                        "fases_criticas": ["V1-V4 (Virose) e Final (Mela)"],
+                        "nivel_dano": "Colônias visíveis ou presença de virose.",
+                        "identificacao_campo": "Insetos pequenos escuros/verdes na face inferior. Folha encarquilhada 'conchinha'.",
+                        "sintomas": "Transmissão do Vírus do Mosaico das Nervuras. Mela da fibra na colheita.",
+                        "manejo_quimico": [
+                            {"ativo": "Carbosulfano", "grupo_quimico": "Carbamato", "sugestao_produtos": ["Marshal"], "mecanismo": "Sistêmico", "observacao": "Ação rápida. Cuidado com inimigos naturais."},
+                            {"ativo": "Flonicamida", "grupo_quimico": "Piridinacarboxamida", "sugestao_produtos": ["Turbine"], "mecanismo": "Bloqueio Alimentar", "observacao": "Específico e seletivo. Ótimo para rotação."}
+                        ]
+                    },
+                    "Ácaro-branco": {
+                        "tipo": "Praga",
+                        "nome_cientifico": "Polyphagotarsonemus latus",
+                        "fases_criticas": ["Todo o ciclo"],
+                        "nivel_dano": "Folhas do ponteiro deformadas.",
+                        "identificacao_campo": "Invisível a olho nu. Folhas novas ficam 'envernizadas' e rasgadas nas bordas.",
+                        "sintomas": "Paralisação do crescimento do ponteiro. Aspecto coriáceo.",
+                        "manejo_quimico": [
+                            {"ativo": "Abamectina", "grupo_quimico": "Avermectina", "sugestao_produtos": ["Vertimec"], "mecanismo": "Paralisia", "observacao": "Padrão. Exige cobertura perfeita."},
+                            {"ativo": "Diafentiurom", "grupo_quimico": "Tioureia", "sugestao_produtos": ["Polo"], "mecanismo": "Respiração", "observacao": "Ação gasosa (fumigante). Funciona bem no calor."}
+                        ]
+                    }
+                },
+                "Doencas": {
+                    "Ramularia": {
+                        "tipo": "Doença",
+                        "nome_cientifico": "Ramularia areola",
+                        "fases_criticas": ["B1 em diante"],
+                        "nivel_dano": "Lesões no baixeiro. Preventivo obrigatório.",
+                        "identificacao_campo": "Manchas angulares brancas/azuladas (parece talco) nas duas faces da folha.",
+                        "sintomas": "Desfolha total precoce. Abertura forçada de capulhos.",
+                        "manejo_quimico": [
+                            {"ativo": "Azoxistrobina + Difenoconazol", "grupo_quimico": "Estrobilurina + Triazol", "sugestao_produtos": ["Priori Top"], "mecanismo": "Sistêmico Duplo", "observacao": "Referência de mercado. Alternar com Carboxamidas."},
+                            {"ativo": "Clorotalonil", "grupo_quimico": "Multissítio", "sugestao_produtos": ["Bravonil"], "mecanismo": "Contato", "observacao": "Obrigatório adicionar para evitar resistência."}
+                        ]
+                    },
+                    "Mancha-alvo": {
+                        "tipo": "Doença",
+                        "nome_cientifico": "Corynespora cassiicola",
+                        "fases_criticas": ["Fechamento"],
+                        "nivel_dano": "Alta severidade em cultivares suscetíveis.",
+                        "identificacao_campo": "Manchas circulares com anéis (alvo).",
+                        "sintomas": "Desfolha rápida do baixeiro.",
+                        "manejo_quimico": [
+                            {"ativo": "Fluxapiroxade + Piraclostrobina", "grupo_quimico": "Carboxamida", "sugestao_produtos": ["Orkestra"], "mecanismo": "SDHI", "observacao": "Melhor performance para alvo."}
+                        ]
+                    }
+                }
+            }
+        },
+        "Arroz": {
+            "nome_cientifico": "Oryza sativa",
+            "fases_fenologicas": {
+                "V1-V4": {
+                    "fase": "Plântula e Perfilhamento",
+                    "foco": "Água e Nitrogênio",
+                    "visao_pratica": "A adubação nitrogenada de cobertura deve ser feita em solo seco, imediatamente antes da entrada da água (inundação). Isso garante que o N não volatilize. O número de perfilhos define o número de panículas futuras.",
+                    "alerta": "Bicheira-da-raiz reduz drasticamente o stand se não houver tratamento de semente."
+                },
+                "R1 (Ponto de Algodão)": {
+                    "fase": "Diferenciação da Panícula",
+                    "foco": "Proteção da Bainha",
+                    "visao_pratica": "Ponto crítico! A planta define o tamanho da espiga. Início das aplicações preventivas para Brusone e Queima-da-bainha. Não deixe faltar água na lâmina de irrigação agora.",
+                    "alerta": "Lagarta-da-panícula pode cortar a base da espiga."
+                },
+                "R4 (Florada)": {
+                    "fase": "Antese",
+                    "foco": "Brusone do Pescoço",
+                    "visao_pratica": "Se a Brusone entrar no pescoço da panícula agora, a espiga fica branca e vazia (chocha). A aplicação de Triciclazol deve ser preventiva, antes da panícula emitir totalmente.",
+                    "alerta": "Temperaturas abaixo de 17°C na florada causam esterilidade (chochamento por frio)."
+                },
+                "R8 (Maturação)": {
+                    "fase": "Grão",
+                    "foco": "Percevejo do Grão",
+                    "visao_pratica": "O percevejo (Oebalus) pica o grão leitoso, causando o 'arroz gessado' e manchado, que perde valor comercial no engenho. Drenagem da lavoura deve ser planejada para permitir colheita.",
+                    "alerta": "Excesso de N tardio favorece doenças e acamamento."
+                }
+            },
+            "problemas": {
+                "Pragas": {
+                    "Bicheira-da-raiz": {
+                        "tipo": "Praga",
+                        "nome_cientifico": "Oryzophagus oryzae",
+                        "fases_criticas": ["Logo após inundação"],
+                        "nivel_dano": "Larvas nas raízes.",
+                        "identificacao_campo": "Plantas amareladas no meio da lâmina d'água. Raízes podadas/comidas.",
+                        "sintomas": "Planta solta fácil do solo. Perda de perfilhos.",
+                        "manejo_quimico": [
+                            {"ativo": "Fipronil", "grupo_quimico": "Pirazol", "sugestao_produtos": ["Standak"], "mecanismo": "GABA", "observacao": "TS é o padrão. Aplicação na água é curativa mas difícil."},
+                            {"ativo": "Clorantraniliprole", "grupo_quimico": "Diamida", "sugestao_produtos": ["Dermacor"], "mecanismo": "Muscular", "observacao": "Excelente seletividade e residual no TS."}
+                        ]
+                    },
+                    "Percevejo-do-arroz": {
+                        "tipo": "Praga",
+                        "nome_cientifico": "Oebalus poecilus",
+                        "fases_criticas": ["R4 a R8 (Leitoso)"],
+                        "nivel_dano": "1 percevejo a cada 10 batidas de rede.",
+                        "identificacao_campo": "Percevejo marrom com manchas amarelas nas 'costas' (escudete).",
+                        "sintomas": "Grão picado (mancha preta) e gessado (quebra no benefício).",
+                        "manejo_quimico": [
+                            {"ativo": "Lambda-cialotrina + Tiametoxam", "grupo_quimico": "Piretroide + Neonic", "sugestao_produtos": ["Engeo Pleno"], "mecanismo": "Choque + Residual", "observacao": "Aplicação aérea comum em pré-colheita."},
+                            {"ativo": "Dinotefuran", "grupo_quimico": "Neonicotinoide", "sugestao_produtos": ["Starkle"], "mecanismo": "Sistêmico", "observacao": "Alta solubilidade e eficiência."}
+                        ]
+                    }
+                },
+                "Doencas": {
+                    "Brusone": {
+                        "tipo": "Doença",
+                        "nome_cientifico": "Magnaporthe oryzae",
+                        "fases_criticas": ["V4 (Folha) e R4 (Pescoço)"],
+                        "nivel_dano": "Principal doença. Pode dar 100% de perda.",
+                        "identificacao_campo": "Folha: mancha em forma de 'olho' (centro cinza, borda marrom). Pescoço: necrose escura na base da panícula.",
+                        "sintomas": "Quebra do pescoço, panícula branca e ereta (sem peso).",
+                        "manejo_quimico": [
+                            {"ativo": "Triciclazol", "grupo_quimico": "Redutase", "sugestao_produtos": ["Bim", "Sifra"], "mecanismo": "Sistêmico Preventivo", "observacao": "O padrão mundial. Deve ser aplicado ANTES da doença. Não tem ação curativa forte."},
+                            {"ativo": "Kasugamicina", "grupo_quimico": "Antibiótico", "sugestao_produtos": ["Kasumin"], "mecanismo": "Síntese Proteica", "observacao": "Curativo e erradicante. Usar se a doença já entrou."}
+                        ]
+                    },
+                    "Queima-da-bainha": {
+                        "tipo": "Doença",
+                        "nome_cientifico": "Rhizoctonia solani",
+                        "fases_criticas": ["Emborrachamento"],
+                        "nivel_dano": "Lesões subindo a bainha.",
+                        "identificacao_campo": "Manchas ovais branco-acinzentadas com bordas escuras na linha d'água.",
+                        "sintomas": "Seca das folhas e acamamento da planta.",
+                        "manejo_quimico": [
+                            {"ativo": "Azoxistrobina", "grupo_quimico": "Estrobilurina", "sugestao_produtos": ["Priori"], "mecanismo": "Respiração", "observacao": "Melhor grupo para Rhizoctonia."},
+                            {"ativo": "Thifluzamida", "grupo_quimico": "Carboxamida", "sugestao_produtos": ["Pulsor"], "mecanismo": "SDHI", "observacao": "Específico e altamente eficaz."}
+                        ]
+                    }
+                }
+            }
+        }
     }
