@@ -167,45 +167,111 @@ if cultura_sel:
                     </div>"""
                     st.markdown(html_q, unsafe_allow_html=True)
 
-    # --- ABA 3: SOLO & PLANTIO ---
+    # --- ABA 3: SOLO & CORREÇÃO (AGORA É UMA FERRAMENTA DE TRABALHO) ---
     with tab_solo:
-        db_completo = engine.db.get(cultura_sel, {})
-        plantio = db_completo.get('manejo_plantio')
+        st.markdown("### 🧪 Interpretador de Análise de Solo")
+        st.caption("Digite os dados do seu laudo para obter a recomendação de correção.")
 
-        if plantio:
-            st.caption(f"Diretrizes de plantabilidade e solo para {cultura_sel}.")
-            c_p1, c_p2 = st.columns(2)
-            with c_p1:
-                html_solo = f"""
-                <div class="plantio-card">
-                    <div class="plantio-title">🌱 SEMENTE & SOLO</div>
-                    <div class="plantio-item"><span class="plantio-label">SOLO IDEAL:</span><br>{plantio['solo_ideal']}</div>
-                    <hr style="border-color:#1e293b; opacity:0.3;">
-                    <div class="plantio-item"><span class="plantio-label">POPULAÇÃO:</span><br>{plantio['populacao']}</div>
-                    <div class="plantio-item"><span class="plantio-label">ESPAÇAMENTO:</span><br>{plantio['espacamento']}</div>
-                </div>
-                """
-                st.markdown(html_solo, unsafe_allow_html=True)
-            with c_p2:
-                maq = plantio['maquinario']
-                html_maq = f"""
-                <div class="plantio-card">
-                    <div class="plantio-title">🚜 MAQUINÁRIO & REGULAGEM</div>
-                    <div class="plantio-item"><span class="plantio-label">SISTEMA:</span> {maq['sistema']}</div>
-                    <div class="plantio-item"><span class="plantio-label">VELOCIDADE:</span> {maq['velocidade']}</div>
-                    <div class="plantio-item"><span class="plantio-label">PRESSÃO:</span> {maq['pressao_linha']}</div>
-                    <div class="plantio-item"><span class="plantio-label">TECNOLOGIA:</span> {maq['tecnologia']}</div>
-                </div>
-                """
-                st.markdown(html_maq, unsafe_allow_html=True)
+        # --- 1. DADOS DA ANÁLISE (INPUTS) ---
+        with st.expander("📝 Inserir Dados da Análise (0 - 20 cm)", expanded=True):
+            c_s1, c_s2, c_s3 = st.columns(3)
+            argila = c_s1.number_input("Argila (%):", min_value=0.0, max_value=100.0, value=35.0)
+            fosoforo = c_s2.number_input("Fósforo (mg/dm³ - Mehlich):", value=8.0)
+            potassio = c_s3.number_input("Potássio (mg/dm³):", value=40.0)
+            
+            c_s4, c_s5, c_s6 = st.columns(3)
+            calcio = c_s4.number_input("Cálcio (cmolc/dm³):", value=1.5)
+            magnesio = c_s5.number_input("Magnésio (cmolc/dm³):", value=0.5)
+            v_atual = c_s6.number_input("V% Atual (Saturação):", value=35.0)
+            
+            c_s7, c_s8 = st.columns(2)
+            ctc = c_s7.number_input("CTC (cmolc/dm³):", value=8.0)
+            prnt = c_s8.number_input("PRNT do Calcário (%):", value=85.0)
 
-            html_alerta = f"""
-            <div style="background:#3f2c22; border-left:4px solid #f97316; padding:15px; border-radius:6px; margin-top:10px;">
-                <div style="color:#f97316; font-weight:bold; font-size:1rem; margin-bottom:5px;">📏 PROFUNDIDADE DE SEMEADURA: {plantio['profundidade']}</div>
-                <div style="color:#fdba74; font-size:0.9rem; font-style:italic;">⚠️ {plantio['alerta_tecnico']}</div>
+        # --- 2. MOTOR DE CÁLCULO E INTERPRETAÇÃO ---
+        # Definição de metas por cultura (Simplificado para o MVP - Ideal é vir do Database)
+        meta_v = 60 # Padrão
+        if cultura_sel == "Soja": meta_v = 80
+        elif cultura_sel == "Milho": meta_v = 70
+        elif cultura_sel == "Algodão": meta_v = 70
+        elif cultura_sel == "Arroz": meta_v = 50
+
+        # Lógica de Interpretação (Tabela aproximada Cerrado)
+        def interpretar_p(p_teor, argila_teor):
+            # Nível Crítico simplificado
+            nivel_critico = 15 if argila_teor < 20 else 10 if argila_teor < 40 else 6
+            if p_teor < nivel_critico * 0.5: return "MUITO BAIXO", "#ef4444"
+            if p_teor < nivel_critico: return "BAIXO", "#f97316"
+            if p_teor < nivel_critico * 1.5: return "MÉDIO", "#eab308"
+            return "ALTO", "#22c55e"
+
+        classificacao_p, cor_p = interpretar_p(fosoforo, argila)
+        
+        # Cálculo de Calagem (Método Saturação por Bases)
+        nc_ton = 0
+        if v_atual < meta_v:
+            nc_ton = ((meta_v - v_atual) * ctc) / prnt
+
+        # Cálculo de Gessagem (Método da Argila - Viltani)
+        # NG = 50 * Argila (%) ... resultado em kg/ha -> divide por 1000 para ton
+        ng_ton = (50 * argila) / 1000 
+        
+        # --- 3. EXIBIÇÃO DOS RESULTADOS (O RELATÓRIO NA TELA) ---
+        st.divider()
+        st.markdown(f"#### 📊 Diagnóstico para {cultura_sel}")
+
+        # Colunas de Resultados
+        col_res1, col_res2 = st.columns(2)
+
+        with col_res1:
+            st.markdown("##### 🪨 Correção (Calagem e Gessagem)")
+            
+            # Card Calagem
+            if nc_ton > 0:
+                st.markdown(f"""
+                <div style="background:#2a1810; border-left:4px solid #f97316; padding:15px; border-radius:6px; margin-bottom:10px;">
+                    <div style="color:#cbd5e1; font-size:0.9rem;">NECESSIDADE DE CALCÁRIO</div>
+                    <div style="color:#f97316; font-size:1.8rem; font-weight:bold;">{nc_ton:.1f} ton/ha</div>
+                    <div style="color:#94a3b8; font-size:0.8rem;">Para elevar V% de {v_atual}% para {meta_v}% (PRNT {prnt}%)</div>
+                </div>
+                """, unsafe_allow_html=True)
+            else:
+                st.success("✅ Solo com V% adequada. Calagem não necessária.")
+
+            # Card Gessagem
+            st.markdown(f"""
+            <div style="background:#1e1e24; border-left:4px solid #cbd5e1; padding:15px; border-radius:6px;">
+                <div style="color:#cbd5e1; font-size:0.9rem;">RECOMENDAÇÃO DE GESSO</div>
+                <div style="color:#fff; font-size:1.4rem; font-weight:bold;">{ng_ton:.1f} ton/ha</div>
+                <div style="color:#94a3b8; font-size:0.8rem;">Baseado no teor de Argila ({argila}%) para condicionamento.</div>
             </div>
-            """
-            st.markdown(html_alerta, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
+
+        with col_res2:
+            st.markdown("##### 📉 Níveis de Fertilidade")
+            
+            # Barras de Progresso Visuais
+            st.markdown(f"**Fósforo (P):** <span style='color:{cor_p}; font-weight:bold;'>{classificacao_p}</span>", unsafe_allow_html=True)
+            st.progress(min(fosoforo/30, 1.0)) # Escala visual até 30mg
+            
+            st.markdown("**Potássio (K):**")
+            k_percent = (potassio / 390) / ctc * 100 # % da CTC
+            st.progress(min(k_percent/5, 1.0)) # Meta é 3% a 5% da CTC
+            st.caption(f"K ocupa {k_percent:.1f}% da CTC (Ideal: 3% a 5%)")
+
+            st.markdown("**Magnésio (Mg):**")
+            mg_percent = magnesio / ctc * 100
+            st.progress(min(mg_percent/15, 1.0))
+            st.caption(f"Mg ocupa {mg_percent:.1f}% da CTC (Ideal: 10% a 15%)")
+
+        # --- 4. DICAS TÉCNICAS DE APLICAÇÃO ---
+        st.markdown("<br>", unsafe_allow_html=True)
+        with st.expander("🚜 Dicas de Aplicação e Incorporação", expanded=False):
+            st.markdown("""
+            * **Calcário:** Aplicar 3 meses antes do plantio. Se a dose for maior que 3 ton/ha, dividir em duas aplicações (metade antes da grade, metade depois).
+            * **Gesso:** Não precisa incorporar. Aplicar em cobertura após o calcário reagir. Cuidado: Gesso não corrige pH, apenas fornece Ca e S em profundidade.
+            * **Fósforo:** Se o nível estiver "MUITO BAIXO", recomenda-se fazer uma fosfatagem (aplicação a lanço) para elevar o nível crítico antes de adubar no sulco.
+            """)
             
             
 
