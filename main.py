@@ -1453,7 +1453,7 @@ with tabs[6]:
             st.markdown("### 🔔 Central de Automação")
             st.info("Configure aqui os alertas automáticos. No App Mobile, estas notificações chegarão como Push Notification.")
         
-        with st.form("form_notificacao_pro"):
+            with st.form("form_notificacao_pro"):
             st.markdown("#### 👤 Perfil do Assinante")
             col_n1, col_n2 = st.columns(2)
             nome_user = col_n1.text_input("Nome Responsável", value="Produtor")
