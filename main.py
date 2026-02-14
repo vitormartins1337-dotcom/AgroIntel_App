@@ -1,5 +1,5 @@
 # ARQUIVO: main.py
-# AGRO SDI | VISUAL PRO (CORREÇÃO DEFINITIVA)
+# AGRO SDI | VISUAL PRO + TICKER BLOOMBERG (FINAL)
 import streamlit as st
 from core_logic import AgroEngine 
 
@@ -7,7 +7,7 @@ from core_logic import AgroEngine
 st.set_page_config(page_title="Agro SDI", page_icon="🌱", layout="wide")
 engine = AgroEngine()
 
-# --- 2. CSS PROFISSIONAL (TICKER FINO + CORES EXÉRCITO) ---
+# --- 2. CSS PROFISSIONAL (SEM ALTERAÇÕES NO QUE JÁ FUNCIONA) ---
 def load_css():
     st.markdown("""
         <style>
@@ -26,29 +26,32 @@ def load_css():
             border-right: 1px solid #1e3a2f;
         }
 
-        /* --- TICKER BLOOMBERG (ESTILO FINO) --- */
+        /* --- NOVO TICKER BLOOMBERG (FINO E ELEGANTE) --- */
         .ticker-container {
             width: 100%;
-            background-color: #000000; /* Fundo Preto Profissional */
-            border-bottom: 2px solid #15803d;
+            background-color: #020403; /* Preto Profundo */
+            border-bottom: 1px solid #15803d;
+            border-top: 1px solid #14532d;
             overflow: hidden;
             white-space: nowrap;
-            padding: 4px 0; /* Bem fino */
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-            margin-bottom: 15px;
+            height: 32px; /* Altura fixa fina */
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+            margin-bottom: 20px; /* Espaço para o conteúdo abaixo */
         }
         .ticker-text {
             display: inline-block;
-            animation: ticker 40s linear infinite;
-            font-family: 'Courier New', monospace;
-            font-size: 0.8rem; /* Fonte pequena e técnica */
+            animation: ticker 35s linear infinite;
+            font-family: 'Courier New', monospace; /* Fonte Financeira */
+            font-size: 0.85rem; 
             font-weight: bold;
         }
         @keyframes ticker {
             0% { transform: translate3d(100%, 0, 0); }
             100% { transform: translate3d(-100%, 0, 0); }
         }
-        .tick-item { margin-right: 40px; color: #cbd5e1; }
+        .tick-item { margin-right: 40px; color: #cbd5e1; letter-spacing: 0.5px; }
         .up { color: #4ade80; } /* Verde Neon */
         .down { color: #f87171; } /* Vermelho */
 
@@ -61,10 +64,10 @@ def load_css():
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            /* margin-bottom removido para colar no ticker */
         }
 
-        /* --- CARDS DE FASES (CORREÇÃO VISUAL) --- */
+        /* --- CARDS DE FASES --- */
         .phase-box {
             background-color: #16241b;
             border-left: 4px solid #22c55e;
@@ -100,24 +103,7 @@ def load_css():
 
 load_css()
 
-# --- 3. TICKER FINO (NO TOPO) ---
-# HTML Pura sem quebras de linha para evitar erro
-ticker_html = """
-<div class="ticker-container">
-    <div class="ticker-text">
-        <span class="tick-item">USD/BRL <span class="up">R$ 5.72 ▲</span></span>
-        <span class="tick-item">SOJA (CBOT) <span class="down">US$ 12.10 ▼</span></span>
-        <span class="tick-item">MILHO (B3) <span class="up">R$ 58.40 ▲</span></span>
-        <span class="tick-item">BOI GORDO <span class="up">R$ 245.00 ▲</span></span>
-        <span class="tick-item">CAFÉ ARÁBICA <span class="down">US$ 230.00 ▼</span></span>
-        <span class="tick-item">UREIA <span class="down">US$ 380.00 ▼</span></span>
-        <span class="tick-item">CLORETO DE POTÁSSIO <span class="down">US$ 310.00 ▼</span></span>
-    </div>
-</div>
-"""
-st.markdown(ticker_html, unsafe_allow_html=True)
-
-# --- 4. HEADER (CAPA) ---
+# --- 3. HEADER (CAPA) ---
 st.markdown("""
 <div class="header-box">
     <div>
@@ -134,6 +120,22 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+# --- 4. TICKER BLOOMBERG (INSERIDO AQUI) ---
+ticker_html = """
+<div class="ticker-container">
+    <div class="ticker-text">
+        <span class="tick-item">USD/BRL <span class="up">R$ 5.72 ▲</span></span>
+        <span class="tick-item">SOJA (CBOT) <span class="down">US$ 12.10 ▼</span></span>
+        <span class="tick-item">MILHO (B3) <span class="up">R$ 58.40 ▲</span></span>
+        <span class="tick-item">BOI GORDO <span class="up">R$ 245.00 ▲</span></span>
+        <span class="tick-item">CAFÉ ARÁBICA <span class="down">US$ 230.00 ▼</span></span>
+        <span class="tick-item">UREIA <span class="down">US$ 380.00 ▼</span></span>
+        <span class="tick-item">CLORETO DE POTÁSSIO <span class="down">US$ 310.00 ▼</span></span>
+    </div>
+</div>
+"""
+st.markdown(ticker_html, unsafe_allow_html=True)
+
 # ==============================================================================
 # 🧠 CÉREBRO DO APLICATIVO
 # ==============================================================================
@@ -146,14 +148,14 @@ if cultura_sel:
     tab_fases, tab_sanidade = st.tabs(["🌱 FASES & MANEJO PRÁTICO", "🛡️ SANIDADE (PRAGAS & DOENÇAS)"])
 
     # =========================================================
-    # ABA 1: FENOLOGIA (SEM ERRO DE CÓDIGO NA TELA)
+    # ABA 1: FENOLOGIA
     # =========================================================
     with tab_fases:
         fases = engine.get_fases(cultura_sel)
         st.caption(f"Guia estratégico para {cultura_sel}.")
         
         for sigla, dados in fases.items():
-            # Criei o HTML sem indentação interna para evitar bugs do markdown
+            # HTML Montado
             html_content = f"""
 <div class="phase-box">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
