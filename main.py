@@ -895,14 +895,100 @@ if not df_clima.empty:
                 st.markdown("""### 📚 Base Científica (Multiculturas)\n* **CFSEMG (5ª Aproximação)**\n* **Malavolta, E. (2006)**\n* **Embrapa**\n* **IPNI Brasil**""")
 
     # ==============================================================================
-    # 🧮 ABA 3: CALCULADORA AGRONÔMICA
+    # 🧮 ABA 3: CALCULADORA MASTER PRO (AGORA COM 3 FERRAMENTAS)
     # ==============================================================================
-    with tabs[2]:
-        st.header("🧮 Calculadoras de Campo")
-        calc_selecionada = st.selectbox("Selecione:", ["Calagem (Saturação por Bases)", "Conversão de Adubo (Formulado)"])
-        st.divider()
+    with tabs[2]: # Lembre-se: Python conta 0, 1, 2. Esta é a terceira aba.
+        st.markdown('<div class="app-card">', unsafe_allow_html=True)
+        st.header("🧮 Calculadora de Campo Pro")
+        st.caption("Ferramentas de precisão para Adubação e Pulverização.")
 
-        if calc_selecionada == "Calagem (Saturação por Bases)":
+        # Criação de Sub-abas para organizar as ferramentas
+        calc_tabs = st.tabs(["🚜 Regulagem Adubadora", "💧 Calda de Pulverização", "⚖️ Calagem"])
+
+        # ----------------------------------------------------------------------
+        # 1. REGULAGEM DE ADUBAÇÃO (MÉTODO DOS 50 METROS)
+        # ----------------------------------------------------------------------
+        with calc_tabs[0]:
+            st.markdown("#### 📏 Calibração por Área (Teste de Pista)")
+            st.info("Passo a Passo: Marque 50 metros. Colete o adubo de UMA saída (ou da largura total) enquanto o trator percorre essa distância.")
+
+            c_ad1, c_ad2, c_ad3 = st.columns(3)
+            distancia = c_ad1.number_input("Distância Percorrida (m):", value=50.0)
+            largura = c_ad2.number_input("Largura de Trabalho/Coleta (m):", value=1.0, help="Largura da faixa que você coletou o adubo.")
+            peso_g = c_ad3.number_input("Peso Coletado (gramas):", value=500.0)
+
+            if st.button("🚜 Calcular Taxa de Aplicação"):
+                if largura > 0 and distancia > 0:
+                    # Lógica da Regra de 3:
+                    # Área Teste = Largura * Distância
+                    # Se em (Area Teste) caiu (Peso_g)... em 10.000m² (1ha) vai cair X.
+                    
+                    area_teste = largura * distancia
+                    fator_conversao = 10000 / area_teste
+                    kg_por_ha = (peso_g * fator_conversao) / 1000 # Divide por 1000 para virar Kg
+
+                    st.markdown("---")
+                    col_res1, col_res2 = st.columns(2)
+                    
+                    with col_res1:
+                        st.markdown(f"""
+                        <div style="background:#f0fdf4; padding:15px; border-radius:10px; border-left:5px solid #16a34a;">
+                            <span style="font-size:0.9rem; color:#15803d;">DOSE FINAL CALCULADA</span><br>
+                            <span style="font-size:2rem; font-weight:bold; color:#16a34a;">{kg_por_ha:.1f} kg/ha</span>
+                        </div>""", unsafe_allow_html=True)
+                    
+                    with col_res2:
+                        # Cálculo extra: Velocidade (se o usuário quiser medir tempo)
+                        st.info(f"💡 **Dica:** Se você coletou **{peso_g}g** em **{area_teste:.1f}m²**, sua máquina está regulada para jogar **{kg_por_ha:.1f} kg** em 1 hectare.")
+                else:
+                    st.error("A largura e distância devem ser maiores que zero.")
+
+        # ----------------------------------------------------------------------
+        # 2. CALDA DE PULVERIZAÇÃO (O EXEMPLO DO UNIPORT 3000L)
+        # ----------------------------------------------------------------------
+        with calc_tabs[1]:
+            st.markdown("#### 💧 Preparo de Calda (Tanque Cheio)")
+            
+            # 
+            
+            c_pul1, c_pul2 = st.columns(2)
+            cap_tanque = c_pul1.number_input("Capacidade do Tanque (Litros):", value=3000.0, step=100.0, help="Ex: Uniport 3000, Patriot 2500...")
+            vazao = c_pul2.number_input("Vazão Regulada (L/ha):", value=90.0, step=5.0)
+
+            st.divider()
+            
+            st.markdown("##### 🧪 Produtos no Tanque")
+            c_prod1, c_prod2 = st.columns([2, 1])
+            nome_prod = c_prod1.text_input("Nome do Produto (Opcional):", placeholder="Ex: Fungicida X")
+            dose_prod = c_prod2.number_input("Dose de Bula (L ou Kg / ha):", value=0.5, step=0.1, format="%.3f")
+
+            if st.button("💧 Calcular Mistura"):
+                if vazao > 0:
+                    # 1. Quantos hectares um tanque faz?
+                    ha_por_tanque = cap_tanque / vazao
+                    
+                    # 2. Quanto produto vai no tanque?
+                    qtd_produto_tanque = ha_por_tanque * dose_prod
+
+                    st.success(f"✅ **Rendimento:** Com {cap_tanque}L e vazão de {vazao} L/ha, você cobre **{ha_por_tanque:.2f} hectares** por tanque.")
+
+                    st.markdown(f"""
+                    <div style="background:#eff6ff; padding:20px; border-radius:10px; border:1px solid #3b82f6; text-align:center;">
+                        <h3 style="color:#1e3a8a; margin:0;">NO TANQUE VAI:</h3>
+                        <div style="font-size:3rem; font-weight:900; color:#2563eb;">{qtd_produto_tanque:.2f}</div>
+                        <div style="font-size:1rem; font-weight:bold; color:#1e40af;">Litros (ou Kg) de {nome_prod if nome_prod else 'Produto'}</div>
+                        <div style="margin-top:10px; font-size:0.8rem; color:#64748b;">(Baseado na dose de {dose_prod} por hectare)</div>
+                    </div>""", unsafe_allow_html=True)
+
+                else:
+                    st.error("A vazão deve ser maior que zero.")
+
+        # ----------------------------------------------------------------------
+        # 3. CALAGEM RÁPIDA (SATURAÇÃO POR BASES)
+        # ----------------------------------------------------------------------
+        with calc_tabs[2]:
+            st.markdown("#### ⚖️ Correção de Solo")
+            
             c1, c2 = st.columns(2)
             with c1:
                 v2 = st.number_input("V% Desejada (Meta):", value=70.0)
@@ -910,21 +996,20 @@ if not df_clima.empty:
             with c2:
                 ctc = st.number_input("CTC (cmolc/dm³):", value=10.0)
                 prnt = st.number_input("PRNT do Calcário (%):", value=85.0)
-            if st.button("Calcular Calagem", type="primary"):
+            
+            if st.button("🪨 Calcular Toneladas"):
                 if prnt > 0:
                     nc = ((v2 - v1) * ctc) / prnt
-                    st.success(f"⚖️ Necessidade de Calagem: **{nc:.2f} ton/ha**")
-                else: st.error("PRNT deve ser maior que zero.")
+                    
+                    st.markdown(f"""
+                    <div style="background:#fff7ed; padding:15px; border-radius:10px; border-left:5px solid #ea580c;">
+                        <span style="font-size:0.9rem; color:#9a3412;">NECESSIDADE DE CALCÁRIO</span><br>
+                        <span style="font-size:2rem; font-weight:bold; color:#c2410c;">{nc:.2f} ton/ha</span>
+                    </div>""", unsafe_allow_html=True)
+                else:
+                    st.error("PRNT deve ser maior que zero.")
 
-        elif calc_selecionada == "Conversão de Adubo (Formulado)":
-            st.info("Calcula quanto aplicar de um formulado para atingir a meta de um nutriente.")
-            meta_kg = st.number_input("Meta do Nutriente (kg/ha):", value=100.0)
-            teor = st.number_input("Teor do Nutriente no Adubo (%):", value=20.0)
-            if st.button("Calcular Dose"):
-                if teor > 0:
-                    dose = (meta_kg * 100) / teor
-                    st.success(f"📦 Aplicar **{dose:.1f} kg/ha** do adubo.")
-                else: st.error("Teor deve ser maior que zero.")
+        st.markdown('</div>', unsafe_allow_html=True)
 
     # ==============================================================================
     # ☁️ ABA 4: CLIMA & RADAR
