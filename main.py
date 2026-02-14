@@ -208,7 +208,7 @@ if cultura_sel:
                 with c_d2: 
                     if 'fases_criticas' in item: st.markdown(f"**Fases:** {', '.join(item['fases_criticas'])}")
                 
-                st.markdown("#### ☠️ Controle Químico")
+                st.markdown("#### Controle")
                 for solucao in item['manejo_quimico']:
                     html_quimica = f"""
                     <div style="background:{bg_header}; padding:10px; border-radius:6px; border:1px solid #334155; margin-bottom:8px;">
