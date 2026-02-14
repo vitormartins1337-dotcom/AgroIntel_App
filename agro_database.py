@@ -1,210 +1,117 @@
 # ARQUIVO: agro_database.py
-# SISTEMA: AGROWER SDI | MASTER GENETICS DATABASE
-# FONTE: Breeders Oficiais, Leafly, SeedFinder.
+# SISTEMA: AGROWER SDI | MASTER DATABASE
+# DESCRIÇÃO: Dados técnicos para Orgânico, Mineral, Hidro e IPM (Manejo Integrado de Pragas).
 
 def get_agro_db():
     return {
-        "📚 BOTÂNICA & SEXAGEM": {
-            "tipos": {
-                "Fêmea (Sinsemilla)": {
-                    "descricao": "O objetivo de todo grower. Produz as flores resinosas ricas em canabinoides (THC/CBD).",
-                    "identificacao": "Pistilos (pelinhos brancos) saindo das brácteas nos nós entre o caule e o galho.",
-                    "funcao": "Produção de medicina e sementes (se polinizada).",
-                    "imagem_ref": "Buscando pistilos em forma de 'V'."
-                },
-                "Macho": {
-                    "descricao": "Produtor de pólen. Essencial para breeding (criação de novas seeds), mas inimigo do cultivo de flores.",
-                    "identificacao": "Sacos de pólen (bolinhas) agrupados nos nós. Parecem cachos de uva minúsculos.",
-                    "funcao": "Polinizar fêmeas.",
-                    "alerta": "Se abrir o saco de pólen, uma única planta macho pode estragar (semear) a colheita de uma estufa inteira."
-                },
-                "Hermafrodita (Hermie)": {
-                    "descricao": "Pesadelo do grower. Planta que desenvolve ambos os sexos, geralmente por estresse (luz, calor).",
-                    "identificacao": "Estruturas amarelas em forma de 'banana' (nanners) saindo de dentro da flor fêmea.",
-                    "acao": "Corte imediato ou remoção cirúrgica das 'bananas' com pinça e água.",
-                    "causa": "Vazamento de luz no período noturno ou genética instável."
-                }
+        "METODOS_CULTIVO": {
+            "Orgânico (Living Soil)": {
+                "descricao": "Cultivo baseado na vida do solo. Foco em terroirs e qualidade final.",
+                "substrato_receita": [
+                    "40% Turfa de Sphagnum ou Coco (Lavado)",
+                    "30% Perlita ou Casca de Arroz Carbonizada (Aeração)",
+                    "30% Húmus de Minhoca ou Composto (Vida)",
+                    "Aditivos (p/ 100L): 1kg Torta de Neem, 2kg Farinha de Osso, 200g Azomite, 500g Gesso Agrícola."
+                ],
+                "nutricao": "A planta come o solo. Use chás de compostagem (Aerados), Bokashi e KNF (Fermentados).",
+                "ph_ideal": "6.2 - 6.8 (O solo tampona variações leves).",
+                "ec_ideal": "Não se mede EC no runoff em orgânico puro."
+            },
+            "Mineral (Inerte)": {
+                "descricao": "Alta performance e controle total. Foco em rendimento (g/watt).",
+                "substrato_receita": [
+                    "50% Turfa de Sphagnum",
+                    "50% Perlita Expandida",
+                    "Ou 100% Coco (Bufferizado com CalMag)"
+                ],
+                "nutricao": "Fertilizantes minerais quelatados (Salt based). Obrigatório medir pH e EC na entrada e saída (Runoff).",
+                "ph_ideal": "5.8 - 6.2 (Mais ácido para absorção de micronutrientes).",
+                "ec_ideal": "Veg: 1.2-1.5 | Flora: 1.8-2.4 mS/cm."
+            },
+            "Hidroponia (DWC/RDWC)": {
+                "descricao": "Máxima oxigenação radicular. Crescimento explosivo (30-50% mais rápido).",
+                "substrato_receita": [
+                    "Argila Expandida (Lavada e pH regulado)",
+                    "Lã de Rocha (Rockwool)"
+                ],
+                "nutricao": "Solução nutritiva estéril ou com biofiltro. Temperatura da água é crítica.",
+                "ph_ideal": "5.5 - 6.0 (Flutuação é normal, corrigir se passar disso).",
+                "ec_ideal": "Veg: 0.8-1.2 | Flora: 1.5-2.0 (Menos é mais em hidro)."
             }
         },
-        "🧬 GENÉTICAS REAIS (CATÁLOGO MASTER)": {
-            "Indica Dominante": {
-                "Granddaddy Purple": {
-                    "banco": "Ken Estes",
-                    "thc": "20-27%", "cbd": "<1%",
-                    "terpenos": ["Mirceno", "Pineno", "Cariofileno"],
-                    "sabor": "Uva, Frutas Vermelhas, Doce.",
-                    "efeito": "Sedação pesada, relaxamento muscular, sono.",
-                    "medicinal": "Insônia, Dor Crônica, Espasmos.",
-                    "cultivo": {
-                        "dificuldade": "Média",
-                        "tempo_flora": "8-10 semanas",
-                        "rendimento_indoor": "450-500g/m²",
-                        "clima": "Gosta de umidade moderada. Tende a ficar roxa com frio noturno."
-                    }
-                },
-                "Northern Lights": {
-                    "banco": "Sensi Seeds",
-                    "thc": "18-22%", "cbd": "<1%",
-                    "terpenos": ["Mirceno", "Cariofileno", "Limoneno"],
-                    "sabor": "Terroso, Pinho, Picante.",
-                    "efeito": "Euforia suave seguida de relaxamento profundo (Couch-lock).",
-                    "medicinal": "Stress, Ansiedade, Falta de Apetite.",
-                    "cultivo": {
-                        "dificuldade": "Fácil (Lendária pela resistência)",
-                        "tempo_flora": "7-8 semanas",
-                        "rendimento_indoor": "500-550g/m²",
-                        "clima": "Resistente a mofo e pragas. Ideal para iniciantes."
-                    }
-                },
-                "Bubba Kush": {
-                    "banco": "Green House Seeds",
-                    "thc": "15-22%", "cbd": "0-1%",
-                    "terpenos": ["Cariofileno", "Limoneno", "Mirceno"],
-                    "sabor": "Café, Chocolate, Terra.",
-                    "efeito": "Narcótico, tranquilizante físico.",
-                    "medicinal": "Dor aguda, Insônia severa.",
-                    "cultivo": {
-                        "dificuldade": "Média",
-                        "tempo_flora": "8-9 semanas",
-                        "rendimento_indoor": "400-450g/m²",
-                        "clima": "Planta compacta e arbustiva. Exige poda de limpeza (lollipopping)."
-                    }
-                }
+        "FASES_DINAMICAS": {
+            "Plântula (Semana 1-2)": {
+                "foco": "Enraizamento",
+                "riscos": ["Damping-off (Pythium)", "Fungus Gnats", "Seca por luz forte"],
+                "obs": "Manter domo de umidade (70-80%). Luz fraca (PPFD 200). Não adubar se o solo tiver carga."
             },
-            "Sativa Dominante": {
-                "Sour Diesel": {
-                    "banco": "Genética Americana (Clone only orig)",
-                    "thc": "20-25%", "cbd": "<1%",
-                    "terpenos": ["Cariofileno", "Limoneno", "Mirceno"],
-                    "sabor": "Diesel, Combustível, Cítrico.",
-                    "efeito": "Energético, Cerebral, Criativo.",
-                    "medicinal": "Depressão, Fadiga, Stress.",
-                    "cultivo": {
-                        "dificuldade": "Difícil",
-                        "tempo_flora": "10-12 semanas",
-                        "rendimento_indoor": "450-600g/m²",
-                        "clima": "Estica muito (Stretch 200%). Precisa de teto alto e SCROG."
-                    }
-                },
-                "Super Lemon Haze": {
-                    "banco": "Green House Seeds",
-                    "thc": "19-25%", "cbd": "<1%",
-                    "terpenos": ["Terpinoleno", "Cariofileno", "Mirceno"],
-                    "sabor": "Limão siciliano, Doce, Zest.",
-                    "efeito": "Eufórico, Vivo, Social.",
-                    "medicinal": "Melhora de humor, Dores de cabeça.",
-                    "cultivo": {
-                        "dificuldade": "Média/Alta",
-                        "tempo_flora": "10 semanas",
-                        "rendimento_indoor": "600-800g/m² (Monstra produtiva)",
-                        "clima": "Gosta de EC alto. Suporta bem nutrientes."
-                    }
-                },
-                "Jack Herer": {
-                    "banco": "Sensi Seeds",
-                    "thc": "18-24%", "cbd": "<1%",
-                    "terpenos": ["Terpinoleno", "Cariofileno", "Pineno"],
-                    "sabor": "Pinho, Madeira, Especiarias.",
-                    "efeito": "Foco mental, clareza, energia limpa.",
-                    "medicinal": "TDAH, Fadiga Mental.",
-                    "cultivo": {
-                        "dificuldade": "Média",
-                        "tempo_flora": "8-10 semanas",
-                        "rendimento_indoor": "500g/m²",
-                        "clima": "Fenótipos variam. Produz muita resina."
-                    }
-                }
+            "Vegetativo (Semana 3-6)": {
+                "foco": "Estrutura e Nitrogênio",
+                "riscos": ["Tripes", "Ácaros", "Deficiência de CalMag"],
+                "obs": "Hora das podas (Topping/LST). Ventilação forte para fortalecer o caule."
             },
-            "Híbridas (50/50 ou Balanceadas)": {
-                "Gorilla Glue #4 (GG4)": {
-                    "banco": "GG Strains",
-                    "thc": "25-32% (Extrema)", "cbd": "<1%",
-                    "terpenos": ["Cariofileno", "Mirceno", "Limoneno"],
-                    "sabor": "Pungente, Terra, Azedo.",
-                    "efeito": "Colada no sofá (Glue), Euforia pesada.",
-                    "medicinal": "Dor Crônica, TOC, Insônia.",
-                    "cultivo": {
-                        "dificuldade": "Média",
-                        "tempo_flora": "8-9 semanas",
-                        "rendimento_indoor": "500-600g/m²",
-                        "clima": "Hermafrodita se estressada. Sensível a luz."
-                    }
-                },
-                "Girl Scout Cookies (GSC)": {
-                    "banco": "Cookie Fam",
-                    "thc": "22-28%", "cbd": "1%",
-                    "terpenos": ["Cariofileno", "Limoneno", "Humuleno"],
-                    "sabor": "Doce, Menta, Terroso.",
-                    "efeito": "Relaxamento total com felicidade mental.",
-                    "medicinal": "Náusea, Perda de Apetite, Dor.",
-                    "cultivo": {
-                        "dificuldade": "Média",
-                        "tempo_flora": "9-10 semanas",
-                        "rendimento_indoor": "450g/m²",
-                        "clima": "Produz buds muito densos e duros."
-                    }
-                },
-                "Wedding Cake": {
-                    "banco": "Seed Junky Genetics",
-                    "thc": "22-27%", "cbd": "<1%",
-                    "terpenos": ["Limoneno", "Cariofileno", "Mirceno"],
-                    "sabor": "Baunilha, Pimenta, Doce.",
-                    "efeito": "Relaxante, mas não sedativo imediato.",
-                    "medicinal": "Ansiedade, Depressão.",
-                    "cultivo": {
-                        "dificuldade": "Média",
-                        "tempo_flora": "8-9 semanas",
-                        "rendimento_indoor": "500g/m²",
-                        "clima": "Muito resistente. Ótima para extração."
-                    }
-                }
+            "Pré-Flora (Semana 7-8)": {
+                "foco": "Stretch (Estirão)",
+                "riscos": ["Hermafroditismo", "Fome de Magnésio"],
+                "obs": "A planta pode dobrar de tamanho. Instalar rede SCROG. Identificar sexagem final."
             },
-            "Automáticas (Ruderalis)": {
-                "Gorilla Cookies Auto": {
-                    "banco": "FastBuds",
-                    "thc": "Até 27%", "cbd": "<1%",
-                    "terpenos": ["Cariofileno", "Limoneno"],
-                    "sabor": "Cookie, Diesel, Cítrico.",
-                    "efeito": "Riso frouxo, relaxamento corporal.",
-                    "medicinal": "Stress, Dor.",
-                    "cultivo": {
-                        "dificuldade": "Fácil",
-                        "tempo_flora": "10 semanas (Ciclo Total)",
-                        "rendimento_indoor": "500-600g/m²",
-                        "clima": "Aguenta muita comida e luz 20/4."
-                    }
-                },
-                "Purple Punch Auto": {
-                    "banco": "Barney's Farm",
-                    "thc": "18-20%", "cbd": "1%",
-                    "terpenos": ["Cariofileno", "Limoneno"],
-                    "sabor": "Torta de maçã, Cravo, Blueberry.",
-                    "efeito": "Desestressante, calmante.",
-                    "medicinal": "Ansiedade, Relaxamento.",
-                    "cultivo": {
-                        "dificuldade": "Muito Fácil",
-                        "tempo_flora": "8-9 semanas (Ciclo Total)",
-                        "rendimento_indoor": "350-400g/m²",
-                        "clima": "Fica pequena e robusta. Ideal para espaços curtos."
-                    }
-                }
+            "Flora Inicial (Semana 9-11)": {
+                "foco": "Formação de Botões",
+                "riscos": ["Oídio (Powdery Mildew)", "Overfert (Queima)"],
+                "obs": "Parar Foliares! A partir daqui nada de neem ou químicos nas folhas."
+            },
+            "Flora Final/Engorda (Semana 12+)": {
+                "foco": "Densidade e Terpenos",
+                "riscos": ["Botrytis (Bud Rot)", "Bananas (Stress final)"],
+                "obs": "Baixar umidade para <45%. Monitorar tricomas."
             }
         },
-        "💡 SETUP & MANEJO": {
-            "luz": "VEG: 18/6h (PPFD 400-600) | FLORA: 12/12h (PPFD 800-1000). Automáticas: 20/4h sempre.",
-            "clima_ideal": "Temp: 22-26°C (Dia) / 18-22°C (Noite). Umidade: Veg 60-70% / Flora 40-50%.",
-            "nutricao": "EC Veg: 0.8-1.2 | EC Flora: 1.4-2.2. pH Solo: 6.0-6.8 | pH Inerte: 5.5-6.2.",
-            "treinamento": "LST (Amarras), Topping (Poda Apical), SCROG (Tela), Lollipopping (Limpeza Baixeiro).",
-            "colheita": "Observar Tricomas com lupa 60x: Transparente (Verde) -> Leitoso (Ponto Máximo THC) -> Âmbar (CBN/Sedativo)."
-        },
-        "🛡️ DOCTOR GROW (PROBLEMAS)": {
+        "DOCTOR_GROW_MASTER": {
             "Pragas": {
-                "Spider Mites": {"tipo": "Praga", "identificacao": "Pontos brancos na folha, teias nos buds.", "dano": "Suga a vida da planta.", "solucao": ["Óleo de Neem (Veg)", "Beauveria bassiana", "Predadores"], "obs": "Aumentar umidade ajuda a frear."},
-                "Fungus Gnats": {"tipo": "Praga", "identificacao": "Mosquitinhos pretos no solo.", "dano": "Larvas comem raiz.", "solucao": ["BTI (Dipel/Dimy)", "Armadilhas Amarelas", "Terra Diatomácea"], "obs": "Deixe o solo secar bem."}
+                "Spider Mites (Ácaro-rajado)": {
+                    "identificacao": "Pontos brancos nas folhas (picadas). Teias nos buds em casos graves. Vivem embaixo da folha.",
+                    "controle_organico": ["Óleo de Neem (Apenas Veg)", "Beauveria bassiana (Fungo)", "Predadores: Phytoseiulus persimilis"],
+                    "controle_quimico": ["Abamectina (Vertimec) - Período de carência 28 dias.", "Etoxazol (Barricade) - Ovicida."],
+                    "gravidade": "ALTA. Pode destruir a colheita em 3 dias."
+                },
+                "Fungus Gnats": {
+                    "identificacao": "Mosquitinhos pretos voando no solo. Larvas brancas com cabeça preta na raiz.",
+                    "controle_organico": ["BTI (Bacillus thuringiensis israelensis) na rega", "Terra de Diatomáceas na superfície", "Armadilhas Amarelas (Sticky Traps)"],
+                    "controle_quimico": ["Imidacloprido (Apenas se infestação massiva no Veg)."],
+                    "gravidade": "MÉDIA. Abre porta para doenças de raiz."
+                },
+                "Tripes (Thrips)": {
+                    "identificacao": "Manchas prateadas/bronzeadas nas folhas. Inseto palito rápido.",
+                    "controle_organico": ["Spinosad (O melhor orgânico)", "Sabão Potássico + Álcool Isopropílico", "Armadilhas Azuis"],
+                    "controle_quimico": ["Clorfenapir (Pirate) - Tóxico, cuidado.", "Acetamiprido."],
+                    "gravidade": "MÉDIA. Vetor de viroses."
+                },
+                "Cochonilha (Mealybugs)": {
+                    "identificacao": "Massas brancas algodoadas no caule ou folhas.",
+                    "controle_organico": ["Álcool 70% direto no inseto (Cotonete)", "Óleo Mineral"],
+                    "controle_quimico": ["Acetamiprido (Mospilan)"],
+                    "gravidade": "BAIXA/MÉDIA. Sugadores de seiva."
+                }
             },
             "Doencas": {
-                "Oídio (Powdery Mildew)": {"tipo": "Fungo", "identificacao": "Pó branco nas folhas.", "dano": "Bloqueia luz.", "solucao": ["Leite cru 10%", "Bicarbonato de K", "Vaporizador de Enxofre"], "obs": "Melhore a ventilação imediatamente."},
-                "Botrytis (Bud Rot)": {"tipo": "Fungo", "identificacao": "Bud podre, cinza/marrom.", "dano": "Perda total do bud.", "solucao": ["Remover área afetada com saco", "Reduzir umidade para 40%"], "obs": "Comum em buds gordos."}
+                "Oídio (Powdery Mildew)": {
+                    "identificacao": "Pó branco (parece farinha) nas folhas. Começa nas folhas baixas e sombreadas.",
+                    "controle_organico": ["Leite Cru 10% + Água 90% (Solar)", "Bicarbonato de Potássio", "Bacillus subtilis"],
+                    "controle_quimico": ["Difenoconazol (Score) - Sistêmico.", "Enxofre (Vaporização) - Apenas Veg."],
+                    "gravidade": "ALTA. Inutiliza a flor para consumo."
+                },
+                "Botrytis (Bud Rot)": {
+                    "identificacao": "Buds ficam marrons, moles e úmidos. Mofo cinza visível dentro da flor.",
+                    "controle_organico": ["Prevenção apenas: Trichoderma harzianum", "Remoção cirúrgica com saco plástico"],
+                    "controle_quimico": ["NÃO USAR EM FLORES. Risco à saúde humana."],
+                    "gravidade": "CRÍTICA. Perda total da área afetada."
+                },
+                "Pythium (Root Rot)": {
+                    "identificacao": "Raízes marrons, Gosmentas e com cheiro de podre. Planta murcha mesmo regada.",
+                    "controle_organico": ["Peróxido de Hidrogênio (H2O2) para limpar", "Enzimas", "Trichoderma"],
+                    "controle_quimico": ["Metalaxil (Ridomil) - Apenas em clones/mães."],
+                    "gravidade": "ALTA. Comum em hidroponia com água quente (>22°C)."
+                }
             }
         }
     }
