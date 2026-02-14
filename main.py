@@ -1,5 +1,5 @@
 # ARQUIVO: main.py
-# SISTEMA: AGROWER SDI | ULTIMATE EDITION (V.4.20)
+# SISTEMA: AGROWER SDI | ULTIMATE EDITION (V.4.21 FIXED)
 # DESCRIÇÃO: Interface Gráfica de Alta Performance com Plotly e CSS Avançado.
 
 import streamlit as st
@@ -186,8 +186,10 @@ st.markdown("""
 c_conf1, c_conf2, c_conf3, c_conf4 = st.columns([1.5, 1.5, 1, 1])
 
 with c_conf1:
-    metodo_keys = list(db.get("METODOS_CULTIVO", {}).keys())
-    metodo_sel = st.selectbox("🥣 MÉTODO DE CULTIVO", metodo_keys if metodo_keys else ["Carregando..."])
+    # Defesa contra erro de chave vazia
+    db_metodos = db.get("METODOS_CULTIVO", {})
+    metodo_keys = list(db_metodos.keys()) if db_metodos else ["Carregando..."]
+    metodo_sel = st.selectbox("🥣 MÉTODO DE CULTIVO", metodo_keys)
 
 with c_conf2:
     ambiente_sel = st.selectbox("🏠 AMBIENTE", ["Indoor (Estufa)", "Greenhouse", "Outdoor"])
@@ -215,11 +217,12 @@ elif dias_vida <= 77: chave_fase = "Flora Inicial"
 else: chave_fase = "Flora Final"
 
 # Busca no DB (Match parcial de string para robustez)
-for k, v in fases_db.items():
-    if chave_fase in k:
-        fase_nome = k
-        fase_dados = v
-        break
+if fases_db:
+    for k, v in fases_db.items():
+        if chave_fase in k:
+            fase_nome = k
+            fase_dados = v
+            break
 
 # --- PAINEL VISUAL DE STATUS ---
 st.markdown("---")
@@ -393,16 +396,14 @@ with tab_vpd:
         ))
         fig_vpd.update_layout(paper_bgcolor = "rgba(0,0,0,0)", font = {'color': "white"}, height=150, margin=dict(l=20,r=20,t=30,b=20))
         st.plotly_chart(fig_vpd, use_container_width=True)
-        
-    
 
 # --- TAB 3: DOCTOR GROW (LISTAGEM AVANÇADA) ---
 with tab_doctor:
     c_doc_filter, c_doc_search = st.columns([1, 2])
     with c_doc_filter:
-        filtro_doc = st.radio("CATEGORIA:", ["Todas", "Pragas 🕷️", "Doenças 🍄"], horizontal=True)
+        filtro_doc = st.radio("CATEGORIA:", ["Todas", "Pragas 🕷️", "Doenças 🍄", "Deficiências 🧪"], horizontal=True)
     with c_doc_search:
-        busca_doc = st.text_input("🔍 DIAGNÓSTICO RÁPIDO:", placeholder="Ex: manchas brancas, ácaro...")
+        busca_doc = st.text_input("🔍 DIAGNÓSTICO RÁPIDO:", placeholder="Ex: manchas brancas, ácaro, folhas amarelas...")
 
     # Acesso ao DB
     db_doc = db.get("DOCTOR_GROW_MASTER", {})
@@ -412,6 +413,8 @@ with tab_doctor:
         for k, v in db_doc.get("Pragas", {}).items(): v['nome'] = k; v['cat'] = 'Praga'; lista_final.append(v)
     if filtro_doc in ["Todas", "Doenças 🍄"]:
         for k, v in db_doc.get("Doencas", {}).items(): v['nome'] = k; v['cat'] = 'Doença'; lista_final.append(v)
+    if filtro_doc in ["Todas", "Deficiências 🧪"]:
+        for k, v in db_doc.get("Deficiencias", {}).items(): v['nome'] = k; v['cat'] = 'Deficiência'; lista_final.append(v)
 
     # Renderização
     if not lista_final:
@@ -421,13 +424,15 @@ with tab_doctor:
             if busca_doc and busca_doc.lower() not in item['nome'].lower() and busca_doc.lower() not in item['identificacao'].lower():
                 continue
             
-            # Cor baseada na gravidade
+            # Cor baseada na gravidade/tipo
             border = "#333"
             icon = "🐛"
             if item['cat'] == 'Doença': icon = "🍄"
+            elif item['cat'] == 'Deficiência': icon = "🧪"
             
             if "CRÍTICA" in item.get('gravidade', ''): border = "#ef4444"
             elif "ALTA" in item.get('gravidade', ''): border = "#f97316"
+            elif "Deficiência" in item['cat']: border = "#eab308"
             
             with st.expander(f"{icon} {item['nome']} | Gravidade: {item.get('gravidade')}"):
                 c_d1, c_d2 = st.columns([1, 1])
@@ -438,8 +443,6 @@ with tab_doctor:
                         st.markdown(f"- {s}")
                         
                 with c_d2:
-                    st.markdown(f"**🧪 QUÍMICO (CUIDADO):**")
+                    st.markdown(f"**🧪 QUÍMICO / CORREÇÃO:**")
                     for s in item.get('controle_quimico', []):
                         st.markdown(f"- {s}")
-                        
-                } symptoms]
