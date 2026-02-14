@@ -306,7 +306,7 @@ def get_agro_db():
                     }
                 }
             }
-        }
+        },
         "Algodão": {
             "nome_cientifico": "Gossypium hirsutum",
             "fases_fenologicas": {
