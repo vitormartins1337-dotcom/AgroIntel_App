@@ -10,70 +10,95 @@ engine = AgroEngine()
 db = engine.db 
 
 # --- 2. CSS NEON PROFISSIONAL (CORRIGIDO) ---
+# --- 2. CSS PROFISSIONAL (ATUALIZADO PARA CAPA PERFEITA) ---
 def load_css():
     st.markdown("""
         <style>
-        /* BASE DARK */
-        .block-container { padding-top: 1rem !important; padding-bottom: 5rem !important; }
-        .stApp { background-color: #050505; color: #e0e0e0; font-family: 'Roboto', sans-serif; }
+        /* FONTS & BASE */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=JetBrains+Mono:wght@400;700&display=swap');
         
-        /* HEADER (CAPA) ROXO NEON */
+        .stApp { 
+            background-color: #09090b; 
+            color: #e4e4e7; 
+            font-family: 'Inter', sans-serif;
+        }
+        .block-container { padding-top: 1.5rem !important; padding-bottom: 5rem !important; }
+
+        /* HEADER HERO (CAPA) - CORRIGIDO PARA NÃO QUEBRAR LINHA */
         .header-box {
-            background: linear-gradient(90deg, #240b36 0%, #000000 100%);
-            border-bottom: 2px solid #a855f7;
-            padding: 30px; border-radius: 0 0 20px 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 0 25px rgba(168, 85, 247, 0.2); margin-bottom: 20px;
-        }
-
-        /* TICKER BLOOMBERG STYLE */
-        .ticker-container {
-            width: 100%; background: #000; border: 1px solid #333; border-radius: 6px;
-            overflow: hidden; white-space: nowrap; height: 32px; display: flex; align-items: center; margin-bottom: 15px;
-        }
-        .ticker-text { display: inline-block; animation: ticker 40s linear infinite; font-family: 'Courier New', monospace; font-weight: bold; font-size: 0.85rem;}
-        @keyframes ticker { 0% { transform: translate3d(100%, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
-        .tick-item { margin-right: 40px; color: #a855f7; } .tick-val { color: #22c55e; }
-
-        /* CARDS DE VIDRO (GLASSMORPHISM) */
-        .glass-card {
-            background: rgba(20, 20, 20, 0.8);
-            border: 1px solid rgba(168, 85, 247, 0.3); /* Borda Roxa Sutil */
-            padding: 20px; border-radius: 12px; margin-bottom: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            background: linear-gradient(90deg, #1e0b2e 0%, #000000 100%); /* Roxo Profundo Medicinal */
+            border-bottom: 1px solid #2e1065; /* Borda Roxa Sutil */
+            padding: 25px 30px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
         }
         
-        /* YIELD CARD (DESTAQUE DOURADO) */
+        .title-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hero-title {
+            font-size: 2.2rem; /* Tamanho ajustado para caber em 1 linha */
+            font-weight: 900; 
+            color: #fff; 
+            letter-spacing: -1px; 
+            line-height: 1;
+            white-space: nowrap; /* ISSO IMPEDE A QUEBRA DE LINHA */
+        }
+
+        .hero-subtitle {
+            font-family: 'JetBrains Mono', monospace; 
+            font-size: 0.75rem; 
+            color: #a855f7; /* Roxo Neon */
+            text-transform: uppercase; 
+            letter-spacing: 3px; 
+            margin-top: 6px;
+            opacity: 0.9;
+            white-space: nowrap;
+        }
+
+        /* BOTÃO ONLINE COM FOLHA */
+        .online-badge {
+            background: rgba(16, 185, 129, 0.1); /* Fundo Verde Medicinal */
+            border: 1px solid #059669; 
+            color: #4ade80; /* Texto Verde Neon */
+            padding: 8px 16px; 
+            border-radius: 99px; 
+            font-size: 0.8rem; 
+            font-weight: 700;
+            display: flex; 
+            align-items: center; 
+            gap: 8px;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.1);
+        }
+
+        /* CARDS & CONTAINERS GERAIS (MANTIDOS) */
+        .glass-panel {
+            background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 24px;
+            margin-bottom: 16px; transition: transform 0.2s;
+        }
         .yield-card {
-            background: linear-gradient(135deg, #1a1200 0%, #000 100%);
+            background: linear-gradient(135deg, #2a1b05 0%, #1a1500 100%);
             border: 1px solid #eab308; border-radius: 12px; padding: 20px;
-            text-align: center; color: #fef08a; box-shadow: 0 0 15px rgba(234, 179, 8, 0.2);
+            text-align: center; color: #fef08a;
         }
-
-        /* BADGES (BALÕES) - AGORA COM NO-WRAP PARA NÃO QUEBRAR */
-        .badge-param {
-            display: inline-block; white-space: nowrap; /* O SEGREDO */
-            background: #111; border: 1px solid #333; color: #fff;
-            padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;
-            margin-right: 8px; margin-bottom: 5px;
-        }
-        .badge-purple { border-color: #a855f7; color: #d8b4fe; }
-        .badge-green { border-color: #22c55e; color: #4ade80; }
-        .badge-blue { border-color: #38bdf8; color: #bae6fd; }
-
-        /* INPUTS ESTILIZADOS */
-        .stSelectbox > div > div, .stDateInput > div > div, .stNumberInput > div > div {
-            background-color: #0f0f0f !important; border: 1px solid #333 !important; color: #fff !important;
+        .info-badge {
+            display: inline-flex; align-items: center; white-space: nowrap;
+            background: #27272a; border: 1px solid #3f3f46; color: #e4e4e7;
+            padding: 6px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; margin-right: 8px; margin-bottom: 8px;
         }
         
-        /* ABAS */
-        .stTabs [data-baseweb="tab-list"] { gap: 5px; }
-        .stTabs [data-baseweb="tab"] { background-color: #111; border: 1px solid #333; color: #888; }
-        .stTabs [aria-selected="true"] { background-color: #a855f7 !important; color: #fff !important; font-weight: bold; }
+        /* INPUTS */
+        .stSelectbox > div > div, .stDateInput > div > div, .stNumberInput > div > div {
+            background-color: #18181b !important; border: 1px solid #27272a !important; color: #fff !important;
+        }
         </style>
     """, unsafe_allow_html=True)
-load_css()
-
 # --- 3. HEADER PROFISSIONAL (VOLTA DO ROXO NEON) ---
 st.markdown("""
 <div class="header-box">
