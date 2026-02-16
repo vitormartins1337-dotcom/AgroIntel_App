@@ -330,7 +330,7 @@ if diagnostico_luz:
 # ==============================================================================
 # 6. ABAS: NUTRIÇÃO & DOCTOR (ATUALIZADO E CORRIGIDO)
 # ==============================================================================
-st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
 tab_nutri, tab_doctor = st.tabs(["🧪 NUTRIÇÃO & MARCHA DE ABSORÇÃO", "🚑 DOCTOR GROW (FITOSSANIDADE)"])
 
 # --- ABA 1: NUTRIÇÃO DINÂMICA (CORRIGIDA) ---
