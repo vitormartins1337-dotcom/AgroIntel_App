@@ -156,120 +156,147 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==============================================================================
-# 4. PAINEL DE CONTROLE & INTELIGÊNCIA ARTIFICIAL (SDI ENGINE V9.6 CORRIGIDO)
+# 4. PAINEL DE CONTROLE & INTELIGÊNCIA ARTIFICIAL (SDI ENGINE V9.7)
 # ==============================================================================
 
-# --- A. INPUTS DE CONFIGURAÇÃO ---
+# --- A. INPUTS GERAIS ---
 st.markdown("<br>", unsafe_allow_html=True)
-c_in1, c_in2, c_in3, c_in4 = st.columns([1.5, 1.5, 1, 1])
 
+# Linha 1: Configurações Básicas
+c_in1, c_in2, c_in3, c_in4 = st.columns([1.5, 1.5, 1, 1])
 with c_in1:
     genetica_sel = st.selectbox("🧬 GENÉTICA PREDOMINANTE", list(db.get("GENETICAS_PARAMETROS", {}).keys()))
 with c_in2:
-    ambiente_sel = st.selectbox("🏠 AMBIENTE DE CULTIVO", ["Indoor", "Estufa Outdoor (Complementar)", "Outdoor (Sol Pleno)"])
+    ambiente_sel = st.selectbox("🏠 AMBIENTE", ["Indoor", "Estufa Outdoor (Complementar)", "Outdoor (Sol Pleno)"])
 with c_in3:
-    n_plantas = st.number_input("Nº PLANTAS", 1, 500, 4, help="Quantidade total de vasos no ambiente.")
+    n_plantas = st.number_input("Nº PLANTAS", 1, 500, 4)
 with c_in4:
-    data_inicio = st.date_input("📅 INÍCIO CULTIVO", datetime.date.today() - datetime.timedelta(days=45))
+    data_inicio = st.date_input("📅 INÍCIO", datetime.date.today() - datetime.timedelta(days=45))
 
-# Método (Linha separada para organização)
-c_met1, c_met2 = st.columns([1.5, 2.5])
-with c_met1:
-     metodo_sel = st.selectbox("🥣 MÉTODO / SUBSTRATO", list(db.get("METODOS_CULTIVO", {}).keys()))
+# Linha 2: Método e Sistema Radicular (NOVO)
+c_sub1, c_sub2, c_sub3 = st.columns([1.5, 1.5, 1.5])
+with c_sub1:
+     metodo_sel = st.selectbox("🥣 SUBSTRATO / MÉTODO", list(db.get("METODOS_CULTIVO", {}).keys()))
+
+with c_sub2:
+    # NOVO: Seleção do Sistema de Plantio
+    tipo_plantio = st.selectbox("🌱 SISTEMA DE PLANTIO", ["Vasos", "Solo Direto (Chão/Canteiro)"])
+
+with c_sub3:
+    # Lógica Condicional para Vasos
+    vol_vaso = 0
+    if tipo_plantio == "Vasos":
+        vol_vaso = st.selectbox("VOLUME DO VASO (L)", [7, 11, 20, 30, 50, 100, 200])
+    else:
+        st.info("Raízes livres no solo.")
+        vol_vaso = 999 # Valor simbólico para solo infinito
 
 # --- B. ENGINE DE DIAGNÓSTICO PROFISSIONAL (SDI LOGIC) ---
-# Variáveis de Inicialização
-watts_painel = 0
-area_cultivo = 0
-diagnostico_titulo = ""
-diagnostico_texto = ""
-sugestao_premium = ""
-cor_diag = "#333"
-show_diag = False
+watts_painel = 0; area_cultivo = 0; diagnostico_titulo = ""; diagnostico_texto = ""; sugestao_premium = ""; cor_diag = "#333"; show_diag = False
 
-# SE FOR INDOOR OU MISTO (Cálculos de Engenharia)
+# Lógica Indoor/Estufa
 if ambiente_sel in ["Indoor", "Estufa Outdoor (Complementar)"]:
-    with st.expander("💡 CONFIGURAÇÃO DO AMBIENTE (DIMENSIONAMENTO)", expanded=True):
-        st.caption("O sistema SDI cruzará seus dados para avaliar a viabilidade agronômica.")
+    with st.expander("💡 CONFIGURAÇÃO DE ILUMINAÇÃO & ESPAÇO", expanded=True):
         cl1, cl2, cl3 = st.columns(3)
-        with cl1: watts_painel = st.number_input("POTÊNCIA LED (W REAIS):", 50, 5000, 240)
+        with cl1: watts_painel = st.number_input("POTÊNCIA TOTAL (W REAIS):", 50, 5000, 240)
         with cl2: largura = st.number_input("LARGURA (cm):", 40, 1000, 80)
         with cl3: profundidade = st.number_input("PROFUNDIDADE (cm):", 40, 1000, 80)
         
-        # --- CÁLCULOS TÉCNICOS ---
         area_m2 = (largura * profundidade) / 10000 
         if area_m2 > 0:
-            ppfd_estimado_w = watts_painel / area_m2 # W/m2
-            densidade_plantas = n_plantas / area_m2 # Plantas/m2
-            watts_por_planta = watts_painel / n_plantas # W/planta
-            
             show_diag = True
+            ppfd_w = watts_painel / area_m2
+            densidade = n_plantas / area_m2
+            w_planta = watts_painel / n_plantas
             
-            # 1. ANÁLISE DE DENSIDADE
+            # 1. ANÁLISE DE DENSIDADE (PLANTAS)
             is_crowded = False
-            txt_densidade = ""
-            
-            if densidade_plantas > 16:
+            if densidade > 16:
                 is_crowded = True
-                txt_densidade = f"⚠️ <b>SUPERPOPULAÇÃO CRÍTICA ({densidade_plantas:.1f} plantas/m²)</b>: Você colocou muitas plantas em pouco espaço. Risco de mofo e competição."
-                sugestao_premium = "REDUÇÃO IMEDIATA: Selecione as melhores plantas e descarte as outras, ou mude para vasos minúsculos (2-3L)."
+                txt_dens = f"⚠️ <b>SUPERPOPULAÇÃO ({densidade:.1f} un/m²)</b>: Muitas plantas! Competição severa."
                 cor_diag = "#ef4444"
-            elif densidade_plantas > 9 and densidade_plantas <= 16:
-                txt_densidade = f"⚠️ <b>ALTA DENSIDADE ({densidade_plantas:.1f} plantas/m²)</b>: Configuração estilo SOG (Sea of Green). Exige ciclo vegetativo curto."
-                sugestao_premium = "TÉCNICA SOG: Vire para a floração rápido e faça poda baixa (Lollipopping) agressiva."
-                if cor_diag == "#333": cor_diag = "#eab308"
-            elif densidade_plantas < 4:
-                txt_densidade = f"ℹ️ <b>BAIXA DENSIDADE ({densidade_plantas:.1f} plantas/m²)</b>: Poucas plantas para o espaço. Exigirá vegetativo longo."
-                sugestao_premium = "TÉCNICA SCROG: Use uma rede e treine a planta horizontalmente para preencher os buracos de luz."
+                sugestao_premium = "Reduza o número de plantas ou use vasos de 4-7L com veg de 1 semana (SOG)."
+            elif densidade < 4:
+                txt_dens = f"ℹ️ <b>BAIXA DENSIDADE ({densidade:.1f} un/m²)</b>: Espaço sobrando."
+                sugestao_premium = "Faça um veg mais longo (6-8 semanas) e use podas/amarras (SCROG) para preencher a luz."
                 if cor_diag == "#333": cor_diag = "#38bdf8"
             else:
-                txt_densidade = f"✅ <b>DENSIDADE IDEAL ({densidade_plantas:.1f} plantas/m²)</b>: Equilíbrio perfeito."
-            
-            # 2. ANÁLISE DE ILUMINAÇÃO
-            txt_luz = ""
-            if ppfd_estimado_w < 250:
-                txt_luz = f"⚠️ <b>LUZ INSUFICIENTE ({ppfd_estimado_w:.0f} W/m²)</b>: Risco de buds aerados ('pipoca')."
-                if not is_crowded: sugestao_premium = "Aumente a potência do LED ou reduza a área do grow."
-                cor_diag = "#eab308"
-            elif ppfd_estimado_w > 650:
-                txt_luz = f"🔥 <b>LUZ EXTREMA ({ppfd_estimado_w:.0f} W/m²)</b>: Risco de estresse térmico."
-                if not is_crowded: sugestao_premium = "Obrigatório uso de CO2 (1200ppm) ou dimerize a luz."
+                txt_dens = f"✅ <b>DENSIDADE OK ({densidade:.1f} un/m²)</b>: Equilíbrio ideal."
+
+            # 2. ANÁLISE DE LUZ
+            if ppfd_w < 250:
+                txt_luz = f"⚠️ <b>LUZ FRACA ({ppfd_w:.0f} W/m²)</b>: Buds aerados ('pipoca')."
+                if cor_diag != "#ef4444": cor_diag = "#eab308"
+            elif ppfd_w > 650:
+                txt_luz = f"🔥 <b>LUZ EXTREMA ({ppfd_w:.0f} W/m²)</b>: Risco de queima."
+                sugestao_premium = "Use CO2 ou suba o painel."
                 cor_diag = "#ef4444"
             else:
-                txt_luz = f"✅ <b>LUZ OTIMIZADA ({ppfd_estimado_w:.0f} W/m²)</b>: Sweet Spot para fotossíntese."
+                txt_luz = f"✅ <b>LUZ PERFEITA ({ppfd_w:.0f} W/m²)</b>: Sweet Spot."
                 if cor_diag == "#333": cor_diag = "#22c55e"
 
-            # 3. ANÁLISE DE ENERGIA INDIVIDUAL
-            if watts_por_planta < 25 and n_plantas > 4:
-                txt_luz += f"<br>⚠️ <b>DÉFICIT POR PLANTA ({watts_por_planta:.1f}W/un)</b>: Luz dividida entre 'muitas bocas'."
-                if is_crowded: sugestao_premium = "ERRO CRÍTICO: Muita planta, pouca luz. Reduza o número de vasos."
-                cor_diag = "#ef4444"
+            # 3. ANÁLISE DE RAÍZES (NOVO!)
+            txt_raiz = ""
+            info_gen = db["GENETICAS_PARAMETROS"][genetica_sel]
+            
+            if tipo_plantio == "Vasos":
+                # Fotoperíodo em vaso pequeno = Problema
+                if info_gen['tipo'] == "Foto" and vol_vaso < 10:
+                    txt_raiz = f"⚠️ <b>RESTRIÇÃO RADICULAR ({vol_vaso}L)</b>: Vaso pequeno para Fotoperíodo. Risco de 'Root Bound'."
+                    sugestao_premium = "Para vasos pequenos, não deixe vegar mais de 3 semanas ou a planta travará na flora."
+                    if cor_diag != "#ef4444": cor_diag = "#eab308"
+                # Automática em vaso gigante = Desperdício
+                elif info_gen['tipo'] == "Auto" and vol_vaso > 25:
+                    txt_raiz = f"ℹ️ <b>VASO SUPERDIMENSIONADO ({vol_vaso}L)</b>: Automáticas raramente usam mais que 20L."
+                else:
+                    txt_raiz = f"✅ <b>VOLUME DE RAIZ ({vol_vaso}L)</b>: Adequado para a genética."
+            else:
+                txt_raiz = "🌿 <b>SOLO LIVRE</b>: Potencial máximo de raiz. Cuidado com altura incontrolável."
 
-            # MONTAGEM DO DIAGNÓSTICO
-            diagnostico_titulo = "CONSULTORIA TÉCNICA SDI (ANÁLISE DE AMBIENTE)"
+            # MONTAGEM FINAL
+            diagnostico_titulo = "CONSULTORIA SDI (AMBIENTE & RAÍZES)"
             diagnostico_texto = f"""
-            <div style="margin-bottom:10px;">{txt_densidade}</div>
-            <div style="margin-bottom:10px;">{txt_luz}</div>
+            <div style="margin-bottom:5px;">{txt_dens}</div>
+            <div style="margin-bottom:5px;">{txt_luz}</div>
+            <div style="margin-bottom:10px;">{txt_raiz}</div>
             <div style="margin-top:15px; padding:10px; background:rgba(255,255,255,0.05); border-radius:8px; border-left:3px solid {cor_diag};">
                 <span style="color:{cor_diag}; font-weight:bold;">RECOMENDAÇÃO MASTER:</span><br>
                 {sugestao_premium if sugestao_premium else "Seu setup está balanceado. Mantenha o VPD constante."}
             </div>
             """
+
 else:
-    # Outdoor
-    n_plantas = st.number_input("Nº PLANTAS (OUTDOOR):", 1, 500, 6)
+    # Lógica Outdoor
     show_diag = True
     diagnostico_titulo = "CONSULTORIA TÉCNICA (OUTDOOR)"
     cor_diag = "#facc15"
+    aviso_vaso = ""
+    if tipo_plantio == "Vasos" and vol_vaso < 30:
+        aviso_vaso = f"⚠️ <b>ALERTA DE SECA:</b> Em outdoor, vasos de {vol_vaso}L secam muito rápido no sol. Use Mulching (cobertura morta)."
+    
     diagnostico_texto = f"""
     <div>☀️ <b>ENERGIA SOLAR (FULL SPECTRUM)</b></div>
-    <div style="margin-top:5px; font-size:0.9rem;">
-        No outdoor, o fator limitante é o <b>volume do substrato</b>. 
-        Para {n_plantas} plantas, garanta vasos de no mínimo 40-60 Litros.
-    </div>
+    <div style="margin-top:5px; font-size:0.9rem;">O sol fornece luz infinita. O limite é a água e nutrição.</div>
+    <div style="margin-top:10px;">{aviso_vaso}</div>
     """
 
-# EXIBIÇÃO DO CARD DE DIAGNÓSTICO
+# --- C. MOTOR DE CÁLCULO (DADOS GERAIS) ---
+info_metodo = db["METODOS_CULTIVO"][metodo_sel]
+info_genetica = db["GENETICAS_PARAMETROS"][genetica_sel]
+dias_vida = (datetime.date.today() - data_inicio).days
+semanas = dias_vida // 7
+yield_total = info_metodo['rendimento_base'] * info_genetica['fator_yield'] * n_plantas
+yield_kg = yield_total / 1000 
+
+fase_nome = "Indefinida"; fase_dados = {}
+range_map = {"Plântula": 14, "Vegetativo": 42, "Pré-Flora": 56, "Flora Inicial": 77, "Flora Final": 200}
+fator_ciclo = 0.75 if info_genetica.get("tipo") == "Auto" else 1.0
+for k, v in db.get("FASES_DINAMICAS", {}).items():
+    chave_limpa = k.split(' ')[0]
+    limite = int(range_map.get(chave_limpa, 200) * fator_ciclo)
+    if dias_vida <= limite: fase_nome = k; fase_dados = v; break
+
+# --- EXIBIÇÃO ÚNICA DO DIAGNÓSTICO ---
 if show_diag:
     st.markdown(f"""
     <div class="diag-card" style="border-left: 4px solid {cor_diag}; margin-top:20px; margin-bottom:20px;">
@@ -280,26 +307,6 @@ if show_diag:
         <div style="color:#e4e4e7; font-size:0.95rem; line-height:1.6;">{diagnostico_texto}</div>
     </div>
     """, unsafe_allow_html=True)
-
-# --- C. MOTOR DE CÁLCULO (AQUI ESTAVA FALTANDO!) ---
-# Define as variáveis essenciais para os Cards que vêm a seguir
-info_metodo = db["METODOS_CULTIVO"][metodo_sel]
-info_genetica = db["GENETICAS_PARAMETROS"][genetica_sel]
-
-dias_vida = (datetime.date.today() - data_inicio).days
-semanas = dias_vida // 7
-
-yield_total = info_metodo['rendimento_base'] * info_genetica['fator_yield'] * n_plantas
-yield_kg = yield_total / 1000 
-
-fase_nome = "Indefinida"; fase_dados = {}
-range_map = {"Plântula": 14, "Vegetativo": 42, "Pré-Flora": 56, "Flora Inicial": 77, "Flora Final": 200}
-fator_ciclo = 0.75 if info_genetica.get("tipo") == "Auto" else 1.0
-
-for k, v in db.get("FASES_DINAMICAS", {}).items():
-    chave_limpa = k.split(' ')[0]
-    limite = int(range_map.get(chave_limpa, 200) * fator_ciclo)
-    if dias_vida <= limite: fase_nome = k; fase_dados = v; break
 
 # ==============================================================================
 # 5. CARDS DASHBOARD
