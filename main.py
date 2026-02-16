@@ -259,72 +259,137 @@ st.markdown("""
     display: inline-flex;
     align-items: center;
     padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    margin-right: 8px;
-    margin-top: 10px;
-}
-.meta-ph { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid #1e3a8a; }
-.meta-ec { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid #064e3b; }
+    border-radius: 6px;# ==============================================================================
+# 🎮 DASHBOARD DE CONTROLE (CORRIGIDO E COMPLETO)
+# ==============================================================================
 
+# 1. INPUTS (CONFIGURAÇÃO)
+c1, c2, c3, c4 = st.columns([1.5, 1.5, 1, 1])
+with c1: 
+    metodo_sel = st.selectbox("MÉTODO DE CULTIVO", list(db.get("METODOS_CULTIVO", {}).keys()))
+with c2: 
+    genetica_sel = st.selectbox("GENÉTICA", list(db.get("GENETICAS_PARAMETROS", {}).keys()))
+with c3: 
+    n_plantas = st.number_input("Nº PLANTAS", 1, 500, 6)
+with c4: 
+    data_inicio = st.date_input("INÍCIO CULTIVO", datetime.date.today() - datetime.timedelta(days=45))
+
+# 2. MOTOR DE CÁLCULO (AQUI ESTAVA O ERRO DO NAME_ERROR)
+# Buscando dados no DB
+info_metodo = db["METODOS_CULTIVO"][metodo_sel]
+info_genetica = db["GENETICAS_PARAMETROS"][genetica_sel]
+
+# Calculando Tempo
+dias_vida = (datetime.date.today() - data_inicio).days
+semanas = dias_vida // 7
+
+# Calculando Produção (CORREÇÃO: Definindo yield_kg aqui)
+yield_total = info_metodo['rendimento_base'] * info_genetica['fator_yield'] * n_plantas
+yield_kg = yield_total / 1000 # <--- AQUI ESTÁ A CORREÇÃO DO ERRO
+
+# Definindo Fase Dinâmica
+fase_nome = "Indefinida"
+fase_dados = {}
+# Lógica de fases
+for k, v in db.get("FASES_DINAMICAS", {}).items():
+    range_map = {"Plântula": 14, "Vegetativo": 42, "Pré-Flora": 56, "Flora Inicial": 77, "Flora Final": 200}
+    chave_limpa = k.split(' ')[0] # Pega a primeira palavra da chave
+    if dias_vida <= range_map.get(chave_limpa, 200):
+        fase_nome = k
+        fase_dados = v
+        break
+
+# 3. VISUALIZAÇÃO DOS CARDS (SEM INDENTAÇÃO PARA NÃO DAR ERRO DE HTML)
+st.markdown("""
+<style>
+/* CSS DOS CARDS - FORÇANDO NÃO QUEBRAR */
+.status-card {
+    background: linear-gradient(145deg, #120520 0%, #050505 100%);
+    border: 1px solid #3b0764;
+    border-left: 5px solid #a855f7;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    height: 100%;
+}
+.yield-card {
+    background: linear-gradient(135deg, #1e1b10 0%, #000000 100%);
+    border: 1px solid #854d0e;
+    border-right: 5px solid #eab308;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(234, 179, 8, 0.1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.card-label {
+    font-size: 0.7rem; color: #9ca3af; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 5px;
+}
+.big-val {
+    font-size: 2.2rem; font-weight: 900; color: #fff; line-height: 1; margin-bottom: 5px;
+}
+.meta-badge {
+    display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; margin-right: 5px;
+}
+.bg-ph { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid #1e3a8a; }
+.bg-ec { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid #064e3b; }
 .divider { height: 1px; background: #333; margin: 15px 0; }
 </style>
 """, unsafe_allow_html=True)
 
-# 2. LAYOUT DOS CARDS
-col_status, col_yield = st.columns([1.8, 1.2]) # Coluna da Esquerda maior
+# Renderização dos Colunas
+st.markdown("<br>", unsafe_allow_html=True)
+col_a, col_b = st.columns([1.8, 1.2])
 
-with col_status:
-    # --- CARD DE STATUS OPERACIONAL ---
+with col_a:
+    # CARD ROXO (STATUS)
     st.markdown(f"""
-    <div class="status-card">
-        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-            <div>
-                <div class="card-label" style="color:#d8b4fe;">FASE ATUAL</div>
-                <div class="big-value">{fase_nome.upper()}</div>
-            </div>
-            <div style="text-align:right;">
-                <div class="card-label">TEMPO DE CULTIVO</div>
-                <div style="font-size:1.5rem; font-weight:bold; color:#fff;">{dias_vida} <span style="font-size:0.9rem; color:#888;">DIAS</span></div>
-                <div style="font-size:0.85rem; color:#a855f7;">SEMANA {semanas}</div>
-            </div>
+<div class="status-card">
+    <div style="display:flex; justify-content:space-between; align-items:start;">
+        <div>
+            <div class="card-label" style="color:#d8b4fe;">FASE ATUAL</div>
+            <div class="big-val">{fase_nome.upper()}</div>
         </div>
-        
-        <div class="divider"></div>
-        
-        <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div style="text-align:right;">
+            <div class="card-label">TEMPO</div>
+            <div style="font-size:1.5rem; font-weight:bold; color:#fff;">{dias_vida} <span style="font-size:0.9rem; color:#888;">DIAS</span></div>
+            <div style="font-size:0.85rem; color:#a855f7;">SEMANA {semanas}</div>
+        </div>
+    </div>
+    <div class="divider"></div>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+            <div class="card-label">OBJETIVO TÁTICO</div>
+            <div style="color:#fff; font-weight:600;">🎯 {fase_dados.get('foco', '-')}</div>
+        </div>
+        <div style="text-align:right;">
+            <div class="card-label">METAS DO AMBIENTE</div>
             <div>
-                <div class="card-label">OBJETIVO TÁTICO</div>
-                <div style="color:#fff; font-weight:600;">🎯 {fase_dados.get('foco', 'Geral')}</div>
-            </div>
-            <div style="text-align:right;">
-                <div class="card-label">METAS DO AMBIENTE</div>
-                <div>
-                    <span class="meta-badge meta-ph">💧 PH {info_metodo['ph_ideal']}</span>
-                    <span class="meta-badge meta-ec">⚡ EC {info_metodo['ec_ideal']}</span>
-                </div>
+                <span class="meta-badge bg-ph">💧 PH {info_metodo['ph_ideal']}</span>
+                <span class="meta-badge bg-ec">⚡ EC {info_metodo['ec_ideal']}</span>
             </div>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+</div>
+""", unsafe_allow_html=True)
 
-with col_yield:
-    # --- CARD DE ESTIMATIVA DE PRODUÇÃO (DOURADO) ---
+with col_b:
+    # CARD DOURADO (YIELD) - Variável yield_kg corrigida
     st.markdown(f"""
-    <div class="yield-card">
-        <div class="card-label" style="color:#fcd34d;">ESTIMATIVA DE COLHEITA</div>
-        <div class="big-value" style="color:#fef08a;">{yield_total:.0f}g</div>
-    <div class="sub-info" style="color:#fde047;">~ {yield_kg:.2f} kg (Seco)</div>
-        
-        <div class="divider" style="background: #422006;"></div>
-        
-        <div style="font-size:0.75rem; color:#ca8a04;">
-            <span style="font-size:1rem;">⚖️</span> BASE CÁLCULO:<br>
-            <b>{n_plantas} plantas</b> x <b>{info_metodo['rendimento_base']}g</b>
-        </div>
+<div class="yield-card">
+    <div class="card-label" style="color:#fcd34d;">ESTIMATIVA DE COLHEITA</div>
+    <div class="big-val" style="color:#fef08a;">{yield_total:.0f}g</div>
+    <div style="font-size:0.9rem; color:#fde047; margin-bottom:10px;">~ {yield_kg:.2f} kg (Seco)</div>
+    <div class="divider" style="background: #422006;"></div>
+    <div style="font-size:0.75rem; color:#ca8a04;">
+        BASE CÁLCULO:<br>
+        <b>{n_plantas} plantas</b> x <b>{info_metodo['rendimento_base']}g</b>
     </div>
-    """, unsafe_allow_html=True)
+</div>
+""", unsafe_allow_html=True)
 
 # ==============================================================================
 # 🎛️ NOVAS ABAS: NUTRIÇÃO & DOCTOR FITO
