@@ -1,100 +1,96 @@
 # ARQUIVO: agro_database.py
-# SISTEMA: AGROWER SDI | DATABASE V5.0 (INTEGRAÇÃO TOTAL)
+# SISTEMA: AGROWER SDI | DATABASE V FINAL (CORRIGIDO)
 
 def get_agro_db():
     return {
         # ==============================================================================
-        # 1. PARÂMETROS DE GENÉTICA & PRODUTIVIDADE (NOVO)
+        # 1. PARÂMETROS GENÉTICOS (CORREÇÃO DO ERRO KEYERROR)
         # ==============================================================================
         "GENETICAS_PARAMETROS": {
-            "Indica (Fotoperíodo)": {
-                "fator_yield": 1.0, # Padrão
-                "ciclo_total_dias": 100,
-                "desc": "Arbustiva, densa, ciclo rápido.",
-                "risco_fase": "Botrytis (Mofo) na Flora Final devido à densidade."
+            "Indica Dominante": {
+                "fator_yield": 1.0, 
+                "ciclo_dias": 60, # Dias de flora
+                "desc": "Estrutura arbustiva, buds densos e pesados."
             },
-            "Sativa (Fotoperíodo)": {
-                "fator_yield": 1.2, # Rende mais, mas demora mais
-                "ciclo_total_dias": 120,
-                "desc": "Alta, esguia, flores aeradas.",
-                "risco_fase": "Queima por luz (cresce muito) e Hermafroditismo."
+            "Sativa Dominante": {
+                "fator_yield": 1.2, 
+                "ciclo_dias": 80, 
+                "desc": "Planta alta, floração longa, buds aerados."
             },
             "Híbrida (50/50)": {
-                "fator_yield": 1.1,
-                "ciclo_total_dias": 110,
-                "desc": "Vigor híbrido, equilíbrio ideal.",
-                "risco_fase": "Variável conforme fenótipo."
+                "fator_yield": 1.1, 
+                "ciclo_dias": 70, 
+                "desc": "Vigor híbrido, equilíbrio entre peso e tempo."
             },
             "Automática (Ruderalis)": {
-                "fator_yield": 0.6, # Menor rendimento por planta
-                "ciclo_total_dias": 75,
-                "desc": "Ciclo curtíssimo, floresce por idade.",
-                "risco_fase": "Travamento no veg (estresse reduz colheita drasticamente)."
+                "fator_yield": 0.6, 
+                "ciclo_dias": 75, # Ciclo total
+                "desc": "Ciclo rápido, não depende de fotoperíodo."
             }
         },
 
         # ==============================================================================
-        # 2. METODOLOGIAS (COM ESTIMATIVA DE RENDIMENTO BASE)
+        # 2. METODOLOGIAS
         # ==============================================================================
         "METODOS_CULTIVO": {
             "Orgânico (Solo Vivo)": {
-                "descricao": "Qualidade máxima de terpenos. Rendimento médio.",
-                "rendimento_base_g_planta": 60, # g secas por planta (média conservadora)
+                "descricao": "Foco em terpenos e qualidade. Ciclo natural.",
+                "rendimento_base": 50, # g por planta
                 "cor_tema": "#22c55e",
-                "ph_ideal": "6.2-6.8",
+                "ph_ideal": "6.2 - 6.8",
                 "ec_ideal": "Solo"
             },
             "Mineral (Coco/Inerte)": {
-                "descricao": "Alta performance. Rendimento alto.",
-                "rendimento_base_g_planta": 85,
+                "descricao": "Alta performance e controle. Rendimento alto.",
+                "rendimento_base": 80,
                 "cor_tema": "#38bdf8",
-                "ph_ideal": "5.8-6.0",
-                "ec_ideal": "1.8-2.2"
+                "ph_ideal": "5.8 - 6.2",
+                "ec_ideal": "1.8 - 2.2"
             },
             "Hidroponia (DWC)": {
                 "descricao": "Crescimento explosivo. Rendimento máximo.",
-                "rendimento_base_g_planta": 110,
+                "rendimento_base": 110,
                 "cor_tema": "#a855f7",
-                "ph_ideal": "5.5-5.8",
-                "ec_ideal": "1.2-1.8"
+                "ph_ideal": "5.5 - 5.8",
+                "ec_ideal": "1.2 - 1.8"
             },
             "Outdoor (Sol)": {
-                "descricao": "Plantas gigantes se plantadas na época certa.",
-                "rendimento_base_g_planta": 150, # Pode ser muito mais, mas média Brasil
+                "descricao": "Energia solar total. Plantas de grande porte.",
+                "rendimento_base": 150,
                 "cor_tema": "#facc15",
-                "ph_ideal": "6.0-6.5",
+                "ph_ideal": "6.0 - 7.0",
                 "ec_ideal": "Solo"
             }
         },
 
         # ==============================================================================
-        # 3. FASES DINÂMICAS (COM AMEAÇAS VINCULADAS AO DOCTOR GROW)
+        # 3. FASES DINÂMICAS & AMEAÇAS
         # ==============================================================================
         "FASES_DINAMICAS": {
             "Plântula (Semana 1-2)": {
                 "foco": "Enraizamento",
                 "obs": "Umidade 70%+. Luz fraca. Não adubar.",
-                "ameacas_chave": ["Pythium (Root Rot)", "Fungus Gnats"]
+                "ameacas": ["Pythium (Root Rot)", "Fungus Gnats"]
             },
             "Vegetativo (Semana 3-6)": {
                 "foco": "Estrutura/Poda",
                 "obs": "Topping/LST. Nitrogênio alto. Vento forte.",
-                "ameacas_chave": ["Tripes", "Spider Mites", "Deficiência N"]
+                "ameacas": ["Tripes", "Spider Mites", "Deficiência N"]
             },
             "Pré-Flora (Semana 7-8)": {
                 "foco": "Stretch/Sexagem",
-                "obs": "Instalar rede SCROG. Remover machos.",
-                "ameacas_chave": ["Deficiência Mg", "Deficiência Ca"]
+                "obs": "Rede SCROG. Remover machos. Aumentar CalMag.",
+                "ameacas": ["Deficiência Mg", "Deficiência Ca", "Hermafroditas"]
             },
             "Flora Inicial (Semana 9-11)": {
                 "foco": "Formação de Botões",
                 "obs": "PK Booster. Baixar umidade para 50%.",
-                "ameacas_chave": ["Oídio", "Overfert"]
+                "ameacas": ["Oídio", "Overfert"]
             },
             "Flora Final (Semana 12+)": {
-                "foco": "Densidade/Resina",
-                "obs": "Flush (Lavagem). Umidade <45%. Escuridão 48h antes da faca.",
-                "ameacas_chave": ["Botrytis (Bud Rot)", "Bananas"]
+                "foco": "Engorda/Resina",
+                "obs": "Flush (Lavagem). Umidade <45%. Monitorar Tricomas.",
+                "ameacas": ["Botrytis (Bud Rot)", "Bananas"]
             }
         },
 
@@ -167,6 +163,12 @@ def get_agro_db():
                 "identificacao": "Estruturas macho amarelas na flor fêmea.",
                 "controle": "Pinça molhada para remover.",
                 "produtos": ["Reduzir calor/luz"]
+            },
+            "Hermafroditas": {
+                "tipo": "Estresse",
+                "identificacao": "Sacos de pólen em plantas fêmeas.",
+                "controle": "Remover a planta ou os sacos com cuidado extremo.",
+                "produtos": ["Água (para matar pólen)"]
             }
         }
     }
