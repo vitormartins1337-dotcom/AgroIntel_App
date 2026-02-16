@@ -51,11 +51,23 @@ def load_master_css():
             color: #d8b4fe; letter-spacing: 4px; text-transform: uppercase;
             margin-top: 15px; font-weight: 600; text-align: center; opacity: 0.9; z-index: 1;
         }
+        /* BOTÃO ONLINE (AGORA NO RODAPÉ DIREITO) */
         .status-pill {
-            position: absolute; top: 20px; right: 20px;
-            background: rgba(16, 185, 129, 0.1); border: 1px solid #059669; color: #4ade80;
-            padding: 6px 14px; border-radius: 99px; font-size: 0.75rem; font-weight: 700;
-            font-family: sans-serif; display: flex; align-items: center; gap: 6px; z-index: 2;
+            position: absolute;
+            bottom: 20px; /* Mudou de top para bottom */
+            right: 20px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid #059669;
+            color: #4ade80;
+            padding: 6px 14px;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            font-family: sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            z-index: 2;
         }
 
         /* --- TICKER --- */
