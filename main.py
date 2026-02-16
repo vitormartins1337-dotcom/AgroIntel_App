@@ -372,35 +372,118 @@ if 'show_diag' in locals() and show_diag:
 st.markdown("<br>", unsafe_allow_html=True)
 tab_nutri, tab_doctor = st.tabs(["🧪 NUTRIÇÃO & MARCHA DE ABSORÇÃO", "🚑 DOCTOR GROW (FITOSSANIDADE)"])
 
-# --- ABA 1: NUTRIÇÃO DINÂMICA (CORRIGIDA) ---
+# --- ABA 1: NUTRIÇÃO DINÂMICA (N-P-K-Ca-Mg-S) ---
 with tab_nutri:
-    st.markdown("### 📊 Demanda Nutricional Atual")
+    st.markdown("### 📊 Marcha de Absorção de Nutrientes (Status Atual)")
     
     nutri = db["NUTRI_MARCHA_ABSORCAO"]
     
-    # Lógica Dinâmica: Pega os valores da Semana Atual
+    # 1. LÓGICA DINÂMICA: Extração de Dados da Semana Atual
     s_idx = min(semanas - 1, 11) if semanas > 0 else 0
-    val_n = nutri['N'][s_idx]
-    val_p = nutri['P'][s_idx]
-    val_k = nutri['K'][s_idx]
     
-    # BALÕES COLORIDOS DINÂMICOS
-    st.markdown(f"""
-    <div style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap; margin-bottom:20px;">
-        <div class="nutri-ball" style="border-color:#22c55e; color:#22c55e;">
-            <span class="ball-label">N</span>{val_n}%
-        </div>
-        <div class="nutri-ball" style="border-color:#3b82f6; color:#3b82f6;">
-            <span class="ball-label">P</span>{val_p}%
-        </div>
-        <div class="nutri-ball" style="border-color:#a855f7; color:#a855f7;">
-            <span class="ball-label">K</span>{val_k}%
-        </div>
-    </div>
-    <div style="text-align:center; font-size:0.8rem; color:#888; margin-bottom:20px;">
-        DEMANDA RELATIVA NA SEMANA {semanas}
-    </div>
-    """, unsafe_allow_html=True)
+    # Dicionário de Cores e Valores para renderização automática
+    macros = {
+        "N":  {"nome": "Nitrogênio", "cor": "#22c55e", "val": nutri['N'][s_idx]},
+        "P":  {"nome": "Fósforo",    "cor": "#3b82f6", "val": nutri['P'][s_idx]},
+        "K":  {"nome": "Potássio",   "cor": "#a855f7", "val": nutri['K'][s_idx]},
+        "Ca": {"nome": "Cálcio",     "cor": "#f97316", "val": nutri['Ca'][s_idx]},
+        "Mg": {"nome": "Magnésio",   "cor": "#eab308", "val": nutri['Mg'][s_idx]},
+        "S":  {"nome": "Enxofre",    "cor": "#facc15", "val": nutri['S'][s_idx]}
+    }
+    
+    # 2. EXIBIÇÃO PROFISSIONAL DOS BALÕES (GRID 2x3 ou 1x6)
+    cols_nutri = st.columns(6)
+    for i, (simbolo, d) in enumerate(macros.items()):
+        with cols_nutri[i]:
+            st.markdown(f"""
+            <div style="text-align:center;">
+                <div class="nutri-ball" style="border-color:{d['cor']}; color:{d['cor']}; margin: 0 auto;">
+                    <span class="ball-label">{simbolo}</span>{d['val']}%
+                </div>
+                <div style="font-size:0.7rem; color:#888; font-weight:bold; margin-top:5px;">{d['nome'].upper()}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+    st.markdown(f"<div style='text-align:center; font-size:0.8rem; color:#666; margin-top:10px;'>DEMANDA BIOQUÍMICA ESTIMADA PARA A SEMANA {semanas} ({fase_nome.upper()})</div>", unsafe_allow_html=True)
+    st.markdown("---")
+
+    # 3. GRÁFICO DINÂMICO PROFISSIONAL (PLOTLY MASTER)
+    st.markdown("#### 📈 Dinâmica de Nutrição vs. Ciclo Fenológico")
+    
+    fig = go.Figure()
+
+    # Adicionando Traces para cada Nutriente
+    for simbolo, d in macros.items():
+        fig.add_trace(go.Scatter(
+            x=nutri['semanas'], 
+            y=nutri[simbolo],
+            name=f"({simbolo}) {d['nome']}",
+            line=dict(color=d['cor'], width=3 if simbolo in ['N','P','K'] else 2),
+            mode='lines+markers' if semanas == nutri['semanas'][s_idx] else 'lines',
+            hovertemplate=f"Semana %{{x}}<br>{d['nome']}: %{{y}}%<extra></extra>"
+        ))
+
+    # Adicionando Linha Vertical Indicadora da Semana Atual
+    fig.add_vline(x=semanas, line_width=2, line_dash="dash", line_color="#ffffff", opacity=0.5)
+    fig.add_annotation(x=semanas, y=105, text="VOCÊ ESTÁ AQUI", showarrow=False, font=dict(color="#ffffff", size=10), bgcolor="#a855f7")
+
+    fig.update_layout(
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        font=dict(color="#ccc"),
+        height=400,
+        margin=dict(l=0, r=0, t=30, b=0),
+        xaxis=dict(
+            title="SEMANAS DE CULTIVO",
+            showgrid=False,
+            tickmode='linear',
+            range=[1, 12]
+        ),
+        yaxis=dict(
+            title="DEMANDA DE ABSORÇÃO (%)",
+            showgrid=True,
+            gridcolor='#222',
+            range=[0, 110]
+        ),
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1
+        ),
+        hovermode="x unified"
+    )
+    
+    st.plotly_chart(fig, use_container_width=True)
+    
+    
+
+    st.markdown("---")
+    st.markdown("#### 🔍 Enciclopédia de Deficiências (Diagnóstico Visual)")
+    
+    # 4. CARDS DE DEFICIÊNCIA (IDENTIFICAÇÃO POR MACRO/MICRO)
+    cols_def = st.columns(4)
+    defs_items = list(db["DEFICIENCIAS_VISUAIS"].items())
+    
+    for i, (k, v) in enumerate(defs_items):
+        with cols_def[i % 4]:
+            cor_card = v.get('cor_card', '#333')
+            with st.expander(f"‼️ {k}"):
+                st.markdown(f"""
+                <div style="border-left: 3px solid {cor_card}; padding-left: 10px;">
+                    <div style="font-size:0.7rem; color:{cor_card}; font-weight:bold; text-transform:uppercase;">{v.get('tipo', 'Nutriente')}</div>
+                    <div style="font-size:0.85rem; color:#eee; margin: 10px 0;">{v['sintoma']}</div>
+                    <div style="background:rgba(34, 197, 94, 0.1); border:1px solid #15803d; padding:5px; border-radius:4px; margin-bottom:5px;">
+                        <span style="font-size:0.7rem; color:#4ade80; font-weight:bold;">BIO:</span>
+                        <div style="font-size:0.75rem; color:#ccc;">{v.get('correcao_bio', '-')}</div>
+                    </div>
+                    <div style="background:rgba(239, 68, 68, 0.1); border:1px solid #991b1b; padding:5px; border-radius:4px;">
+                        <span style="font-size:0.7rem; color:#f87171; font-weight:bold;">QUÍMICO:</span>
+                        <div style="font-size:0.75rem; color:#ccc;">{v.get('correcao_quim', '-')}</div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
 
     # GRÁFICO DE LINHAS NEON
     fig = go.Figure()
