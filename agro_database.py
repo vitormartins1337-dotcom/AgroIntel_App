@@ -1,168 +1,172 @@
 # ARQUIVO: agro_database.py
-# SISTEMA: AGROWER SDI | MASTER DATABASE V4.20
-# DESCRIÇÃO: Banco de dados agronômico completo (Nutrição, Pragas, Doenças, Deficiências).
+# SISTEMA: AGROWER SDI | DATABASE V5.0 (INTEGRAÇÃO TOTAL)
 
 def get_agro_db():
     return {
         # ==============================================================================
-        # 1. METODOLOGIAS DE CULTIVO (RECEITAS & PARÂMETROS)
+        # 1. PARÂMETROS DE GENÉTICA & PRODUTIVIDADE (NOVO)
         # ==============================================================================
-        "METODOS_CULTIVO": {
-            "Orgânico (No-Till / Living Soil)": {
-                "descricao": "Foco na microbiologia do solo (Soil Food Web). Sabor (Terpenos) superior. Ciclo mais lento, porém mais estável.",
-                "substrato_receita": [
-                    "BASE: 40% Turfa de Sphagnum + 30% Perlita/Casca de Arroz + 30% Húmus de Minhoca.",
-                    "ADITIVOS (p/ 50L): 200g Torta de Neem (Pragas), 200g Farinha de Ostras (Cálcio), 500g Bokashi.",
-                    "MINERAIS: 200g Azomite (Micronutrientes), 100g Gesso Agrícola (Enxofre)."
-                ],
-                "nutricao": "A planta se alimenta da troca catiônica com fungos/bactérias. Use Chás Aerados (Compost Tea) e Fermentados (KNF).",
-                "ph_ideal": "6.2 - 6.8 (O solo vivo tampona flutuações. Não use redutores ácidos químicos).",
-                "ec_ideal": "N/A (Não se mede EC no runoff em orgânico. Monitore a vida do solo)."
+        "GENETICAS_PARAMETROS": {
+            "Indica (Fotoperíodo)": {
+                "fator_yield": 1.0, # Padrão
+                "ciclo_total_dias": 100,
+                "desc": "Arbustiva, densa, ciclo rápido.",
+                "risco_fase": "Botrytis (Mofo) na Flora Final devido à densidade."
             },
-            "Mineral (Coco / High Fertigation)": {
-                "descricao": "Alta performance (Crop Steering). Crescimento explosivo. Exige precisão de pH e EC diária.",
-                "substrato_receita": [
-                    "100% Fibra de Coco (Bufferizada com CalMag previamente).",
-                    "OU Mix: 70% Coco + 30% Perlita (Melhor drenagem para regas frequentes)."
-                ],
-                "nutricao": "Sais Minerais Quelatados. Regas frequentes (Múltiplas vezes ao dia) com Runoff de 10-20% para lavar sais.",
-                "ph_ideal": "5.8 - 6.2 (Faixa ácida para absorção de micronutrientes no coco).",
-                "ec_ideal": "Veg: 1.2-1.5 mS | Flora: 1.8-2.5 mS (Cuidado com o 'Stacking' de sais no substrato)."
+            "Sativa (Fotoperíodo)": {
+                "fator_yield": 1.2, # Rende mais, mas demora mais
+                "ciclo_total_dias": 120,
+                "desc": "Alta, esguia, flores aeradas.",
+                "risco_fase": "Queima por luz (cresce muito) e Hermafroditismo."
             },
-            "Hidroponia (DWC / RDWC)": {
-                "descricao": "Raízes submersas em solução oxigenada. Velocidade máxima de crescimento (30% mais rápido). Risco alto de Pythium.",
-                "substrato_receita": [
-                    "Argila Expandida (Lavada e pH estabilizado em 5.5).",
-                    "Cubos de Lã de Rocha (Rockwool) para germinação/clones."
-                ],
-                "nutricao": "Solução estéril (H2O2) OU Biológica (Beneficiais). Nunca misture os dois. Temperatura da água < 21°C é MANDATÓRIA.",
-                "ph_ideal": "5.5 - 6.0 (Flutua rápido. Checar 2x ao dia).",
-                "ec_ideal": "Veg: 0.8-1.0 | Flora: 1.2-1.8 (Hidro exige MENOS comida que o coco)."
+            "Híbrida (50/50)": {
+                "fator_yield": 1.1,
+                "ciclo_total_dias": 110,
+                "desc": "Vigor híbrido, equilíbrio ideal.",
+                "risco_fase": "Variável conforme fenótipo."
             },
-            "Outdoor (Guerrilha / Quintal)": {
-                "descricao": "Energia solar (espectro completo). Plantas gigantes. Risco ambiental alto.",
-                "substrato_receita": [
-                    "Cova de 40L mínimo.",
-                    "Mistura: 50% Solo Nativo + 50% Composto Orgânico + Esterco curtido."
-                ],
-                "nutricao": "Top Dress (Cobertura) a cada 20 dias com Bokashi ou Torta de Mamona (Veg) / Farinha de Osso (Flora).",
-                "ph_ideal": "6.0 - 7.0",
-                "ec_ideal": "Depende da análise de solo."
+            "Automática (Ruderalis)": {
+                "fator_yield": 0.6, # Menor rendimento por planta
+                "ciclo_total_dias": 75,
+                "desc": "Ciclo curtíssimo, floresce por idade.",
+                "risco_fase": "Travamento no veg (estresse reduz colheita drasticamente)."
             }
         },
 
         # ==============================================================================
-        # 2. FASES DINÂMICAS (SISTEMA DE DECISÃO DE RISCO)
+        # 2. METODOLOGIAS (COM ESTIMATIVA DE RENDIMENTO BASE)
+        # ==============================================================================
+        "METODOS_CULTIVO": {
+            "Orgânico (Solo Vivo)": {
+                "descricao": "Qualidade máxima de terpenos. Rendimento médio.",
+                "rendimento_base_g_planta": 60, # g secas por planta (média conservadora)
+                "cor_tema": "#22c55e",
+                "ph_ideal": "6.2-6.8",
+                "ec_ideal": "Solo"
+            },
+            "Mineral (Coco/Inerte)": {
+                "descricao": "Alta performance. Rendimento alto.",
+                "rendimento_base_g_planta": 85,
+                "cor_tema": "#38bdf8",
+                "ph_ideal": "5.8-6.0",
+                "ec_ideal": "1.8-2.2"
+            },
+            "Hidroponia (DWC)": {
+                "descricao": "Crescimento explosivo. Rendimento máximo.",
+                "rendimento_base_g_planta": 110,
+                "cor_tema": "#a855f7",
+                "ph_ideal": "5.5-5.8",
+                "ec_ideal": "1.2-1.8"
+            },
+            "Outdoor (Sol)": {
+                "descricao": "Plantas gigantes se plantadas na época certa.",
+                "rendimento_base_g_planta": 150, # Pode ser muito mais, mas média Brasil
+                "cor_tema": "#facc15",
+                "ph_ideal": "6.0-6.5",
+                "ec_ideal": "Solo"
+            }
+        },
+
+        # ==============================================================================
+        # 3. FASES DINÂMICAS (COM AMEAÇAS VINCULADAS AO DOCTOR GROW)
         # ==============================================================================
         "FASES_DINAMICAS": {
             "Plântula (Semana 1-2)": {
-                "foco": "Enraizamento e Umidade",
-                "riscos": ["Damping-off (Pythium)", "Desidratação", "Queima por Luz"],
-                "obs": "Umidade alta (70%+) é vital. As raízes ainda não bebem, a planta se hidrata pelas folhas. Luz suave (PPFD 150-250)."
+                "foco": "Enraizamento",
+                "obs": "Umidade 70%+. Luz fraca. Não adubar.",
+                "ameacas_chave": ["Pythium (Root Rot)", "Fungus Gnats"]
             },
             "Vegetativo (Semana 3-6)": {
-                "foco": "Estrutura, Poda e Nitrogênio",
-                "riscos": ["Tripes", "Ácaros", "Deficiência de Magnésio"],
-                "obs": "Hora de treinar (LST/Topping). A planta consome muito Nitrogênio. Ventilação forte para engrossar caules."
+                "foco": "Estrutura/Poda",
+                "obs": "Topping/LST. Nitrogênio alto. Vento forte.",
+                "ameacas_chave": ["Tripes", "Spider Mites", "Deficiência N"]
             },
-            "Pré-Flora / Stretch (Semana 7-8)": {
-                "foco": "Controle de Altura e Sexagem",
-                "riscos": ["Hermafroditas (Stress)", "Fome de Cálcio"],
-                "obs": "A planta pode triplicar de tamanho. Instale a rede SCROG agora. Identifique e remova machos imediatamente."
+            "Pré-Flora (Semana 7-8)": {
+                "foco": "Stretch/Sexagem",
+                "obs": "Instalar rede SCROG. Remover machos.",
+                "ameacas_chave": ["Deficiência Mg", "Deficiência Ca"]
             },
             "Flora Inicial (Semana 9-11)": {
-                "foco": "Formação de Botões (Pistilos)",
-                "riscos": ["Oídio (Pó Branco)", "Overfert (Pontas Queimadas)"],
-                "obs": "Pare sprays foliares! Aumente o Fósforo (P) e Potássio (K). Reduza a umidade para 50%."
+                "foco": "Formação de Botões",
+                "obs": "PK Booster. Baixar umidade para 50%.",
+                "ameacas_chave": ["Oídio", "Overfert"]
             },
-            "Flora Final / Engorda (Semana 12+)": {
-                "foco": "Densidade, Resina e Senescência",
-                "riscos": ["Botrytis (Bud Rot)", "Bananas (Nanners)"],
-                "obs": "Umidade crítica < 45%. Inicie o FLUSH (lavagem) 10 dias antes da colheita se usar mineral. Monitore tricomas."
+            "Flora Final (Semana 12+)": {
+                "foco": "Densidade/Resina",
+                "obs": "Flush (Lavagem). Umidade <45%. Escuridão 48h antes da faca.",
+                "ameacas_chave": ["Botrytis (Bud Rot)", "Bananas"]
             }
         },
 
         # ==============================================================================
-        # 3. DOCTOR GROW MASTER (PRAGAS, DOENÇAS E DEFICIÊNCIAS)
+        # 4. DOCTOR GROW (DATABASE DE SOLUÇÕES)
         # ==============================================================================
         "DOCTOR_GROW_MASTER": {
-            "Pragas": {
-                "Spider Mites (Tetranychus urticae)": {
-                    "identificacao": "Pontinhos brancos/amarelos nas folhas (picadas). Teias nos buds em casos graves. Vivem na face inferior.",
-                    "controle_organico": ["Óleo de Neem (Apenas Veg)", "Beauveria bassiana (Fungo)", "Predadores: Phytoseiulus persimilis"],
-                    "controle_quimico": ["Abamectina (Vertimec) - Carência 28 dias.", "Etoxazol (Ovicida)."],
-                    "gravidade": "ALTA. Destrói a fotossíntese e cobre a planta de teia."
-                },
-                "Fungus Gnats (Bradysia)": {
-                    "identificacao": "Mosquitinhos pretos voando no solo. Larvas brancas translúcidas na raiz.",
-                    "controle_organico": ["BTI (Bacillus thuringiensis israelensis) na rega", "Terra de Diatomáceas (Seco)", "Armadilhas Amarelas"],
-                    "controle_quimico": ["Imidacloprido (Apenas se infestação massiva no Veg)."],
-                    "gravidade": "MÉDIA. Larvas comem raízes capilares e abrem porta para Fusarium."
-                },
-                "Tripes (Thrips)": {
-                    "identificacao": "Manchas prateadas/bronzeadas que brilham. Inseto palito rápido.",
-                    "controle_organico": ["Spinosad (Produto: Tracer/Exalt) - O melhor biológico.", "Sabão Potássico", "Armadilhas Azuis"],
-                    "controle_quimico": ["Clorfenapir (Pirate) - Tóxico.", "Acetamiprido."],
-                    "gravidade": "MÉDIA. Deforma folhas novas e transmite viroses."
-                },
-                "Russet Mites (Ácaro-do-Bronzeamento)": {
-                    "identificacao": "Invisível a olho nu (precisa de lupa 60x). Folhas ficam 'envernizadas', marrons e encarquilhadas.",
-                    "controle_organico": ["Enxofre Micronizado (Pó ou Vapor) - Apenas Veg.", "Ácido Cítrico"],
-                    "controle_quimico": ["Abamectina + Espirodiclofeno"],
-                    "gravidade": "CRÍTICA. O 'Assassino Invisível'. Quando você vê o dano, já é tarde."
-                }
+            "Pythium (Root Rot)": {
+                "tipo": "Doença",
+                "identificacao": "Raízes marrons gosmentas, cheiro de podre. Planta murcha.",
+                "controle": "H2O2 (Peróxido) na rega. Enzimas (Cannazym). Manter água fria (<21°C).",
+                "produtos": ["Peróxido 10 vol", "Trichoderma", "Metalaxil (Químico)"]
             },
-            "Doencas": {
-                "Oídio (Powdery Mildew)": {
-                    "identificacao": "Pó branco (parece farinha) nas folhas. Começa nas folhas baixas e sombreadas.",
-                    "controle_organico": ["Leite Cru 10% + Água 90% (Luz solar ativa a enzima)", "Bicarbonato de Potássio", "Bacillus subtilis"],
-                    "controle_quimico": ["Difenoconazol (Score) - Sistêmico.", "Tebuconazol."],
-                    "gravidade": "ALTA. Fungo sistêmico. Melhore a ventilação e baixe a umidade."
-                },
-                "Botrytis (Bud Rot / Mofo Cinza)": {
-                    "identificacao": "Buds ficam marrons, moles e úmidos. Ao abrir, sai uma 'fumaça' de esporos.",
-                    "controle_organico": ["Prevenção: Trichoderma harzianum desde o início.", "Remoção cirúrgica com saco plástico."],
-                    "controle_quimico": ["NÃO USAR FUNGICIDAS EM FLORES. Risco severo à saúde (Pneumonia fúngica)."],
-                    "gravidade": "CRÍTICA. Perda total da área afetada. Comum em buds densos (Indicas)."
-                },
-                "Fusarium (Murcha)": {
-                    "identificacao": "Um galho murcha do nada enquanto o resto está bem. Ao cortar o caule, o miolo está marrom.",
-                    "controle_organico": ["Trichoderma (Preventivo). Não tem cura pós-infecção."],
-                    "controle_quimico": ["Não efetivo. Descarte a planta e esterilize o vaso."],
-                    "gravidade": "FATAL. O fungo entope os vasos xilemáticos da planta."
-                },
-                 "Pythium (Root Rot)": {
-                    "identificacao": "Raízes marrons, gosmentas e cheiro de podre (ovo/peixe).",
-                    "controle_organico": ["H2O2 (Peróxido) para esterilizar.", "Enzimas (Cannazym)"],
-                    "controle_quimico": ["Metalaxil"],
-                    "gravidade": "ALTA. Comum em Hidroponia com reservatório quente (>22°C)."
-                }
+            "Fungus Gnats": {
+                "tipo": "Praga",
+                "identificacao": "Mosquitinhos pretos voando. Larvas na raiz.",
+                "controle": "Deixar solo secar. BTI na rega. Armadilhas amarelas.",
+                "produtos": ["Dipel (BTI)", "Terra Diatomácea", "Dimy Pel"]
             },
-            "Deficiencias (Nutrientes)": {
-                "Nitrogênio (N)": {
-                    "identificacao": "Folhas velhas (baixeiro) ficam amarelas uniformemente e caem.",
-                    "controle_organico": ["Sangue seco", "Humus de Minhoca", "Chá de Urtiga"],
-                    "controle_quimico": ["Ureia", "Nitrato de Cálcio"],
-                    "gravidade": "BAIXA. Fácil correção no Veg. Normal no final da Flora."
-                },
-                "Magnésio (Mg)": {
-                    "identificacao": "Clorose intervenal (nervuras verdes, meio da folha amarelo). Folhas viram pra cima (rezando).",
-                    "controle_organico": ["Sal Amargo (Sulfato de Magnésio) via foliar", "Dolomita"],
-                    "controle_quimico": ["CalMag", "Nitrato de Magnésio"],
-                    "gravidade": "MÉDIA. Crítico na transição para flora."
-                },
-                "Cálcio (Ca)": {
-                    "identificacao": "Manchas de ferrugem (pontos marrons) nas folhas novas/médias. Crescimento lento.",
-                    "controle_organico": ["Farinha de Ostras", "Casca de Ovo moída (Lento)"],
-                    "controle_quimico": ["Nitrato de Cálcio (CalMag)"],
-                    "gravidade": "ALTA. Cálcio é imóvel. A planta não recupera a folha danificada."
-                },
-                "Overfert (Excesso/Queima)": {
-                    "identificacao": "Pontas das folhas queimadas e viradas para baixo (Garra). Folhas verde escuro excessivo.",
-                    "controle_organico": ["Flush (Lavagem) apenas com água.", "Medir Runoff."],
-                    "controle_quimico": ["Flush com agente de limpeza (FloraKleen)."],
-                    "gravidade": "MÉDIA. Trava o crescimento (Lockout) por excesso de sais."
-                }
+            "Tripes": {
+                "tipo": "Praga",
+                "identificacao": "Folhas prateadas/brilhantes. Inseto palito.",
+                "controle": "Spinosad é o rei. Sabão potássico ajuda.",
+                "produtos": ["Tracer (Spinosad)", "Óleo de Neem (Só Veg)", "Mospilan (Químico)"]
+            },
+            "Spider Mites": {
+                "tipo": "Praga",
+                "identificacao": "Pontos brancos na folha. Teias.",
+                "controle": "Alta umidade freia eles. Abamectina no veg.",
+                "produtos": ["Vertimec", "Beauveria Bassiana", "Enxofre"]
+            },
+            "Deficiência N": {
+                "tipo": "Nutrição",
+                "identificacao": "Folhas velhas amarelam por inteiro.",
+                "controle": "Aumentar Nitrogênio na rega.",
+                "produtos": ["Flowermind", "Ureia", "Humus"]
+            },
+            "Deficiência Mg": {
+                "tipo": "Nutrição",
+                "identificacao": "Amarelo entre as nervuras (esqueleto verde).",
+                "controle": "Sal Amargo foliar ou CalMag.",
+                "produtos": ["Sulfato de Magnésio", "CalMag"]
+            },
+            "Deficiência Ca": {
+                "tipo": "Nutrição",
+                "identificacao": "Pontos de ferrugem marrom nas folhas.",
+                "controle": "Cálcio é imóvel. Aplicar CalMag na raiz.",
+                "produtos": ["Nitrato de Cálcio", "Farinha de Ostras"]
+            },
+            "Oídio": {
+                "tipo": "Fungo",
+                "identificacao": "Pó branco nas folhas (farinha).",
+                "controle": "Leite 10% no sol. Bicarbonato.",
+                "produtos": ["Score (Químico)", "Enxofre", "Bicarbonato de Potássio"]
+            },
+            "Overfert": {
+                "tipo": "Nutrição",
+                "identificacao": "Pontas queimadas e viradas p/ baixo (Garra).",
+                "controle": "Flush (Lavagem do solo).",
+                "produtos": ["Água pura", "FloraKleen"]
+            },
+            "Botrytis (Bud Rot)": {
+                "tipo": "Fungo",
+                "identificacao": "Bud podre, cinza/marrom, soltando esporos.",
+                "controle": "Remoção cirúrgica. Baixar umidade urgente.",
+                "produtos": ["NADA (Cortar fora)", "Desumidificador"]
+            },
+            "Bananas": {
+                "tipo": "Estresse",
+                "identificacao": "Estruturas macho amarelas na flor fêmea.",
+                "controle": "Pinça molhada para remover.",
+                "produtos": ["Reduzir calor/luz"]
             }
         }
     }
