@@ -100,84 +100,79 @@ def load_css():
         </style>
     """, unsafe_allow_html=True)
 
-# --- CAPA HERO V.FINAL (CENTRALIZADA & BLINDADA) ---
+# --- CAPA HERO V.FINAL (SEM INDENTAÇÃO PARA NÃO DAR ERRO) ---
 st.markdown("""
 <style>
-/* 1. O CARD (CONTAINER PRINCIPAL) */
+/* 1. CONTAINER DA CAPA (RESPONSIVO E CENTRALIZADO) */
 .hero-card {
-    position: relative; /* Essencial para o botão online não vazar */
+    position: relative;
     background: linear-gradient(135deg, #1a0b2e 0%, #000000 100%);
     border: 1px solid #a855f7;
-    box-shadow: 0 0 50px rgba(168, 85, 247, 0.2); /* Glow Profissional */
-    border-radius: 16px;
-    padding: 50px 20px; /* Altura boa, laterais seguras */
+    box-shadow: 0 0 50px rgba(168, 85, 247, 0.25);
+    border-radius: 20px;
+    padding: 60px 20px;
     margin-bottom: 30px;
-    
-    /* CENTRALIZAÇÃO TOTAL */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    
-    overflow: hidden; /* Garante que nada saia do quadrado */
+    overflow: hidden;
 }
 
-/* 2. BOTÃO ONLINE (FLUTUANTE NO CANTO) */
+/* 2. BOTÃO ONLINE (FIXO NO CANTO DIREITO SUPERIOR) */
 .status-pill {
-    position: absolute; /* Fixa no canto sem empurrar o texto */
+    position: absolute;
     top: 15px;
     right: 15px;
-    
     background: rgba(16, 185, 129, 0.1);
     border: 1px solid #059669;
     color: #4ade80;
-    padding: 5px 12px;
-    border-radius: 20px;
+    padding: 6px 14px;
+    border-radius: 99px;
     font-size: 0.75rem;
     font-weight: 700;
     font-family: sans-serif;
     display: flex;
     align-items: center;
     gap: 6px;
-    white-space: nowrap;
+    z-index: 2;
 }
 
-/* 3. TÍTULO (NUNCA VAZA) */
+/* 3. TÍTULO GIGANTE (AJUSTÁVEL) */
 .main-title {
-    /* Fonte se adapta à largura da tela (5% da tela) */
-    font-size: clamp(2rem, 5vw, 4.5rem); 
+    font-size: clamp(2.5rem, 6vw, 5rem); /* Fonte Grande que não vaza */
     font-weight: 900;
     color: #fff;
-    line-height: 1.1;
-    letter-spacing: -1px;
-    text-shadow: 0 0 25px rgba(168, 85, 247, 0.5);
-    margin-bottom: 5px;
-    max-width: 90%; /* Margem de segurança */
+    line-height: 1;
+    letter-spacing: -2px;
+    text-align: center;
+    text-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
+    z-index: 1;
 }
 
-/* 4. SUBTÍTULO (CENTRALIZADO) */
+/* 4. SUBTÍTULO */
 .sub-title {
     font-family: 'Courier New', monospace;
-    font-size: clamp(0.7rem, 1.2vw, 1rem);
+    font-size: clamp(0.7rem, 1.5vw, 1rem);
     color: #d8b4fe;
-    letter-spacing: 4px; /* Espaçamento chique */
+    letter-spacing: 4px;
     text-transform: uppercase;
+    margin-top: 15px;
     font-weight: 600;
+    text-align: center;
     opacity: 0.9;
+    z-index: 1;
 }
 </style>
 
 <div class="hero-card">
     <div class="status-pill">
-        <span style="line-height:0; font-size:1rem;">🍁</span> ONLINE
+        <span style="font-size:1rem; line-height:1;">🍁</span> ONLINE
     </div>
-
     <div class="main-title">AGROWER <span style="color:#a855f7">SDI</span></div>
     <div class="sub-title">SISTEMA DE DECISÃO INTEGRADA</div>
 </div>
 """, unsafe_allow_html=True)
-
 # ==============================================================================
 # 🎮 DASHBOARD
 # ==============================================================================
