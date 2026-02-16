@@ -144,7 +144,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==============================================================================
-# 4. PAINEL DE CONTROLE & INTELIGÊNCIA ARTIFICIAL (SDI ENGINE V9.5)
+# 4. PAINEL DE CONTROLE & INTELIGÊNCIA ARTIFICIAL (SDI ENGINE V9.6 CORRIGIDO)
 # ==============================================================================
 
 # --- A. INPUTS DE CONFIGURAÇÃO ---
@@ -171,7 +171,7 @@ watts_painel = 0
 area_cultivo = 0
 diagnostico_titulo = ""
 diagnostico_texto = ""
-sugestao_premium = "" # A Cereja do bolo: Sugestão baseada no erro
+sugestao_premium = ""
 cor_diag = "#333"
 show_diag = False
 
@@ -187,57 +187,53 @@ if ambiente_sel in ["Indoor", "Estufa Outdoor (Complementar)"]:
         # --- CÁLCULOS TÉCNICOS ---
         area_m2 = (largura * profundidade) / 10000 
         if area_m2 > 0:
-            ppfd_estimado_w = watts_painel / area_m2 # W/m2 (Proxy para PPFD)
+            ppfd_estimado_w = watts_painel / area_m2 # W/m2
             densidade_plantas = n_plantas / area_m2 # Plantas/m2
             watts_por_planta = watts_painel / n_plantas # W/planta
             
             show_diag = True
             
-            # --- ALGORITMO DE INTELIGÊNCIA SDI ---
-            
-            # 1. ANÁLISE DE DENSIDADE (SUPERPOPULAÇÃO)
-            # Regra de Ouro: Standard = 4-9 plantas/m2 | SOG = 10-25 plantas/m2
+            # 1. ANÁLISE DE DENSIDADE
             is_crowded = False
             txt_densidade = ""
             
             if densidade_plantas > 16:
                 is_crowded = True
-                txt_densidade = f"⚠️ <b>SUPERPOPULAÇÃO CRÍTICA ({densidade_plantas:.1f} plantas/m²)</b>: Você colocou muitas plantas em pouco espaço. Isso causará sombreamento mútuo, microclima úmido (risco de mofo) e competição radicular."
-                sugestao_premium = "REDUÇÃO IMEDIATA: Selecione as 4-6 melhores plantas e descarte as outras, ou mude para vasos minúsculos (2-3L) estilo SOG sem vegetativo."
-                cor_diag = "#ef4444" # Vermelho
+                txt_densidade = f"⚠️ <b>SUPERPOPULAÇÃO CRÍTICA ({densidade_plantas:.1f} plantas/m²)</b>: Você colocou muitas plantas em pouco espaço. Risco de mofo e competição."
+                sugestao_premium = "REDUÇÃO IMEDIATA: Selecione as melhores plantas e descarte as outras, ou mude para vasos minúsculos (2-3L)."
+                cor_diag = "#ef4444"
             elif densidade_plantas > 9 and densidade_plantas <= 16:
-                txt_densidade = f"⚠️ <b>ALTA DENSIDADE ({densidade_plantas:.1f} plantas/m²)</b>: Configuração estilo SOG (Sea of Green). Exige ciclo vegetativo muito curto (max 2 semanas) para não lotar a tenda."
-                sugestao_premium = "TÉCNICA SOG: Vire para a floração rápido. Faça poda baixa (Lollipopping) agressiva para circular ar."
-                if cor_diag == "#333": cor_diag = "#eab308" # Amarelo (se não tiver erro pior)
+                txt_densidade = f"⚠️ <b>ALTA DENSIDADE ({densidade_plantas:.1f} plantas/m²)</b>: Configuração estilo SOG (Sea of Green). Exige ciclo vegetativo curto."
+                sugestao_premium = "TÉCNICA SOG: Vire para a floração rápido e faça poda baixa (Lollipopping) agressiva."
+                if cor_diag == "#333": cor_diag = "#eab308"
             elif densidade_plantas < 4:
-                txt_densidade = f"ℹ️ <b>BAIXA DENSIDADE ({densidade_plantas:.1f} plantas/m²)</b>: Poucas plantas para o espaço. Exigirá um tempo vegetativo longo (6-8 semanas) para preencher a rede (SCROG)."
-                sugestao_premium = "TÉCNICA SCROG: Use uma rede e treine a planta horizontalmente para preencher os buracos de luz e maximizar o rendimento."
-                if cor_diag == "#333": cor_diag = "#38bdf8" # Azul
+                txt_densidade = f"ℹ️ <b>BAIXA DENSIDADE ({densidade_plantas:.1f} plantas/m²)</b>: Poucas plantas para o espaço. Exigirá vegetativo longo."
+                sugestao_premium = "TÉCNICA SCROG: Use uma rede e treine a planta horizontalmente para preencher os buracos de luz."
+                if cor_diag == "#333": cor_diag = "#38bdf8"
             else:
-                txt_densidade = f"✅ <b>DENSIDADE IDEAL ({densidade_plantas:.1f} plantas/m²)</b>: Equilíbrio perfeito entre espaço e número de vasos."
+                txt_densidade = f"✅ <b>DENSIDADE IDEAL ({densidade_plantas:.1f} plantas/m²)</b>: Equilíbrio perfeito."
             
-            # 2. ANÁLISE DE ILUMINAÇÃO (W/m2)
+            # 2. ANÁLISE DE ILUMINAÇÃO
             txt_luz = ""
             if ppfd_estimado_w < 250:
-                txt_luz = f"⚠️ <b>LUZ INSUFICIENTE ({ppfd_estimado_w:.0f} W/m²)</b>: Seus buds não terão densidade. Ficarão aerados ('pipoca')."
-                if not is_crowded: sugestao_premium = "Aumente a potência do LED ou reduza a área do grow (aproxime as paredes refletivas)."
+                txt_luz = f"⚠️ <b>LUZ INSUFICIENTE ({ppfd_estimado_w:.0f} W/m²)</b>: Risco de buds aerados ('pipoca')."
+                if not is_crowded: sugestao_premium = "Aumente a potência do LED ou reduza a área do grow."
                 cor_diag = "#eab308"
             elif ppfd_estimado_w > 650:
-                txt_luz = f"🔥 <b>LUZ EXTREMA ({ppfd_estimado_w:.0f} W/m²)</b>: Risco alto de estresse térmico e luminoso (Fox tailing)."
-                if not is_crowded: sugestao_premium = "Obrigatório uso de CO2 (1200ppm) e VPD perfeito, ou dimerize a luz para 80%."
+                txt_luz = f"🔥 <b>LUZ EXTREMA ({ppfd_estimado_w:.0f} W/m²)</b>: Risco de estresse térmico."
+                if not is_crowded: sugestao_premium = "Obrigatório uso de CO2 (1200ppm) ou dimerize a luz."
                 cor_diag = "#ef4444"
             else:
-                txt_luz = f"✅ <b>LUZ OTIMIZADA ({ppfd_estimado_w:.0f} W/m²)</b>: Sweet Spot para fotossíntese eficiente."
-                if cor_diag == "#333": cor_diag = "#22c55e" # Verde se tudo ok
+                txt_luz = f"✅ <b>LUZ OTIMIZADA ({ppfd_estimado_w:.0f} W/m²)</b>: Sweet Spot para fotossíntese."
+                if cor_diag == "#333": cor_diag = "#22c55e"
 
-            # 3. ANÁLISE DE ENERGIA INDIVIDUAL (W/Planta)
-            # Se tenho 15 plantas e 240W = 16W por planta (Muito pouco!)
+            # 3. ANÁLISE DE ENERGIA INDIVIDUAL
             if watts_por_planta < 25 and n_plantas > 4:
-                txt_luz += f"<br>⚠️ <b>DÉFICIT POR PLANTA ({watts_por_planta:.1f}W/un)</b>: Você está dividindo a luz entre 'muitas bocas'. O rendimento individual será medíocre."
-                if is_crowded: sugestao_premium = "ERRO CRÍTICO DE PLANEJAMENTO: Muita planta, pouca luz e pouco espaço. Reduza o número de plantas pela metade urgentemente."
+                txt_luz += f"<br>⚠️ <b>DÉFICIT POR PLANTA ({watts_por_planta:.1f}W/un)</b>: Luz dividida entre 'muitas bocas'."
+                if is_crowded: sugestao_premium = "ERRO CRÍTICO: Muita planta, pouca luz. Reduza o número de vasos."
                 cor_diag = "#ef4444"
 
-            # MONTAGEM DO DIAGNÓSTICO FINAL
+            # MONTAGEM DO DIAGNÓSTICO
             diagnostico_titulo = "CONSULTORIA TÉCNICA SDI (ANÁLISE DE AMBIENTE)"
             diagnostico_texto = f"""
             <div style="margin-bottom:10px;">{txt_densidade}</div>
@@ -247,7 +243,6 @@ if ambiente_sel in ["Indoor", "Estufa Outdoor (Complementar)"]:
                 {sugestao_premium if sugestao_premium else "Seu setup está balanceado. Mantenha o VPD constante."}
             </div>
             """
-
 else:
     # Outdoor
     n_plantas = st.number_input("Nº PLANTAS (OUTDOOR):", 1, 500, 6)
@@ -257,15 +252,12 @@ else:
     diagnostico_texto = f"""
     <div>☀️ <b>ENERGIA SOLAR (FULL SPECTRUM)</b></div>
     <div style="margin-top:5px; font-size:0.9rem;">
-        No outdoor, o fator limitante não é a luz, mas o <b>volume do substrato</b>. 
-        Para {n_plantas} plantas, garanta vasos de no mínimo 40-60 Litros (ou canteiro) para expressar o potencial genético.
-    </div>
-    <div style="margin-top:10px; padding:8px; background:rgba(250, 204, 21, 0.1); border-radius:6px;">
-        ⚠️ <b>Atenção:</b> Monitore pragas diariamente e proteja da chuva na floração final para evitar Botrytis.
+        No outdoor, o fator limitante é o <b>volume do substrato</b>. 
+        Para {n_plantas} plantas, garanta vasos de no mínimo 40-60 Litros.
     </div>
     """
 
-# EXIBIÇÃO DO CARD DE DIAGNÓSTICO (LOGO APÓS INPUTS)
+# EXIBIÇÃO DO CARD DE DIAGNÓSTICO
 if show_diag:
     st.markdown(f"""
     <div class="diag-card" style="border-left: 4px solid {cor_diag}; margin-top:20px; margin-bottom:20px;">
@@ -276,6 +268,27 @@ if show_diag:
         <div style="color:#e4e4e7; font-size:0.95rem; line-height:1.6;">{diagnostico_texto}</div>
     </div>
     """, unsafe_allow_html=True)
+
+# --- C. MOTOR DE CÁLCULO (AQUI ESTAVA FALTANDO!) ---
+# Define as variáveis essenciais para os Cards que vêm a seguir
+info_metodo = db["METODOS_CULTIVO"][metodo_sel]
+info_genetica = db["GENETICAS_PARAMETROS"][genetica_sel]
+
+dias_vida = (datetime.date.today() - data_inicio).days
+semanas = dias_vida // 7
+
+yield_total = info_metodo['rendimento_base'] * info_genetica['fator_yield'] * n_plantas
+yield_kg = yield_total / 1000 
+
+fase_nome = "Indefinida"; fase_dados = {}
+range_map = {"Plântula": 14, "Vegetativo": 42, "Pré-Flora": 56, "Flora Inicial": 77, "Flora Final": 200}
+fator_ciclo = 0.75 if info_genetica.get("tipo") == "Auto" else 1.0
+
+for k, v in db.get("FASES_DINAMICAS", {}).items():
+    chave_limpa = k.split(' ')[0]
+    limite = int(range_map.get(chave_limpa, 200) * fator_ciclo)
+    if dias_vida <= limite: fase_nome = k; fase_dados = v; break
+
 # ==============================================================================
 # 5. CARDS DASHBOARD
 # ==============================================================================
