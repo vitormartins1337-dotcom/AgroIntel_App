@@ -372,17 +372,16 @@ if 'show_diag' in locals() and show_diag:
 st.markdown("<br>", unsafe_allow_html=True)
 tab_nutri, tab_doctor = st.tabs(["🧪 NUTRIÇÃO & MARCHA DE ABSORÇÃO", "🚑 DOCTOR GROW (FITOSSANIDADE)"])
 
-# --- ABA 1: NUTRIÇÃO DINÂMICA (N-P-K-Ca-Mg-S) ---
+# --- ABA 1: NUTRIÇÃO & MARCHA DE ABSORÇÃO (MASTER V10.5) ---
 with tab_nutri:
-    st.markdown("### 📊 Marcha de Absorção de Nutrientes (Status Atual)")
+    # --- 1. DASHBOARD DE MACRONUTRIENTES (CARDS HORIZONTAIS) ---
+    st.markdown("#### 🧪 Status Químico da Semana Atual")
     
     nutri = db["NUTRI_MARCHA_ABSORCAO"]
-    
-    # 1. LÓGICA DINÂMICA: Extração de Dados da Semana Atual
     s_idx = min(semanas - 1, 11) if semanas > 0 else 0
     
-    # Dicionário de Cores e Valores para renderização automática
-    macros = {
+    # Definição dos elementos com cores e nomes profissionais
+    macros_data = {
         "N":  {"nome": "Nitrogênio", "cor": "#22c55e", "val": nutri['N'][s_idx]},
         "P":  {"nome": "Fósforo",    "cor": "#3b82f6", "val": nutri['P'][s_idx]},
         "K":  {"nome": "Potássio",   "cor": "#a855f7", "val": nutri['K'][s_idx]},
@@ -391,138 +390,94 @@ with tab_nutri:
         "S":  {"nome": "Enxofre",    "cor": "#facc15", "val": nutri['S'][s_idx]}
     }
     
-    # 2. EXIBIÇÃO PROFISSIONAL DOS BALÕES (GRID 2x3 ou 1x6)
-    cols_nutri = st.columns(6)
-    for i, (simbolo, d) in enumerate(macros.items()):
-        with cols_nutri[i]:
+    # Renderização em 6 colunas (Horizontal)
+    cols_m = st.columns(6)
+    for i, (simbolo, d) in enumerate(macros_data.items()):
+        with cols_m[i]:
             st.markdown(f"""
-            <div style="text-align:center;">
-                <div class="nutri-ball" style="border-color:{d['cor']}; color:{d['cor']}; margin: 0 auto;">
-                    <span class="ball-label">{simbolo}</span>{d['val']}%
-                </div>
-                <div style="font-size:0.7rem; color:#888; font-weight:bold; margin-top:5px;">{d['nome'].upper()}</div>
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid #333; border-top: 3px solid {d['cor']}; 
+                        border-radius: 8px; padding: 10px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+                <div style="font-size: 0.65rem; color: #999; font-weight: bold; margin-bottom: 2px;">{d['nome'].upper()}</div>
+                <div style="font-size: 1.4rem; font-weight: 900; color: #fff; line-height: 1;">{d['val']}%</div>
+                <div style="font-size: 0.75rem; color: {d['cor']}; font-weight: bold; margin-top: 3px;">{simbolo}</div>
             </div>
             """, unsafe_allow_html=True)
 
-    st.markdown(f"<div style='text-align:center; font-size:0.8rem; color:#666; margin-top:10px;'>DEMANDA BIOQUÍMICA ESTIMADA PARA A SEMANA {semanas} ({fase_nome.upper()})</div>", unsafe_allow_html=True)
-    st.markdown("---")
+    st.markdown(f"<div style='text-align:right; font-size:0.75rem; color:#555; margin-top:5px;'>Referência: Semana {semanas} | {fase_nome}</div>", unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
 
-    # 3. GRÁFICO DINÂMICO PROFISSIONAL (PLOTLY MASTER)
-    st.markdown("#### 📈 Dinâmica de Nutrição vs. Ciclo Fenológico")
+    # --- 2. GRÁFICO PROFISSIONAL AMPLIADO ---
+    st.markdown("#### 📈 Dinâmica Fenológica vs Marcha de Absorção")
     
     fig = go.Figure()
 
-    # Adicionando Traces para cada Nutriente
-    for simbolo, d in macros.items():
+    # Adicionando zonas de fundo para as fases (Contexto Visual)
+    # Vegetativo (Semanas 1-4), Stretch (4-6), Flora (6-12)
+    fig.add_vrect(x0=1, x1=4.5, fillcolor="rgba(34, 197, 94, 0.05)", layer="below", line_width=0, annotation_text="VEGETATIVO", annotation_position="top left")
+    fig.add_vrect(x0=4.5, x1=6.5, fillcolor="rgba(168, 85, 247, 0.05)", layer="below", line_width=0, annotation_text="TRANSICÃO/STRETCH", annotation_position="top left")
+    fig.add_vrect(x0=6.5, x1=12, fillcolor="rgba(239, 68, 68, 0.05)", layer="below", line_width=0, annotation_text="FLORAÇÃO/ENGORDA", annotation_position="top left")
+
+    # Linhas de cada nutriente
+    for simbolo, d in macros_data.items():
         fig.add_trace(go.Scatter(
-            x=nutri['semanas'], 
-            y=nutri[simbolo],
-            name=f"({simbolo}) {d['nome']}",
+            x=nutri['semanas'], y=nutri[simbolo],
+            name=f"{simbolo} ({d['nome']})",
             line=dict(color=d['cor'], width=3 if simbolo in ['N','P','K'] else 2),
-            mode='lines+markers' if semanas == nutri['semanas'][s_idx] else 'lines',
-            hovertemplate=f"Semana %{{x}}<br>{d['nome']}: %{{y}}%<extra></extra>"
+            mode='lines',
+            hovertemplate=f"Semanas: %{{x}}<br>{simbolo}: %{{y}}%<extra></extra>"
         ))
 
-    # Adicionando Linha Vertical Indicadora da Semana Atual
-    fig.add_vline(x=semanas, line_width=2, line_dash="dash", line_color="#ffffff", opacity=0.5)
-    fig.add_annotation(x=semanas, y=105, text="VOCÊ ESTÁ AQUI", showarrow=False, font=dict(color="#ffffff", size=10), bgcolor="#a855f7")
+    # Indicador de posição atual
+    fig.add_vline(x=semanas, line_width=2, line_dash="dash", line_color="#fff")
 
     fig.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font=dict(color="#ccc"),
-        height=400,
-        margin=dict(l=0, r=0, t=30, b=0),
-        xaxis=dict(
-            title="SEMANAS DE CULTIVO",
-            showgrid=False,
-            tickmode='linear',
-            range=[1, 12]
-        ),
-        yaxis=dict(
-            title="DEMANDA DE ABSORÇÃO (%)",
-            showgrid=True,
-            gridcolor='#222',
-            range=[0, 110]
-        ),
-        legend=dict(
-            orientation="h",
-            yanchor="bottom",
-            y=1.02,
-            xanchor="right",
-            x=1
-        ),
+        paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
+        height=500, # Gráfico maior para melhor visualização
+        margin=dict(l=10, r=10, t=20, b=10),
+        xaxis=dict(title="SEMANAS", showgrid=False, tickmode='linear', range=[1, 12]),
+        yaxis=dict(title="DEMANDA (%)", showgrid=True, gridcolor='#222', range=[0, 105]),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(size=10)),
         hovermode="x unified"
     )
     
     st.plotly_chart(fig, use_container_width=True)
-    
-    
 
+    # --- 3. CONSULTORIA VISUAL DE DEFICIÊNCIAS (EXPANDÍVEL) ---
     st.markdown("---")
-    st.markdown("#### 🔍 Enciclopédia de Deficiências (Diagnóstico Visual)")
-    
-    # 4. CARDS DE DEFICIÊNCIA (IDENTIFICAÇÃO POR MACRO/MICRO)
+    st.markdown("#### 🔍 Identificação Visual de Deficiências")
+    st.caption("Selecione o elemento para visualizar a referência fotográfica e o protocolo de correção.")
+
     cols_def = st.columns(4)
     defs_items = list(db["DEFICIENCIAS_VISUAIS"].items())
     
     for i, (k, v) in enumerate(defs_items):
         with cols_def[i % 4]:
             cor_card = v.get('cor_card', '#333')
-            with st.expander(f"‼️ {k}"):
+            # Extração limpa do símbolo químico para a busca da imagem
+            simbolo_q = k.split('(')[1].replace(')', '') if '(' in k else k
+
+            with st.expander(f"📌 {k}"):
+                # 📸 IMAGEM TÉCNICA PARA REFERÊNCIA
+                st.markdown(f"**Referência Fotográfica ($ {simbolo_q} $):**")
+                
+                
+                # INFORMAÇÕES TÉCNICAS
                 st.markdown(f"""
-                <div style="border-left: 3px solid {cor_card}; padding-left: 10px;">
-                    <div style="font-size:0.7rem; color:{cor_card}; font-weight:bold; text-transform:uppercase;">{v.get('tipo', 'Nutriente')}</div>
-                    <div style="font-size:0.85rem; color:#eee; margin: 10px 0;">{v['sintoma']}</div>
-                    <div style="background:rgba(34, 197, 94, 0.1); border:1px solid #15803d; padding:5px; border-radius:4px; margin-bottom:5px;">
-                        <span style="font-size:0.7rem; color:#4ade80; font-weight:bold;">BIO:</span>
-                        <div style="font-size:0.75rem; color:#ccc;">{v.get('correcao_bio', '-')}</div>
+                <div style="border-left: 3px solid {cor_card}; padding-left: 10px; margin-top: 10px;">
+                    <div style="font-size:0.75rem; color:{cor_card}; font-weight:bold; text-transform:uppercase; margin-bottom:5px;">{v.get('tipo', 'Macro')}</div>
+                    <div style="font-size:0.85rem; color:#ddd; margin-bottom:10px;"><b>Sintoma:</b> {v['sintoma']}</div>
+                    
+                    <div style="background:rgba(34, 197, 94, 0.05); border:1px solid #15803d; padding:8px; border-radius:6px; margin-bottom:8px;">
+                        <span style="font-size:0.7rem; color:#4ade80; font-weight:bold;">SOLUÇÃO BIO:</span>
+                        <div style="font-size:0.8rem; color:#ccc;">{v.get('correcao_bio', '-')}</div>
                     </div>
-                    <div style="background:rgba(239, 68, 68, 0.1); border:1px solid #991b1b; padding:5px; border-radius:4px;">
-                        <span style="font-size:0.7rem; color:#f87171; font-weight:bold;">QUÍMICO:</span>
-                        <div style="font-size:0.75rem; color:#ccc;">{v.get('correcao_quim', '-')}</div>
+                    <div style="background:rgba(239, 68, 68, 0.05); border:1px solid #991b1b; padding:8px; border-radius:6px;">
+                        <span style="font-size:0.7rem; color:#f87171; font-weight:bold;">SOLUÇÃO MINERAL:</span>
+                        <div style="font-size:0.8rem; color:#ccc;">{v.get('correcao_quim', '-')}</div>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
-
-    # GRÁFICO DE LINHAS NEON
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(x=nutri['semanas'], y=nutri['N'], name='Nitrogênio (N)', line=dict(color='#22c55e', width=3)))
-    fig.add_trace(go.Scatter(x=nutri['semanas'], y=nutri['P'], name='Fósforo (P)', line=dict(color='#3b82f6', width=3)))
-    fig.add_trace(go.Scatter(x=nutri['semanas'], y=nutri['K'], name='Potássio (K)', line=dict(color='#a855f7', width=3)))
-    fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color="#ccc"), xaxis=dict(showgrid=False), yaxis=dict(showgrid=True, gridcolor='#333'), height=300)
-    st.plotly_chart(fig, use_container_width=True)
-    
-    st.markdown("---")
-    st.markdown("#### 🔍 Enciclopédia de Deficiências")
-    
-    # CARDS DE DEFICIÊNCIA (CORRIGIDO PARA O DB V9.0)
-    cols_def = st.columns(4)
-    defs_items = list(db["DEFICIENCIAS_VISUAIS"].items())
-    
-    for i, (k, v) in enumerate(defs_items):
-        with cols_def[i % 4]:
-            # Usa .get para evitar erros se faltar chave, e acessa 'correcao_bio' e 'correcao_quim'
-            cor_card = v.get('cor_card', '#333')
-            st.markdown(f"""
-            <div class="nutri-card" style="border-left: 4px solid {cor_card};">
-                <div style="color:{cor_card}; font-weight:bold; margin-bottom:5px; font-size:0.9rem;">{k}</div>
-                <div style="font-size:0.75rem; color:#888; text-transform:uppercase; margin-bottom:10px;">{v.get('tipo', 'Macro')}</div>
-                
-                <div style="font-size:0.85rem; color:#e4e4e7; margin-bottom:15px; height:60px; overflow-y:auto;">
-                    {v['sintoma']}
-                </div>
-                
-                <div style="margin-bottom:5px;">
-                    <div style="font-size:0.7rem; color:#4ade80; font-weight:bold;">BIO:</div>
-                    <div style="font-size:0.75rem; color:#ccc;">{v.get('correcao_bio', '-')}</div>
-                </div>
-                <div>
-                    <div style="font-size:0.7rem; color:#f87171; font-weight:bold;">QUÍMICO:</div>
-                    <div style="font-size:0.75rem; color:#ccc;">{v.get('correcao_quim', '-')}</div>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+                        
 
 # --- ABA 2: DOCTOR GROW ---
 with tab_doctor:
