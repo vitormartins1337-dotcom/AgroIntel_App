@@ -317,15 +317,18 @@ with col_b:
         <div style="font-size:0.75rem; color:#ca8a04;">BASE: <b>{n_plantas} plantas</b> ({info_genetica['tipo']})</div>
     </div>""", unsafe_allow_html=True)
 
-    if diagnostico_luz:
+    # CARD DIAGNÓSTICO (ATUALIZADO PARA O NOVO MOTOR IA)
+# Este bloco verifica se o motor SDI gerou um diagnóstico (show_diag)
+if 'show_diag' in locals() and show_diag:
     st.markdown(f"""
-    <div class="diag-card" style="border-left: 4px solid {cor_diag};">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-            <div style="font-weight:bold; color:{cor_diag}; letter-spacing:1px;">DIAGNÓSTICO DE ILUMINAÇÃO (SDI)</div>
-            <div style="background:{cor_diag}20; color:{cor_diag}; padding:4px 10px; border-radius:4px; font-size:0.8rem; font-weight:bold;">{diagnostico_luz}</div>
+    <div class="diag-card" style="border-left: 4px solid {cor_diag}; margin-top:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #333; padding-bottom:10px;">
+            <div style="font-weight:900; color:{cor_diag}; letter-spacing:1px; font-size:1.1rem;">{diagnostico_titulo}</div>
+            <div style="background:{cor_diag}20; color:{cor_diag}; padding:4px 12px; border-radius:20px; font-size:0.8rem; font-weight:bold;">ANÁLISE IA</div>
         </div>
-        <div style="color:#e4e4e7; font-size:0.95rem;">{analise_texto}</div>
-    </div>""", unsafe_allow_html=True)
+        <div style="color:#e4e4e7; font-size:0.95rem; line-height:1.6;">{diagnostico_texto}</div>
+    </div>
+    """, unsafe_allow_html=True)
 
 # ==============================================================================
 # 6. ABAS: NUTRIÇÃO & DOCTOR (ATUALIZADO E CORRIGIDO)
