@@ -194,27 +194,137 @@ for k, v in db.get("FASES_DINAMICAS", {}).items():
     if dias_vida <= {"Plântula": 14, "Vegetativo": 42, "Pré-Flora": 56, "Flora Inicial": 77, "Flora Final": 200}.get(k.split(' ')[0], 200):
         fase_nome = k; fase_dados = v; break
 
-# STATUS & YIELD CARDS (MANTIDOS IGUAIS AO ANTERIOR)
-st.markdown("<br>", unsafe_allow_html=True)
-col_a, col_b = st.columns([2, 1])
-with col_a:
+# --- SCRIPT VISUAL PROFISSIONAL (CARDS DE STATUS E YIELD) ---
+
+# 1. ESTILOS ESPECÍFICOS PARA OS CARDS
+st.markdown("""
+<style>
+/* CARD DE STATUS (ROXO NEON) */
+.status-card {
+    background: linear-gradient(145deg, #120520 0%, #050505 100%);
+    border: 1px solid #3b0764;
+    border-left: 5px solid #a855f7; /* Tarja Roxa */
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    transition: transform 0.2s;
+    height: 100%;
+}
+.status-card:hover {
+    border-color: #a855f7;
+    transform: translateY(-2px);
+}
+
+/* CARD DE YIELD (DOURADO PREMIUM) */
+.yield-card {
+    background: linear-gradient(135deg, #1e1b10 0%, #000000 100%);
+    border: 1px solid #854d0e;
+    border-right: 5px solid #eab308; /* Tarja Dourada */
+    border-radius: 12px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(234, 179, 8, 0.1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* TEXTOS E ELEMENTOS */
+.card-label {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.big-value {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1;
+    text-shadow: 0 0 15px rgba(255,255,255,0.1);
+}
+
+.sub-info {
+    font-size: 0.9rem;
+    color: #d1d5db;
+    margin-top: 5px;
+}
+
+/* BADGES (METAS) */
+.meta-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-right: 8px;
+    margin-top: 10px;
+}
+.meta-ph { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid #1e3a8a; }
+.meta-ec { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid #064e3b; }
+
+.divider { height: 1px; background: #333; margin: 15px 0; }
+</style>
+""", unsafe_allow_html=True)
+
+# 2. LAYOUT DOS CARDS
+col_status, col_yield = st.columns([1.8, 1.2]) # Coluna da Esquerda maior
+
+with col_status:
+    # --- CARD DE STATUS OPERACIONAL ---
     st.markdown(f"""
-    <div class="glass-panel" style="border-left: 4px solid #a855f7;">
-        <div style="display:flex; justify-content:space-between;">
-            <div><div style="color:#a855f7; font-weight:bold;">FASE ATUAL</div><div style="font-size:2.2rem; font-weight:900; color:#fff;">{fase_nome.upper()}</div></div>
-            <div style="text-align:right;"><div style="font-size:2rem; font-weight:bold; color:#d8b4fe;">{dias_vida} DIAS</div></div>
+    <div class="status-card">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div>
+                <div class="card-label" style="color:#d8b4fe;">FASE ATUAL</div>
+                <div class="big-value">{fase_nome.upper()}</div>
+            </div>
+            <div style="text-align:right;">
+                <div class="card-label">TEMPO DE CULTIVO</div>
+                <div style="font-size:1.5rem; font-weight:bold; color:#fff;">{dias_vida} <span style="font-size:0.9rem; color:#888;">DIAS</span></div>
+                <div style="font-size:0.85rem; color:#a855f7;">SEMANA {semanas}</div>
+            </div>
         </div>
-        <hr style="border-color:#333; opacity:0.5;">
-        <div style="font-size:1.1rem; color:#fff; font-weight:600;">🎯 FOCO: {fase_dados.get('foco', '-')}</div>
-        <div style="color:#a1a1aa; margin-top:5px;">{fase_dados.get('obs', '-')}</div>
-    </div>""", unsafe_allow_html=True)
-with col_b:
+        
+        <div class="divider"></div>
+        
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+                <div class="card-label">OBJETIVO TÁTICO</div>
+                <div style="color:#fff; font-weight:600;">🎯 {fase_dados.get('foco', 'Geral')}</div>
+            </div>
+            <div style="text-align:right;">
+                <div class="card-label">METAS DO AMBIENTE</div>
+                <div>
+                    <span class="meta-badge meta-ph">💧 PH {info_metodo['ph_ideal']}</span>
+                    <span class="meta-badge meta-ec">⚡ EC {info_metodo['ec_ideal']}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col_yield:
+    # --- CARD DE ESTIMATIVA DE PRODUÇÃO (DOURADO) ---
     st.markdown(f"""
     <div class="yield-card">
-        <div style="color:#ca8a04; font-weight:bold;">ESTIMATIVA COLHEITA</div>
-        <div style="font-size:3rem; font-weight:900; color:#fef08a;">{yield_total:.0f}g</div>
-        <div style="font-size:0.9rem; color:#fde047;">~ {yield_total/1000:.2f} kg (Seco)</div>
-    </div>""", unsafe_allow_html=True)
+        <div class="card-label" style="color:#fcd34d;">ESTIMATIVA DE COLHEITA</div>
+        <div class="big-value" style="color:#fef08a;">{yield_total:.0f}g</div>
+        <div class="sub-info" style="color:#fde047;">~ {yield_kg:.2f} kg (Seco)</div>
+        
+        <div class="divider" style="background: #422006;"></div>
+        
+        <div style="font-size:0.75rem; color:#ca8a04;">
+            <span style="font-size:1rem;">⚖️</span> BASE CÁLCULO:<br>
+            <b>{n_plantas} plantas</b> x <b>{info_metodo['rendimento_base']}g</b>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 # ==============================================================================
 # 🎛️ NOVAS ABAS: NUTRIÇÃO & DOCTOR FITO
