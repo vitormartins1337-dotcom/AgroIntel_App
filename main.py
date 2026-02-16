@@ -99,24 +99,25 @@ def load_css():
         }
         </style>
     """, unsafe_allow_html=True)
-# --- 3. HEADER PROFISSIONAL (VOLTA DO ROXO NEON) ---
+    
+# --- 3. HEADER PROFISSIONAL (CAPA CORRIGIDA) ---
 st.markdown("""
 <div class="header-box">
-    <div>
-        <h1 style="margin:0; font-family:'Helvetica', sans-serif; font-weight:900; font-size:3rem; letter-spacing:-2px; color:#fff; line-height: 1;">
-            AGROWER <span style="color:#a855f7;">SDI</span>
-        </h1>
-        <div style="font-size:0.9rem; letter-spacing:3px; color:#d8b4fe; margin-top:5px; font-weight:600; opacity:0.9;">
-            SISTEMA DE DECISÃO INTEGRADA
-        </div>
+    <div class="title-container">
+        <div class="hero-title">AGROWER <span style="color:#a855f7">SDI</span></div>
+        <div class="hero-subtitle">SISTEMA DE DECISÃO INTEGRADA</div>
     </div>
-    <div style="text-align:right;">
-        <div style="background:rgba(168, 85, 247, 0.2); border:1px solid #a855f7; color:#d8b4fe; padding:6px 16px; border-radius:30px; font-size:0.8rem; display:inline-flex; align-items:center; gap:8px;">
-            🧬 GENETICS LAB
+    
+    <div>
+        <div class="online-badge">
+            <span style="font-size:1.2rem; line-height:0;">🍁</span> ONLINE
         </div>
     </div>
 </div>
 """, unsafe_allow_html=True)
+
+# Mantém o Ticker logo abaixo (Sem alterações, só para garantir a ordem)
+st.markdown("---")
 
 # Ticker Bloomberg Style
 st.markdown("""
