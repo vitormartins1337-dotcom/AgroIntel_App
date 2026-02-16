@@ -315,7 +315,7 @@ with col_yield:
     <div class="yield-card">
         <div class="card-label" style="color:#fcd34d;">ESTIMATIVA DE COLHEITA</div>
         <div class="big-value" style="color:#fef08a;">{yield_total:.0f}g</div>
-        <div class="sub-info" style="color:#fde047;">~ {yield_kg:.2f} kg (Seco)</div>
+    <div class="sub-info" style="color:#fde047;">~ {yield_kg:.2f} kg (Seco)</div>
         
         <div class="divider" style="background: #422006;"></div>
         
