@@ -372,9 +372,10 @@ if 'show_diag' in locals() and show_diag:
 st.markdown("<br>", unsafe_allow_html=True)
 tab_nutri, tab_doctor = st.tabs(["🧪 NUTRIÇÃO & MARCHA DE ABSORÇÃO", "🚑 DOCTOR GROW (FITOSSANIDADE)"])
 
-# --- ABA 1: NUTRIÇÃO & MARCHA DE ABSORÇÃO (SDI MASTER V11.0) ---
+# --- ABA 1: NUTRIÇÃO & MARCHA DE ABSORÇÃO (SDI MASTER V12.0) ---
 with tab_nutri:
-    st.markdown("#### 🧪 Demanda Bioquímica (Semana Atual)")
+    # 1. GRÁFICO DE BARRAS AGRUPADAS (AMPLIADO E EM PRIMEIRO PLANO)
+    st.markdown(f"#### 📊 Marcha de Absorção - Ciclo Fenológico (Semana {semanas} em Destaque)")
     
     nutri = db["NUTRI_MARCHA_ABSORCAO"]
     s_idx = min(semanas - 1, 11) if semanas > 0 else 0
@@ -389,24 +390,6 @@ with tab_nutri:
         "S":  {"nome": "Enxofre",    "cor": "#facc15", "val": nutri['S'][s_idx]}
     }
     
-    # 1. CARDS HORIZONTAIS LADO A LADO
-    c_met = st.columns(6)
-    for i, (simbolo, d) in enumerate(macros_config.items()):
-        with c_met[i]:
-            st.markdown(f"""
-            <div style="background: rgba(168, 85, 247, 0.05); border: 1px solid {d['cor']}44; 
-                        border-radius: 10px; padding: 12px 5px; text-align: center; min-width: 80px;">
-                <div style="font-size: 0.7rem; color: {d['cor']}; font-weight: 800; margin-bottom: 2px;">{simbolo}</div>
-                <div style="font-size: 1.3rem; font-weight: 900; color: #fff;">{d['val']}%</div>
-                <div style="font-size: 0.55rem; color: #999; text-transform: uppercase;">{d['nome']}</div>
-            </div>
-            """, unsafe_allow_html=True)
-
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    # 2. GRÁFICO DE BARRAS AGRUPADAS (VISUALIZAÇÃO PROFISSIONAL)
-    st.markdown(f"#### 📊 Marcha de Absorção - Ciclo Completo (Semana {semanas} Destacada)")
-    
     fig = go.Figure()
 
     # Adicionando Barras para cada Nutriente
@@ -416,21 +399,21 @@ with tab_nutri:
             x=nutri['semanas'],
             y=nutri[simbolo],
             marker_color=d['cor'],
-            opacity=0.85,
+            opacity=0.9,
             hovertemplate=f"Semana %{{x}}<br>{d['nome']}: %{{y}}%<extra></extra>"
         ))
 
-    # Adicionando Linha de Referência da Semana Atual
-    fig.add_vline(x=semanas, line_width=3, line_dash="solid", line_color="#fff", opacity=0.8)
+    # Linha de Referência da Semana Atual (Indicador Vertical)
+    fig.add_vline(x=semanas, line_width=4, line_dash="solid", line_color="#ffffff", opacity=0.7)
 
     fig.update_layout(
-        barmode='group', # Agrupa as barras lado a lado por semana
+        barmode='group', 
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
         font=dict(color="#ccc"),
-        height=450,
+        height=550, # Tamanho ampliado conforme solicitado
         margin=dict(l=10, r=10, t=20, b=40),
-        legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="center", x=0.5, font=dict(size=10)),
+        legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="center", x=0.5, font=dict(size=11)),
         xaxis=dict(
             title="SEMANAS DO CICLO",
             tickmode='linear',
@@ -438,23 +421,40 @@ with tab_nutri:
             fixedrange=True
         ),
         yaxis=dict(
-            title="ABSORÇÃO (%)",
+            title="DEMANDA DE ABSORÇÃO (%)",
             gridcolor='#222',
             range=[0, 105],
             fixedrange=True
         ),
-        bargap=0.15,
-        bargroupgap=0.05
+        bargap=0.18,
+        bargroupgap=0.04
     )
+    
     
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 
-    
+    st.markdown("<br>", unsafe_allow_html=True)
 
-    # 3. ENCICLOPÉDIA DE DEFICIÊNCIAS COM FOTOS
+    # 2. CARDS HORIZONTAIS DE LEITURA RÁPIDA (DEPOIS DO GRÁFICO)
+    st.markdown("#### 🧪 Demanda Bioquímica da Semana Atual")
+    
+    c_met = st.columns(6)
+    for i, (simbolo, d) in enumerate(macros_config.items()):
+        with c_met[i]:
+            st.markdown(f"""
+            <div style="background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0) 100%); 
+                        border: 1px solid {d['cor']}44; border-top: 4px solid {d['cor']}; 
+                        border-radius: 8px; padding: 15px 5px; text-align: center;">
+                <div style="font-size: 0.75rem; color: #999; font-weight: 800; margin-bottom: 5px; letter-spacing: 1px;">{simbolo}</div>
+                <div style="font-size: 1.5rem; font-weight: 900; color: #fff; line-height: 1;">{d['val']}%</div>
+                <div style="font-size: 0.6rem; color: {d['cor']}; text-transform: uppercase; font-weight:bold; margin-top: 5px;">{d['nome']}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+    # 3. ENCICLOPÉDIA DE DEFICIÊNCIAS (EXPANDÍVEL)
     st.markdown("---")
     st.markdown("#### 🔍 Diagnóstico Visual de Deficiências")
-    st.caption("Clique nos elementos abaixo para comparar com as fotos de referência e ver a correção.")
+    st.caption("Clique no elemento para abrir o guia de identificação por foto e o protocolo de correção.")
 
     cols_def = st.columns(4)
     defs_items = list(db["DEFICIENCIAS_VISUAIS"].items())
@@ -462,17 +462,17 @@ with tab_nutri:
     for i, (k, v) in enumerate(defs_items):
         with cols_def[i % 4]:
             cor_card = v.get('cor_card', '#333')
-            # Extração limpa do nome do nutriente
             nome_limpo = k.split('(')[0].strip()
 
             with st.expander(f"👁️ {k}"):
-                # IMAGEM TÉCNICA DE REFERÊNCIA
                 st.markdown(f"**Referência Fotográfica:**")
                 
                 
                 st.markdown(f"""
-                <div style="border-left: 3px solid {cor_card}; padding-left: 10px; margin-top: 10px;">
-                    <div style="font-size: 0.85rem; color: #eee; margin-bottom: 12px;"><b>Sintoma Clínico:</b> {v['sintoma']}</div>
+                <div style="border-left: 3px solid {cor_card}; padding-left: 12px; margin-top: 10px;">
+                    <div style="font-size: 0.85rem; color: #eee; margin-bottom: 12px; line-height: 1.4;">
+                        <b>Sintoma Clínico:</b> {v['sintoma']}
+                    </div>
                     
                     <div style="background: rgba(34, 197, 94, 0.08); border: 1px solid #15803d; padding: 10px; border-radius: 8px; margin-bottom: 8px;">
                         <div style="font-size: 0.7rem; color: #4ade80; font-weight: 900; letter-spacing: 1px;">PROTOCOLO BIO</div>
