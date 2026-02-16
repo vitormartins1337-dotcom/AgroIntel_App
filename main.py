@@ -173,94 +173,9 @@ st.markdown("""
     <div class="sub-title">SISTEMA DE DECISÃO INTEGRADA</div>
 </div>
 """, unsafe_allow_html=True)
+
 # ==============================================================================
-# 🎮 DASHBOARD
-# ==============================================================================
-c1, c2, c3, c4 = st.columns([1.5, 1.5, 1, 1])
-with c1: metodo_sel = st.selectbox("MÉTODO DE CULTIVO", list(db.get("METODOS_CULTIVO", {}).keys()))
-with c2: genetica_sel = st.selectbox("GENÉTICA", list(db.get("GENETICAS_PARAMETROS", {}).keys()))
-with c3: n_plantas = st.number_input("Nº PLANTAS", 1, 500, 6)
-with c4: data_inicio = st.date_input("INÍCIO CULTIVO", datetime.date.today() - datetime.timedelta(days=45))
-
-# Cálculos Engine
-info_metodo = db["METODOS_CULTIVO"][metodo_sel]
-info_genetica = db["GENETICAS_PARAMETROS"][genetica_sel]
-dias_vida = (datetime.date.today() - data_inicio).days
-semanas = dias_vida // 7
-yield_total = info_metodo['rendimento_base'] * info_genetica['fator_yield'] * n_plantas
-fase_nome = "Indefinida"
-fase_dados = {}
-for k, v in db.get("FASES_DINAMICAS", {}).items():
-    if dias_vida <= {"Plântula": 14, "Vegetativo": 42, "Pré-Flora": 56, "Flora Inicial": 77, "Flora Final": 200}.get(k.split(' ')[0], 200):
-        fase_nome = k; fase_dados = v; break
-
-# --- SCRIPT VISUAL PROFISSIONAL (CARDS DE STATUS E YIELD) ---
-
-# 1. ESTILOS ESPECÍFICOS PARA OS CARDS
-st.markdown("""
-<style>
-/* CARD DE STATUS (ROXO NEON) */
-.status-card {
-    background: linear-gradient(145deg, #120520 0%, #050505 100%);
-    border: 1px solid #3b0764;
-    border-left: 5px solid #a855f7; /* Tarja Roxa */
-    border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-    transition: transform 0.2s;
-    height: 100%;
-}
-.status-card:hover {
-    border-color: #a855f7;
-    transform: translateY(-2px);
-}
-
-/* CARD DE YIELD (DOURADO PREMIUM) */
-.yield-card {
-    background: linear-gradient(135deg, #1e1b10 0%, #000000 100%);
-    border: 1px solid #854d0e;
-    border-right: 5px solid #eab308; /* Tarja Dourada */
-    border-radius: 12px;
-    padding: 25px;
-    text-align: center;
-    box-shadow: 0 4px 20px rgba(234, 179, 8, 0.1);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-/* TEXTOS E ELEMENTOS */
-.card-label {
-    font-size: 0.75rem;
-    color: #9ca3af;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-weight: 700;
-    margin-bottom: 5px;
-}
-
-.big-value {
-    font-size: 2.5rem;
-    font-weight: 900;
-    color: #fff;
-    line-height: 1;
-    text-shadow: 0 0 15px rgba(255,255,255,0.1);
-}
-
-.sub-info {
-    font-size: 0.9rem;
-    color: #d1d5db;
-    margin-top: 5px;
-}
-
-/* BADGES (METAS) */
-.meta-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 4px 10px;
-    border-radius: 6px;# ==============================================================================
-# 🎮 DASHBOARD DE CONTROLE (CORRIGIDO E COMPLETO)
+# 🎮 DASHBOARD DE CONTROLE (CORRIGIDO E SEPARADO)
 # ==============================================================================
 
 # 1. INPUTS (CONFIGURAÇÃO)
@@ -274,8 +189,8 @@ with c3:
 with c4: 
     data_inicio = st.date_input("INÍCIO CULTIVO", datetime.date.today() - datetime.timedelta(days=45))
 
-# 2. MOTOR DE CÁLCULO (AQUI ESTAVA O ERRO DO NAME_ERROR)
-# Buscando dados no DB
+# 2. CÁLCULOS (ENGINE)
+# Buscando dados
 info_metodo = db["METODOS_CULTIVO"][metodo_sel]
 info_genetica = db["GENETICAS_PARAMETROS"][genetica_sel]
 
@@ -283,26 +198,25 @@ info_genetica = db["GENETICAS_PARAMETROS"][genetica_sel]
 dias_vida = (datetime.date.today() - data_inicio).days
 semanas = dias_vida // 7
 
-# Calculando Produção (CORREÇÃO: Definindo yield_kg aqui)
+# Calculando Produção (Yield)
 yield_total = info_metodo['rendimento_base'] * info_genetica['fator_yield'] * n_plantas
-yield_kg = yield_total / 1000 # <--- AQUI ESTÁ A CORREÇÃO DO ERRO
+yield_kg = yield_total / 1000 
 
-# Definindo Fase Dinâmica
+# Definindo Fase
 fase_nome = "Indefinida"
 fase_dados = {}
-# Lógica de fases
 for k, v in db.get("FASES_DINAMICAS", {}).items():
     range_map = {"Plântula": 14, "Vegetativo": 42, "Pré-Flora": 56, "Flora Inicial": 77, "Flora Final": 200}
-    chave_limpa = k.split(' ')[0] # Pega a primeira palavra da chave
+    chave_limpa = k.split(' ')[0]
     if dias_vida <= range_map.get(chave_limpa, 200):
         fase_nome = k
         fase_dados = v
         break
 
-# 3. VISUALIZAÇÃO DOS CARDS (SEM INDENTAÇÃO PARA NÃO DAR ERRO DE HTML)
+# 3. ESTILOS CSS (SEM 'f' PARA NÃO DAR ERRO NAS CORES)
 st.markdown("""
 <style>
-/* CSS DOS CARDS - FORÇANDO NÃO QUEBRAR */
+/* CARD ROXO (STATUS) */
 .status-card {
     background: linear-gradient(145deg, #120520 0%, #050505 100%);
     border: 1px solid #3b0764;
@@ -312,6 +226,8 @@ st.markdown("""
     box-shadow: 0 4px 20px rgba(0,0,0,0.5);
     height: 100%;
 }
+
+/* CARD DOURADO (YIELD) */
 .yield-card {
     background: linear-gradient(135deg, #1e1b10 0%, #000000 100%);
     border: 1px solid #854d0e;
@@ -325,14 +241,32 @@ st.markdown("""
     flex-direction: column;
     justify-content: center;
 }
+
+/* TIPOGRAFIA */
 .card-label {
-    font-size: 0.7rem; color: #9ca3af; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 5px;
+    font-size: 0.7rem; 
+    color: #9ca3af; 
+    text-transform: uppercase; 
+    letter-spacing: 1.5px; 
+    font-weight: 700; 
+    margin-bottom: 5px;
 }
 .big-val {
-    font-size: 2.2rem; font-weight: 900; color: #fff; line-height: 1; margin-bottom: 5px;
+    font-size: 2.2rem; 
+    font-weight: 900; 
+    color: #fff; 
+    line-height: 1; 
+    margin-bottom: 5px;
 }
+
+/* BADGES */
 .meta-badge {
-    display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; margin-right: 5px;
+    display: inline-block; 
+    padding: 4px 8px; 
+    border-radius: 4px; 
+    font-size: 0.75rem; 
+    font-weight: bold; 
+    margin-right: 5px;
 }
 .bg-ph { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid #1e3a8a; }
 .bg-ec { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid #064e3b; }
@@ -340,56 +274,54 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Renderização dos Colunas
+# 4. HTML DINÂMICO (COM 'f' PARA OS DADOS)
 st.markdown("<br>", unsafe_allow_html=True)
 col_a, col_b = st.columns([1.8, 1.2])
 
 with col_a:
-    # CARD ROXO (STATUS)
     st.markdown(f"""
-<div class="status-card">
-    <div style="display:flex; justify-content:space-between; align-items:start;">
-        <div>
-            <div class="card-label" style="color:#d8b4fe;">FASE ATUAL</div>
-            <div class="big-val">{fase_nome.upper()}</div>
-        </div>
-        <div style="text-align:right;">
-            <div class="card-label">TEMPO</div>
-            <div style="font-size:1.5rem; font-weight:bold; color:#fff;">{dias_vida} <span style="font-size:0.9rem; color:#888;">DIAS</span></div>
-            <div style="font-size:0.85rem; color:#a855f7;">SEMANA {semanas}</div>
-        </div>
-    </div>
-    <div class="divider"></div>
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div>
-            <div class="card-label">OBJETIVO TÁTICO</div>
-            <div style="color:#fff; font-weight:600;">🎯 {fase_dados.get('foco', '-')}</div>
-        </div>
-        <div style="text-align:right;">
-            <div class="card-label">METAS DO AMBIENTE</div>
+    <div class="status-card">
+        <div style="display:flex; justify-content:space-between; align-items:start;">
             <div>
-                <span class="meta-badge bg-ph">💧 PH {info_metodo['ph_ideal']}</span>
-                <span class="meta-badge bg-ec">⚡ EC {info_metodo['ec_ideal']}</span>
+                <div class="card-label" style="color:#d8b4fe;">FASE ATUAL</div>
+                <div class="big-val">{fase_nome.upper()}</div>
+            </div>
+            <div style="text-align:right;">
+                <div class="card-label">TEMPO</div>
+                <div style="font-size:1.5rem; font-weight:bold; color:#fff;">{dias_vida} <span style="font-size:0.9rem; color:#888;">DIAS</span></div>
+                <div style="font-size:0.85rem; color:#a855f7;">SEMANA {semanas}</div>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+                <div class="card-label">OBJETIVO TÁTICO</div>
+                <div style="color:#fff; font-weight:600;">🎯 {fase_dados.get('foco', '-')}</div>
+            </div>
+            <div style="text-align:right;">
+                <div class="card-label">METAS DO AMBIENTE</div>
+                <div>
+                    <span class="meta-badge bg-ph">💧 PH {info_metodo['ph_ideal']}</span>
+                    <span class="meta-badge bg-ec">⚡ EC {info_metodo['ec_ideal']}</span>
+                </div>
             </div>
         </div>
     </div>
-</div>
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
 with col_b:
-    # CARD DOURADO (YIELD) - Variável yield_kg corrigida
     st.markdown(f"""
-<div class="yield-card">
-    <div class="card-label" style="color:#fcd34d;">ESTIMATIVA DE COLHEITA</div>
-    <div class="big-val" style="color:#fef08a;">{yield_total:.0f}g</div>
-    <div style="font-size:0.9rem; color:#fde047; margin-bottom:10px;">~ {yield_kg:.2f} kg (Seco)</div>
-    <div class="divider" style="background: #422006;"></div>
-    <div style="font-size:0.75rem; color:#ca8a04;">
-        BASE CÁLCULO:<br>
-        <b>{n_plantas} plantas</b> x <b>{info_metodo['rendimento_base']}g</b>
+    <div class="yield-card">
+        <div class="card-label" style="color:#fcd34d;">ESTIMATIVA DE COLHEITA</div>
+        <div class="big-val" style="color:#fef08a;">{yield_total:.0f}g</div>
+        <div style="font-size:0.9rem; color:#fde047; margin-bottom:10px;">~ {yield_kg:.2f} kg (Seco)</div>
+        <div class="divider" style="background: #422006;"></div>
+        <div style="font-size:0.75rem; color:#ca8a04;">
+            BASE CÁLCULO:<br>
+            <b>{n_plantas} plantas</b> x <b>{info_metodo['rendimento_base']}g</b>
+        </div>
     </div>
-</div>
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
 # ==============================================================================
 # 🎛️ NOVAS ABAS: NUTRIÇÃO & DOCTOR FITO
