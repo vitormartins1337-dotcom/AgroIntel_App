@@ -100,79 +100,81 @@ def load_css():
         </style>
     """, unsafe_allow_html=True)
 
-# --- CAPA HERO PROFISSIONAL (VERSÃO FINAL AUMENTADA) ---
+# --- CAPA HERO V.FINAL (CENTRALIZADA & BLINDADA) ---
 st.markdown("""
 <style>
-/* 1. O CARD (CAPA DE REVISTA) */
+/* 1. O CARD (CONTAINER PRINCIPAL) */
 .hero-card {
-    background: linear-gradient(135deg, #1a0b2e 0%, #000000 100%); /* Roxo Deep */
-    border: 1px solid #a855f7; /* Borda Neon */
-    box-shadow: 0 0 60px rgba(168, 85, 247, 0.25); /* Glow Expandido */
-    border-radius: 20px;
-    padding: 60px 50px; /* AUMENTEI O ESPAÇO INTERNO DRASTICAMENTE */
-    margin-bottom: 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center; /* Centraliza verticalmente o conteúdo */
-    min-height: 200px; /* Altura mínima garantida */
-}
-
-/* 2. BLOCO DE TÍTULO */
-.title-block {
+    position: relative; /* Essencial para o botão online não vazar */
+    background: linear-gradient(135deg, #1a0b2e 0%, #000000 100%);
+    border: 1px solid #a855f7;
+    box-shadow: 0 0 50px rgba(168, 85, 247, 0.2); /* Glow Profissional */
+    border-radius: 16px;
+    padding: 50px 20px; /* Altura boa, laterais seguras */
+    margin-bottom: 30px;
+    
+    /* CENTRALIZAÇÃO TOTAL */
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: center;
+    text-align: center;
+    
+    overflow: hidden; /* Garante que nada saia do quadrado */
 }
 
-.main-title {
-    font-size: clamp(3rem, 6vw, 5rem); /* FONTE GIGANTE */
-    font-weight: 900;
-    color: #fff;
-    line-height: 0.9; /* Mais compacto verticalmente */
-    letter-spacing: -2px;
-    white-space: nowrap;
-    text-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
-}
-
-.sub-title {
-    font-family: 'Courier New', monospace;
-    font-size: clamp(0.8rem, 1.5vw, 1.1rem);
-    color: #d8b4fe;
-    letter-spacing: 6px; /* Espaçamento largo para ficar chique */
-    text-transform: uppercase;
-    margin-top: 15px; /* Mais separado do título */
-    font-weight: 600;
-    opacity: 0.9;
-}
-
-/* 3. BOTÃO ONLINE (MINIMALISTA) */
+/* 2. BOTÃO ONLINE (FLUTUANTE NO CANTO) */
 .status-pill {
-    background: rgba(16, 185, 129, 0.05);
+    position: absolute; /* Fixa no canto sem empurrar o texto */
+    top: 15px;
+    right: 15px;
+    
+    background: rgba(16, 185, 129, 0.1);
     border: 1px solid #059669;
     color: #4ade80;
-    padding: 4px 12px; /* BEM MENOR */
-    border-radius: 99px;
-    font-size: 0.7rem; /* LETRA PEQUENA */
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
     font-weight: 700;
     font-family: sans-serif;
     display: flex;
     align-items: center;
     gap: 6px;
     white-space: nowrap;
-    box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
-    align-self: flex-start; /* Joga o botão pro topo do card */
+}
+
+/* 3. TÍTULO (NUNCA VAZA) */
+.main-title {
+    /* Fonte se adapta à largura da tela (5% da tela) */
+    font-size: clamp(2rem, 5vw, 4.5rem); 
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    text-shadow: 0 0 25px rgba(168, 85, 247, 0.5);
+    margin-bottom: 5px;
+    max-width: 90%; /* Margem de segurança */
+}
+
+/* 4. SUBTÍTULO (CENTRALIZADO) */
+.sub-title {
+    font-family: 'Courier New', monospace;
+    font-size: clamp(0.7rem, 1.2vw, 1rem);
+    color: #d8b4fe;
+    letter-spacing: 4px; /* Espaçamento chique */
+    text-transform: uppercase;
+    font-weight: 600;
+    opacity: 0.9;
 }
 </style>
 
 <div class="hero-card">
-    <div class="title-block">
-        <div class="main-title">AGROWER <span style="color:#a855f7">SDI</span></div>
-        <div class="sub-title">SISTEMA DE DECISÃO INTEGRADA</div>
-    </div>
-    
     <div class="status-pill">
-        <span style="font-size:0.9rem; line-height:1;">🍁</span> ONLINE
+        <span style="line-height:0; font-size:1rem;">🍁</span> ONLINE
     </div>
+
+    <div class="main-title">AGROWER <span style="color:#a855f7">SDI</span></div>
+    <div class="sub-title">SISTEMA DE DECISÃO INTEGRADA</div>
 </div>
 """, unsafe_allow_html=True)
 
