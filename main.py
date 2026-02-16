@@ -298,34 +298,33 @@ else:
     <div style="margin-top:10px;">{aviso_vaso}</div>
     """
 
-# --- C. MOTOR DE CÁLCULO GERAL (CORRIGIDO) ---
-# Mantém o cálculo de Yield e Fase para não dar erro
+# --- C. MOTOR DE CÁLCULO GERAL (CÁLCULOS QUE ALIMENTAM O RESTO DO APP) ---
+# Recupera dados do DB para não quebrar a próxima sessão
 info_metodo = db["METODOS_CULTIVO"][metodo_sel]
 info_genetica = db["GENETICAS_PARAMETROS"][genetica_sel]
 
+# Cálculos de Tempo
 dias_vida = (datetime.date.today() - data_inicio).days
 semanas = dias_vida // 7
 
+# Cálculos de Produção
 yield_total = info_metodo['rendimento_base'] * info_genetica['fator_yield'] * n_plantas
 yield_kg = yield_total / 1000 
 
+# Cálculos de Fase (Lógica Automática vs Fotoperíodo)
 fase_nome = "Indefinida"; fase_dados = {}
 range_map = {"Plântula": 14, "Vegetativo": 42, "Pré-Flora": 56, "Flora Inicial": 77, "Flora Final": 200}
-
-# Ajusta ciclo se for Automática
 fator_ciclo = 0.75 if info_genetica.get("tipo") == "Auto" else 1.0
 
-# Loop Corrigido: Primeiro define a chave, depois usa
 for k, v in db.get("FASES_DINAMICAS", {}).items():
-    chave_limpa = k.split(' ')[0] # Pega o nome da fase (ex: "Vegetativo")
-    limite = int(range_map.get(chave_limpa, 200) * fator_ciclo) # Calcula o limite
-    
+    chave_limpa = k.split(' ')[0]
+    limite = int(range_map.get(chave_limpa, 200) * fator_ciclo)
     if dias_vida <= limite: 
         fase_nome = k
         fase_dados = v
         break
 
-# --- EXIBIÇÃO ÚNICA DO DIAGNÓSTICO ---
+# --- EXIBIÇÃO ÚNICA DO DIAGNÓSTICO (MANTENHA APENAS ESTA AQUI) ---
 if show_diag:
     st.markdown(f"""
     <div class="diag-card" style="border-left: 4px solid {cor_diag}; margin-top:20px; margin-bottom:20px;">
