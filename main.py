@@ -100,18 +100,19 @@ def load_css():
         </style>
     """, unsafe_allow_html=True)
 
-# --- 3. HEADER & TICKER ---
+# --- 3. HEADER PROFISSIONAL (AJUSTADO) ---
 st.markdown("""
 <div class="hero-container">
-    <div>
+    <div class="title-wrapper">
         <div class="hero-title">AGROWER <span style="color:#a855f7">SDI</span></div>
         <div class="hero-subtitle">SISTEMA DE DECISÃO INTEGRADA</div>
     </div>
-    <div><div class="status-badge"><span style="font-size:1.3rem;">🍁</span> SISTEMA ONLINE</div></div>
+    
+    <div class="status-pill">
+        <span style="font-size:0.9rem; line-height:1;">🍁</span> ONLINE
+    </div>
 </div>
 """, unsafe_allow_html=True)
-
-# Ticker HTML (Omitido para economizar espaço, mas pode manter o anterior)
 
 # ==============================================================================
 # 🎮 DASHBOARD
