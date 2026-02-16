@@ -100,79 +100,72 @@ def load_css():
         </style>
     """, unsafe_allow_html=True)
 
-# --- CAPA PROFISSIONAL (CARD ROXO + FONTE AJUSTADA + FOLHA) ---
+# --- CAPA PROFISSIONAL (CORRIGIDA) ---
+# O segredo aqui é não deixar espaço no início das linhas de HTML dentro das aspas """
 st.markdown("""
-    <style>
-    /* 1. O CARD ROXO PROFISSIONAL (FUNDO) */
-    .header-card {
-        background: linear-gradient(135deg, #240b36 0%, #000000 90%); /* O degradê Roxo que você gosta */
-        border: 1px solid #a855f7; /* Borda Neon Roxa */
-        box-shadow: 0 0 30px rgba(168, 85, 247, 0.25); /* Glow Profissional */
-        border-radius: 16px;
-        padding: 25px 35px;
-        margin-bottom: 25px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        overflow: hidden; /* Garante que nada vaze */
-    }
+<style>
+/* 1. O CARD ROXO PROFISSIONAL */
+.header-card {
+    background: linear-gradient(135deg, #240b36 0%, #000000 90%);
+    border-bottom: 2px solid #a855f7;
+    box-shadow: 0 0 30px rgba(168, 85, 247, 0.2);
+    border-radius: 16px;
+    padding: 20px 30px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-    /* 2. O TÍTULO (AGROWER SDI) */
-    .app-title-box {
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .main-title {
-        /* A MÁGICA: clamp(mínimo, ideal, máximo) -> A fonte se ajusta ao espaço */
-        font-size: clamp(1.8rem, 4vw, 3.2rem); 
-        font-family: 'Helvetica', sans-serif;
-        font-weight: 900;
-        color: #ffffff;
-        line-height: 1;
-        letter-spacing: -1px;
-        white-space: nowrap; /* Não quebra linha */
-        text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-    }
+/* 2. TÍTULO E SUBTÍTULO */
+.title-box {
+    display: flex;
+    flex-direction: column;
+}
 
-    .subtitle {
-        font-family: 'Courier New', monospace;
-        font-size: clamp(0.7rem, 1vw, 0.9rem);
-        color: #d8b4fe; /* Lilás suave */
-        letter-spacing: 3px;
-        font-weight: 600;
-        margin-top: 6px;
-        text-transform: uppercase;
-    }
+.main-title {
+    font-size: clamp(1.5rem, 4vw, 3rem); /* Fonte elástica para não vazar */
+    font-weight: 900;
+    color: #fff;
+    line-height: 1;
+    white-space: nowrap;
+}
 
-    /* 3. O BOTÃO ONLINE (FOLHA + TEXTO) */
-    .status-pill {
-        background: rgba(16, 185, 129, 0.1); /* Fundo verde escuro vidro */
-        border: 1px solid #10b981; /* Borda Verde Matrix */
-        color: #4ade80; /* Texto Verde Neon */
-        padding: 8px 18px;
-        border-radius: 50px;
-        font-family: 'Arial', sans-serif;
-        font-size: 0.85rem;
-        font-weight: 800;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        box-shadow: 0 0 15px rgba(16, 185, 129, 0.2); /* Brilho verde */
-        white-space: nowrap;
-    }
-    </style>
+.sub-title {
+    font-family: 'Courier New', monospace;
+    font-size: clamp(0.7rem, 1vw, 0.9rem);
+    color: #d8b4fe;
+    letter-spacing: 3px;
+    margin-top: 5px;
+    text-transform: uppercase;
+}
 
-    <div class="header-card">
-        <div class="app-title-box">
-            <div class="main-title">AGROWER <span style="color:#a855f7;">SDI</span></div>
-            <div class="subtitle">SISTEMA DE DECISÃO INTEGRADA</div>
-        </div>
-        
-        <div class="status-pill">
-            <span style="font-size:1.2rem; line-height:0;">🍁</span> ONLINE
-        </div>
+/* 3. BOTÃO ONLINE (PÍLULA) */
+.status-pill {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid #10b981;
+    color: #4ade80;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+}
+</style>
+
+<div class="header-card">
+    <div class="title-box">
+        <div class="main-title">AGROWER <span style="color:#a855f7;">SDI</span></div>
+        <div class="sub-title">SISTEMA DE DECISÃO INTEGRADA</div>
     </div>
+    <div class="status-pill">
+        <span style="font-size:1.2rem; line-height:1;">🍁</span> ONLINE
+    </div>
+</div>
 """, unsafe_allow_html=True)
 
 # ==============================================================================
