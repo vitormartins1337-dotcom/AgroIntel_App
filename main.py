@@ -10,44 +10,95 @@ st.set_page_config(page_title="Agrower SDI", page_icon="🍁", layout="wide", in
 engine = AgroEngine()
 db = engine.db 
 
-# --- 2. CSS PROFISSIONAL ---
 def load_css():
     st.markdown("""
         <style>
+        /* IMPORT FONTES */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=JetBrains+Mono:wght@400;700&display=swap');
-        .stApp { background-color: #050505; color: #e4e4e7; font-family: 'Inter', sans-serif; }
-        .block-container { padding-top: 1rem !important; padding-bottom: 5rem !important; }
         
-        /* HEADER HERO */
-        .hero-container {
-            background: linear-gradient(135deg, #1e1b4b 0%, #000000 90%);
-            border-bottom: 2px solid #a855f7; padding: 30px 40px; border-radius: 0 0 15px 15px;
-            margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 10px 40px rgba(168, 85, 247, 0.2);
+        /* FUNDO GERAL */
+        .stApp { 
+            background-color: #09090b; 
+            color: #e4e4e7; 
+            font-family: 'Inter', sans-serif;
         }
-        .hero-title { font-size: 3.5rem; font-weight: 900; color: #fff; line-height: 1; white-space: nowrap; text-shadow: 0 0 20px rgba(168, 85, 247, 0.6); }
-        .hero-subtitle { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #d8b4fe; letter-spacing: 4px; margin-top: 5px; text-transform: uppercase; }
-        .status-badge { background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #4ade80; padding: 8px 20px; border-radius: 30px; font-weight: bold; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; }
-
-        /* CARDS */
-        .glass-panel { background: #111; border: 1px solid #27272a; border-radius: 12px; padding: 24px; margin-bottom: 16px; }
-        .yield-card { background: linear-gradient(135deg, #422006 0%, #000 100%); border: 1px solid #eab308; border-radius: 12px; padding: 20px; text-align: center; color: #fef08a; }
         
-        /* DOCTOR CARDS */
-        .doc-card { background: #0f0f0f; border-radius: 10px; padding: 15px; margin-bottom: 15px; border-left: 5px solid #333; }
-        .doc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .doc-title { font-size: 1.2rem; font-weight: bold; color: #fff; }
-        .doc-badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
-        
-        .solucao-tag { padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 5px; display: block; }
-        .bio { background: rgba(34, 197, 94, 0.1); border: 1px solid #15803d; color: #86efac; }
-        .quim { background: rgba(239, 68, 68, 0.1); border: 1px solid #991b1b; color: #fca5a5; }
+        /* AJUSTE DE MARGEM DO TOPO */
+        .block-container { padding-top: 1rem !important; padding-bottom: 5rem !important; }
 
+        /* --- CAPA PROFISSIONAL (RESPONSIVA) --- */
+        .hero-container {
+            background: linear-gradient(90deg, #2e1065 0%, #000000 100%); /* Roxo Profundo -> Preto */
+            border-bottom: 2px solid #a855f7; /* Linha Neon */
+            border-radius: 0 0 16px 16px; /* Cantos arredondados embaixo */
+            padding: 20px 25px; /* Espaçamento interno controlado */
+            margin-bottom: 25px;
+            
+            /* FLEXBOX PARA ALINHAMENTO PERFEITO */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px; /* Espaço mínimo entre titulo e botão */
+            
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Sombra elegante */
+        }
+        
+        .title-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .hero-title {
+            /* O SEGREDO DO NÃO-VAZAMENTO: CLAMP */
+            /* Mínimo 1.5rem, Ideal 3vw, Máximo 2.2rem */
+            font-size: clamp(1.5rem, 3vw, 2.2rem); 
+            font-weight: 900; /* Gramatura pesada */
+            color: #fff;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            white-space: nowrap; /* Não quebra linha */
+        }
+        
+        .hero-subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem; /* Subtítulo pequeno e discreto */
+            color: #c084fc; /* Roxo claro */
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+        
+        /* BOTÃO ONLINE COMPACTO */
+        .status-pill {
+            background: rgba(16, 185, 129, 0.1); /* Fundo verde transparente */
+            border: 1px solid #059669; /* Borda verde escura */
+            color: #4ade80; /* Texto verde neon */
+            padding: 6px 14px; /* Tamanho reduzido */
+            border-radius: 99px; /* Formato pílula */
+            font-size: 0.75rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Espaço entre folha e texto */
+            white-space: nowrap;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.15); /* Glow sutil */
+        }
+
+        /* --- OUTROS ELEMENTOS (MANTIDOS) --- */
+        .ticker-wrap { width: 100%; background: #000; border-y: 1px solid #333; height: 32px; overflow: hidden; display: flex; align-items: center; margin-bottom: 20px; }
+        .glass-panel { background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+        .yield-card { background: linear-gradient(135deg, #2a1b05 0%, #000 100%); border: 1px solid #eab308; border-radius: 12px; padding: 20px; text-align: center; color: #fef08a; }
+        .badge-param { display: inline-block; background: #111; border: 1px solid #333; color: #fff; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; margin-right: 5px; margin-bottom: 5px; }
+        .badge-green { border-color: #22c55e; color: #4ade80; } .badge-blue { border-color: #38bdf8; color: #bae6fd; }
+        
         /* INPUTS */
-        .stSelectbox > div > div, .stDateInput > div > div, .stNumberInput > div > div { background-color: #0f0f0f !important; border: 1px solid #333 !important; color: #fff !important; }
+        .stSelectbox > div > div, .stDateInput > div > div, .stNumberInput > div > div, .stTextInput > div > div {
+            background-color: #121212 !important; border: 1px solid #333 !important; color: #e0e0e0 !important; border-radius: 6px !important;
+        }
         </style>
     """, unsafe_allow_html=True)
-load_css()
 
 # --- 3. HEADER & TICKER ---
 st.markdown("""
