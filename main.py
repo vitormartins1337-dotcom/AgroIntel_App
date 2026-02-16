@@ -1,272 +1,261 @@
 # ARQUIVO: main.py
-# SISTEMA: AGROWER SDI | REVOLUTION V5.0
+# SISTEMA: AGROWER SDI | VISUAL NEON PRO (RESTORED & FIXED)
 import streamlit as st
 import datetime
 from core_logic import AgroEngine 
 
-# --- 1. SETUP & LAYOUT ---
-st.set_page_config(page_title="Agrower SDI", page_icon="🍁", layout="wide", initial_sidebar_state="collapsed")
+# --- 1. SETUP ---
+st.set_page_config(page_title="Agrower SDI", page_icon="🧬", layout="wide", initial_sidebar_state="collapsed")
 engine = AgroEngine()
 db = engine.db 
 
-# --- 2. CSS PROFISSIONAL (CORRIGIDO E OTIMIZADO) ---
+# --- 2. CSS NEON PROFISSIONAL (CORRIGIDO) ---
 def load_css():
     st.markdown("""
         <style>
-        /* FONTS & BASE */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=JetBrains+Mono:wght@400;700&display=swap');
+        /* BASE DARK */
+        .block-container { padding-top: 1rem !important; padding-bottom: 5rem !important; }
+        .stApp { background-color: #050505; color: #e0e0e0; font-family: 'Roboto', sans-serif; }
         
-        .stApp { 
-            background-color: #09090b; 
-            color: #e4e4e7; 
-            font-family: 'Inter', sans-serif;
-        }
-        .block-container { padding-top: 2rem !important; padding-bottom: 5rem !important; }
-
-        /* HEADER HERO */
-        .hero-header {
-            background: linear-gradient(135deg, #18181b 0%, #09090b 100%);
-            border-bottom: 1px solid #27272a;
-            padding: 40px 0;
-            margin-bottom: 30px;
-            text-align: left;
-        }
-        .hero-title {
-            font-size: 3.5rem; font-weight: 900; color: #fff; letter-spacing: -2px; line-height: 1;
-        }
-        .hero-subtitle {
-            font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #a1a1aa; 
-            text-transform: uppercase; letter-spacing: 2px; margin-top: 10px;
-        }
-        .live-badge {
-            background: rgba(34, 197, 94, 0.1); border: 1px solid #15803d; color: #4ade80;
-            padding: 6px 12px; border-radius: 99px; font-size: 0.75rem; font-weight: 700;
-            display: inline-flex; align-items: center; gap: 6px; vertical-align: middle;
+        /* HEADER (CAPA) ROXO NEON */
+        .header-box {
+            background: linear-gradient(90deg, #240b36 0%, #000000 100%);
+            border-bottom: 2px solid #a855f7;
+            padding: 30px; border-radius: 0 0 20px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 0 25px rgba(168, 85, 247, 0.2); margin-bottom: 20px;
         }
 
-        /* CARDS & CONTAINERS */
-        .glass-panel {
-            background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 24px;
-            margin-bottom: 16px; transition: transform 0.2s;
+        /* TICKER BLOOMBERG STYLE */
+        .ticker-container {
+            width: 100%; background: #000; border: 1px solid #333; border-radius: 6px;
+            overflow: hidden; white-space: nowrap; height: 32px; display: flex; align-items: center; margin-bottom: 15px;
         }
-        .glass-panel:hover { border-color: #3f3f46; }
+        .ticker-text { display: inline-block; animation: ticker 40s linear infinite; font-family: 'Courier New', monospace; font-weight: bold; font-size: 0.85rem;}
+        @keyframes ticker { 0% { transform: translate3d(100%, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+        .tick-item { margin-right: 40px; color: #a855f7; } .tick-val { color: #22c55e; }
 
-        /* YIELD CARD (DESTAQUE) */
+        /* CARDS DE VIDRO (GLASSMORPHISM) */
+        .glass-card {
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid rgba(168, 85, 247, 0.3); /* Borda Roxa Sutil */
+            padding: 20px; border-radius: 12px; margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        
+        /* YIELD CARD (DESTAQUE DOURADO) */
         .yield-card {
-            background: linear-gradient(135deg, #2a1b05 0%, #1a1500 100%);
+            background: linear-gradient(135deg, #1a1200 0%, #000 100%);
             border: 1px solid #eab308; border-radius: 12px; padding: 20px;
-            text-align: center; color: #fef08a;
+            text-align: center; color: #fef08a; box-shadow: 0 0 15px rgba(234, 179, 8, 0.2);
         }
-        
-        /* BADGES (CORREÇÃO DE QUEBRA DE LINHA) */
-        .info-badge {
-            display: inline-flex; align-items: center; white-space: nowrap; /* SEGREDO PARA NÃO QUEBRAR */
-            background: #27272a; border: 1px solid #3f3f46; color: #e4e4e7;
-            padding: 6px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; margin-right: 8px; margin-bottom: 8px;
+
+        /* BADGES (BALÕES) - AGORA COM NO-WRAP PARA NÃO QUEBRAR */
+        .badge-param {
+            display: inline-block; white-space: nowrap; /* O SEGREDO */
+            background: #111; border: 1px solid #333; color: #fff;
+            padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;
+            margin-right: 8px; margin-bottom: 5px;
         }
-        
-        /* INPUTS */
+        .badge-purple { border-color: #a855f7; color: #d8b4fe; }
+        .badge-green { border-color: #22c55e; color: #4ade80; }
+        .badge-blue { border-color: #38bdf8; color: #bae6fd; }
+
+        /* INPUTS ESTILIZADOS */
         .stSelectbox > div > div, .stDateInput > div > div, .stNumberInput > div > div {
-            background-color: #18181b !important; border: 1px solid #27272a !important; color: #fff !important;
+            background-color: #0f0f0f !important; border: 1px solid #333 !important; color: #fff !important;
         }
-
-        /* THREAT CARD (AMEAÇAS) */
-        .threat-box {
-            background: #220505; border-left: 4px solid #ef4444; padding: 15px; border-radius: 6px; margin-top: 10px;
-        }
-        .threat-title { color: #fca5a5; font-weight: bold; font-size: 0.95rem; margin-bottom: 5px; }
-        .solution-tag { font-size: 0.8rem; color: #cbd5e1; font-family: 'JetBrains Mono', monospace; }
-
+        
+        /* ABAS */
+        .stTabs [data-baseweb="tab-list"] { gap: 5px; }
+        .stTabs [data-baseweb="tab"] { background-color: #111; border: 1px solid #333; color: #888; }
+        .stTabs [aria-selected="true"] { background-color: #a855f7 !important; color: #fff !important; font-weight: bold; }
         </style>
     """, unsafe_allow_html=True)
 load_css()
 
-# --- 3. HEADER PROFISSIONAL ---
-c_head1, c_head2 = st.columns([3, 1])
-with c_head1:
-    st.markdown("""
+# --- 3. HEADER PROFISSIONAL (VOLTA DO ROXO NEON) ---
+st.markdown("""
+<div class="header-box">
     <div>
-        <div class="hero-title">AGROWER <span style="color:#22c55e">SDI</span></div>
-        <div class="hero-subtitle">Sistema de Decisão Integrada v5.0</div>
+        <h1 style="margin:0; font-family:'Helvetica', sans-serif; font-weight:900; font-size:3rem; letter-spacing:-2px; color:#fff; line-height: 1;">
+            AGROWER <span style="color:#a855f7;">SDI</span>
+        </h1>
+        <div style="font-size:0.9rem; letter-spacing:3px; color:#d8b4fe; margin-top:5px; font-weight:600; opacity:0.9;">
+            SISTEMA DE DECISÃO INTEGRADA
+        </div>
     </div>
-    """, unsafe_allow_html=True)
-with c_head2:
-    st.markdown("""
-    <div style="text-align:right; padding-top:20px;">
-        <span class="live-badge"><span style="width:6px; height:6px; background:#4ade80; border-radius:50%;"></span> ONLINE</span>
+    <div style="text-align:right;">
+        <div style="background:rgba(168, 85, 247, 0.2); border:1px solid #a855f7; color:#d8b4fe; padding:6px 16px; border-radius:30px; font-size:0.8rem; display:inline-flex; align-items:center; gap:8px;">
+            🧬 GENETICS LAB
+        </div>
     </div>
-    """, unsafe_allow_html=True)
+</div>
+""", unsafe_allow_html=True)
 
-st.markdown("---")
+# Ticker Bloomberg Style
+st.markdown("""
+<div class="ticker-container">
+    <div class="ticker-text">
+        <span class="tick-item">VEG TEMP: <span class="tick-val">24°C</span></span>
+        <span class="tick-item">VEG UMIDADE: <span class="tick-val">65%</span></span>
+        <span class="tick-item">FLORA TEMP: <span class="tick-val">22°C</span></span>
+        <span class="tick-item">FLORA UMIDADE: <span class="tick-val">45%</span></span>
+        <span class="tick-item">VPD IDEAL: <span class="tick-val">0.8-1.2 kPa</span></span>
+        <span class="tick-item">EC FLORA: <span class="tick-val">1.8-2.4 mS</span></span>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
 # ==============================================================================
-# 🎮 DASHBOARD DE CONFIGURAÇÃO & PREVISÃO
+# 🎮 CONFIGURAÇÃO E CÁLCULOS (O CÉREBRO)
 # ==============================================================================
 
-# Inputs em linha única (Layout Desktop)
+# Inputs (Grid Layout)
 c1, c2, c3, c4 = st.columns([1.5, 1.5, 1, 1])
 
 with c1:
-    # Busca chaves do DB
     metodo_keys = list(db.get("METODOS_CULTIVO", {}).keys())
-    metodo_sel = st.selectbox("MÉTODO DE CULTIVO", metodo_keys)
+    metodo_sel = st.selectbox("🥣 MÉTODO CULTIVO", metodo_keys)
     
 with c2:
-    # Busca Genéticas do DB
+    # AQUI ESTAVA O ERRO: Agora a chave existe no DB
     genetica_keys = list(db.get("GENETICAS_PARAMETROS", {}).keys())
-    genetica_sel = st.selectbox("GENÉTICA PREDOMINANTE", genetica_keys)
+    genetica_sel = st.selectbox("🧬 GENÉTICA", genetica_keys)
 
 with c3:
-    n_plantas = st.number_input("Nº PLANTAS", 1, 500, 6)
+    n_plantas = st.number_input("🌳 Nº PLANTAS", 1, 500, 6)
 
 with c4:
-    data_inicio = st.date_input("DATA INÍCIO", datetime.date.today() - datetime.timedelta(days=45))
+    data_inicio = st.date_input("📅 INÍCIO", datetime.date.today() - datetime.timedelta(days=45))
 
-# --- MOTOR DE CÁLCULO SDI ---
-# 1. Dados do Método
+# --- CÁLCULOS AUTOMÁTICOS ---
+# 1. Dados
 info_metodo = db["METODOS_CULTIVO"][metodo_sel]
-# 2. Dados da Genética
 info_genetica = db["GENETICAS_PARAMETROS"][genetica_sel]
 
-# 3. Cálculo de Tempo
+# 2. Tempo
 dias_vida = (datetime.date.today() - data_inicio).days
 semanas = dias_vida // 7
 
-# 4. Cálculo de Yield (Estimativa)
-rendimento_base = info_metodo['rendimento_base_g_planta']
-fator_genetica = info_genetica['fator_yield']
-estimativa_total_g = rendimento_base * fator_genetica * n_plantas
-estimativa_total_kg = estimativa_total_g / 1000
+# 3. Yield Estimado
+rendimento_base = info_metodo['rendimento_base']
+fator_gen = info_genetica['fator_yield']
+yield_total = rendimento_base * fator_gen * n_plantas
+yield_kg = yield_total / 1000
 
-# 5. Determinação da Fase
+# 4. Fase Dinâmica
 fase_nome = "Indefinida"
 fase_dados = {}
 for k, v in db.get("FASES_DINAMICAS", {}).items():
-    # Lógica simplificada de dias
-    dias_limite = 200 # Default
-    if "Plântula" in k: dias_limite = 14
-    elif "Vegetativo" in k: dias_limite = 42
-    elif "Pré-Flora" in k: dias_limite = 56
-    elif "Flora Inicial" in k: dias_limite = 77
-    if dias_vida <= dias_limite:
-        fase_nome = k
-        fase_dados = v
-        break
+    range_map = {"Plântula": 14, "Vegetativo": 42, "Pré-Flora": 56, "Flora Inicial": 77, "Flora Final": 200}
+    chave_limpa = k.split(' ')[0]
+    if dias_vida <= range_map.get(chave_limpa, 200):
+        fase_nome = k; fase_dados = v; break
 
-# --- PAINEL VISUAL DE STATUS ---
-st.markdown("<br>", unsafe_allow_html=True)
+# ==============================================================================
+# 📊 DASHBOARD PRINCIPAL (VISUAL NEON RESTAURADO)
+# ==============================================================================
 
-col_painel_1, col_painel_2 = st.columns([2, 1])
+col_dash1, col_dash2 = st.columns([2, 1])
 
-with col_painel_1:
-    # STATUS CARD
+with col_dash1:
+    # Card de Status Principal
     st.markdown(f"""
-    <div class="glass-panel" style="border-left: 4px solid {info_metodo['cor_tema']};">
+    <div class="glass-card" style="border-left: 4px solid #a855f7;">
         <div style="display:flex; justify-content:space-between; align-items:start;">
             <div>
-                <div style="font-size:0.8rem; color:#a1a1aa; text-transform:uppercase; font-weight:bold;">FASE ATUAL</div>
-                <div style="font-size:2rem; font-weight:900; color:#fff; margin:5px 0;">{fase_nome.upper()}</div>
-                <div style="margin-top:10px;">
-                    <span class="info-badge">📅 {dias_vida} DIAS</span>
-                    <span class="info-badge">📆 SEMANA {semanas}</span>
+                <div style="color:#a855f7; font-size:0.8rem; font-weight:bold; letter-spacing:1px;">FASE ATUAL</div>
+                <div style="font-size:2.2rem; font-weight:900; color:#fff; margin-bottom:10px;">{fase_nome.upper()}</div>
+                <div>
+                    <span class="badge-param">📅 {dias_vida} DIAS</span>
+                    <span class="badge-param">📆 SEMANA {semanas}</span>
                 </div>
             </div>
             <div style="text-align:right;">
-                <div style="font-size:0.8rem; color:#a1a1aa;">PARÂMETROS ALVO</div>
-                <div style="margin-top:5px;">
-                    <span class="info-badge" style="border-color:{info_metodo['cor_tema']}; color:{info_metodo['cor_tema']};">PH {info_metodo['ph_ideal']}</span>
-                </div>
-                <div style="margin-top:5px;">
-                    <span class="info-badge" style="border-color:{info_metodo['cor_tema']}; color:{info_metodo['cor_tema']};">EC {info_metodo['ec_ideal']}</span>
-                </div>
+                <div style="color:#888; font-size:0.8rem; margin-bottom:5px;">METAS DA FASE</div>
+                <div><span class="badge-param badge-blue">PH {info_metodo['ph_ideal']}</span></div>
+                <div><span class="badge-param badge-green">EC {info_metodo['ec_ideal']}</span></div>
             </div>
         </div>
-        <hr style="border-color:#333; margin:15px 0;">
-        <div style="color:#e4e4e7; font-size:1.1rem; font-weight:600;">🎯 FOCO DA SEMANA: {fase_dados.get('foco', '-')}</div>
-        <div style="color:#a1a1aa; font-size:0.95rem; margin-top:5px;">{fase_dados.get('obs', '-')}</div>
+        <hr style="border-color:#333; opacity:0.5; margin:15px 0;">
+        <div style="color:#d8b4fe; font-size:1.1rem; font-weight:bold;">🎯 FOCO: {fase_dados.get('foco','-')}</div>
+        <div style="color:#ccc; font-size:0.9rem; margin-top:5px;">{fase_dados.get('obs','-')}</div>
     </div>
     """, unsafe_allow_html=True)
 
-with col_painel_2:
-    # YIELD CALCULATOR CARD
+with col_dash2:
+    # Card de Yield Dourado
     st.markdown(f"""
     <div class="yield-card">
-        <div style="font-size:0.8rem; font-weight:bold; letter-spacing:1px; opacity:0.8;">PREVISÃO DE COLHEITA (SECA)</div>
-        <div style="font-size:3rem; font-weight:900; line-height:1.2; margin:10px 0;">{estimativa_total_g:.0f}g</div>
-        <div style="font-size:0.9rem; opacity:0.8;">~ {estimativa_total_kg:.2f} kg Totais</div>
+        <div style="color:#ca8a04; font-size:0.8rem; font-weight:bold; letter-spacing:1px;">PREVISÃO COLHEITA</div>
+        <div style="font-size:2.5rem; font-weight:900; color:#fef08a; margin:10px 0;">{yield_total:.0f}g</div>
+        <div style="font-size:0.9rem; color:#fde047;">~ {yield_kg:.2f} kg (Seco)</div>
         <hr style="border-color:#ca8a04; opacity:0.3; margin:15px 0;">
-        <div style="font-size:0.8rem;">
-            Baseado em: {n_plantas}x {genetica_sel.split(' ')[0]} no {metodo_sel.split(' ')[0]}
+        <div style="font-size:0.8rem; color:#eab308;">
+            {n_plantas}x {genetica_sel.split(' ')[0]}
         </div>
     </div>
     """, unsafe_allow_html=True)
 
 # ==============================================================================
-# 🕵️ RADAR DE AMEAÇAS & DOCTOR GROW (INTEGRADO)
+# 🛡️ RADAR DE MANEJO & DOCTOR GROW
 # ==============================================================================
 
-# Abas Simplificadas conforme pedido
-tab_radar, tab_doctor_full = st.tabs(["🛡️ RADAR DA SEMANA (MANEJO)", "🚑 DOCTOR GROW (COMPLETO)"])
+tab_radar, tab_doctor = st.tabs(["📡 RADAR DA SEMANA", "🚑 DOCTOR GROW (ENCICLOPÉDIA)"])
 
 with tab_radar:
-    st.markdown(f"### 📡 Ameaças Ativas: {fase_nome}")
-    st.caption("Baseado na biologia da planta nesta idade específica, estas são as pragas e problemas mais prováveis. Previna-se agora.")
+    st.markdown(f"### Ameaças Ativas: {fase_nome}")
+    st.caption("Baseado na idade da planta, estas são as pragas e deficiências mais prováveis agora.")
     
-    ameacas = fase_dados.get("ameacas_chave", [])
+    ameacas = fase_dados.get("ameacas", [])
+    
     if not ameacas:
-        st.success("Nenhuma ameaça crítica mapeada para esta fase inicial. Foque no ambiente.")
-    
-    # Grid de Ameaças
-    cols_threat = st.columns(len(ameacas) if len(ameacas) > 0 else 1)
-    
-    doctor_db = db["DOCTOR_GROW_MASTER"]
-    
-    for i, ameaca_nome in enumerate(ameacas):
-        # Procura a ameaça no DB completo para pegar a solução
-        solucao = None
-        dados_ameaca = {}
+        st.success("Nenhuma ameaça crítica mapeada para esta fase. Mantenha o VPD estável.")
+    else:
+        # Busca detalhes no DB Doctor Grow
+        db_doc = db["DOCTOR_GROW_MASTER"]
         
-        # Varre o DB para achar os dados da ameaça citada na fase
-        for cat in doctor_db: # Pragas, Doencas, etc
-            if ameaca_nome in doctor_db[cat]:
-                dados_ameaca = doctor_db[cat][ameaca_nome]
-                break
-        
-        if not dados_ameaca:
-            # Fallback se o nome não bater exato (busca parcial)
-            for cat in doctor_db:
-                for k, v in doctor_db[cat].items():
-                    if ameaca_nome.split(' ')[0] in k:
-                        dados_ameaca = v
-                        break
-        
-        # Renderiza o Card de Ação Imediata
-        if dados_ameaca:
-            with st.expander(f"🚨 RISCO ALTO: {ameaca_nome}", expanded=True):
-                st.markdown(f"**Identificação:** {dados_ameaca['identificacao']}")
-                
-                c_sol1, c_sol2 = st.columns(2)
-                with c_sol1:
-                    st.markdown(f"<div style='color:#4ade80; font-weight:bold; font-size:0.85rem;'>🌿 CONTROLE BIO</div>", unsafe_allow_html=True)
-                    st.markdown(f"{dados_ameaca['controle']}")
-                with c_sol2:
-                    st.markdown(f"<div style='color:#f87171; font-weight:bold; font-size:0.85rem;'>🧪 PRODUTOS</div>", unsafe_allow_html=True)
-                    for prod in dados_ameaca['produtos']:
-                         st.markdown(f"- {prod}")
-                
+        for ameaca_nome in ameacas:
+            # Lógica de busca no DB
+            detalhes = None
+            for nome_db, info in db_doc.items():
+                if ameaca_nome in nome_db: # Busca parcial
+                    detalhes = info
+                    nome_exibicao = nome_db
+                    break
+            
+            if detalhes:
+                # Cor baseada no tipo
+                cor_borda = "#ef4444" # Vermelho padrão
+                icone = "🚨"
+                if detalhes['tipo'] == "Nutrição": 
+                    cor_borda = "#eab308"; icone = "🧪"
+                elif detalhes['tipo'] == "Fungo":
+                    cor_borda = "#a855f7"; icone = "🍄"
 
-with tab_doctor_full:
-    st.markdown("### 📚 Enciclopédia de Pragas e Soluções")
-    search_doc = st.text_input("🔍 Buscar sintoma ou praga:")
+                # Card de Ameaça Integrado
+                with st.expander(f"{icone} ALERTA: {nome_exibicao}", expanded=True):
+                    c_a1, c_a2 = st.columns(2)
+                    with c_a1:
+                        st.markdown(f"**Identificação:** {detalhes['identificacao']}")
+                        st.markdown(f"**Controle:** {detalhes['controle']}")
+                    with c_a2:
+                        st.markdown(f"**🛒 Produtos Sugeridos:**")
+                        for p in detalhes['produtos']:
+                            st.markdown(f"- {p}")
+                    
+
+with tab_doctor:
+    st.markdown("### 📚 Banco de Dados Completo")
+    busca = st.text_input("🔍 Pesquisar problema (Ex: Ácaro, Mofo, Nitrogênio):")
     
-    for categoria, itens in doctor_db.items():
-        # Filtro de busca
-        itens_filtrados = {k:v for k,v in itens.items() if not search_doc or search_doc.lower() in k.lower()}
+    db_full = db["DOCTOR_GROW_MASTER"]
+    
+    for nome, info in db_full.items():
+        if busca and busca.lower() not in nome.lower(): continue
         
-        if itens_filtrados:
-            st.markdown(f"#### {categoria}")
-            for nome, info in itens_filtrados.items():
-                with st.expander(f"{nome}"):
-                    st.markdown(f"**Sintomas:** {info['identificacao']}")
-                    st.markdown(f"**Solução:** {info['controle']}")
-                    st.markdown(f"**Produtos:** {', '.join(info['produtos'])}")
+        with st.expander(f"{nome} ({info['tipo']})"):
+            st.write(f"**ID:** {info['identificacao']}")
+            st.write(f"**Controle:** {info['controle']}")
+            st.write(f"**Produtos:** {', '.join(info['produtos'])}")
