@@ -100,70 +100,78 @@ def load_css():
         </style>
     """, unsafe_allow_html=True)
 
-# --- CAPA PROFISSIONAL (CORRIGIDA) ---
-# O segredo aqui é não deixar espaço no início das linhas de HTML dentro das aspas """
+# --- CAPA HERO PROFISSIONAL (VERSÃO FINAL AUMENTADA) ---
 st.markdown("""
 <style>
-/* 1. O CARD ROXO PROFISSIONAL */
-.header-card {
-    background: linear-gradient(135deg, #240b36 0%, #000000 90%);
-    border-bottom: 2px solid #a855f7;
-    box-shadow: 0 0 30px rgba(168, 85, 247, 0.2);
-    border-radius: 16px;
-    padding: 20px 30px;
-    margin-bottom: 20px;
+/* 1. O CARD (CAPA DE REVISTA) */
+.hero-card {
+    background: linear-gradient(135deg, #1a0b2e 0%, #000000 100%); /* Roxo Deep */
+    border: 1px solid #a855f7; /* Borda Neon */
+    box-shadow: 0 0 60px rgba(168, 85, 247, 0.25); /* Glow Expandido */
+    border-radius: 20px;
+    padding: 60px 50px; /* AUMENTEI O ESPAÇO INTERNO DRASTICAMENTE */
+    margin-bottom: 40px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: center; /* Centraliza verticalmente o conteúdo */
+    min-height: 200px; /* Altura mínima garantida */
 }
 
-/* 2. TÍTULO E SUBTÍTULO */
-.title-box {
+/* 2. BLOCO DE TÍTULO */
+.title-block {
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
 
 .main-title {
-    font-size: clamp(1.5rem, 4vw, 3rem); /* Fonte elástica para não vazar */
+    font-size: clamp(3rem, 6vw, 5rem); /* FONTE GIGANTE */
     font-weight: 900;
     color: #fff;
-    line-height: 1;
+    line-height: 0.9; /* Mais compacto verticalmente */
+    letter-spacing: -2px;
     white-space: nowrap;
+    text-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
 }
 
 .sub-title {
     font-family: 'Courier New', monospace;
-    font-size: clamp(0.7rem, 1vw, 0.9rem);
+    font-size: clamp(0.8rem, 1.5vw, 1.1rem);
     color: #d8b4fe;
-    letter-spacing: 3px;
-    margin-top: 5px;
+    letter-spacing: 6px; /* Espaçamento largo para ficar chique */
     text-transform: uppercase;
+    margin-top: 15px; /* Mais separado do título */
+    font-weight: 600;
+    opacity: 0.9;
 }
 
-/* 3. BOTÃO ONLINE (PÍLULA) */
+/* 3. BOTÃO ONLINE (MINIMALISTA) */
 .status-pill {
-    background: rgba(16, 185, 129, 0.1);
-    border: 1px solid #10b981;
+    background: rgba(16, 185, 129, 0.05);
+    border: 1px solid #059669;
     color: #4ade80;
-    padding: 6px 16px;
-    border-radius: 50px;
-    font-weight: bold;
-    font-size: 0.8rem;
+    padding: 4px 12px; /* BEM MENOR */
+    border-radius: 99px;
+    font-size: 0.7rem; /* LETRA PEQUENA */
+    font-weight: 700;
+    font-family: sans-serif;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     white-space: nowrap;
-    box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
+    align-self: flex-start; /* Joga o botão pro topo do card */
 }
 </style>
 
-<div class="header-card">
-    <div class="title-box">
-        <div class="main-title">AGROWER <span style="color:#a855f7;">SDI</span></div>
+<div class="hero-card">
+    <div class="title-block">
+        <div class="main-title">AGROWER <span style="color:#a855f7">SDI</span></div>
         <div class="sub-title">SISTEMA DE DECISÃO INTEGRADA</div>
     </div>
+    
     <div class="status-pill">
-        <span style="font-size:1.2rem; line-height:1;">🍁</span> ONLINE
+        <span style="font-size:0.9rem; line-height:1;">🍁</span> ONLINE
     </div>
 </div>
 """, unsafe_allow_html=True)
