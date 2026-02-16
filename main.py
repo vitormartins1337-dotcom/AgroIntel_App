@@ -317,7 +317,7 @@ with col_b:
         <div style="font-size:0.75rem; color:#ca8a04;">BASE: <b>{n_plantas} plantas</b> ({info_genetica['tipo']})</div>
     </div>""", unsafe_allow_html=True)
 
-if diagnostico_luz:
+    if diagnostico_luz:
     st.markdown(f"""
     <div class="diag-card" style="border-left: 4px solid {cor_diag};">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
@@ -330,7 +330,7 @@ if diagnostico_luz:
 # ==============================================================================
 # 6. ABAS: NUTRIÇÃO & DOCTOR (ATUALIZADO E CORRIGIDO)
 # ==============================================================================
-    st.markdown("<br>", unsafe_allow_html=True)
+st.markdown("<br>", unsafe_allow_html=True)
 tab_nutri, tab_doctor = st.tabs(["🧪 NUTRIÇÃO & MARCHA DE ABSORÇÃO", "🚑 DOCTOR GROW (FITOSSANIDADE)"])
 
 # --- ABA 1: NUTRIÇÃO DINÂMICA (CORRIGIDA) ---
