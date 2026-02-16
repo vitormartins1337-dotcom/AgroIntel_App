@@ -171,87 +171,90 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# Ticker Bloomberg (Opcional - Visual Tech)
-st.markdown("""
-<div class="ticker-wrap">
-    <div style="display:inline-block; white-space:nowrap; animation:ticker 45s linear infinite;">
-        <span class="tick-item">VPD IDEAL <span class="tick-val">0.8-1.2 kPa</span></span>
-        <span class="tick-item">TEMP FLORA <span class="tick-val">22-26°C</span></span>
-        <span class="tick-item">UMIDADE FLORA <span class="tick-val">45-50%</span></span>
-        <span class="tick-item">PPFD FLORA <span class="tick-val">800-1000 µmol</span></span>
-        <span class="tick-item">PH SOLO <span class="tick-val">6.0-6.8</span></span>
-        <span class="tick-item">PH COCO <span class="tick-val">5.8-6.2</span></span>
-        <span class="tick-item">EC FLORA <span class="tick-val">1.8-2.4 mS</span></span>
-    </div>
-</div>
-<style>@keyframes ticker { 0% { transform: translate3d(100%, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }</style>
-""", unsafe_allow_html=True)
-
 # ==============================================================================
-# 4. PAINEL DE CONTROLE (INPUTS & ENGINE SDI)
+# 4. PAINEL DE CONTROLE (INPUTS & ENGINE SDI V2.0)
 # ==============================================================================
 
-# --- A. INPUTS PRINCIPAIS ---
+# --- A. INPUTS GERAIS (SEMPRE VISÍVEIS) ---
 st.markdown("<br>", unsafe_allow_html=True)
 c_in1, c_in2, c_in3, c_in4 = st.columns([1.5, 1.5, 1, 1])
 
 with c_in1:
-    # Genética (Agora com Foto/Auto)
-    genetica_sel = st.selectbox("🧬 GENÉTICA", list(db.get("GENETICAS_PARAMETROS", {}).keys()))
+    # Seleção precisa de Genética
+    genetica_sel = st.selectbox("🧬 GENÉTICA PREDOMINANTE", list(db.get("GENETICAS_PARAMETROS", {}).keys()))
 
 with c_in2:
-    # Método (Orgânico, Mineral, Hidro...)
-    metodo_sel = st.selectbox("🥣 MÉTODO", list(db.get("METODOS_CULTIVO", {}).keys()))
+    # Seleção do Ambiente (Não é mais Método)
+    ambiente_sel = st.selectbox("🏠 AMBIENTE DE CULTIVO", ["Indoor", "Estufa Outdoor (Complementar)", "Outdoor (Sol Pleno)"])
 
 with c_in3:
-    # Ambiente (Define a lógica de Luz)
-    ambiente_sel = st.selectbox("🏠 AMBIENTE", ["Indoor (Estufa)", "Estufa Outdoor", "Outdoor (Sol Pleno)"])
+    # Número de plantas separado (Serve para todos)
+    n_plantas = st.number_input("Nº PLANTAS", 1, 500, 6)
 
 with c_in4:
-    # Data
-    data_inicio = st.date_input("📅 INÍCIO", datetime.date.today() - datetime.timedelta(days=45))
+    # Data de Início
+    data_inicio = st.date_input("📅 INÍCIO CULTIVO", datetime.date.today() - datetime.timedelta(days=45))
 
-# --- B. LÓGICA DE ILUMINAÇÃO & ESPAÇO (SDI) ---
+# Método de Cultivo (Fica logo abaixo para não poluir a linha de cima ou pode ser integrado)
+# Vamos colocar numa linha separada ou expander se preferir, mas aqui coloco numa coluna abaixo para limpeza
+c_met1, c_met2 = st.columns([1.5, 2.5])
+with c_met1:
+     metodo_sel = st.selectbox("🥣 MÉTODO / SUBSTRATO", list(db.get("METODOS_CULTIVO", {}).keys()))
+
+# --- B. CONFIGURAÇÃO AVANÇADA DE LUZ (CONDICIONAL) ---
+# Inicializa variáveis para não dar erro
 watts_painel = 0
 area_cultivo = 0
 diagnostico_luz = ""
 analise_texto = ""
 cor_diag = "#333"
 
-# Se não for Outdoor puro, pede dados técnicos
-if ambiente_sel != "Outdoor (Sol Pleno)":
-    with st.expander("💡 CONFIGURAÇÃO DE ILUMINAÇÃO & ESPAÇO (OBRIGATÓRIO)", expanded=True):
-        cl1, cl2, cl3, cl4 = st.columns(4)
-        with cl1: watts_painel = st.number_input("POTÊNCIA LED (W Reais):", 50, 2000, 240, help="Watts reais consumidos da tomada.")
-        with cl2: largura = st.number_input("LARGURA (cm):", 40, 500, 80)
-        with cl3: profundidade = st.number_input("PROFUNDIDADE (cm):", 40, 500, 80)
-        with cl4: n_plantas = st.number_input("Nº PLANTAS:", 1, 100, 4)
+# LÓGICA: Só mostra W se for Indoor ou Estufa
+if ambiente_sel in ["Indoor", "Estufa Outdoor (Complementar)"]:
+    with st.expander("💡 CONFIGURAÇÃO DE LUZ ARTIFICIAL (W)", expanded=True):
+        st.caption("Informe a potência para o sistema calcular a eficiência (PPFD Estimado).")
+        cl1, cl2, cl3 = st.columns(3)
         
-        # Engenharia Reversa
-        area_cultivo = (largura * profundidade) / 10000 # m2
-        wm2 = watts_painel / area_cultivo if area_cultivo > 0 else 0
+        with cl1: 
+            watts_painel = st.number_input("POTÊNCIA TOTAL DO LED (W REAIS):", 50, 5000, 240, help="Soma da potência real de todos os painéis.")
+        with cl2: 
+            largura = st.number_input("LARGURA DO ESPAÇO (cm):", 40, 1000, 80)
+        with cl3: 
+            profundidade = st.number_input("PROFUNDIDADE DO ESPAÇO (cm):", 40, 1000, 80)
         
-        # Diagnóstico Agronômico (W/m2)
-        if wm2 < 250:
-            diagnostico_luz = "BAIXA INTENSIDADE"
-            cor_diag = "#eab308" # Amarelo
-            analise_texto = f"⚠️ <b>{wm2:.0f} W/m²</b>. Luz insuficiente para floração densa. Risco de estiolamento e buds aerados (pipoca)."
-        elif 250 <= wm2 <= 550:
-            diagnostico_luz = "ALTA PERFORMANCE"
-            cor_diag = "#22c55e" # Verde
-            analise_texto = f"🚀 <b>{wm2:.0f} W/m²</b>. Sweet Spot (Ponto Ideal). Potencial máximo de rendimento e produção de resina."
+        # Cálculo SDI (Engenharia de Iluminação)
+        area_cultivo = (largura * profundidade) / 10000 # converte para m²
+        if area_cultivo > 0:
+            wm2 = watts_painel / area_cultivo
+            
+            # Diagnóstico Profissional
+            if wm2 < 200:
+                diagnostico_luz = "BAIXA INTENSIDADE (VEG/CLONES)"
+                cor_diag = "#eab308" # Amarelo
+                analise_texto = f"⚠️ <b>{wm2:.0f} W/m²</b>. Esta intensidade é ideal para clones ou vegetativo inicial. Para floração, os buds podem ficar aerados (pipoca). Considere aumentar a potência ou reduzir a área."
+            elif 200 <= wm2 <= 300:
+                diagnostico_luz = "MÉDIA INTENSIDADE (FLORA PADRÃO)"
+                cor_diag = "#38bdf8" # Azul
+                analise_texto = f"✅ <b>{wm2:.0f} W/m²</b>. Faixa funcional para floração. Você terá bons resultados, mas pode não atingir a dureza máxima da genética."
+            elif 300 < wm2 <= 600:
+                diagnostico_luz = "ALTA PERFORMANCE (SWEET SPOT)"
+                cor_diag = "#22c55e" # Verde
+                analise_texto = f"🚀 <b>{wm2:.0f} W/m²</b>. Ponto ideal (Sweet Spot). Intensidade perfeita para produção máxima de resina e peso sem necessidade obrigatória de CO2."
+            else:
+                diagnostico_luz = "INTENSIDADE EXTREMA (CO2 OBRIGATÓRIO)"
+                cor_diag = "#ef4444" # Vermelho
+                analise_texto = f"🔥 <b>{wm2:.0f} W/m²</b>. Nível de competição comercial. O uso de CO2 suplementar (1000-1500ppm) é obrigatório para evitar travamento ou queima por luz."
         else:
-            diagnostico_luz = "EXTREMO (CO2)"
-            cor_diag = "#ef4444" # Vermelho
-            analise_texto = f"🔥 <b>{wm2:.0f} W/m²</b>. Intensidade muito alta. Risco de branqueamento (Light Bleach). Obrigatório CO2 suplementar."
-else:
-    # Outdoor
-    n_plantas = st.number_input("Nº PLANTAS (OUTDOOR):", 1, 500, 6)
-    diagnostico_luz = "SOLAR"
-    cor_diag = "#facc15"
-    analise_texto = "☀️ Cultivo guiado pelo ciclo solar natural. Atenção a chuvas na floração."
+            diagnostico_luz = "DADOS INVÁLIDOS"
 
-# --- C. MOTOR DE CÁLCULO (YIELD & FASES) ---
+elif ambiente_sel == "Outdoor (Sol Pleno)":
+    # Lógica para Outdoor
+    diagnostico_luz = "ENERGIA SOLAR (FULL SPECTRUM)"
+    cor_diag = "#facc15" # Amarelo Sol
+    analise_texto = "☀️ Cultivo guiado pelo ciclo natural. O fator limitante será o tamanho do vaso e a nutrição. Monitore pragas com mais frequência."
+
+
+# --- C. MOTOR DE CÁLCULO (PROCESSAMENTO) ---
 # Recupera dados do DB
 info_metodo = db["METODOS_CULTIVO"][metodo_sel]
 info_genetica = db["GENETICAS_PARAMETROS"][genetica_sel]
@@ -267,23 +270,25 @@ yield_kg = yield_total / 1000
 # Fase Dinâmica (Detecta se é Auto ou Foto)
 fase_nome = "Indefinida"
 fase_dados = {}
+
+# Mapa de dias padrão
+range_map = {"Plântula": 14, "Vegetativo": 42, "Pré-Flora": 56, "Flora Inicial": 77, "Flora Final": 200}
+
+# Se for Automática, ajusta o limite de dias (acelera o ciclo)
+fator_ciclo = 0.75 if info_genetica.get("tipo") == "Auto" else 1.0
+
 for k, v in db.get("FASES_DINAMICAS", {}).items():
-    # Mapa de dias padrão para Fotoperíodo
-    range_map = {"Plântula": 14, "Vegetativo": 42, "Pré-Flora": 56, "Flora Inicial": 77, "Flora Final": 200}
     chave_limpa = k.split(' ')[0]
     limite = range_map.get(chave_limpa, 200)
-    
-    # Se for Automática, reduz o ciclo em 20%
-    if info_genetica.get("tipo") == "Auto": 
-        limite = int(limite * 0.8) 
+    limite_ajustado = int(limite * fator_ciclo)
         
-    if dias_vida <= limite:
+    if dias_vida <= limite_ajustado:
         fase_nome = k
         fase_dados = v
         break
 
 # ==============================================================================
-# 5. VISUAL DASHBOARD (CARDS NEON & GLASS)
+# 5. VISUAL DASHBOARD (CARDS)
 # ==============================================================================
 st.markdown("<br>", unsafe_allow_html=True)
 col_a, col_b = st.columns([1.8, 1.2])
@@ -333,7 +338,7 @@ with col_b:
         </div>
     </div>""", unsafe_allow_html=True)
 
-# CARD DIAGNÓSTICO (CONDICIONAL)
+# CARD DIAGNÓSTICO (CONDICIONAL - APARECE PARA TODOS, MAS COM TEXTO DIFERENTE)
 if diagnostico_luz:
     st.markdown(f"""
     <div class="diag-card" style="border-left: 4px solid {cor_diag};">
