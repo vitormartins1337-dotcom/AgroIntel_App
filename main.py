@@ -311,7 +311,7 @@ yield_kg = yield_total / 1000
 fase_nome = "Indefinida"; fase_dados = {}
 range_map = {"Plântula": 14, "Vegetativo": 42, "Pré-Flora": 56, "Flora Inicial": 77, "Flora Final": 200}
 fator_ciclo = 0.75 if info_genetica.get("tipo") == "Auto" else 1.0
-    for k, v in db.get("FASES_DINAMICAS", {}).items():
+for k, v in db.get("FASES_DINAMICAS", {}).items():
 limite = int(range_map.get(chave_limpa, 200) * fator_ciclo) # chave_limpa corrigida abaixo
 chave_limpa = k.split(' ')[0]
 limite = int(range_map.get(chave_limpa, 200) * fator_ciclo)
