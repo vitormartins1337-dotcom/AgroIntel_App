@@ -753,152 +753,131 @@ SDI SYSTEM
 st.markdown("<br>", unsafe_allow_html=True)
 tab_nutri, tab_doctor = st.tabs(["🧪 NUTRIÇÃO & ABSORÇÃO", "🚑 DOCTOR GROW"])
 
+
 # ==============================================================================
-# ABA: NUTRIÇÃO PROFISSIONAL & PRESCRIÇÃO CALCULADA (SDI MASTER V24)
+# ABA: DIAGNÓSTICO VISUAL MASTER (V25 - BANCO DE DADOS EXPANDIDO & CALCULADORA)
 # ==============================================================================
 with tab_nutri:
     
-    # --- 1. CONFIGURAÇÃO DA INTELIGÊNCIA AGRONÔMICA ---
-    # Detecta contexto do usuário para personalizar a receita
+    # --- 1. CONFIGURAÇÃO & BANCO DE DADOS LOCAL (EXPANDIDO) ---
     is_organic = "Orgânico" in metodo_sel or "KNF" in metodo_sel
     tipo_cultivo_txt = "ORGÂNICO/SOLO VIVO" if is_organic else "MINERAL/HIDRO"
     
-    # BANCO DE DADOS DE PROTOCOLOS (O "CÉREBRO" DA PRESCRIÇÃO)
-    # Estrutura: Nutriente -> {Bio_Produtos, Quim_Produtos, Dose_Solo(g/L), Dose_Agua(g/L), Obs}
-    protocolos_avancados = {
-        "N": {
-            "nome": "Nitrogênio",
-            "bio_prods": ["Farinha de Sangue", "Torta de Mamona", "Fish Mix (Biobizz)", "Churume de Urtiga"],
-            "quim_prods": ["Ureia Agrícola", "Nitrato de Cálcio", "Peters Maintenance 30-10-10"],
-            "dose_solo": 3.0, # gramas por Litro de terra
-            "dose_agua": 0.8, # gramas por Litro de água
-            "func": "Crescimento vegetativo e cor verde."
+    # 1.1 DATABASE DE SINTOMAS (3x MAIOR QUE O ANTERIOR)
+    # Agora inclui Micros, Excessos e Problemas Fisiológicos
+    db_visual_master = {
+        "MACRO NUTRIENTES": {
+            "Nitrogênio (Carência)": {"cor": "#22c55e", "sintoma": "Folhas velhas (base) ficam amarelo pálido uniformemente. Planta para de crescer.", "elem": "N"},
+            "Nitrogênio (Toxidez)":  {"cor": "#14532d", "sintoma": "Folhas verde-escuro quase preto. Pontas em 'garra' viradas para baixo.", "elem": "Flush"},
+            "Fósforo (Carência)":    {"cor": "#3b82f6", "sintoma": "Manchas roxas/azuladas nas folhas. Caules vermelhos. Crescimento travado.", "elem": "P"},
+            "Potássio (Carência)":   {"cor": "#a855f7", "sintoma": "Bordas das folhas queimadas (marrom) e enrolando para cima. Parece queimadura.", "elem": "K"},
+            "Magnésio (Carência)":   {"cor": "#eab308", "sintoma": "Clorose intervenal (amarelo entre as veias, veias continuam verdes). Folhas médias.", "elem": "Mg"},
+            "Cálcio (Carência)":     {"cor": "#f97316", "sintoma": "Manchas marrons/ferrugem (spots) no meio da folha. Folhas novas nascem deformadas.", "elem": "Ca"},
+            "Enxofre (Carência)":    {"cor": "#facc15", "sintoma": "Parecido com Nitrogênio, mas começa nas folhas NOVAS (topo) ficando amarelas.", "elem": "S"},
         },
-        "P": {
-            "nome": "Fósforo",
-            "bio_prods": ["Farinha de Osso", "Guano de Morcego (Bloom)", "Fosfato Natural", "Bokashi"],
-            "quim_prods": ["MAP (Monoamônio)", "Superfosfato Simples", "MKP (0-52-34)"],
-            "dose_solo": 4.5,
-            "dose_agua": 0.6,
-            "func": "Raízes, floração e transferência de energia."
+        "MICRO NUTRIENTES": {
+            "Ferro (Carência)":      {"cor": "#a3e635", "sintoma": "Folhas novas nascem amarelo-limão brilhante. Veias ficam verdes no início.", "elem": "Fe"},
+            "Zinco (Carência)":      {"cor": "#9ca3af", "sintoma": "Rosetting (topo amassado/compacto). Pontas das folhas queimadas (90 graus).", "elem": "Zn"},
+            "Boro (Carência)":       {"cor": "#be123c", "sintoma": "Pontos de crescimento (meristemas) morrem ou ficam marrons. Caules ocos.", "elem": "B"},
+            "Manganês (Carência)":   {"cor": "#0d9488", "sintoma": "Manchas necróticas (marrons) espalhadas entre as veias. Folhas jovens.", "elem": "Mn"},
+            "Cobre (Carência)":      {"cor": "#b45309", "sintoma": "Folhas ficam escuras com tons azulados/metálicos e bordas viram para baixo.", "elem": "Cu"},
         },
-        "K": {
-            "nome": "Potássio",
-            "bio_prods": ["Cinzas de Madeira (Coadas)", "Kelp Meal (Algas)", "Extrato de Banana (KNF)"],
-            "quim_prods": ["Sulfato de Potássio", "Nitrato de Potássio", "Cloreto de Potássio (Cuidado)"],
-            "dose_solo": 5.0,
-            "dose_agua": 0.8,
-            "func": "Transpiração, resistência e peso da flor."
-        },
-        "Ca": {
-            "nome": "Cálcio",
-            "bio_prods": ["Calcário de Ostras", "Dolomita", "Casca de Ovo (Pó fino)"],
-            "quim_prods": ["Nitrato de Cálcio", "CalMag (Botafarm/General Hydroponics)"],
-            "dose_solo": 2.0,
-            "dose_agua": 1.0, # ml/L geralmente
-            "func": "Estrutura celular e força do caule."
-        },
-        "Mg": {
-            "nome": "Magnésio",
-            "bio_prods": ["Calcário Dolomítico", "Sal Amargo (Farmácia)"],
-            "quim_prods": ["Sulfato de Magnésio", "Epsom Salt (Grau Agrícola)"],
-            "dose_solo": 1.5,
-            "dose_agua": 1.0,
-            "func": "Núcleo da clorofila (Fotossíntese)."
-        },
-        "S": {
-            "nome": "Enxofre",
-            "bio_prods": ["Gesso Agrícola", "Enxofre Elementar"],
-            "quim_prods": ["Sulfato de Magnésio", "Sulfato de Potássio"],
-            "dose_solo": 1.0,
-            "dose_agua": 0.5,
-            "func": "Sabor, cheiro (terpenos) e proteínas."
+        "AMBIENTE & REGA": {
+            "Excesso de Rega":       {"cor": "#38bdf8", "sintoma": "Folhas pesadas, caídas e curvadas para baixo (Garrra de Água). Solo encharcado.", "elem": "Seca"},
+            "Falta de Rega":         {"cor": "#d97706", "sintoma": "Folhas murchas e moles, parecem papel fino. Solo seco e separado do vaso.", "elem": "Agua"},
+            "Light Burn (Luz)":      {"cor": "#ffffff", "sintoma": "Branqueamento (Bleaching) apenas no topo mais alto. Bud fica branco/albino.", "elem": "Luz"},
+            "Wind Burn (Vento)":     {"cor": "#94a3b8", "sintoma": "Folhas em formato de 'garra' ou torcidas, parecem secas pelo vento constante.", "elem": "Vento"},
+            "PH Flutuante":          {"cor": "#ec4899", "sintoma": "Manchas marrons irregulares, folhas retorcidas. Parece várias deficiências juntas.", "elem": "PH"}
         }
     }
 
-    st.markdown(f"#### 🩺 Diagnóstico & Prescrição ({tipo_cultivo_txt})")
-    st.caption("Clique nos cards abaixo para ver o protocolo de tratamento calculado para seu vaso.")
+    # 1.2 PROTOCOLOS DE TRATAMENTO (O CÉREBRO)
+    protocolos = {
+        "N": {"bio": ["Farinha de Sangue", "Fish Mix"], "quim": ["Ureia", "Nitrato de Cálcio"], "dose_s": 3.0, "dose_a": 0.8},
+        "P": {"bio": ["Farinha de Osso", "Guano"], "quim": ["MAP", "MKP 0-52-34"], "dose_s": 4.0, "dose_a": 0.6},
+        "K": {"bio": ["Cinzas", "Kelp Meal"], "quim": ["Sulfato de Potássio"], "dose_s": 5.0, "dose_a": 0.8},
+        "Ca": {"bio": ["Calcário Ostras"], "quim": ["CalMag", "Nitrato de Cálcio"], "dose_s": 2.0, "dose_a": 1.0},
+        "Mg": {"bio": ["Dolomita"], "quim": ["Sal Amargo (Epsom)"], "dose_s": 1.5, "dose_a": 1.0},
+        "S": {"bio": ["Gesso Agrícola"], "quim": ["Sulfato de Magnésio"], "dose_s": 1.0, "dose_a": 0.5},
+        "Fe": {"bio": ["Quelato de Ferro Nat.", "Algas"], "quim": ["Ferro EDTA"], "dose_s": 0.5, "dose_a": 0.2},
+        "Zn": {"bio": ["Quelato Zinco", "Sementes"], "quim": ["Sulfato de Zinco"], "dose_s": 0.3, "dose_a": 0.1},
+        "B":  {"bio": ["Ácido Bórico Nat."], "quim": ["Ácido Bórico"], "dose_s": 0.1, "dose_a": 0.05},
+        "Mn": {"bio": ["Sulfato Manganês"], "quim": ["Sulfato Manganês"], "dose_s": 0.2, "dose_a": 0.1},
+        "Cu": {"bio": ["Fungicida Cobre"], "quim": ["Sulfato de Cobre"], "dose_s": 0.1, "dose_a": 0.05},
+        "Flush": {"bio": ["Água Pura", "Enzimas"], "quim": ["Flush Finish", "Água pH 6.0"], "dose_s": 0, "dose_a": 0, "txt": "Faça uma rega com 3x o volume do vaso para lavar o solo."},
+        "Seca": {"bio": ["Ventilação"], "quim": ["Ventilação"], "dose_s": 0, "dose_a": 0, "txt": "Pare de regar por 3-5 dias. Aumente a circulação de ar no chão."},
+        "Agua": {"bio": ["Água + Algas"], "quim": ["Água + Wetting Agent"], "dose_s": 0, "dose_a": 0, "txt": "Regue lentamente com borrifador para reidratar o solo compactado."},
+        "Luz": {"bio": ["Afaste o LED"], "quim": ["Afaste o LED"], "dose_s": 0, "dose_a": 0, "txt": "Suba o painel 15-30cm imediatamente. Diminua a potência em 20%."},
+        "Vento": {"bio": ["Reposicionar"], "quim": ["Reposicionar"], "dose_s": 0, "dose_a": 0, "txt": "Não aponte ventiladores direto para a planta. Use o vento rebatido na parede."},
+        "PH": {"bio": ["Calcário/Vinagre"], "quim": ["PH Up/Down"], "dose_s": 0, "dose_a": 0, "txt": "Meça o runoff. Se < 5.5 use Calcário. Se > 7.5 use Enxofre/Turfa."}
+    }
 
-    # GRID DE 4 COLUNAS (VISUAL LIMPO)
-    cols_def = st.columns(4)
-    defs_items = list(db["DEFICIENCIAS_VISUAIS"].items())
+    # --- 2. RENDERIZAÇÃO DA INTERFACE ---
+    st.markdown(f"#### 🩺 Central de Diagnóstico ({len(db_visual_master['MACRO NUTRIENTES']) + len(db_visual_master['MICRO NUTRIENTES']) + len(db_visual_master['AMBIENTE & REGA'])} Sintomas)")
     
-    for i, (k, v) in enumerate(defs_items):
-        # Identifica o elemento (ex: "Nitrogênio (N)" -> pega "N")
-        simbolo = k.split('(')[1].replace(')', '').strip()
-        dados_proto = protocolos_avancados.get(simbolo)
-        
-        with cols_def[i % 4]:
-            cor_c = v.get('cor_card', '#333')
+    # Cria abas para organizar o banco de dados gigante
+    tab_macro, tab_micro, tab_amb = st.tabs(["MACRO NUTRIENTES", "MICRO NUTRIENTES", "FISIOLÓGICO & AMBIENTE"])
+    
+    # Função Auxiliar de Renderização (Para não repetir código e EVITAR ERRO DE HTML)
+    def render_cards(categoria_dict):
+        cols = st.columns(3)
+        idx = 0
+        for k, v in categoria_dict.items():
+            elem_key = v['elem']
+            proto = protocolos.get(elem_key, {})
             
-            # CARD EXPANSÍVEL (O QUE VOCÊ PEDIU)
-            with st.expander(f"👁️ {k}"):
-                
-                # 1. VISUAL (SINTOMA)
-                
-                st.markdown(f"""
-                <div style="border-left: 3px solid {cor_c}; padding-left: 10px; margin-bottom:10px;">
-                    <strong style="color:#eee;">Sintoma Visual:</strong><br>
-                    <span style="color:#ccc; font-size:0.9rem;">{v['sintoma']}</span>
-                </div>
-                """, unsafe_allow_html=True)
+            # Cálculo de Dose
+            receita = ""
+            if "txt" in proto:
+                receita = proto['txt'] # Instrução direta (ex: Flush)
+            elif is_organic and vol_vaso != 999 and proto:
+                total = proto['dose_s'] * vol_vaso
+                receita = f"Aplicar <b>{total:.1f}g</b> no vaso de {vol_vaso}L."
+            elif proto:
+                receita = f"Diluir <b>{proto['dose_a']}g</b> por Litro d'água."
+            
+            # Produtos
+            prods = proto.get('bio' if is_organic else 'quim', [])
+            prods_html = ", ".join(prods) if prods else "Ajuste Ambiental"
 
-                if dados_proto:
-                    # 2. CÁLCULO INTELIGENTE DA DOSE
-                    receita_txt = ""
-                    if is_organic and vol_vaso != 999:
-                        total_g = dados_proto['dose_solo'] * vol_vaso
-                        receita_txt = f"Aplique <b>{total_g:.1f}g</b> (mistura total) no seu vaso de <b>{vol_vaso}L</b> via Top Dressing."
-                    elif not is_organic:
-                        receita_txt = f"Dilua <b>{dados_proto['dose_agua']}g</b> (ou ml) para cada <b>1 Litro</b> de água na rega."
-                    else:
-                        receita_txt = f"Espalhe <b>{dados_proto['dose_solo']*10:.1f}g</b> por m² no canteiro."
-
-                    # 3. LISTA DE PRODUTOS (BANCO DE DADOS)
-                    lista_prods = dados_proto['bio_prods'] if is_organic else dados_proto['quim_prods']
-                    produtos_html = "".join([f"<li>{p}</li>" for p in lista_prods])
-
-                    # 4. OBSERVAÇÃO PROFISSIONAL (CONTEXTO DE FASE)
-                    obs_fase = "Aplicação segura em qualquer horário."
-                    if "Flora" in fase_atual:
-                        if simbolo == "N": obs_fase = "⚠️ <b>ALERTA FLORA:</b> Excesso de Nitrogênio agora reduz o tamanho dos buds. Use meia dose."
-                        else: obs_fase = "🚫 <b>ALERTA FLORA:</b> Evite aplicação foliar para não molhar as flores (Risco de Botrytis)."
+            with cols[idx % 3]:
+                # CARD SEGURO (HTML SEM INDENTAÇÃO)
+                with st.expander(f"👁️ {k}"):
+                    # Imagem Placeholder
                     
-                    # RENDERIZAÇÃO DA CONSULTORIA DENTRO DO CARD
-                    st.markdown(f"""
-                    <div style="background:rgba(255,255,255,0.05); border-radius:6px; padding:10px; border:1px solid #333;">
-                        <div style="color:{cor_c}; font-weight:900; font-size:0.8rem; margin-bottom:5px;">TRATAMENTO SUGERIDO ({tipo_cultivo_txt})</div>
-                        
-                        <div style="font-size:0.85rem; margin-bottom:8px;">
-                            <b>🧪 Produtos Recomendados:</b>
-                            <ul style="margin-top:2px; padding-left:20px; color:#ddd;">{produtos_html}</ul>
-                        </div>
-                        
-                        <div style="background:{cor_c}15; border:1px dashed {cor_c}; padding:8px; border-radius:4px; margin-bottom:8px;">
-                            <div style="color:{cor_c}; font-weight:bold; font-size:0.8rem;">⚖️ DOSAGEM CALCULADA:</div>
-                            <div style="color:#fff; font-size:0.9rem;">{receita_txt}</div>
-                        </div>
+                    
+                    html_card = f"""
+<div style="border-left:3px solid {v['cor']}; padding-left:10px; margin-bottom:10px;">
+<div style="font-size:0.85rem; color:#ccc; margin-bottom:5px;"><b>Sintoma:</b> {v['sintoma']}</div>
+</div>
+<div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:6px; border:1px solid #333;">
+<div style="color:{v['cor']}; font-weight:bold; font-size:0.75rem; letter-spacing:1px; margin-bottom:5px;">SOLUÇÃO {tipo_cultivo_txt}</div>
+<div style="font-size:0.85rem; margin-bottom:5px;"><b>🛠️ Usar:</b> {prods_html}</div>
+<div style="background:{v['cor']}15; padding:6px; border-radius:4px; font-size:0.85rem; border:1px dashed {v['cor']}; color:#fff;">
+<b>⚖️ DOSE:</b> {receita}
+</div>
+</div>
+"""
+                    st.markdown(html_card, unsafe_allow_html=True)
+            idx += 1
 
-                        <div style="font-size:0.75rem; color:#aaa; border-top:1px solid #444; padding-top:5px;">
-                            {obs_fase}
-                        </div>
-                    </div>
-                    """, unsafe_allow_html=True)
+    with tab_macro: render_cards(db_visual_master["MACRO NUTRIENTES"])
+    with tab_micro: render_cards(db_visual_master["MICRO NUTRIENTES"])
+    with tab_amb:   render_cards(db_visual_master["AMBIENTE & REGA"])
 
     st.markdown("---")
     
-    # --- 2. GRÁFICO DE MARCHA (MANTENDO O ZOOM V22) ---
-    st.markdown(f"#### 📊 Demanda Nutricional: Semana {semanas} (Foco)")
+    # --- 3. GRÁFICO DE MARCHA DE ABSORÇÃO (MANTIDO ZOOM V22) ---
+    st.markdown(f"#### 📊 Demanda Nutricional: Semana {semanas}")
     nutri = db["NUTRI_MARCHA_ABSORCAO"]
-    s_idx = min(semanas - 1, 11) if semanas > 0 else 0
     
     macros_config = {
-        "N":  {"nome": "Nitrogênio", "cor": "#22c55e", "val": nutri['N'][s_idx]},
-        "P":  {"nome": "Fósforo",    "cor": "#3b82f6", "val": nutri['P'][s_idx]},
-        "K":  {"nome": "Potássio",   "cor": "#a855f7", "val": nutri['K'][s_idx]},
-        "Ca": {"nome": "Cálcio",     "cor": "#f97316", "val": nutri['Ca'][s_idx]},
-        "Mg": {"nome": "Magnésio",   "cor": "#eab308", "val": nutri['Mg'][s_idx]},
-        "S":  {"nome": "Enxofre",    "cor": "#facc15", "val": nutri['S'][s_idx]}
+        "N":  {"nome": "Nitrogênio", "cor": "#22c55e", "val": nutri['N'][min(semanas-1,11)]},
+        "P":  {"nome": "Fósforo",    "cor": "#3b82f6", "val": nutri['P'][min(semanas-1,11)]},
+        "K":  {"nome": "Potássio",   "cor": "#a855f7", "val": nutri['K'][min(semanas-1,11)]},
+        "Ca": {"nome": "Cálcio",     "cor": "#f97316", "val": nutri['Ca'][min(semanas-1,11)]},
+        "Mg": {"nome": "Magnésio",   "cor": "#eab308", "val": nutri['Mg'][min(semanas-1,11)]},
+        "S":  {"nome": "Enxofre",    "cor": "#facc15", "val": nutri['S'][min(semanas-1,11)]}
     }
     
     fig = go.Figure()
@@ -907,8 +886,7 @@ with tab_nutri:
         fig.add_trace(go.Bar(
             name=symbol, x=nutri['semanas'], y=nutri[symbol],
             marker_color=d['cor'], marker_opacity=opacity_list,
-            text=nutri[symbol], textposition='auto',
-            hovertemplate=f"Semana %{{x}}<br>{d['nome']}: <b>%{{y}}%</b><extra></extra>"
+            text=nutri[symbol], textposition='auto'
         ))
     
     zoom_start = max(0.5, semanas - 2.5)
@@ -923,7 +901,6 @@ with tab_nutri:
     )
     
     st.plotly_chart(fig, use_container_width=True)
-
 
 with tab_doctor:
     st.markdown("### 🚑 Doctor Grow")
