@@ -533,40 +533,48 @@ dias_restantes = max(0, ciclo_total_dias - dias_vida)
 progresso_pct = min(100, max(0, int((dias_vida / ciclo_total_dias) * 100)))
 
 # ==============================================================================
-# CARDS SUPERIORES (STATUS V20 + YIELD)
+# CARDS SUPERIORES (STATUS V21 + YIELD) - COM TEMP E UMIDADE
 # ==============================================================================
 
-# 1. CRIAÇÃO DAS COLUNAS (Essencial para evitar o NameError)
+# 1. CRIAÇÃO DAS COLUNAS
 col_a, col_b = st.columns([1.8, 1.2]) 
 
 # 2. CÁLCULOS DE PROGRESSO E ESTRATÉGIA
-# Adiciona 30 dias de margem (vegetativo) ao ciclo da genética
 ciclo_total_dias = info_genetica.get('ciclo_dias', 90) + 30 
-
-# Calcula dias restantes (o comando max(0, ...) impede que o número seja negativo)
 dias_restantes = max(0, ciclo_total_dias - dias_vida)
-
-# Calcula a porcentagem de progresso (trava entre 0 e 100)
 progresso_pct = min(100, max(0, int((dias_vida / ciclo_total_dias) * 100)))
 
-# Dicionário de Conselhos (O "Agrônomo de Bolso")
+# 3. BASE DE CONHECIMENTO CLIMÁTICO (TEMP & UMIDADE POR FASE)
+# Define os alvos ideais dependendo da fase atual
+mapa_clima_ideal = {
+    "Plântula":    {"temp": "20-25°C", "rh": "65-80%"},
+    "Vegetativo":  {"temp": "22-28°C", "rh": "55-70%"},
+    "Pré-Flora":   {"temp": "21-26°C", "rh": "50-60%"},
+    "Flora Inicial": {"temp": "21-26°C", "rh": "45-55%"},
+    "Flora Média":   {"temp": "20-25°C", "rh": "40-50%"},
+    "Flora Final":   {"temp": "18-23°C", "rh": "35-45%"} # Mais frio para terpenos
+}
+# Pega os dados da fase atual (ou usa um padrão seguro se não encontrar)
+alvos_clima = mapa_clima_ideal.get(fase_nome, {"temp": "22-26°C", "rh": "50-60%"})
+
+# Dicionário de Conselhos (Estratégia)
 conselhos_fase = {
-    "Plântula": "🌱 <b>Foco:</b> Sobrevivência. Mantenha a umidade alta (cúpula) e não exagere na água. A raiz ainda é frágil.",
+    "Plântula": "🌱 <b>Foco:</b> Sobrevivência. Mantenha a umidade alta (cúpula) e não exagere na água.",
     "Vegetativo": "🌿 <b>Foco:</b> Estrutura. A planta precisa crescer folhas e galhos fortes. Hora de podas e amarras (LST).",
-    "Pré-Flora": "🚀 <b>Foco:</b> Estirão. A planta vai dobrar de tamanho. Ajuste a altura da luz diariamente para não queimar o topo.",
-    "Flora Inicial": "🌸 <b>Foco:</b> Formação. Os 'pelinhos' (pistilos) apareceram. Pare o Nitrogênio e aumente Fósforo/Potássio.",
-    "Flora Média": "💪 <b>Foco:</b> Engorda. Os buds estão inchando. Garanta ventilação máxima para evitar mofo nos miolos.",
-    "Flora Final": "💎 <b>Foco:</b> Resina e Sabor. As folhas vão amarelar (é normal). Reduza a temperatura para destacar os terpenos."
+    "Pré-Flora": "🚀 <b>Foco:</b> Estirão. A planta vai dobrar de tamanho. Ajuste a altura da luz diariamente.",
+    "Flora Inicial": "🌸 <b>Foco:</b> Formação. Os pistilos apareceram. Pare o Nitrogênio e aumente Fósforo/Potássio.",
+    "Flora Média": "💪 <b>Foco:</b> Engorda. Os buds estão inchando. Garanta ventilação máxima para evitar mofo.",
+    "Flora Final": "💎 <b>Foco:</b> Resina e Sabor. Reduza a temperatura e umidade para destacar os terpenos e evitar Botrytis."
 }
 texto_estrategico = conselhos_fase.get(fase_nome, "Mantenha os parâmetros estáveis e monitore o clima.")
 
-# --- COLUNA A: STATUS CARD V20 (COM BARRA DE PROGRESSO & TRADUÇÃO) ---
+# --- COLUNA A: STATUS CARD V21 (AGORA COM 4 MÉTRICAS DE CLIMA) ---
 with col_a:
     meta_vpd = fase_dados.get('meta_vpd', '-')
     meta_ppfd = fase_dados.get('meta_ppfd', '-')
     regime_luz = fase_dados.get('luz_h', '-')
     
-    # HTML SEM INDENTAÇÃO (Para evitar bugs visuais)
+    # HTML SEM INDENTAÇÃO (BLINDADO)
     html_status = f"""
 <div class="status-card">
 <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:10px;">
@@ -594,24 +602,32 @@ with col_a:
 <div style="display:flex; flex-direction:column; gap:6px;">
 <div style="display:flex; align-items:center; gap:6px;">
 <span class="meta-badge bg-ph">💧 PH {info_metodo['ph_ideal']}</span>
-<span style="font-size:0.65rem; color:#666;">(Acidez da Água)</span>
+<span style="font-size:0.65rem; color:#666;">(Acidez)</span>
 </div>
 <div style="display:flex; align-items:center; gap:6px;">
 <span class="meta-badge bg-ec">⚡ EC {info_metodo['ec_ideal']}</span>
-<span style="font-size:0.65rem; color:#666;">(Qtde. Comida)</span>
+<span style="font-size:0.65rem; color:#666;">(Nutrientes)</span>
 </div>
 </div>
 </div>
 <div>
 <div class="card-label" style="margin-bottom:8px;">🌤️ ALVOS DE CLIMA</div>
-<div style="display:flex; flex-direction:column; gap:6px;">
-<div style="display:flex; align-items:center; gap:6px;">
-<span class="meta-badge" style="background:rgba(234, 179, 8, 0.15); color:#facc15; border:1px solid #854d0e;">☀️ {meta_ppfd} PPFD</span>
-<span style="font-size:0.65rem; color:#666;">(Força da Luz)</span>
+<div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+<div title="Força da Luz Ideal">
+<span class="meta-badge" style="background:rgba(234, 179, 8, 0.15); color:#facc15; border:1px solid #854d0e; width:100%; text-align:center; display:block;">☀️ {meta_ppfd}</span>
+<div style="font-size:0.6rem; color:#666; text-align:center; margin-top:2px;">PPFD</div>
 </div>
-<div style="display:flex; align-items:center; gap:6px;">
-<span class="meta-badge" style="background:rgba(236, 72, 153, 0.15); color:#f472b6; border:1px solid #831843;">🌫️ VPD {meta_vpd}</span>
-<span style="font-size:0.65rem; color:#666;">(Transpiração)</span>
+<div title="Déficit de Pressão de Vapor">
+<span class="meta-badge" style="background:rgba(236, 72, 153, 0.15); color:#f472b6; border:1px solid #831843; width:100%; text-align:center; display:block;">🌫️ {meta_vpd}</span>
+<div style="font-size:0.6rem; color:#666; text-align:center; margin-top:2px;">VPD (kPa)</div>
+</div>
+<div title="Temperatura Ambiente Ideal">
+<span class="meta-badge" style="background:rgba(249, 115, 22, 0.15); color:#fdba74; border:1px solid #9a3412; width:100%; text-align:center; display:block;">🌡️ {alvos_clima['temp']}</span>
+<div style="font-size:0.6rem; color:#666; text-align:center; margin-top:2px;">TEMP</div>
+</div>
+<div title="Umidade Relativa Ideal">
+<span class="meta-badge" style="background:rgba(6, 182, 212, 0.15); color:#67e8f9; border:1px solid #155e75; width:100%; text-align:center; display:block;">☁️ {alvos_clima['rh']}</span>
+<div style="font-size:0.6rem; color:#666; text-align:center; margin-top:2px;">UMIDADE</div>
 </div>
 </div>
 </div>
