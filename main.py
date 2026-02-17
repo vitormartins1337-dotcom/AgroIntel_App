@@ -169,16 +169,45 @@ class AgroEngine:
                 "Zinco (Zn)": {"tipo": "Micro Imóvel", "sintoma": "Rosetting (topo amassado), pontas queimadas.", "correcao_bio": "Extrato sementes.", "correcao_quim": "Sulfato Zn.", "cor_card": "#9ca3af"}
             },
             
-            # --- 1.6 FASES DINÂMICAS ---
+            # --- 1.6 FASES DINÂMICAS (ATUALIZADO V19: COM METAS DE CLIMA & LUZ) ---
             "FASES_DINAMICAS": {
-                "Plântula": {"foco": "Raízes", "obs": "Umidade alta (70%+). Luz fraca.", "ameacas": ["Pythium"]},
-                "Vegetativo": {"foco": "Folhas/Caule", "obs": "Nitrogênio alto. Poda Top/FIM.", "ameacas": ["Tripes"]},
-                "Pré-Flora": {"foco": "Stretch", "obs": "Alongamento. Demanda de Ca/Mg.", "ameacas": ["Hermafroditismo"]},
-                "Flora Inicial": {"foco": "Pistilos", "obs": "Formação de botões. Parar N.", "ameacas": ["Oídio"]},
-                "Flora Média": {"foco": "Engorda", "obs": "PK Booster. Densidade.", "ameacas": ["Calor"]},
-                "Flora Final": {"foco": "Resina", "obs": "Maturação. Flush.", "ameacas": ["Botrytis"]}
+                "Plântula": {
+                    "foco": "Raízes/Sobrevivência", 
+                    "luz_h": "18/6", "meta_ppfd": "200-300", "meta_vpd": "0.4-0.8",
+                    "obs": "Umidade alta (70%+). Luz fraca. Não adube forte.", 
+                    "ameacas": ["Pythium", "Damping-off"]
+                },
+                "Vegetativo": {
+                    "foco": "Estrutura/Folhagem", 
+                    "luz_h": "18/6", "meta_ppfd": "400-600", "meta_vpd": "0.8-1.1",
+                    "obs": "Nitrogênio alto. Poda Top/FIM. Ventilação constante.", 
+                    "ameacas": ["Tripes", "Minadores"]
+                },
+                "Pré-Flora": {
+                    "foco": "Stretch/Sexagem", 
+                    "luz_h": "12/12", "meta_ppfd": "600-750", "meta_vpd": "1.0-1.2",
+                    "obs": "Planta dobra de tamanho. Demanda alta de Ca/Mg.", 
+                    "ameacas": ["Hermafroditismo", "Carência de Mg"]
+                },
+                "Flora Inicial": {
+                    "foco": "Formação de Pistilos", 
+                    "luz_h": "12/12", "meta_ppfd": "750-900", "meta_vpd": "1.1-1.3",
+                    "obs": "Botões florais aparecendo. Parar Nitrogênio gradualmente.", 
+                    "ameacas": ["Oídio", "Estresse de Calor"]
+                },
+                "Flora Média": {
+                    "foco": "Engorda/Densidade", 
+                    "luz_h": "12/12", "meta_ppfd": "900-1000", "meta_vpd": "1.2-1.5",
+                    "obs": "PK Booster. Máxima exigência de luz e ventilação.", 
+                    "ameacas": ["Queima de Luz", "Ácaros"]
+                },
+                "Flora Final": {
+                    "foco": "Maturação/Resina", 
+                    "luz_h": "12/12", "meta_ppfd": "800-600", "meta_vpd": "1.3-1.6",
+                    "obs": "Senescência natural. Flush (lavagem). Reduzir temperatura.", 
+                    "ameacas": ["Botrytis (Mofo)", "Bananas"]
+                }
             }
-        }
 
 # ==============================================================================
 # 2. SETUP VISUAL & CONFIGURAÇÃO
@@ -499,19 +528,63 @@ st.markdown("""
 <style>@keyframes ticker { 0% { transform: translate3d(100%, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }</style>
 """, unsafe_allow_html=True)
 
-# CARDS SUPERIORES
-col_a, col_b = st.columns([1.8, 1.2])
+# CÁLCULO DE ESTIMATIVA DE TÉRMINO
+ciclo_total_dias = info_genetica.get('ciclo_dias', 90) + 30 # +30 de margem para vega
+dias_restantes = max(0, ciclo_total_dias - dias_vida)
+
 with col_a:
+    # Cores dinâmicas para as metas
+    meta_vpd = fase_dados.get('meta_vpd', '-')
+    meta_ppfd = fase_dados.get('meta_ppfd', '-')
+    regime_luz = fase_dados.get('luz_h', '-')
+    
     st.markdown(f"""
     <div class="status-card">
-        <div style="display:flex; justify-content:space-between; align-items:start;">
-            <div><div class="card-label" style="color:#d8b4fe;">FASE ATUAL ({info_genetica.get('tipo', 'Foto').upper()})</div><div class="big-val">{fase_nome.upper()}</div></div>
-            <div style="text-align:right;"><div class="card-label">TEMPO</div><div style="font-size:1.5rem; font-weight:bold; color:#fff;">{dias_vida} <span style="font-size:0.9rem; color:#888;">DIAS</span></div><div style="font-size:0.85rem; color:#a855f7;">SEMANA {semanas}</div></div>
+        <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:15px;">
+            <div>
+                <div class="card-label" style="color:#a855f7;">FASE ATUAL ({info_genetica.get('tipo', 'Foto').upper()})</div>
+                <div class="big-val" style="font-size:1.8rem;">{fase_nome.upper()}</div>
+                <div style="background:#3b0764; color:#d8b4fe; padding:2px 8px; border-radius:4px; font-size:0.7rem; display:inline-block; font-weight:bold;">
+                    💡 LUZ: {regime_luz}H
+                </div>
+            </div>
+            <div style="text-align:right;">
+                <div class="card-label">CRONOGRAMA</div>
+                <div style="font-size:1.4rem; font-weight:bold; color:#fff;">{dias_vida} <span style="font-size:0.8rem; color:#888;">DIAS</span></div>
+                <div style="font-size:0.75rem; color:#a855f7;">SEMANA {semanas}</div>
+                <div style="font-size:0.7rem; color:#666; margin-top:2px;">Restam ~{dias_restantes} dias</div>
+            </div>
         </div>
-        <div style="height:1px; background:#333; margin:15px 0;"></div>
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div><div class="card-label">OBJETIVO TÁTICO</div><div style="color:#fff; font-weight:600;">🎯 {fase_dados.get('foco', '-')}</div></div>
-            <div style="text-align:right;"><div class="card-label">METAS</div><div><span class="meta-badge bg-ph">💧 PH {info_metodo['ph_ideal']}</span><span class="meta-badge bg-ec">⚡ EC {info_metodo['ec_ideal']}</span></div></div>
+
+        <div style="height:1px; background:#333; margin:10px 0;"></div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px;">
+            <div>
+                <div class="card-label" style="margin-bottom:8px;">ALVOS DE REGA</div>
+                <div style="display:flex; gap:5px; flex-wrap:wrap;">
+                    <span class="meta-badge bg-ph" title="pH Ideal">💧 PH {info_metodo['ph_ideal']}</span>
+                    <span class="meta-badge bg-ec" title="Eletrocondutividade">⚡ EC {info_metodo['ec_ideal']}</span>
+                </div>
+            </div>
+            <div>
+                <div class="card-label" style="margin-bottom:8px;">ALVOS DE CLIMA</div>
+                <div style="display:flex; gap:5px; flex-wrap:wrap;">
+                    <span class="meta-badge" style="background:rgba(234, 179, 8, 0.15); color:#facc15; border:1px solid #854d0e;">
+                        ☀️ {meta_ppfd} PPFD
+                    </span>
+                    <span class="meta-badge" style="background:rgba(236, 72, 153, 0.15); color:#f472b6; border:1px solid #831843;">
+                        🌫️ VPD {meta_vpd}
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top:15px; background:rgba(255,255,255,0.05); padding:8px; border-radius:6px; display:flex; align-items:center; gap:10px;">
+            <div style="font-size:1.2rem;">🎯</div>
+            <div style="line-height:1.2;">
+                <div class="card-label" style="margin:0; color:#aaa;">FOCO ESTRATÉGICO</div>
+                <div style="color:#fff; font-size:0.85rem; font-weight:600;">{fase_dados.get('foco', '-')}</div>
+            </div>
         </div>
     </div>""", unsafe_allow_html=True)
 
