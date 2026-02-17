@@ -754,115 +754,141 @@ st.markdown("<br>", unsafe_allow_html=True)
 tab_nutri, tab_doctor = st.tabs(["🧪 NUTRIÇÃO & ABSORÇÃO", "🚑 DOCTOR GROW"])
 
 # ==============================================================================
-# ABA: NUTRIÇÃO, ABSORÇÃO & PRESCRIÇÃO INTELIGENTE (SDI PRO V23)
+# ABA: NUTRIÇÃO PROFISSIONAL & PRESCRIÇÃO CALCULADA (SDI MASTER V24)
 # ==============================================================================
 with tab_nutri:
     
-    # --- 1. SISTEMA DE PRESCRIÇÃO DE CORREÇÃO (NOVO!) ---
-    st.markdown("#### 🩺 Diagnóstico & Prescrição Inteligente")
-    st.caption(f"Protocolo personalizado para: **{metodo_sel.split(' ')[0].upper()}** | Vaso: **{vol_vaso}L** | Fase: **{fase_nome.upper()}**")
+    # --- 1. CONFIGURAÇÃO DA INTELIGÊNCIA AGRONÔMICA ---
+    # Detecta contexto do usuário para personalizar a receita
+    is_organic = "Orgânico" in metodo_sel or "KNF" in metodo_sel
+    tipo_cultivo_txt = "ORGÂNICO/SOLO VIVO" if is_organic else "MINERAL/HIDRO"
     
-    # BANCO DE DADOS DE DOSAGEM (Protocolos Agronômicos)
-    # Estrutura: Nutriente -> Método -> {Produto, Dose Base, Unidade, Tipo Aplicação}
-    protocolos = {
-        "Nitrogênio (N)": {
-            "Orgânico": {"prod": "Farinha de Sangue ou Torta de Mamona", "dose": 3.0, "unid": "g/L de terra", "tipo": "Top Dressing (Cobertura)"},
-            "Mineral":  {"prod": "Nitrato de Cálcio ou Ureia", "dose": 0.8, "unid": "g/L de água", "tipo": "Rega (Drench)"}
+    # BANCO DE DADOS DE PROTOCOLOS (O "CÉREBRO" DA PRESCRIÇÃO)
+    # Estrutura: Nutriente -> {Bio_Produtos, Quim_Produtos, Dose_Solo(g/L), Dose_Agua(g/L), Obs}
+    protocolos_avancados = {
+        "N": {
+            "nome": "Nitrogênio",
+            "bio_prods": ["Farinha de Sangue", "Torta de Mamona", "Fish Mix (Biobizz)", "Churume de Urtiga"],
+            "quim_prods": ["Ureia Agrícola", "Nitrato de Cálcio", "Peters Maintenance 30-10-10"],
+            "dose_solo": 3.0, # gramas por Litro de terra
+            "dose_agua": 0.8, # gramas por Litro de água
+            "func": "Crescimento vegetativo e cor verde."
         },
-        "Fósforo (P)": {
-            "Orgânico": {"prod": "Farinha de Osso ou Guano de Morcego", "dose": 4.0, "unid": "g/L de terra", "tipo": "Top Dressing (Cobertura)"},
-            "Mineral":  {"prod": "MKP (Monofosfato de Potássio) ou MAP", "dose": 0.5, "unid": "g/L de água", "tipo": "Rega (Drench)"}
+        "P": {
+            "nome": "Fósforo",
+            "bio_prods": ["Farinha de Osso", "Guano de Morcego (Bloom)", "Fosfato Natural", "Bokashi"],
+            "quim_prods": ["MAP (Monoamônio)", "Superfosfato Simples", "MKP (0-52-34)"],
+            "dose_solo": 4.5,
+            "dose_agua": 0.6,
+            "func": "Raízes, floração e transferência de energia."
         },
-        "Potássio (K)": {
-            "Orgânico": {"prod": "Cinzas de Madeira ou Kelp Meal", "dose": 5.0, "unid": "g/L de terra", "tipo": "Top Dressing (Cobertura)"},
-            "Mineral":  {"prod": "Sulfato de Potássio ou Nitrato de K", "dose": 0.6, "unid": "g/L de água", "tipo": "Rega (Drench)"}
+        "K": {
+            "nome": "Potássio",
+            "bio_prods": ["Cinzas de Madeira (Coadas)", "Kelp Meal (Algas)", "Extrato de Banana (KNF)"],
+            "quim_prods": ["Sulfato de Potássio", "Nitrato de Potássio", "Cloreto de Potássio (Cuidado)"],
+            "dose_solo": 5.0,
+            "dose_agua": 0.8,
+            "func": "Transpiração, resistência e peso da flor."
         },
-        "Cálcio (Ca)": {
-            "Orgânico": {"prod": "Calcário de Ostras ou Dolomita", "dose": 2.0, "unid": "g/L de terra", "tipo": "Top Dressing (Lento)"},
-            "Mineral":  {"prod": "Nitrato de Cálcio (CalMag)", "dose": 1.0, "unid": "ml/L de água", "tipo": "Rega ou Foliar (Apagar luz)"}
+        "Ca": {
+            "nome": "Cálcio",
+            "bio_prods": ["Calcário de Ostras", "Dolomita", "Casca de Ovo (Pó fino)"],
+            "quim_prods": ["Nitrato de Cálcio", "CalMag (Botafarm/General Hydroponics)"],
+            "dose_solo": 2.0,
+            "dose_agua": 1.0, # ml/L geralmente
+            "func": "Estrutura celular e força do caule."
         },
-        "Magnésio (Mg)": {
-            "Orgânico": {"prod": "Calcário Dolomítico", "dose": 2.0, "unid": "g/L de terra", "tipo": "Mistura no Solo"},
-            "Mineral":  {"prod": "Sulfato de Magnésio (Sal Amargo)", "dose": 1.5, "unid": "g/L de água", "tipo": "Foliar ou Rega"}
+        "Mg": {
+            "nome": "Magnésio",
+            "bio_prods": ["Calcário Dolomítico", "Sal Amargo (Farmácia)"],
+            "quim_prods": ["Sulfato de Magnésio", "Epsom Salt (Grau Agrícola)"],
+            "dose_solo": 1.5,
+            "dose_agua": 1.0,
+            "func": "Núcleo da clorofila (Fotossíntese)."
         },
-        "Enxofre (S)": {
-            "Orgânico": {"prod": "Gesso Agrícola", "dose": 1.0, "unid": "g/L de terra", "tipo": "Top Dressing"},
-            "Mineral":  {"prod": "Sulfato de Magnésio", "dose": 1.0, "unid": "g/L de água", "tipo": "Rega"}
+        "S": {
+            "nome": "Enxofre",
+            "bio_prods": ["Gesso Agrícola", "Enxofre Elementar"],
+            "quim_prods": ["Sulfato de Magnésio", "Sulfato de Potássio"],
+            "dose_solo": 1.0,
+            "dose_agua": 0.5,
+            "func": "Sabor, cheiro (terpenos) e proteínas."
         }
     }
 
-    # Detecta se é Orgânico ou Mineral para selecionar o protocolo
-    is_organic = "Orgânico" in metodo_sel or "KNF" in metodo_sel
-    chave_metodo = "Orgânico" if is_organic else "Mineral"
+    st.markdown(f"#### 🩺 Diagnóstico & Prescrição ({tipo_cultivo_txt})")
+    st.caption("Clique nos cards abaixo para ver o protocolo de tratamento calculado para seu vaso.")
 
-    # GERAÇÃO DOS CARDS INTELIGENTES
-    cols_def = st.columns(3) # Layout em 3 colunas para ficar robusto
+    # GRID DE 4 COLUNAS (VISUAL LIMPO)
+    cols_def = st.columns(4)
     defs_items = list(db["DEFICIENCIAS_VISUAIS"].items())
     
     for i, (k, v) in enumerate(defs_items):
-        if k.split(' ')[0] not in protocolos: continue # Pula micros se não tiver protocolo definido acima
+        # Identifica o elemento (ex: "Nitrogênio (N)" -> pega "N")
+        simbolo = k.split('(')[1].replace(')', '').strip()
+        dados_proto = protocolos_avancados.get(simbolo)
         
-        nutri_key = k.split(' ')[0] + " (" + k.split('(')[1]
-        proto = protocolos.get(nutri_key, {}).get(chave_metodo, {})
-        
-        # CÁLCULO MATEMÁTICO DA PRESCRIÇÃO
-        dose_total = 0
-        txt_calculo = ""
-        
-        if is_organic and vol_vaso != 999:
-            # Cálculo para Solo: Dose Base * Litragem do Vaso
-            dose_total = proto['dose'] * vol_vaso
-            txt_calculo = f"Aplique <b>{dose_total:.1f}g</b> totais neste vaso de {vol_vaso}L."
-        elif not is_organic:
-            # Cálculo para Mineral: Concentração por Litro de Água
-            txt_calculo = f"Dilua <b>{proto['dose']} {proto['unid'].split('/')[0]}</b> para cada 1L de água."
-        else:
-            # Outdoor/Chão
-            txt_calculo = f"Aplique <b>{proto['dose']*10:.1f}g</b> por m² de canteiro."
-
-        with cols_def[i % 3]:
+        with cols_def[i % 4]:
             cor_c = v.get('cor_card', '#333')
             
-            with st.expander(f"🩺 {k}"):
-                # 1. O Diagnóstico Visual
+            # CARD EXPANSÍVEL (O QUE VOCÊ PEDIU)
+            with st.expander(f"👁️ {k}"):
+                
+                # 1. VISUAL (SINTOMA)
+                
                 st.markdown(f"""
-                <div style="margin-bottom:10px; font-size:0.85rem; color:#ccc; border-left:2px solid {cor_c}; padding-left:8px;">
-                <b>Sintoma:</b> {v['sintoma']}
+                <div style="border-left: 3px solid {cor_c}; padding-left: 10px; margin-bottom:10px;">
+                    <strong style="color:#eee;">Sintoma Visual:</strong><br>
+                    <span style="color:#ccc; font-size:0.9rem;">{v['sintoma']}</span>
                 </div>
                 """, unsafe_allow_html=True)
-                
-                # 2. A Prescrição Técnica (O "Ouro" do App)
-                st.markdown(f"""
-                <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:6px; border:1px solid #333;">
-                    <div style="color:{cor_c}; font-weight:bold; font-size:0.75rem; letter-spacing:1px; margin-bottom:5px;">
-                        RECOMENDAÇÃO TÉCNICA ({chave_metodo.upper()})
+
+                if dados_proto:
+                    # 2. CÁLCULO INTELIGENTE DA DOSE
+                    receita_txt = ""
+                    if is_organic and vol_vaso != 999:
+                        total_g = dados_proto['dose_solo'] * vol_vaso
+                        receita_txt = f"Aplique <b>{total_g:.1f}g</b> (mistura total) no seu vaso de <b>{vol_vaso}L</b> via Top Dressing."
+                    elif not is_organic:
+                        receita_txt = f"Dilua <b>{dados_proto['dose_agua']}g</b> (ou ml) para cada <b>1 Litro</b> de água na rega."
+                    else:
+                        receita_txt = f"Espalhe <b>{dados_proto['dose_solo']*10:.1f}g</b> por m² no canteiro."
+
+                    # 3. LISTA DE PRODUTOS (BANCO DE DADOS)
+                    lista_prods = dados_proto['bio_prods'] if is_organic else dados_proto['quim_prods']
+                    produtos_html = "".join([f"<li>{p}</li>" for p in lista_prods])
+
+                    # 4. OBSERVAÇÃO PROFISSIONAL (CONTEXTO DE FASE)
+                    obs_fase = "Aplicação segura em qualquer horário."
+                    if "Flora" in fase_atual:
+                        if simbolo == "N": obs_fase = "⚠️ <b>ALERTA FLORA:</b> Excesso de Nitrogênio agora reduz o tamanho dos buds. Use meia dose."
+                        else: obs_fase = "🚫 <b>ALERTA FLORA:</b> Evite aplicação foliar para não molhar as flores (Risco de Botrytis)."
+                    
+                    # RENDERIZAÇÃO DA CONSULTORIA DENTRO DO CARD
+                    st.markdown(f"""
+                    <div style="background:rgba(255,255,255,0.05); border-radius:6px; padding:10px; border:1px solid #333;">
+                        <div style="color:{cor_c}; font-weight:900; font-size:0.8rem; margin-bottom:5px;">TRATAMENTO SUGERIDO ({tipo_cultivo_txt})</div>
+                        
+                        <div style="font-size:0.85rem; margin-bottom:8px;">
+                            <b>🧪 Produtos Recomendados:</b>
+                            <ul style="margin-top:2px; padding-left:20px; color:#ddd;">{produtos_html}</ul>
+                        </div>
+                        
+                        <div style="background:{cor_c}15; border:1px dashed {cor_c}; padding:8px; border-radius:4px; margin-bottom:8px;">
+                            <div style="color:{cor_c}; font-weight:bold; font-size:0.8rem;">⚖️ DOSAGEM CALCULADA:</div>
+                            <div style="color:#fff; font-size:0.9rem;">{receita_txt}</div>
+                        </div>
+
+                        <div style="font-size:0.75rem; color:#aaa; border-top:1px solid #444; padding-top:5px;">
+                            {obs_fase}
+                        </div>
                     </div>
-                    <div style="font-size:0.9rem; font-weight:bold; color:#fff; margin-bottom:5px;">
-                        Use: {proto['prod']}
-                    </div>
-                    <div style="background:{cor_c}20; color:{cor_c}; padding:6px; border-radius:4px; font-size:0.85rem; border:1px dashed {cor_c};">
-                        ⚖️ {txt_calculo}
-                    </div>
-                    <div style="font-size:0.75rem; color:#888; margin-top:6px;">
-                        <i>Modo: {proto['tipo']}</i>
-                    </div>
-                </div>
-                """, unsafe_allow_html=True)
-                
-                # 3. Observação Profissional (Condicional à Fase)
-                obs_pro = "Monitore o pH após aplicação."
-                if fase_atual == "Flora" and "Nitrogênio" in k:
-                    obs_pro = "⚠️ CUIDADO: Excesso de N na flora aborta flores. Use meia dose."
-                elif fase_atual == "Plântula":
-                    obs_pro = "⚠️ CUIDADO: Planta jovem. Aplique apenas 25% da dose recomendada."
-                
-                st.markdown(f"<div style='margin-top:8px; font-size:0.7rem; color:#aaa;'>📝 <b>Nota Agronômica:</b> {obs_pro}</div>", unsafe_allow_html=True)
+                    """, unsafe_allow_html=True)
 
     st.markdown("---")
     
-    # --- 2. GRÁFICO DE MARCHA DE ABSORÇÃO (MANTIDO O ZOOM V22) ---
+    # --- 2. GRÁFICO DE MARCHA (MANTENDO O ZOOM V22) ---
     st.markdown(f"#### 📊 Demanda Nutricional: Semana {semanas} (Foco)")
-    
     nutri = db["NUTRI_MARCHA_ABSORCAO"]
     s_idx = min(semanas - 1, 11) if semanas > 0 else 0
     
@@ -876,7 +902,6 @@ with tab_nutri:
     }
     
     fig = go.Figure()
-    
     for symbol, d in macros_config.items():
         opacity_list = [1.0 if x == semanas else 0.3 for x in nutri['semanas']]
         fig.add_trace(go.Bar(
@@ -885,31 +910,20 @@ with tab_nutri:
             text=nutri[symbol], textposition='auto',
             hovertemplate=f"Semana %{{x}}<br>{d['nome']}: <b>%{{y}}%</b><extra></extra>"
         ))
-
+    
     zoom_start = max(0.5, semanas - 2.5)
     zoom_end = min(12.5, semanas + 2.5)
-
     fig.update_layout(
         barmode='group', paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', 
-        font=dict(color="#ccc"), height=450, showlegend=True,
+        font=dict(color="#ccc"), height=400, showlegend=True,
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-        margin=dict(l=20, r=20, t=40, b=20),
-        xaxis=dict(title="Semanas de Vida", tickmode='linear', tick0=1, dtick=1, showgrid=False, range=[zoom_start, zoom_end]),
-        yaxis=dict(title="Demanda Relativa (%)", showgrid=True, gridcolor='#333', range=[0, 110])
+        margin=dict(l=20, r=20, t=20, b=20),
+        xaxis=dict(tickmode='linear', tick0=1, dtick=1, showgrid=False, range=[zoom_start, zoom_end]),
+        yaxis=dict(showgrid=True, gridcolor='#333', range=[0, 110])
     )
     
     st.plotly_chart(fig, use_container_width=True)
-    
-    # Valores de Referência
-    c_m = st.columns(6)
-    for i, (symbol, d) in enumerate(macros_config.items()):
-        with c_m[i]:
-            st.markdown(f"""
-            <div style="background:rgba(255,255,255,0.03); border-bottom:3px solid {d['cor']}; border-radius:6px; padding:10px; text-align:center;">
-                <div style="font-size:1.4rem; font-weight:900; color:#fff;">{d['val']}%</div>
-                <div style="font-size:0.7rem; color:{d['cor']}; font-weight:bold;">{d['nome'].upper()}</div>
-            </div>
-            """, unsafe_allow_html=True)
+
 
 with tab_doctor:
     st.markdown("### 🚑 Doctor Grow")
