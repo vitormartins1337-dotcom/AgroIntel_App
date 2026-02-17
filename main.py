@@ -640,15 +640,6 @@ with col_b:
     """
     st.markdown(html_yield, unsafe_allow_html=True)
 
-with col_b:
-    st.markdown(f"""
-    <div class="yield-card">
-        <div class="card-label" style="color:#fcd34d;">ESTIMATIVA DE COLHEITA</div><div class="big-val" style="color:#fef08a;">{yield_total:.0f}g</div><div class="sub-info" style="color:#fde047;">~ {yield_kg:.2f} kg (Seco)</div>
-        <div style="height:1px; background:#422006; margin:15px 0;"></div>
-        <div style="font-size:0.75rem; color:#ca8a04;">BASE: <b>{n_plantas} plantas</b> ({info_genetica['tipo']})</div>
-        <div style="font-size:0.7rem; color:#888; margin-top:5px;">Método: {metodo_sel.split(' ')[0]}</div>
-    </div>""", unsafe_allow_html=True)
-
 # CARD DE CONSULTORIA (HTML BLINDADO - SEM INDENTAÇÃO INTERNA)
 if show_consultoria:
     titulo_card = f"CONSULTORIA: {ambiente_sel.split('(')[0].upper()}"
