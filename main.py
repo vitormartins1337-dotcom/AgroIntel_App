@@ -657,107 +657,94 @@ with col_b:
     st.markdown(html_yield, unsafe_allow_html=True)
 
 # ==============================================================================
-# CARD DE CONSULTORIA PROFISSIONAL (REMASTERIZADO V21)
+# CARD DE CONSULTORIA PROFISSIONAL (CORRIGIDO: VISUAL PREMIUM & ZERO BUGS)
 # ==============================================================================
 if show_consultoria:
     titulo_card = f"CONSULTORIA TÉCNICA: {ambiente_sel.split('(')[0].upper()}"
-    cor_brand = "#a855f7" # Roxo Profissional da Marca
+    cor_brand = "#a855f7" # Roxo Profissional
     
-    # Lógica de Ícones e Cores Dinâmicas para os Sub-Items
-    # (Define a cor do ícone baseada na gravidade, mas mantendo o card roxo)
+    # 1. LÓGICA DE DETECÇÃO DE STATUS (Define cores dos alertas internos)
+    # Luz
+    cor_luz = "#4ade80" # Verde (Padrão)
+    if "EXCESSIVA" in txt_luz_titulo or "SATURAÇÃO" in txt_luz_titulo or "BAIXA" in txt_luz_titulo:
+        cor_luz = "#fbbf24" # Amarelo/Alerta
+    if "CRÍTICO" in txt_luz_titulo: cor_luz = "#ef4444" # Vermelho
     
-    # 1. Status Luz
-    icon_luz = "✅"; color_luz = "#4ade80" # Verde
-    if "EXCESSIVA" in txt_luz_titulo or "SATURAÇÃO" in txt_luz_titulo: 
-        icon_luz = "🔥"; color_luz = "#facc15" # Amarelo/Laranja
-    elif "BAIXA" in txt_luz_titulo or "INSUFICIENTE" in txt_luz_titulo:
-        icon_luz = "⚠️"; color_luz = "#fbbf24"
-        
-    # 2. Status Espaço
-    icon_espaco = "✅"; color_espaco = "#4ade80"
-    if "ERRO" in txt_espaco_titulo: 
-        icon_espaco = "🚫"; color_espaco = "#ef4444" # Vermelho
-    elif "ALTA DENSIDADE" in txt_espaco_titulo:
-        icon_espaco = "⚠️"; color_espaco = "#fbbf24"
+    # Espaço
+    cor_espaco = "#4ade80"
+    if "ALTA DENSIDADE" in txt_espaco_titulo: cor_espaco = "#fbbf24"
+    if "ERRO" in txt_espaco_titulo: cor_espaco = "#ef4444"
 
-    # 3. Status Raiz
-    icon_raiz = "✅"; color_raiz = "#4ade80"
-    if "RESTRIÇÃO" in txt_raiz_titulo or "ROOT BOUND" in txt_raiz_titulo:
-        icon_raiz = "⚠️"; color_raiz = "#fbbf24"
+    # Raiz
+    cor_raiz = "#4ade80"
+    if "RESTRIÇÃO" in txt_raiz_titulo or "ROOT BOUND" in txt_raiz_titulo or "SOBRA" in txt_raiz_titulo:
+        cor_raiz = "#fbbf24"
 
-    # HTML BLINDADO (Layout de Consultoria em Grade)
+    # 2. HTML BLINDADO (SEM INDENTAÇÃO INTERNA PARA NÃO QUEBRAR)
     html_consultoria = f"""
-<div class="diag-card" style="border-left: 4px solid {cor_brand}; background: linear-gradient(160deg, #120520 0%, #0a0a0a 100%);">
-    
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:10px;">
-        <div style="display:flex; align-items:center; gap:10px;">
-            <div style="font-size:1.5rem;">👨‍🌾</div>
-            <div>
-                <div style="font-weight:900; color:{cor_brand}; letter-spacing:1px; font-size:1.1rem;">{titulo_card}</div>
-                <div style="font-size:0.7rem; color:#888;">ANÁLISE DE ECOSSISTEMA</div>
-            </div>
-        </div>
-        <div style="background:{cor_brand}20; color:{cor_brand}; padding:4px 12px; border-radius:20px; font-size:0.7rem; font-weight:bold; letter-spacing:1px;">
-            SDI SYSTEM
-        </div>
-    </div>
-
-    <div style="display:grid; grid-template-columns: 1fr; gap:15px;">
-        
-        <div style="background:rgba(255,255,255,0.03); border-radius:8px; padding:15px; border:1px solid #222;">
-            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
-                <strong style="color:#aaa; font-size:0.75rem; letter-spacing:1px;">1. ENGENHARIA FOTÔNICA & CLIMÁTICA</strong>
-                <span style="font-size:1rem;">{icon_luz}</span>
-            </div>
-            <div style="font-size:0.95rem; font-weight:bold; color:{color_luz}; margin-bottom:5px;">
-                {txt_luz_titulo.replace('✅', '').replace('⚠️', '').replace('🔥', '').strip()}
-            </div>
-            <div style="font-size:0.85rem; color:#ccc; line-height:1.4; margin-bottom:8px;">
-                <span style="color:{cor_brand}; font-weight:bold;">DIAGNÓSTICO:</span> {txt_luz_desc}
-            </div>
-            <div style="font-size:0.8rem; color:#888; border-top:1px dashed #333; padding-top:6px; margin-top:6px;">
-                🌪️ <b>HVAC:</b> {txt_clima_desc}
-            </div>
-        </div>
-
-        <div style="background:rgba(255,255,255,0.03); border-radius:8px; padding:15px; border:1px solid #222;">
-            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
-                <strong style="color:#aaa; font-size:0.75rem; letter-spacing:1px;">2. DENSIDADE & FÍSICA</strong>
-                <span style="font-size:1rem;">{icon_espaco}</span>
-            </div>
-            <div style="font-size:0.95rem; font-weight:bold; color:{color_espaco}; margin-bottom:5px;">
-                {txt_espaco_titulo.replace('✅', '').replace('⚠️', '').replace('🚫', '').strip()}
-            </div>
-            <div style="font-size:0.85rem; color:#ccc; line-height:1.4;">
-                <span style="color:{cor_brand}; font-weight:bold;">OBSERVAÇÃO:</span> {txt_espaco_desc}
-            </div>
-        </div>
-
-        <div style="background:rgba(255,255,255,0.03); border-radius:8px; padding:15px; border:1px solid #222;">
-            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
-                <strong style="color:#aaa; font-size:0.75rem; letter-spacing:1px;">3. SUBSTRATO & RAÍZES</strong>
-                <span style="font-size:1rem;">{icon_raiz}</span>
-            </div>
-            <div style="font-size:0.95rem; font-weight:bold; color:{color_raiz}; margin-bottom:5px;">
-                {txt_raiz_titulo.replace('✅', '').replace('⚠️', '').replace('ℹ️', '').strip()}
-            </div>
-            <div style="font-size:0.85rem; color:#ccc; line-height:1.4;">
-                <span style="color:{cor_brand}; font-weight:bold;">ANÁLISE:</span> {txt_raiz_desc}
-            </div>
-        </div>
-
-    </div>
-    
-    <div style="margin-top:20px; padding:15px; background:linear-gradient(90deg, {cor_brand}20 0%, rgba(0,0,0,0) 100%); border-radius:8px; border-left:4px solid {cor_brand}; display:flex; gap:15px; align-items:center;">
-        <div style="font-size:2rem;">🧠</div>
-        <div>
-            <span style="color:{cor_brand}; font-weight:900; font-size:0.8rem; letter-spacing:1px; text-transform:uppercase;">CONCLUSÃO DO ESPECIALISTA</span>
-            <span style="color:#fff; font-size:0.95rem; line-height:1.5; display:block; margin-top:4px;">
-            {recomendacao_premium if recomendacao_premium else "O setup está calibrado. Mantenha a estabilidade dos parâmetros (Homeostase) para maximizar a expressão genética."}
-            </span>
-        </div>
-    </div>
-
+<div class="diag-card" style="border-left: 4px solid {cor_brand}; background: linear-gradient(160deg, #120520 0%, #0a0a0a 100%); padding:20px; border-radius:12px; margin-top:20px;">
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:10px;">
+<div style="display:flex; align-items:center; gap:10px;">
+<div style="font-size:1.5rem;">👨‍🌾</div>
+<div>
+<div style="font-weight:900; color:{cor_brand}; letter-spacing:1px; font-size:1.1rem;">{titulo_card}</div>
+<div style="font-size:0.7rem; color:#888;">ANÁLISE DE ECOSSISTEMA</div>
+</div>
+</div>
+<div style="background:{cor_brand}20; color:{cor_brand}; padding:4px 12px; border-radius:20px; font-size:0.7rem; font-weight:bold; letter-spacing:1px;">
+SDI SYSTEM
+</div>
+</div>
+<div style="display:grid; grid-template-columns: 1fr; gap:15px;">
+<div style="background:rgba(255,255,255,0.03); border-radius:8px; padding:15px; border:1px solid #222;">
+<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+<strong style="color:#aaa; font-size:0.75rem; letter-spacing:1px;">1. ENGENHARIA FOTÔNICA & CLIMÁTICA</strong>
+<span style="font-size:0.8rem; color:{cor_luz}; font-weight:bold;">● STATUS</span>
+</div>
+<div style="font-size:1rem; font-weight:bold; color:{cor_luz}; margin-bottom:5px;">
+{txt_luz_titulo.replace('✅','').replace('⚠️','').replace('🔥','').strip()}
+</div>
+<div style="font-size:0.9rem; color:#ccc; line-height:1.4; margin-bottom:8px;">
+<span style="color:{cor_brand}; font-weight:bold;">DIAGNÓSTICO:</span> {txt_luz_desc}
+</div>
+<div style="font-size:0.8rem; color:#888; border-top:1px dashed #333; padding-top:6px; margin-top:6px;">
+🌪️ <b>CLIMATOLOGIA (HVAC):</b> {txt_clima_desc if txt_clima_desc else "Ventilação passiva/natural."}
+</div>
+</div>
+<div style="background:rgba(255,255,255,0.03); border-radius:8px; padding:15px; border:1px solid #222;">
+<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+<strong style="color:#aaa; font-size:0.75rem; letter-spacing:1px;">2. DENSIDADE & FÍSICA</strong>
+<span style="font-size:0.8rem; color:{cor_espaco}; font-weight:bold;">● STATUS</span>
+</div>
+<div style="font-size:1rem; font-weight:bold; color:{cor_espaco}; margin-bottom:5px;">
+{txt_espaco_titulo.replace('✅','').replace('⚠️','').replace('🚫','').strip()}
+</div>
+<div style="font-size:0.9rem; color:#ccc; line-height:1.4;">
+<span style="color:{cor_brand}; font-weight:bold;">OBSERVAÇÃO:</span> {txt_espaco_desc}
+</div>
+</div>
+<div style="background:rgba(255,255,255,0.03); border-radius:8px; padding:15px; border:1px solid #222;">
+<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+<strong style="color:#aaa; font-size:0.75rem; letter-spacing:1px;">3. SUBSTRATO & RAÍZES</strong>
+<span style="font-size:0.8rem; color:{cor_raiz}; font-weight:bold;">● STATUS</span>
+</div>
+<div style="font-size:1rem; font-weight:bold; color:{cor_raiz}; margin-bottom:5px;">
+{txt_raiz_titulo.replace('✅','').replace('⚠️','').replace('ℹ️','').strip()}
+</div>
+<div style="font-size:0.9rem; color:#ccc; line-height:1.4;">
+<span style="color:{cor_brand}; font-weight:bold;">ANÁLISE:</span> {txt_raiz_desc}
+</div>
+</div>
+</div>
+<div style="margin-top:20px; padding:15px; background:linear-gradient(90deg, {cor_brand}20 0%, rgba(0,0,0,0) 100%); border-radius:8px; border-left:4px solid {cor_brand}; display:flex; gap:15px; align-items:center;">
+<div style="font-size:2rem;">🧠</div>
+<div>
+<span style="color:{cor_brand}; font-weight:900; font-size:0.8rem; letter-spacing:1px; text-transform:uppercase;">CONCLUSÃO DO ESPECIALISTA</span>
+<span style="color:#fff; font-size:0.95rem; line-height:1.5; display:block; margin-top:4px;">
+{recomendacao_premium if recomendacao_premium else "O setup está calibrado. Mantenha a estabilidade dos parâmetros (Homeostase) para maximizar a expressão genética."}
+</span>
+</div>
+</div>
 </div>
 """
     st.markdown(html_consultoria, unsafe_allow_html=True)
