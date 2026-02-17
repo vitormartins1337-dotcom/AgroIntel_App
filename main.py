@@ -532,11 +532,6 @@ st.markdown("""
 # CÁLCULO DE ESTIMATIVA DE TÉRMINO
 ciclo_total_dias = info_genetica.get('ciclo_dias', 90) + 30 # +30 de margem para vega
 dias_restantes = max(0, ciclo_total_dias - dias_vida)
-
-    # Cores dinâmicas para as metas
-    meta_vpd = fase_dados.get('meta_vpd', '-')
-    meta_ppfd = fase_dados.get('meta_ppfd', '-')
-    regime_luz = fase_dados.get('luz_h', '-')
     
 with col_a:
     st.markdown(f"""
