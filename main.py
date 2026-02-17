@@ -1,17 +1,14 @@
 # ARQUIVO: main.py
-# SISTEMA: AGROWER SDI | TITANIUM EDITION V18.0 (MONSTER LOGIC)
-# DESCRIÇÃO: Sistema Completo: Database Integrado, Volumetria HVAC, Consultoria Blindada.
+# SISTEMA: AGROWER SDI | TITANIUM EDITION V19.0 (MASTER STABLE)
+# DESCRIÇÃO: Sistema Agronômico Completo com Volumetria, HVAC e Fitopatologia Avançada.
 
 import streamlit as st
 import datetime
 import plotly.graph_objects as go
 
 # ==============================================================================
-# 1. CORE ENGINE & DATABASE (BLOCO MONOLÍTICO INTEGRADO)
+# 1. CORE ENGINE & DATABASE (MONOLITHIC BLOCK)
 # ==============================================================================
-# Incorporamos o banco de dados aqui para garantir que todas as novas informações
-# (Russet Mites, Landraces, Volumetria) estejam disponíveis sem erros de importação.
-
 class AgroEngine:
     def __init__(self):
         self.db = self._get_agro_db()
@@ -208,7 +205,7 @@ class AgroEngine:
                     "ameacas": ["Botrytis (Mofo)", "Bananas"]
                 }
             }
-        }    
+        }
 
 # ==============================================================================
 # 2. SETUP VISUAL & CONFIGURAÇÃO
@@ -269,7 +266,6 @@ st.markdown("""
 # ==============================================================================
 # 3. SIDEBAR (PAINEL DE COMANDO BLINDADO)
 # ==============================================================================
-# Aqui garantimos que todos os inputs fiquem na lateral para não poluir a tela.
 with st.sidebar:
     st.markdown("### 🎛️ COMANDO SDI")
     st.caption("Central de Controle Agronômico")
@@ -339,7 +335,7 @@ with st.sidebar:
         st.caption(f"Área: {area_m2:.2f} m² | Vol: {(area_m2*(altura/100)):.1f} m³")
 
 # ==============================================================================
-# 4. SDI INTELLIGENCE CORE V18 (CÁLCULOS & LÓGICA)
+# 4. SDI INTELLIGENCE CORE V19 (CÁLCULOS & LÓGICA)
 # ==============================================================================
 # Bloco de inicialização para evitar NameError
 info_genetica = db["GENETICAS_PARAMETROS"][genetica_sel]
@@ -420,7 +416,7 @@ if area_m2 > 0 and area_m2 != 999:
         txt_luz_desc = "Dependência do clima. Monitore a temperatura das raízes em dias muito quentes."
         cor_card = "#facc15"
 
-# --- B. ENGENHARIA CLIMÁTICA & HVAC (V18 NOVO!) ---
+# --- B. ENGENHARIA CLIMÁTICA & HVAC (V18) ---
 if area_m2 > 0 and area_m2 != 999 and altura > 0:
     volume_m3 = area_m2 * (altura / 100)
     # Troca de ar recomendada: 60 vezes por hora (1x por minuto)
@@ -529,11 +525,19 @@ st.markdown("""
 <style>@keyframes ticker { 0% { transform: translate3d(100%, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }</style>
 """, unsafe_allow_html=True)
 
+# CARDS SUPERIORES (V19: COM VPD, PPFD E LUZ NO CARD)
+col_a, col_b = st.columns([1.8, 1.2])
+
 # CÁLCULO DE ESTIMATIVA DE TÉRMINO
 ciclo_total_dias = info_genetica.get('ciclo_dias', 90) + 30 # +30 de margem para vega
 dias_restantes = max(0, ciclo_total_dias - dias_vida)
-    
+
 with col_a:
+    # Cores dinâmicas e dados seguros
+    meta_vpd = fase_dados.get('meta_vpd', '-')
+    meta_ppfd = fase_dados.get('meta_ppfd', '-')
+    regime_luz = fase_dados.get('luz_h', '-')
+    
     st.markdown(f"""
     <div class="status-card">
         <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:15px;">
@@ -590,9 +594,10 @@ with col_b:
         <div class="card-label" style="color:#fcd34d;">ESTIMATIVA DE COLHEITA</div><div class="big-val" style="color:#fef08a;">{yield_total:.0f}g</div><div class="sub-info" style="color:#fde047;">~ {yield_kg:.2f} kg (Seco)</div>
         <div style="height:1px; background:#422006; margin:15px 0;"></div>
         <div style="font-size:0.75rem; color:#ca8a04;">BASE: <b>{n_plantas} plantas</b> ({info_genetica['tipo']})</div>
+        <div style="font-size:0.7rem; color:#888; margin-top:5px;">Método: {metodo_sel.split(' ')[0]}</div>
     </div>""", unsafe_allow_html=True)
 
-# CARD DE CONSULTORIA V18 (HTML BLINDADO - SEM INDENTAÇÃO INTERNA)
+# CARD DE CONSULTORIA (HTML BLINDADO - SEM INDENTAÇÃO INTERNA)
 if show_consultoria:
     titulo_card = f"CONSULTORIA: {ambiente_sel.split('(')[0].upper()}"
     
@@ -600,7 +605,7 @@ if show_consultoria:
 <div class="diag-card" style="border-left: 4px solid {cor_card};">
 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:10px;">
 <div style="font-weight:900; color:{cor_card}; letter-spacing:1px; font-size:1.2rem;">{titulo_card}</div>
-<div style="background:{cor_card}20; color:{cor_card}; padding:4px 12px; border-radius:20px; font-size:0.75rem; font-weight:bold;">SDI TITANIUM V18</div>
+<div style="background:{cor_card}20; color:{cor_card}; padding:4px 12px; border-radius:20px; font-size:0.75rem; font-weight:bold;">SDI TITANIUM V19</div>
 </div>
 <div style="font-family:sans-serif; color:#e4e4e7;">
 <div style="margin-bottom:15px;">
@@ -642,7 +647,7 @@ with tab_nutri:
     for i, (k, v) in enumerate(defs_items):
         with cols_def[i % 4]:
             cor_c = v.get('cor_card', '#333')
-            # Imagem de placeholder contextual
+            # Placeholder para imagem
             
             with st.expander(f"👁️ {k}"):
                 st.markdown(f"""
