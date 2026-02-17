@@ -526,68 +526,87 @@ st.markdown("""
 <style>@keyframes ticker { 0% { transform: translate3d(100%, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }</style>
 """, unsafe_allow_html=True)
 
-# CARDS SUPERIORES (V19: COM VPD, PPFD E LUZ NO CARD)
-col_a, col_b = st.columns([1.8, 1.2])
-
-# CÁLCULO DE ESTIMATIVA DE TÉRMINO
-ciclo_total_dias = info_genetica.get('ciclo_dias', 90) + 30 # +30 de margem para vega
+# CÁLCULO DE ESTIMATIVA & PROGRESSO
+ciclo_total_dias = info_genetica.get('ciclo_dias', 90) + 30 
 dias_restantes = max(0, ciclo_total_dias - dias_vida)
+progresso_pct = min(100, max(0, int((dias_vida / ciclo_total_dias) * 100)))
+
+# DICIONÁRIO DE CONSELHOS PREMIUM (O "AGRÔNOMO DE BOLSO")
+# Traduz o foco técnico para uma instrução prática que qualquer um entende.
+conselhos_fase = {
+    "Plântula": "🌱 <b>Foco:</b> Sobrevivência. Mantenha a umidade alta (cúpula) e não exagere na água. A raiz ainda é frágil.",
+    "Vegetativo": "🌿 <b>Foco:</b> Estrutura. A planta precisa crescer folhas e galhos fortes. Hora de podas e amarras (LST).",
+    "Pré-Flora": "🚀 <b>Foco:</b> Estirão. A planta vai dobrar de tamanho. Ajuste a altura da luz diariamente para não queimar o topo.",
+    "Flora Inicial": "🌸 <b>Foco:</b> Formação. Os 'pelinhos' (pistilos) apareceram. Pare o Nitrogênio e aumente Fósforo/Potássio.",
+    "Flora Média": "💪 <b>Foco:</b> Engorda. Os buds estão inchando. Garanta ventilação máxima para evitar mofo nos miolos.",
+    "Flora Final": "💎 <b>Foco:</b> Resina e Sabor. As folhas vão amarelar (é normal). Reduza a temperatura para destacar os terpenos."
+}
+texto_estrategico = conselhos_fase.get(fase_nome, "Mantenha os parâmetros estáveis.")
 
 with col_a:
-    # 1. Definição de Variáveis (Segurança)
+    # Variáveis de Segurança
     meta_vpd = fase_dados.get('meta_vpd', '-')
     meta_ppfd = fase_dados.get('meta_ppfd', '-')
     regime_luz = fase_dados.get('luz_h', '-')
     
-    # 2. Montagem do HTML "Liso" (Sem espaços na esquerda para não quebrar)
+    # HTML SEM INDENTAÇÃO (BLINDADO)
     html_status_card = f"""
 <div class="status-card">
-<div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:15px;">
+<div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:10px;">
 <div>
 <div class="card-label" style="color:#a855f7;">FASE ATUAL ({info_genetica.get('tipo', 'Foto').upper()})</div>
-<div class="big-val" style="font-size:1.8rem;">{fase_nome.upper()}</div>
+<div class="big-val" style="font-size:1.8rem; margin-bottom:0;">{fase_nome.upper()}</div>
+<div style="font-size:0.75rem; color:#888; font-style:italic; margin-bottom:5px;">Semanas: {semanas}</div>
 <div style="background:#3b0764; color:#d8b4fe; padding:2px 8px; border-radius:4px; font-size:0.7rem; display:inline-block; font-weight:bold;">
-💡 LUZ: {regime_luz}H
+💡 LUZ: {regime_luz}H/DIA
 </div>
 </div>
-<div style="text-align:right;">
-<div class="card-label">CRONOGRAMA</div>
-<div style="font-size:1.4rem; font-weight:bold; color:#fff;">{dias_vida} <span style="font-size:0.8rem; color:#888;">DIAS</span></div>
-<div style="font-size:0.75rem; color:#a855f7;">SEMANA {semanas}</div>
-<div style="font-size:0.7rem; color:#666; margin-top:2px;">Restam ~{dias_restantes} dias</div>
+<div style="text-align:right; width:40%;">
+<div class="card-label">PROGRESSO DO CICLO</div>
+<div style="font-size:1.4rem; font-weight:bold; color:#fff;">{progresso_pct}% <span style="font-size:0.8rem; color:#888;">CONCLUÍDO</span></div>
+<div style="width:100%; background:#333; height:8px; border-radius:10px; margin-top:5px; overflow:hidden;">
+<div style="width:{progresso_pct}%; background:linear-gradient(90deg, #a855f7, #d8b4fe); height:100%; border-radius:10px;"></div>
+</div>
+<div style="font-size:0.7rem; color:#666; margin-top:4px;">Faltam aprox. {dias_restantes} dias</div>
 </div>
 </div>
-<div style="height:1px; background:#333; margin:10px 0;"></div>
-<div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px;">
+<div style="height:1px; background:#333; margin:15px 0;"></div>
+<div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:10px;">
 <div>
-<div class="card-label" style="margin-bottom:8px;">ALVOS DE REGA</div>
-<div style="display:flex; gap:5px; flex-wrap:wrap;">
-<span class="meta-badge bg-ph" title="pH Ideal">💧 PH {info_metodo['ph_ideal']}</span>
-<span class="meta-badge bg-ec" title="Eletrocondutividade">⚡ EC {info_metodo['ec_ideal']}</span>
+<div class="card-label" style="margin-bottom:8px;">🎯 ALVOS DE NUTRIÇÃO</div>
+<div style="display:flex; flex-direction:column; gap:6px;">
+<div style="display:flex; align-items:center; gap:6px;">
+<span class="meta-badge bg-ph">💧 PH {info_metodo['ph_ideal']}</span>
+<span style="font-size:0.65rem; color:#666;">(Acidez da água)</span>
+</div>
+<div style="display:flex; align-items:center; gap:6px;">
+<span class="meta-badge bg-ec">⚡ EC {info_metodo['ec_ideal']}</span>
+<span style="font-size:0.65rem; color:#666;">(Qtde. Comida)</span>
+</div>
 </div>
 </div>
 <div>
-<div class="card-label" style="margin-bottom:8px;">ALVOS DE CLIMA</div>
-<div style="display:flex; gap:5px; flex-wrap:wrap;">
-<span class="meta-badge" style="background:rgba(234, 179, 8, 0.15); color:#facc15; border:1px solid #854d0e;">
-☀️ {meta_ppfd} PPFD
-</span>
-<span class="meta-badge" style="background:rgba(236, 72, 153, 0.15); color:#f472b6; border:1px solid #831843;">
-🌫️ VPD {meta_vpd}
-</span>
+<div class="card-label" style="margin-bottom:8px;">🌤️ ALVOS DE CLIMA</div>
+<div style="display:flex; flex-direction:column; gap:6px;">
+<div style="display:flex; align-items:center; gap:6px;">
+<span class="meta-badge" style="background:rgba(234, 179, 8, 0.15); color:#facc15; border:1px solid #854d0e;">☀️ {meta_ppfd} PPFD</span>
+<span style="font-size:0.65rem; color:#666;">(Força da Luz)</span>
+</div>
+<div style="display:flex; align-items:center; gap:6px;">
+<span class="meta-badge" style="background:rgba(236, 72, 153, 0.15); color:#f472b6; border:1px solid #831843;">🌫️ VPD {meta_vpd}</span>
+<span style="font-size:0.65rem; color:#666;">(Transpiração)</span>
 </div>
 </div>
 </div>
-<div style="margin-top:15px; background:rgba(255,255,255,0.05); padding:8px; border-radius:6px; display:flex; align-items:center; gap:10px;">
-<div style="font-size:1.2rem;">🎯</div>
-<div style="line-height:1.2;">
-<div class="card-label" style="margin:0; color:#aaa;">FOCO ESTRATÉGICO</div>
-<div style="color:#fff; font-size:0.85rem; font-weight:600;">{fase_dados.get('foco', '-')}</div>
+</div>
+<div style="margin-top:20px; background:rgba(255,255,255,0.03); padding:12px; border-radius:8px; border-left:3px solid #a855f7;">
+<div class="card-label" style="margin:0; color:#a855f7; margin-bottom:4px;">ESTRATÉGIA DA SEMANA:</div>
+<div style="color:#e4e4e7; font-size:0.85rem; line-height:1.4;">
+{texto_estrategico}
 </div>
 </div>
 </div>
 """
-    # 3. Renderização Final
     st.markdown(html_status_card, unsafe_allow_html=True)
 
 with col_b:
