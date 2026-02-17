@@ -539,8 +539,13 @@ progresso_pct = min(100, max(0, int((dias_vida / ciclo_total_dias) * 100)))
 col_a, col_b = st.columns([1.8, 1.2]) 
 
 # 2. CÁLCULOS DE PROGRESSO E ESTRATÉGIA
+# Adiciona 30 dias de margem (vegetativo) ao ciclo da genética
 ciclo_total_dias = info_genetica.get('ciclo_dias', 90) + 30 
+
+# Calcula dias restantes (o comando max(0, ...) impede que o número seja negativo)
 dias_restantes = max(0, ciclo_total_dias - dias_vida)
+
+# Calcula a porcentagem de progresso (trava entre 0 e 100)
 progresso_pct = min(100, max(0, int((dias_vida / ciclo_total_dias) * 100)))
 
 # Dicionário de Conselhos (O "Agrônomo de Bolso")
