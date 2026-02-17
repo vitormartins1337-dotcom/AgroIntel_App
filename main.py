@@ -754,36 +754,118 @@ st.markdown("<br>", unsafe_allow_html=True)
 tab_nutri, tab_doctor = st.tabs(["🧪 NUTRIÇÃO & ABSORÇÃO", "🚑 DOCTOR GROW"])
 
 # ==============================================================================
-# ABA: NUTRIÇÃO & ABSORÇÃO (ZOOM DINÂMICO V22)
+# ABA: NUTRIÇÃO, ABSORÇÃO & PRESCRIÇÃO INTELIGENTE (SDI PRO V23)
 # ==============================================================================
 with tab_nutri:
-    # 1. DIAGNÓSTICO VISUAL (MANTIDO)
-    st.markdown("#### 🔍 Diagnóstico Visual")
-    cols_def = st.columns(4)
+    
+    # --- 1. SISTEMA DE PRESCRIÇÃO DE CORREÇÃO (NOVO!) ---
+    st.markdown("#### 🩺 Diagnóstico & Prescrição Inteligente")
+    st.caption(f"Protocolo personalizado para: **{metodo_sel.split(' ')[0].upper()}** | Vaso: **{vol_vaso}L** | Fase: **{fase_nome.upper()}**")
+    
+    # BANCO DE DADOS DE DOSAGEM (Protocolos Agronômicos)
+    # Estrutura: Nutriente -> Método -> {Produto, Dose Base, Unidade, Tipo Aplicação}
+    protocolos = {
+        "Nitrogênio (N)": {
+            "Orgânico": {"prod": "Farinha de Sangue ou Torta de Mamona", "dose": 3.0, "unid": "g/L de terra", "tipo": "Top Dressing (Cobertura)"},
+            "Mineral":  {"prod": "Nitrato de Cálcio ou Ureia", "dose": 0.8, "unid": "g/L de água", "tipo": "Rega (Drench)"}
+        },
+        "Fósforo (P)": {
+            "Orgânico": {"prod": "Farinha de Osso ou Guano de Morcego", "dose": 4.0, "unid": "g/L de terra", "tipo": "Top Dressing (Cobertura)"},
+            "Mineral":  {"prod": "MKP (Monofosfato de Potássio) ou MAP", "dose": 0.5, "unid": "g/L de água", "tipo": "Rega (Drench)"}
+        },
+        "Potássio (K)": {
+            "Orgânico": {"prod": "Cinzas de Madeira ou Kelp Meal", "dose": 5.0, "unid": "g/L de terra", "tipo": "Top Dressing (Cobertura)"},
+            "Mineral":  {"prod": "Sulfato de Potássio ou Nitrato de K", "dose": 0.6, "unid": "g/L de água", "tipo": "Rega (Drench)"}
+        },
+        "Cálcio (Ca)": {
+            "Orgânico": {"prod": "Calcário de Ostras ou Dolomita", "dose": 2.0, "unid": "g/L de terra", "tipo": "Top Dressing (Lento)"},
+            "Mineral":  {"prod": "Nitrato de Cálcio (CalMag)", "dose": 1.0, "unid": "ml/L de água", "tipo": "Rega ou Foliar (Apagar luz)"}
+        },
+        "Magnésio (Mg)": {
+            "Orgânico": {"prod": "Calcário Dolomítico", "dose": 2.0, "unid": "g/L de terra", "tipo": "Mistura no Solo"},
+            "Mineral":  {"prod": "Sulfato de Magnésio (Sal Amargo)", "dose": 1.5, "unid": "g/L de água", "tipo": "Foliar ou Rega"}
+        },
+        "Enxofre (S)": {
+            "Orgânico": {"prod": "Gesso Agrícola", "dose": 1.0, "unid": "g/L de terra", "tipo": "Top Dressing"},
+            "Mineral":  {"prod": "Sulfato de Magnésio", "dose": 1.0, "unid": "g/L de água", "tipo": "Rega"}
+        }
+    }
+
+    # Detecta se é Orgânico ou Mineral para selecionar o protocolo
+    is_organic = "Orgânico" in metodo_sel or "KNF" in metodo_sel
+    chave_metodo = "Orgânico" if is_organic else "Mineral"
+
+    # GERAÇÃO DOS CARDS INTELIGENTES
+    cols_def = st.columns(3) # Layout em 3 colunas para ficar robusto
     defs_items = list(db["DEFICIENCIAS_VISUAIS"].items())
     
     for i, (k, v) in enumerate(defs_items):
-        with cols_def[i % 4]:
+        if k.split(' ')[0] not in protocolos: continue # Pula micros se não tiver protocolo definido acima
+        
+        nutri_key = k.split(' ')[0] + " (" + k.split('(')[1]
+        proto = protocolos.get(nutri_key, {}).get(chave_metodo, {})
+        
+        # CÁLCULO MATEMÁTICO DA PRESCRIÇÃO
+        dose_total = 0
+        txt_calculo = ""
+        
+        if is_organic and vol_vaso != 999:
+            # Cálculo para Solo: Dose Base * Litragem do Vaso
+            dose_total = proto['dose'] * vol_vaso
+            txt_calculo = f"Aplique <b>{dose_total:.1f}g</b> totais neste vaso de {vol_vaso}L."
+        elif not is_organic:
+            # Cálculo para Mineral: Concentração por Litro de Água
+            txt_calculo = f"Dilua <b>{proto['dose']} {proto['unid'].split('/')[0]}</b> para cada 1L de água."
+        else:
+            # Outdoor/Chão
+            txt_calculo = f"Aplique <b>{proto['dose']*10:.1f}g</b> por m² de canteiro."
+
+        with cols_def[i % 3]:
             cor_c = v.get('cor_card', '#333')
             
-            with st.expander(f"👁️ {k}"):
+            with st.expander(f"🩺 {k}"):
+                # 1. O Diagnóstico Visual
                 st.markdown(f"""
-                <div style="border-left: 3px solid {cor_c}; padding-left: 10px;">
-                    <div style="font-size: 0.85rem; color: #eee; margin-bottom: 10px;">{v['sintoma']}</div>
-                    <div style="background: rgba(34, 197, 94, 0.1); padding: 5px; margin-bottom: 5px;">BIO: {v.get('correcao_bio', '-')}</div>
-                    <div style="background: rgba(239, 68, 68, 0.1); padding: 5px;">MINERAL: {v.get('correcao_quim', '-')}</div>
+                <div style="margin-bottom:10px; font-size:0.85rem; color:#ccc; border-left:2px solid {cor_c}; padding-left:8px;">
+                <b>Sintoma:</b> {v['sintoma']}
                 </div>
                 """, unsafe_allow_html=True)
-    
+                
+                # 2. A Prescrição Técnica (O "Ouro" do App)
+                st.markdown(f"""
+                <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:6px; border:1px solid #333;">
+                    <div style="color:{cor_c}; font-weight:bold; font-size:0.75rem; letter-spacing:1px; margin-bottom:5px;">
+                        RECOMENDAÇÃO TÉCNICA ({chave_metodo.upper()})
+                    </div>
+                    <div style="font-size:0.9rem; font-weight:bold; color:#fff; margin-bottom:5px;">
+                        Use: {proto['prod']}
+                    </div>
+                    <div style="background:{cor_c}20; color:{cor_c}; padding:6px; border-radius:4px; font-size:0.85rem; border:1px dashed {cor_c};">
+                        ⚖️ {txt_calculo}
+                    </div>
+                    <div style="font-size:0.75rem; color:#888; margin-top:6px;">
+                        <i>Modo: {proto['tipo']}</i>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                # 3. Observação Profissional (Condicional à Fase)
+                obs_pro = "Monitore o pH após aplicação."
+                if fase_atual == "Flora" and "Nitrogênio" in k:
+                    obs_pro = "⚠️ CUIDADO: Excesso de N na flora aborta flores. Use meia dose."
+                elif fase_atual == "Plântula":
+                    obs_pro = "⚠️ CUIDADO: Planta jovem. Aplique apenas 25% da dose recomendada."
+                
+                st.markdown(f"<div style='margin-top:8px; font-size:0.7rem; color:#aaa;'>📝 <b>Nota Agronômica:</b> {obs_pro}</div>", unsafe_allow_html=True)
+
     st.markdown("---")
     
-    # 2. GRÁFICO DE MARCHA DE ABSORÇÃO (COM ZOOM INTELIGENTE)
+    # --- 2. GRÁFICO DE MARCHA DE ABSORÇÃO (MANTIDO O ZOOM V22) ---
     st.markdown(f"#### 📊 Demanda Nutricional: Semana {semanas} (Foco)")
     
     nutri = db["NUTRI_MARCHA_ABSORCAO"]
     s_idx = min(semanas - 1, 11) if semanas > 0 else 0
     
-    # Configuração de Cores dos Nutrientes
     macros_config = {
         "N":  {"nome": "Nitrogênio", "cor": "#22c55e", "val": nutri['N'][s_idx]},
         "P":  {"nome": "Fósforo",    "cor": "#3b82f6", "val": nutri['P'][s_idx]},
@@ -795,60 +877,30 @@ with tab_nutri:
     
     fig = go.Figure()
     
-    # Adiciona as barras
     for symbol, d in macros_config.items():
-        # Lógica de destaque: A barra da semana atual fica 100% opaca, as outras 40%
-        # Isso substitui a linha vertical por um destaque visual nas barras
         opacity_list = [1.0 if x == semanas else 0.3 for x in nutri['semanas']]
-        
         fig.add_trace(go.Bar(
-            name=symbol, 
-            x=nutri['semanas'], 
-            y=nutri[symbol],
-            marker_color=d['cor'], 
-            marker_opacity=opacity_list, # Opacidade dinâmica
-            text=nutri[symbol], # Mostra o valor na barra
-            textposition='auto',
+            name=symbol, x=nutri['semanas'], y=nutri[symbol],
+            marker_color=d['cor'], marker_opacity=opacity_list,
+            text=nutri[symbol], textposition='auto',
             hovertemplate=f"Semana %{{x}}<br>{d['nome']}: <b>%{{y}}%</b><extra></extra>"
         ))
 
-    # CÁLCULO DO ZOOM (JANELA DESLIZANTE)
-    # Mostra 2 semanas antes e 2 semanas depois da atual.
-    # Ex: Se está na semana 5, mostra da 3 a 7.
     zoom_start = max(0.5, semanas - 2.5)
     zoom_end = min(12.5, semanas + 2.5)
 
     fig.update_layout(
-        barmode='group', 
-        paper_bgcolor='rgba(0,0,0,0)', 
-        plot_bgcolor='rgba(0,0,0,0)', 
-        font=dict(color="#ccc"), 
-        height=450, 
-        showlegend=True,
+        barmode='group', paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', 
+        font=dict(color="#ccc"), height=450, showlegend=True,
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         margin=dict(l=20, r=20, t=40, b=20),
-        xaxis=dict(
-            title="Semanas de Vida",
-            tickmode='linear',
-            tick0=1,
-            dtick=1,
-            showgrid=False,
-            range=[zoom_start, zoom_end] # AQUI ACONTECE O ZOOM PARCIAL
-        ),
-        yaxis=dict(
-            title="Demanda Relativa (%)",
-            showgrid=True, 
-            gridcolor='#333',
-            range=[0, 110]
-        )
+        xaxis=dict(title="Semanas de Vida", tickmode='linear', tick0=1, dtick=1, showgrid=False, range=[zoom_start, zoom_end]),
+        yaxis=dict(title="Demanda Relativa (%)", showgrid=True, gridcolor='#333', range=[0, 110])
     )
-    
-    # Removemos a linha vertical (fig.add_vline) e usamos o destaque de cor + zoom
     
     st.plotly_chart(fig, use_container_width=True)
     
-    # 3. CARDS DE VALORES EXATOS (SEMANA ATUAL)
-    st.markdown(f"**Valores de referência para a SEMANA {semanas}:**")
+    # Valores de Referência
     c_m = st.columns(6)
     for i, (symbol, d) in enumerate(macros_config.items()):
         with c_m[i]:
