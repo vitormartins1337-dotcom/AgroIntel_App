@@ -346,10 +346,11 @@ with col_b:
         <div style="font-size:0.7rem; color:#888; margin-top:5px;">Considerando método {metodo_sel.split(' ')[0]}</div>
     </div>""", unsafe_allow_html=True)
 
-# C. CARD DE CONSULTORIA SDI (POSICIONADO APÓS OS CARDS DE STATUS)
+# C. CARD DE CONSULTORIA SDI (CORRIGIDO PARA RENDERIZAR O HTML)
 if show_consultoria:
     titulo_card = f"CONSULTORIA: {ambiente_sel.split('(')[0].upper()}"
     
+    # O segredo é o unsafe_allow_html=True no final deste bloco
     st.markdown(f"""
     <div class="diag-card" style="border-left: 4px solid {cor_diag};">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #333; padding-bottom:10px;">
