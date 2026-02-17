@@ -346,16 +346,19 @@ with col_b:
         <div style="font-size:0.7rem; color:#888; margin-top:5px;">Considerando método {metodo_sel.split(' ')[0]}</div>
     </div>""", unsafe_allow_html=True)
 
-# C. CARD DE CONSULTORIA SDI (CORRIGIDO PARA RENDERIZAR O HTML)
+# C. CARD DE CONSULTORIA SDI (CORRIGIDO: VISUAL ROXO & RENDERIZAÇÃO HTML)
 if show_consultoria:
     titulo_card = f"CONSULTORIA: {ambiente_sel.split('(')[0].upper()}"
     
-    # O segredo é o unsafe_allow_html=True no final deste bloco
+    # Define a cor ROXA PROFISSIONAL fixa para o layout do card
+    cor_layout = "#a855f7"
+    
+    # ATENÇÃO: Copie exatamente até o final do parênteses do st.markdown
     st.markdown(f"""
-    <div class="diag-card" style="border-left: 4px solid {cor_diag};">
+    <div class="diag-card" style="border-left: 4px solid {cor_layout};">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #333; padding-bottom:10px;">
-            <div style="font-weight:900; color:{cor_diag}; letter-spacing:1px; font-size:1.1rem;">{titulo_card}</div>
-            <div style="background:{cor_diag}20; color:{cor_diag}; padding:4px 12px; border-radius:20px; font-size:0.75rem; font-weight:bold;">ANÁLISE PREMIUM</div>
+            <div style="font-weight:900; color:{cor_layout}; letter-spacing:1px; font-size:1.1rem;">{titulo_card}</div>
+            <div style="background:{cor_layout}20; color:{cor_layout}; padding:4px 12px; border-radius:20px; font-size:0.75rem; font-weight:bold;">ANÁLISE PREMIUM</div>
         </div>
         
         <div style="font-family:sans-serif; color:#e4e4e7;">
@@ -374,8 +377,8 @@ if show_consultoria:
                 <div style="font-size:0.95rem; margin-top:3px;">{txt_raiz}</div>
             </div>
             
-            <div style="margin-top:20px; padding:15px; background:rgba(255,255,255,0.05); border-radius:8px; border-left:3px solid {cor_diag};">
-                <span style="color:{cor_diag}; font-weight:bold; font-size:0.9rem;">SUGESTÃO DO ESPECIALISTA:</span><br>
+            <div style="margin-top:20px; padding:15px; background:rgba(255,255,255,0.05); border-radius:8px; border-left:3px solid {cor_layout};">
+                <span style="color:{cor_layout}; font-weight:bold; font-size:0.9rem;">SUGESTÃO DO ESPECIALISTA:</span><br>
                 <span style="color:#fff; font-size:1rem; line-height:1.5;">
                 {recomendacao_premium if recomendacao_premium else "Seu setup está tecnicamente equilibrado. Mantenha a constância nos parâmetros."}
                 </span>
