@@ -533,60 +533,64 @@ ciclo_total_dias = info_genetica.get('ciclo_dias', 90) + 30 # +30 de margem para
 dias_restantes = max(0, ciclo_total_dias - dias_vida)
 
 with col_a:
-    # Cores dinâmicas e dados seguros
+    # 1. Definição de Variáveis (Segurança)
     meta_vpd = fase_dados.get('meta_vpd', '-')
     meta_ppfd = fase_dados.get('meta_ppfd', '-')
     regime_luz = fase_dados.get('luz_h', '-')
     
-    st.markdown(f"""
-    <div class="status-card">
-        <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:15px;">
-            <div>
-                <div class="card-label" style="color:#a855f7;">FASE ATUAL ({info_genetica.get('tipo', 'Foto').upper()})</div>
-                <div class="big-val" style="font-size:1.8rem;">{fase_nome.upper()}</div>
-                <div style="background:#3b0764; color:#d8b4fe; padding:2px 8px; border-radius:4px; font-size:0.7rem; display:inline-block; font-weight:bold;">
-                    💡 LUZ: {regime_luz}H
-                </div>
-            </div>
-            <div style="text-align:right;">
-                <div class="card-label">CRONOGRAMA</div>
-                <div style="font-size:1.4rem; font-weight:bold; color:#fff;">{dias_vida} <span style="font-size:0.8rem; color:#888;">DIAS</span></div>
-                <div style="font-size:0.75rem; color:#a855f7;">SEMANA {semanas}</div>
-                <div style="font-size:0.7rem; color:#666; margin-top:2px;">Restam ~{dias_restantes} dias</div>
+    # 2. Montagem do HTML em Variável (Sem indentação interna para evitar erros)
+    html_status_card = f"""
+<div class="status-card">
+    <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:15px;">
+        <div>
+            <div class="card-label" style="color:#a855f7;">FASE ATUAL ({info_genetica.get('tipo', 'Foto').upper()})</div>
+            <div class="big-val" style="font-size:1.8rem;">{fase_nome.upper()}</div>
+            <div style="background:#3b0764; color:#d8b4fe; padding:2px 8px; border-radius:4px; font-size:0.7rem; display:inline-block; font-weight:bold;">
+                💡 LUZ: {regime_luz}H
             </div>
         </div>
+        <div style="text-align:right;">
+            <div class="card-label">CRONOGRAMA</div>
+            <div style="font-size:1.4rem; font-weight:bold; color:#fff;">{dias_vida} <span style="font-size:0.8rem; color:#888;">DIAS</span></div>
+            <div style="font-size:0.75rem; color:#a855f7;">SEMANA {semanas}</div>
+            <div style="font-size:0.7rem; color:#666; margin-top:2px;">Restam ~{dias_restantes} dias</div>
+        </div>
+    </div>
 
-        <div style="height:1px; background:#333; margin:10px 0;"></div>
+    <div style="height:1px; background:#333; margin:10px 0;"></div>
 
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px;">
-            <div>
-                <div class="card-label" style="margin-bottom:8px;">ALVOS DE REGA</div>
-                <div style="display:flex; gap:5px; flex-wrap:wrap;">
-                    <span class="meta-badge bg-ph" title="pH Ideal">💧 PH {info_metodo['ph_ideal']}</span>
-                    <span class="meta-badge bg-ec" title="Eletrocondutividade">⚡ EC {info_metodo['ec_ideal']}</span>
-                </div>
-            </div>
-            <div>
-                <div class="card-label" style="margin-bottom:8px;">ALVOS DE CLIMA</div>
-                <div style="display:flex; gap:5px; flex-wrap:wrap;">
-                    <span class="meta-badge" style="background:rgba(234, 179, 8, 0.15); color:#facc15; border:1px solid #854d0e;">
-                        ☀️ {meta_ppfd} PPFD
-                    </span>
-                    <span class="meta-badge" style="background:rgba(236, 72, 153, 0.15); color:#f472b6; border:1px solid #831843;">
-                        🌫️ VPD {meta_vpd}
-                    </span>
-                </div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px;">
+        <div>
+            <div class="card-label" style="margin-bottom:8px;">ALVOS DE REGA</div>
+            <div style="display:flex; gap:5px; flex-wrap:wrap;">
+                <span class="meta-badge bg-ph" title="pH Ideal">💧 PH {info_metodo['ph_ideal']}</span>
+                <span class="meta-badge bg-ec" title="Eletrocondutividade">⚡ EC {info_metodo['ec_ideal']}</span>
             </div>
         </div>
-        
-        <div style="margin-top:15px; background:rgba(255,255,255,0.05); padding:8px; border-radius:6px; display:flex; align-items:center; gap:10px;">
-            <div style="font-size:1.2rem;">🎯</div>
-            <div style="line-height:1.2;">
-                <div class="card-label" style="margin:0; color:#aaa;">FOCO ESTRATÉGICO</div>
-                <div style="color:#fff; font-size:0.85rem; font-weight:600;">{fase_dados.get('foco', '-')}</div>
+        <div>
+            <div class="card-label" style="margin-bottom:8px;">ALVOS DE CLIMA</div>
+            <div style="display:flex; gap:5px; flex-wrap:wrap;">
+                <span class="meta-badge" style="background:rgba(234, 179, 8, 0.15); color:#facc15; border:1px solid #854d0e;">
+                    ☀️ {meta_ppfd} PPFD
+                </span>
+                <span class="meta-badge" style="background:rgba(236, 72, 153, 0.15); color:#f472b6; border:1px solid #831843;">
+                    🌫️ VPD {meta_vpd}
+                </span>
             </div>
         </div>
-    </div>""", unsafe_allow_html=True)
+    </div>
+    
+    <div style="margin-top:15px; background:rgba(255,255,255,0.05); padding:8px; border-radius:6px; display:flex; align-items:center; gap:10px;">
+        <div style="font-size:1.2rem;">🎯</div>
+        <div style="line-height:1.2;">
+            <div class="card-label" style="margin:0; color:#aaa;">FOCO ESTRATÉGICO</div>
+            <div style="color:#fff; font-size:0.85rem; font-weight:600;">{fase_dados.get('foco', '-')}</div>
+        </div>
+    </div>
+</div>
+"""
+    # 3. Renderização Final (Onde a mágica acontece)
+    st.markdown(html_status_card, unsafe_allow_html=True)
 
 with col_b:
     st.markdown(f"""
