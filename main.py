@@ -528,7 +528,7 @@ st.markdown("""
 
 # CÁLCULO DE ESTIMATIVA & PROGRESSO
 ciclo_total_dias = info_genetica.get('ciclo_dias', 90) + 30 
-dias_restantes = max0, (ciclo_total_dias - dias_vida)
+dias_restantes = max0,(ciclo_total_dias - dias_vida)
 progresso_pct = min(100, max(0, int((dias_vida / ciclo_total_dias) * 100)))
 
 # ==============================================================================
