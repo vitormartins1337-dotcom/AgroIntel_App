@@ -181,100 +181,254 @@ with st.sidebar:
 
 
 # ==============================================================================
-# 4. SDI ENGINE (CÉREBRO LÓGICO) - CÁLCULOS ANTES DA EXIBIÇÃO
+# 4. PAINEL DE CONTROLE & INTELIGÊNCIA ARTIFICIAL (SDI ENGINE V17.0 - TITANIUM)
 # ==============================================================================
 
-# --- Inicialização Segura de Variáveis (Evita NameError) ---
-show_consultoria = False
-titulo_consultoria = "ANÁLISE SDI"
-txt_luz = ""; txt_espaco = ""; txt_raiz = ""; recomendacao_premium = ""
-cor_diag = "#333" # Cor padrão Dark
+# --- A. CÁLCULO CRONOLÓGICO PRELIMINAR (Para Contexto da IA) ---
+st.markdown("<br>", unsafe_allow_html=True)
+c_in1, c_in2, c_in3, c_in4 = st.columns([1.5, 1.8, 1, 1])
+
+with c_in1:
+    genetica_sel = st.selectbox("🧬 GENÉTICA", list(db.get("GENETICAS_PARAMETROS", {}).keys()))
+with c_in2:
+    ambiente_sel = st.selectbox("🏠 AMBIENTE", [
+        "Indoor (Luz Artificial Controlada)", 
+        "Estufa/Greenhouse (Sol + Luz Complementar)", 
+        "Estufa/Greenhouse (Somente Sol)", 
+        "Outdoor (Céu Aberto/Quintal)"
+    ])
+with c_in3:
+    n_plantas = st.number_input("Nº PLANTAS", 1, 1000, 4)
+with c_in4:
+    data_inicio = st.date_input("📅 INÍCIO", datetime.date.today() - datetime.timedelta(days=1))
+
+# Processamento de Dados Cronológicos
+dias_vida = (datetime.date.today() - data_inicio).days
+semanas = dias_vida // 7
+fase_atual = "Plântula"
+if dias_vida > 14: fase_atual = "Vegetativo"
+if dias_vida > 42: fase_atual = "Pré-Flora/Flora"
+
+# --- B. INPUTS FÍSICOS ---
+c_sub1, c_sub2, c_sub3, c_sub4 = st.columns([1.5, 1.2, 1.2, 1.5])
+with c_sub1:
+     metodo_sel = st.selectbox("🥣 MÉTODO/SUBSTRATO", list(db.get("METODOS_CULTIVO", {}).keys()))
+with c_sub2:
+    tipo_plantio = st.selectbox("🌱 ONDE ESTÃO?", ["Vasos", "Canteiro/Chão"])
+with c_sub3:
+    vol_vaso = 0
+    if tipo_plantio == "Vasos":
+        vol_vaso = st.selectbox("TAMANHO VASO", [4, 7, 11, 15, 20, 25, 30, 40, 50, 100], index=2, format_func=lambda x: f"{x} Litros")
+    else:
+        vol_vaso = 999 
+with c_sub4:
+    horas_luz = st.number_input("⏰ HORAS DE LUZ/DIA", 10, 24, 18, help="Fotoperíodo diário.")
+
+# --- INICIALIZAÇÃO DE VARIÁVEIS SEGURAS ---
 info_genetica = db["GENETICAS_PARAMETROS"][genetica_sel]
 info_metodo = db["METODOS_CULTIVO"][metodo_sel]
-
-# Mapa de Ocupação Física (m²)
 mapa_ocupacao = {4: 0.04, 7: 0.06, 11: 0.09, 15: 0.11, 20: 0.14, 25: 0.16, 30: 0.20, 40: 0.25, 50: 0.30, 100: 0.50}
 
-# --- A. LÓGICA DE ILUMINAÇÃO (PPFD & DLI) ---
-dli = 0
-if area_m2 > 0 and area_m2 != 999:
-    show_consultoria = True
-    
-    if "Indoor" in ambiente_sel:
-        ppfd = (watts_painel * 2.2) / area_m2
-        dli = ppfd * horas_luz * 0.0036
+watts_painel = 0; area_m2 = 0; show_consultoria = False
+txt_luz_titulo = ""; txt_luz_desc = ""
+txt_espaco_titulo = ""; txt_espaco_desc = ""
+txt_raiz_titulo = ""; txt_raiz_desc = ""
+recomendacao_premium = ""; cor_card = "#a855f7"
+
+# --- C. MOTOR DE INTELIGÊNCIA (ANÁLISE PROFUNDA) ---
+
+# 1. SETUP DO AMBIENTE
+if "Indoor" in ambiente_sel:
+    with st.expander("💡 CONFIGURAÇÃO DO GROW (Dimensionamento)", expanded=True):
+        c1, c2, c3 = st.columns(3)
+        with c1: watts_painel = st.number_input("POTÊNCIA LED (Watts Reais):", 50, 5000, 240)
+        with c2: largura = st.number_input("LARGURA (cm):", 40, 1000, 80)
+        with c3: profundidade = st.number_input("PROFUNDIDADE (cm):", 40, 1000, 80)
+        area_m2 = (largura * profundidade) / 10000
         
-        if dli < 15:
-            txt_luz = "⚠️ <b>BAIXA ENERGIA:</b> Luz fraca para floração densa. Buds ficarão 'aerados'."
-            cor_diag = "#eab308"
-            recomendacao_premium = "Aumente a potência do painel ou reduza a área de cultivo aproximando as paredes reflexivas."
-        elif 15 <= dli < 45:
-            txt_luz = "✅ <b>LUZ OTIMIZADA:</b> Quantidade perfeita de fótons para fotossíntese."
-            cor_diag = "#22c55e"
-        else:
-            txt_luz = "🔥 <b>LUZ EXTREMA:</b> Risco de queima. Obrigatório uso de CO2 (1200ppm)."
-            cor_diag = "#ef4444"
-            recomendacao_premium = "Afaste o painel ou use Dimmer para 80%."
+        if area_m2 > 0:
+            show_consultoria = True
+            # Cálculo PPFD Estimado (Eficiência média 2.3 umol/J)
+            ppfd = (watts_painel * 2.3) / area_m2
+            dli = ppfd * horas_luz * 0.0036
+            
+            # Análise Contextual (Idade x Luz)
+            if fase_atual == "Plântula":
+                meta_ppfd = 300
+                if ppfd > 400:
+                    txt_luz_titulo = f"⚠️ ALERTA: LUZ MUITO FORTE ({ppfd:.0f} µmol/s)"
+                    txt_luz_desc = "Para plântulas/clones, essa intensidade causa estresse luminosa. As folhas vão 'tacar' (curvar bordas)."
+                    recomendacao_premium = "Dimmer em 40% ou afaste o painel para 80cm."
+                    cor_card = "#eab308"
+                elif ppfd < 150:
+                    txt_luz_titulo = "⚠️ LUZ INSUFICIENTE (Estiolamento)"
+                    txt_luz_desc = "A planta vai esticar o caule buscando luz, ficando fraca."
+                    cor_card = "#eab308"
+                else:
+                    txt_luz_titulo = "✅ INTENSIDADE PERFEITA (VPD Foco)"
+                    txt_luz_desc = "Excelente para enraizamento. Mantenha umidade alta."
+                    cor_card = "#22c55e"
+            
+            elif fase_atual == "Vegetativo":
+                if ppfd < 400:
+                    txt_luz_titulo = "⚠️ CRESCIMENTO LENTO"
+                    txt_luz_desc = "Pouca energia para ramificação lateral. A planta crescerá devagar."
+                    cor_card = "#eab308"
+                elif ppfd > 700:
+                    txt_luz_titulo = "🔥 LIMITE METABÓLICO"
+                    txt_luz_desc = "Sem CO2 extra, você está no limite. Monitore deficiência de Magnésio."
+                else:
+                    txt_luz_titulo = "✅ VEGETATIVO VIGOROSO"
+                    txt_luz_desc = "Faixa ideal para criar estrutura robusta antes da flora."
+                    cor_card = "#22c55e"
+            
+            else: # Flora
+                if dli < 30:
+                    txt_luz_titulo = f"⚠️ BAIXA DENSIDADE DE BUDS (DLI {dli:.1f})"
+                    txt_luz_desc = "Falta energia para compactar as flores. Espere buds mais 'aerados'."
+                    recomendacao_premium = "Aumente a luz, aproxime o painel ou adicione luz lateral (side-lighting)."
+                    cor_card = "#eab308"
+                elif dli > 45:
+                    txt_luz_titulo = f"🔥 SATURAÇÃO ({dli:.1f} DLI)"
+                    txt_luz_desc = "Intensidade extrema. Obrigatório CO2 (1200ppm) e CalMag extra."
+                else:
+                    txt_luz_titulo = f"🚀 FLORAÇÃO OTIMIZADA ({dli:.1f} DLI)"
+                    txt_luz_desc = "Ponto ideal (Sweet Spot) para produção máxima de resina e peso."
+                    cor_card = "#22c55e"
 
-    elif "Híbrida" in ambiente_sel:
-        ppfd_art = (watts_painel * 2.2) / area_m2
-        if ppfd_art < 40:
-            txt_luz = "ℹ️ <b>SUPORTE FOTOPERÍODO:</b> Luz apenas para impedir floração precoce."
-            cor_diag = "#38bdf8"
-        else:
-            txt_luz = "⚡ <b>SUPLEMENTAÇÃO ATIVA:</b> Luz forte o suficiente para engorda."
-            cor_diag = "#a855f7"
+elif "Complementar" in ambiente_sel:
+    with st.expander("☀️💡 ESTUFA HÍBRIDA", expanded=True):
+        c1, c2, c3 = st.columns(3)
+        with c1: watts_painel = st.number_input("W COMPLEMENTAR:", 10, 5000, 100)
+        with c2: largura = st.number_input("LARGURA (cm):", 100, 5000, 200)
+        with c3: profundidade = st.number_input("COMPRIMENTO (cm):", 100, 5000, 200)
+        area_m2 = (largura * profundidade) / 10000
+        
+        if area_m2 > 0:
+            show_consultoria = True
+            ppfd_art = (watts_painel * 2.3) / area_m2
+            txt_luz_titulo = f"SUPORTE: {ppfd_art:.0f} µmol/s (Artificial)"
+            if ppfd_art < 50:
+                txt_luz_desc = "Função exclusiva de Fotoperíodo (impedir floração). Não gera peso extra."
+            else:
+                txt_luz_desc = "Luz suficiente para DLI Extensivo (Aumenta o peso final)."
 
-    elif "Somente Sol" in ambiente_sel:
-        txt_luz = "☀️ <b>ENERGIA SOLAR:</b> Dependência total do clima. Monitore dias nublados."
-        cor_diag = "#facc15"
-    
-    else:
-        txt_luz = "☀️ <b>SOL PLENO:</b> Intensidade máxima. O limite é a água."
+elif "Somente Sol" in ambiente_sel:
+    with st.expander("☀️ ÁREA SOLAR", expanded=True):
+        c1, c2 = st.columns(2)
+        with c1: largura = st.number_input("LARGURA (cm):", 100, 5000, 200)
+        with c2: profundidade = st.number_input("COMPRIMENTO (cm):", 100, 5000, 200)
+        area_m2 = (largura * profundidade) / 10000
+        show_consultoria = True
+        txt_luz_titulo = "☀️ ESPECTRO SOLAR COMPLETO"
+        txt_luz_desc = "O Sol fornece UV (aumenta resina) e IR (calor). O desafio é gerenciar a temperatura das raízes."
 
-# --- B. LÓGICA DE ESPAÇO (FÍSICA) ---
+else: # Outdoor
+    area_m2 = 999; show_consultoria = True
+    txt_luz_titulo = "☀️ CULTIVO AO AR LIVRE"
+    txt_luz_desc = "Exposição total. Monitore tempestades e pragas voadoras (mariposas/lagartas)."
+
+# 2. ANÁLISE DE ENGENHARIA DE ESPAÇO
 if area_m2 != 999 and show_consultoria:
     if tipo_plantio == "Vasos":
         area_uni = mapa_ocupacao.get(vol_vaso, 0.15)
-        area_total = n_plantas * area_uni
-        ocupacao = (area_total / area_m2) * 100
+        area_req = n_plantas * area_uni
+        ocupacao = (area_req / area_m2) * 100
         
-        if ocupacao > 100:
-            txt_espaco = f"🚫 <b>SEM ESPAÇO:</b> Impossível colocar {n_plantas} vasos nesse local."
-            cor_diag = "#ef4444"
-            recomendacao_premium = "Reduza a quantidade de plantas pela metade urgentemente."
+        if ocupacao > 110:
+            txt_espaco_titulo = f"🚫 ERRO FÍSICO CRÍTICO ({ocupacao:.0f}% Ocupado)"
+            txt_espaco_desc = f"Impossível acomodar {n_plantas} plantas. Elas vão crescer umas sobre as outras."
+            recomendacao_premium = "Descarte plantas fracas (Culling) para salvar as fortes."
+            cor_card = "#ef4444"
         elif ocupacao > 85:
-            txt_espaco = f"⚠️ <b>SUPERLOTAÇÃO:</b> Plantas coladas. Risco crítico de mofo."
-            if not recomendacao_premium: recomendacao_premium = "Faça desfolhação pesada na base para circular ar."
-            if cor_diag != "#ef4444": cor_diag = "#eab308"
+            txt_espaco_titulo = f"⚠️ ALTA DENSIDADE (SOG) - {ocupacao:.0f}%"
+            txt_espaco_desc = "Dossel fechado. Risco alto de microclima úmido (Mofo). Exige ventilação inferior."
+            if not recomendacao_premium: recomendacao_premium = "Faça Poda Lollipopping (Canela nua) agressiva."
         else:
-            txt_espaco = "✅ <b>ESPAÇAMENTO CORRETO:</b> Boa circulação de ar prevista."
+            txt_espaco_titulo = "✅ ESPAÇAMENTO SAUDÁVEL"
+            txt_espaco_desc = "Ar circula livremente. Menor risco de pragas e doenças fúngicas."
     else:
-        txt_espaco = "🌿 <b>CANTEIRO:</b> Sem restrição de vasos."
+        txt_espaco_titulo = "🌿 SOLO LIVRE"
+        txt_espaco_desc = "Sem restrição de vaso. Plantas tendem a triplicar de tamanho na flora."
 
-# --- C. LÓGICA DE RAÍZES (GENÉTICA) ---
+# 3. ANÁLISE DE SAÚDE RADICULAR (Complexa)
 if tipo_plantio == "Vasos":
-    # Automáticas
+    is_coco = "Mineral" in metodo_sel or "Hidro" in metodo_sel
+    
+    # Lógica Automática
     if info_genetica['tipo'] == "Auto":
-        if vol_vaso > 25: txt_raiz = "ℹ️ <b>DESPERDÍCIO:</b> Autos não usam mais que 25L."
-        elif vol_vaso < 7: txt_raiz = "⚠️ <b>VASO PEQUENO:</b> Vai limitar o tamanho da automática."
-        else: txt_raiz = "✅ <b>VOLUME IDEAL:</b> Perfeito para ciclo automático."
-    # Fotoperíodo
+        if vol_vaso < 7:
+            txt_raiz_titulo = "⚠️ VOLUME INSUFICIENTE"
+            txt_raiz_desc = "Automáticas não recuperam de estresse de raiz. Vaso pequeno = Planta anã."
+        elif vol_vaso > 25:
+            txt_raiz_titulo = "ℹ️ SOBRA DE SUBSTRATO"
+            txt_raiz_desc = "A planta entrará em floração antes de colonizar o fundo. Risco de zona anaeróbica (água parada) no fundo."
+        else:
+            txt_raiz_titulo = "✅ BUFFER IDEAL"
+            txt_raiz_desc = "Equilíbrio perfeito entre oxigenação e retenção de água."
+
+    # Lógica Fotoperíodo
     else:
-        if vol_vaso < 7: 
-            txt_raiz = "⚠️ <b>RAIZ PRESA:</b> Vaso muito pequeno para fotoperíodo."
-            if not recomendacao_premium: recomendacao_premium = "Faça ciclo vegetativo curto (max 2 semanas) ou transplante."
-        else: 
-            txt_raiz = "✅ <b>VOLUME ADEQUADO:</b> Sustenta bem a planta."
+        if is_coco: # Substrato Inerte
+            if vol_vaso < 4:
+                txt_raiz_titulo = "💧 CROP STEERING (Alta Frequência)"
+                txt_raiz_desc = "Em coco/lã, vasos pequenos exigem múltiplas regas por dia (4-6x). Se regar 1x, vai secar (Dryback excessivo)."
+            else:
+                txt_raiz_titulo = "✅ HIDRODENSIDADE OK"
+                txt_raiz_desc = "Vaso permite regas volumosas com boa oxigenação."
+        else: # Solo Orgânico
+            if vol_vaso < 11 and dias_vida > 30:
+                txt_raiz_titulo = "⚠️ RISCO DE ROOT BOUND"
+                txt_raiz_desc = "No orgânico, a planta come a terra. Vaso pequeno esgota nutrientes rápido. Transplante recomendado."
+                recomendacao_premium = "Faça transplante para vaso final (20L+) antes da floração."
+            else:
+                txt_raiz_titulo = "✅ VIDA DO SOLO ATIVA"
+                txt_raiz_desc = "Volume suficiente para manter a microbiologia (fungos/bactérias) estável."
 else:
-    txt_raiz = "🌿 <b>RAÍZES LIVRES:</b> Atenção à altura incontrolável."
+    txt_raiz_titulo = "🌍 RAÍZES NO CHÃO"
+    txt_raiz_desc = "Atenção: Solo argiloso pode compactar. Solo arenoso drena demais. Use cobertura morta (Mulching)."
 
-# --- D. CÁLCULOS GERAIS (TEMPO E YIELD) ---
-dias_vida = (datetime.date.today() - data_inicio).days
-semanas = dias_vida // 7
+# --- EXIBIÇÃO DO CARD (HTML PURO / SEM RECUO PARA EVITAR ERROS) ---
+if show_consultoria:
+    titulo_card = f"CONSULTORIA: {ambiente_sel.split('(')[0].upper()}"
+    
+    # O HTML deve estar colado na margem esquerda (flush left) dentro da f-string
+    html_content = f"""
+<div class="diag-card" style="border-left: 4px solid {cor_card};">
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:10px;">
+<div style="font-weight:900; color:{cor_card}; letter-spacing:1px; font-size:1.2rem;">{titulo_card}</div>
+<div style="background:{cor_card}20; color:{cor_card}; padding:4px 12px; border-radius:20px; font-size:0.75rem; font-weight:bold;">SDI TITANIUM</div>
+</div>
+<div style="font-family:sans-serif; color:#e4e4e7;">
+<div style="margin-bottom:15px;">
+<strong style="color:#aaa; font-size:0.75rem; letter-spacing:1px;">ANÁLISE FOTÔNICA ({fase_atual.upper()})</strong><br>
+<div style="font-size:1rem; font-weight:bold; margin-top:4px; color:#fff;">{txt_luz_titulo}</div>
+<div style="font-size:0.9rem; color:#ccc; line-height:1.4; margin-top:2px;">{txt_luz_desc}</div>
+</div>
+<div style="margin-bottom:15px;">
+<strong style="color:#aaa; font-size:0.75rem; letter-spacing:1px;">ENGENHARIA DE ESPAÇO</strong><br>
+<div style="font-size:1rem; font-weight:bold; margin-top:4px; color:#fff;">{txt_espaco_titulo}</div>
+<div style="font-size:0.9rem; color:#ccc; line-height:1.4; margin-top:2px;">{txt_espaco_desc}</div>
+</div>
+<div style="margin-bottom:15px;">
+<strong style="color:#aaa; font-size:0.75rem; letter-spacing:1px;">SAÚDE RADICULAR & MEIO</strong><br>
+<div style="font-size:1rem; font-weight:bold; margin-top:4px; color:#fff;">{txt_raiz_titulo}</div>
+<div style="font-size:0.9rem; color:#ccc; line-height:1.4; margin-top:2px;">{txt_raiz_desc}</div>
+</div>
+<div style="margin-top:25px; padding:15px; background:linear-gradient(90deg, {cor_card}15 0%, rgba(0,0,0,0) 100%); border-radius:8px; border-left:4px solid {cor_card};">
+<span style="color:{cor_card}; font-weight:bold; font-size:0.9rem;">PLANO DE AÇÃO DO ESPECIALISTA:</span><br>
+<span style="color:#fff; font-size:1rem; line-height:1.6; display:block; margin-top:6px;">
+{recomendacao_premium if recomendacao_premium else "Seu ecossistema está estável e produtivo. Mantenha o VPD na faixa de 1.0 kPa e monitore o pH do runoff semanalmente."}
+</span>
+</div>
+</div>
+</div>
+"""
+    st.markdown(html_content, unsafe_allow_html=True)
 
+# --- CÁLCULOS FINAIS PARA INTEGRAÇÃO ---
 fator_luz = 1.0
-if "Indoor" in ambiente_sel and dli > 0:
+if "Indoor" in ambiente_sel and 'dli' in locals():
     if dli < 20: fator_luz = 0.6
     elif dli > 40: fator_luz = 1.1
 
@@ -289,10 +443,6 @@ for k, v in db.get("FASES_DINAMICAS", {}).items():
     chave_limpa = k.split(' ')[0]
     limite = int(range_map.get(chave_limpa, 200) * fator_ciclo)
     if dias_vida <= limite: fase_nome = k; fase_dados = v; break
-
-# FIM DA PARTE 1 - COPIE E COLE A PARTE 2 ABAIXO DESTA LINHA
-
-# --- INÍCIO DA PARTE 2 (INTERFACE VISUAL) ---
 
 # ==============================================================================
 # 5. DASHBOARD VISUAL (O PALCO)
