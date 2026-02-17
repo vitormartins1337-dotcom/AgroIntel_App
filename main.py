@@ -208,6 +208,7 @@ class AgroEngine:
                     "ameacas": ["Botrytis (Mofo)", "Bananas"]
                 }
             }
+        }    
 
 # ==============================================================================
 # 2. SETUP VISUAL & CONFIGURAÇÃO
