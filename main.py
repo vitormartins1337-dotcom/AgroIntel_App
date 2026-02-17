@@ -528,11 +528,22 @@ st.markdown("""
 
 # CÁLCULO DE ESTIMATIVA & PROGRESSO
 ciclo_total_dias = info_genetica.get('ciclo_dias', 90) + 30 
+dias_restantes = max0, ciclo_total_dias - dias_vida)
+progresso_pct = min(100, max(0, int((dias_vida / ciclo_total_dias) * 100)))
+
+# ==============================================================================
+# CARDS SUPERIORES (STATUS V20 + YIELD)
+# ==============================================================================
+
+# 1. CRIAÇÃO DAS COLUNAS (Essencial para evitar o NameError)
+col_a, col_b = st.columns([1.8, 1.2]) 
+
+# 2. CÁLCULOS DE PROGRESSO E ESTRATÉGIA
+ciclo_total_dias = info_genetica.get('ciclo_dias', 90) + 30 
 dias_restantes = max(0, ciclo_total_dias - dias_vida)
 progresso_pct = min(100, max(0, int((dias_vida / ciclo_total_dias) * 100)))
 
-# DICIONÁRIO DE CONSELHOS PREMIUM (O "AGRÔNOMO DE BOLSO")
-# Traduz o foco técnico para uma instrução prática que qualquer um entende.
+# Dicionário de Conselhos (O "Agrônomo de Bolso")
 conselhos_fase = {
     "Plântula": "🌱 <b>Foco:</b> Sobrevivência. Mantenha a umidade alta (cúpula) e não exagere na água. A raiz ainda é frágil.",
     "Vegetativo": "🌿 <b>Foco:</b> Estrutura. A planta precisa crescer folhas e galhos fortes. Hora de podas e amarras (LST).",
@@ -541,27 +552,27 @@ conselhos_fase = {
     "Flora Média": "💪 <b>Foco:</b> Engorda. Os buds estão inchando. Garanta ventilação máxima para evitar mofo nos miolos.",
     "Flora Final": "💎 <b>Foco:</b> Resina e Sabor. As folhas vão amarelar (é normal). Reduza a temperatura para destacar os terpenos."
 }
-texto_estrategico = conselhos_fase.get(fase_nome, "Mantenha os parâmetros estáveis.")
+texto_estrategico = conselhos_fase.get(fase_nome, "Mantenha os parâmetros estáveis e monitore o clima.")
 
+# --- COLUNA A: STATUS CARD V20 (COM BARRA DE PROGRESSO & TRADUÇÃO) ---
 with col_a:
-    # Variáveis de Segurança
     meta_vpd = fase_dados.get('meta_vpd', '-')
     meta_ppfd = fase_dados.get('meta_ppfd', '-')
     regime_luz = fase_dados.get('luz_h', '-')
     
-    # HTML SEM INDENTAÇÃO (BLINDADO)
-    html_status_card = f"""
+    # HTML SEM INDENTAÇÃO (Para evitar bugs visuais)
+    html_status = f"""
 <div class="status-card">
 <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:10px;">
 <div>
 <div class="card-label" style="color:#a855f7;">FASE ATUAL ({info_genetica.get('tipo', 'Foto').upper()})</div>
 <div class="big-val" style="font-size:1.8rem; margin-bottom:0;">{fase_nome.upper()}</div>
-<div style="font-size:0.75rem; color:#888; font-style:italic; margin-bottom:5px;">Semanas: {semanas}</div>
+<div style="font-size:0.75rem; color:#888; font-style:italic; margin-bottom:5px;">Semanas de vida: {semanas}</div>
 <div style="background:#3b0764; color:#d8b4fe; padding:2px 8px; border-radius:4px; font-size:0.7rem; display:inline-block; font-weight:bold;">
 💡 LUZ: {regime_luz}H/DIA
 </div>
 </div>
-<div style="text-align:right; width:40%;">
+<div style="text-align:right; width:45%;">
 <div class="card-label">PROGRESSO DO CICLO</div>
 <div style="font-size:1.4rem; font-weight:bold; color:#fff;">{progresso_pct}% <span style="font-size:0.8rem; color:#888;">CONCLUÍDO</span></div>
 <div style="width:100%; background:#333; height:8px; border-radius:10px; margin-top:5px; overflow:hidden;">
@@ -577,7 +588,7 @@ with col_a:
 <div style="display:flex; flex-direction:column; gap:6px;">
 <div style="display:flex; align-items:center; gap:6px;">
 <span class="meta-badge bg-ph">💧 PH {info_metodo['ph_ideal']}</span>
-<span style="font-size:0.65rem; color:#666;">(Acidez da água)</span>
+<span style="font-size:0.65rem; color:#666;">(Acidez da Água)</span>
 </div>
 <div style="display:flex; align-items:center; gap:6px;">
 <span class="meta-badge bg-ec">⚡ EC {info_metodo['ec_ideal']}</span>
@@ -607,7 +618,21 @@ with col_a:
 </div>
 </div>
 """
-    st.markdown(html_status_card, unsafe_allow_html=True)
+    st.markdown(html_status, unsafe_allow_html=True)
+
+# --- COLUNA B: YIELD CARD ---
+with col_b:
+    html_yield = f"""
+    <div class="yield-card">
+        <div class="card-label" style="color:#fcd34d;">ESTIMATIVA DE COLHEITA</div>
+        <div class="big-val" style="color:#fef08a;">{yield_total:.0f}g</div>
+        <div class="sub-info" style="color:#fde047;">~ {yield_kg:.2f} kg (Seco)</div>
+        <div style="height:1px; background:#422006; margin:15px 0;"></div>
+        <div style="font-size:0.75rem; color:#ca8a04;">BASE: <b>{n_plantas} plantas</b> ({info_genetica['tipo']})</div>
+        <div style="font-size:0.7rem; color:#888; margin-top:5px;">Método: {metodo_sel.split(' ')[0]}</div>
+    </div>
+    """
+    st.markdown(html_yield, unsafe_allow_html=True)
 
 with col_b:
     st.markdown(f"""
