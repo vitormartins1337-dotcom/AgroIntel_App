@@ -753,7 +753,11 @@ SDI SYSTEM
 st.markdown("<br>", unsafe_allow_html=True)
 tab_nutri, tab_doctor = st.tabs(["🧪 NUTRIÇÃO & ABSORÇÃO", "🚑 DOCTOR GROW"])
 
+# ==============================================================================
+# ABA: NUTRIÇÃO & ABSORÇÃO (ZOOM DINÂMICO V22)
+# ==============================================================================
 with tab_nutri:
+    # 1. DIAGNÓSTICO VISUAL (MANTIDO)
     st.markdown("#### 🔍 Diagnóstico Visual")
     cols_def = st.columns(4)
     defs_items = list(db["DEFICIENCIAS_VISUAIS"].items())
@@ -761,7 +765,6 @@ with tab_nutri:
     for i, (k, v) in enumerate(defs_items):
         with cols_def[i % 4]:
             cor_c = v.get('cor_card', '#333')
-            # Placeholder para imagem
             
             with st.expander(f"👁️ {k}"):
                 st.markdown(f"""
@@ -773,10 +776,14 @@ with tab_nutri:
                 """, unsafe_allow_html=True)
     
     st.markdown("---")
-    st.markdown(f"#### 📊 Marcha de Absorção (Semana {semanas})")
+    
+    # 2. GRÁFICO DE MARCHA DE ABSORÇÃO (COM ZOOM INTELIGENTE)
+    st.markdown(f"#### 📊 Demanda Nutricional: Semana {semanas} (Foco)")
+    
     nutri = db["NUTRI_MARCHA_ABSORCAO"]
     s_idx = min(semanas - 1, 11) if semanas > 0 else 0
     
+    # Configuração de Cores dos Nutrientes
     macros_config = {
         "N":  {"nome": "Nitrogênio", "cor": "#22c55e", "val": nutri['N'][s_idx]},
         "P":  {"nome": "Fósforo",    "cor": "#3b82f6", "val": nutri['P'][s_idx]},
@@ -787,15 +794,70 @@ with tab_nutri:
     }
     
     fig = go.Figure()
+    
+    # Adiciona as barras
     for symbol, d in macros_config.items():
+        # Lógica de destaque: A barra da semana atual fica 100% opaca, as outras 40%
+        # Isso substitui a linha vertical por um destaque visual nas barras
+        opacity_list = [1.0 if x == semanas else 0.3 for x in nutri['semanas']]
+        
         fig.add_trace(go.Bar(
-            name=symbol, x=nutri['semanas'], y=nutri[symbol],
-            marker_color=d['cor'], opacity=0.9, text=symbol, textposition='inside'
+            name=symbol, 
+            x=nutri['semanas'], 
+            y=nutri[symbol],
+            marker_color=d['cor'], 
+            marker_opacity=opacity_list, # Opacidade dinâmica
+            text=nutri[symbol], # Mostra o valor na barra
+            textposition='auto',
+            hovertemplate=f"Semana %{{x}}<br>{d['nome']}: <b>%{{y}}%</b><extra></extra>"
         ))
-    fig.add_vline(x=semanas, line_width=4, line_color="rgba(255,255,255,0.5)")
-    fig.update_layout(barmode='group', paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color="#ccc"), height=500, showlegend=False)
+
+    # CÁLCULO DO ZOOM (JANELA DESLIZANTE)
+    # Mostra 2 semanas antes e 2 semanas depois da atual.
+    # Ex: Se está na semana 5, mostra da 3 a 7.
+    zoom_start = max(0.5, semanas - 2.5)
+    zoom_end = min(12.5, semanas + 2.5)
+
+    fig.update_layout(
+        barmode='group', 
+        paper_bgcolor='rgba(0,0,0,0)', 
+        plot_bgcolor='rgba(0,0,0,0)', 
+        font=dict(color="#ccc"), 
+        height=450, 
+        showlegend=True,
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        margin=dict(l=20, r=20, t=40, b=20),
+        xaxis=dict(
+            title="Semanas de Vida",
+            tickmode='linear',
+            tick0=1,
+            dtick=1,
+            showgrid=False,
+            range=[zoom_start, zoom_end] # AQUI ACONTECE O ZOOM PARCIAL
+        ),
+        yaxis=dict(
+            title="Demanda Relativa (%)",
+            showgrid=True, 
+            gridcolor='#333',
+            range=[0, 110]
+        )
+    )
+    
+    # Removemos a linha vertical (fig.add_vline) e usamos o destaque de cor + zoom
     
     st.plotly_chart(fig, use_container_width=True)
+    
+    # 3. CARDS DE VALORES EXATOS (SEMANA ATUAL)
+    st.markdown(f"**Valores de referência para a SEMANA {semanas}:**")
+    c_m = st.columns(6)
+    for i, (symbol, d) in enumerate(macros_config.items()):
+        with c_m[i]:
+            st.markdown(f"""
+            <div style="background:rgba(255,255,255,0.03); border-bottom:3px solid {d['cor']}; border-radius:6px; padding:10px; text-align:center;">
+                <div style="font-size:1.4rem; font-weight:900; color:#fff;">{d['val']}%</div>
+                <div style="font-size:0.7rem; color:{d['cor']}; font-weight:bold;">{d['nome'].upper()}</div>
+            </div>
+            """, unsafe_allow_html=True)
 
 with tab_doctor:
     st.markdown("### 🚑 Doctor Grow")
