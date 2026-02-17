@@ -533,12 +533,12 @@ st.markdown("""
 ciclo_total_dias = info_genetica.get('ciclo_dias', 90) + 30 # +30 de margem para vega
 dias_restantes = max(0, ciclo_total_dias - dias_vida)
 
-with col_a:   
     # Cores dinâmicas para as metas
     meta_vpd = fase_dados.get('meta_vpd', '-')
     meta_ppfd = fase_dados.get('meta_ppfd', '-')
     regime_luz = fase_dados.get('luz_h', '-')
     
+with col_a:
     st.markdown(f"""
     <div class="status-card">
         <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:15px;">
