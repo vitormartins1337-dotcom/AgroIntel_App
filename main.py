@@ -346,46 +346,43 @@ with col_b:
         <div style="font-size:0.7rem; color:#888; margin-top:5px;">Considerando método {metodo_sel.split(' ')[0]}</div>
     </div>""", unsafe_allow_html=True)
 
-# C. CARD DE CONSULTORIA SDI (CORRIGIDO: VISUAL ROXO & RENDERIZAÇÃO HTML)
+# C. CARD DE CONSULTORIA SDI (CORRIGIDO: SEM INDENTAÇÃO INTERNA)
 if show_consultoria:
     titulo_card = f"CONSULTORIA: {ambiente_sel.split('(')[0].upper()}"
     
-    # Define a cor ROXA PROFISSIONAL fixa para o layout do card
+    # Cor Fixa Roxa Profissional
     cor_layout = "#a855f7"
     
-    # ATENÇÃO: Copie exatamente até o final do parênteses do st.markdown
-    st.markdown(f"""
-    <div class="diag-card" style="border-left: 4px solid {cor_layout};">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #333; padding-bottom:10px;">
-            <div style="font-weight:900; color:{cor_layout}; letter-spacing:1px; font-size:1.1rem;">{titulo_card}</div>
-            <div style="background:{cor_layout}20; color:{cor_layout}; padding:4px 12px; border-radius:20px; font-size:0.75rem; font-weight:bold;">ANÁLISE PREMIUM</div>
-        </div>
-        
-        <div style="font-family:sans-serif; color:#e4e4e7;">
-            <div style="margin-bottom:12px;">
-                <strong style="color:#aaa; font-size:0.75rem; letter-spacing:1px;">LUZ & ENERGIA</strong><br>
-                <div style="font-size:0.95rem; margin-top:3px;">{txt_luz}</div>
-            </div>
-            
-            <div style="margin-bottom:12px;">
-                 <strong style="color:#aaa; font-size:0.75rem; letter-spacing:1px;">FÍSICA & ESPAÇO</strong><br>
-                <div style="font-size:0.95rem; margin-top:3px;">{txt_espaco if txt_espaco else "Sem restrições físicas."}</div>
-            </div>
-
-            <div style="margin-bottom:12px;">
-                 <strong style="color:#aaa; font-size:0.75rem; letter-spacing:1px;">RAÍZES</strong><br>
-                <div style="font-size:0.95rem; margin-top:3px;">{txt_raiz}</div>
-            </div>
-            
-            <div style="margin-top:20px; padding:15px; background:rgba(255,255,255,0.05); border-radius:8px; border-left:3px solid {cor_layout};">
-                <span style="color:{cor_layout}; font-weight:bold; font-size:0.9rem;">SUGESTÃO DO ESPECIALISTA:</span><br>
-                <span style="color:#fff; font-size:1rem; line-height:1.5;">
-                {recomendacao_premium if recomendacao_premium else "Seu setup está tecnicamente equilibrado. Mantenha a constância nos parâmetros."}
-                </span>
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    # IMPORTANTE: O HTML abaixo não pode ter espaços no início das linhas!
+    html_content = f"""
+<div class="diag-card" style="border-left: 4px solid {cor_layout};">
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #333; padding-bottom:10px;">
+<div style="font-weight:900; color:{cor_layout}; letter-spacing:1px; font-size:1.1rem;">{titulo_card}</div>
+<div style="background:{cor_layout}20; color:{cor_layout}; padding:4px 12px; border-radius:20px; font-size:0.75rem; font-weight:bold;">ANÁLISE PREMIUM</div>
+</div>
+<div style="font-family:sans-serif; color:#e4e4e7;">
+<div style="margin-bottom:12px;">
+<strong style="color:#aaa; font-size:0.75rem; letter-spacing:1px;">LUZ & ENERGIA</strong><br>
+<div style="font-size:0.95rem; margin-top:3px;">{txt_luz}</div>
+</div>
+<div style="margin-bottom:12px;">
+<strong style="color:#aaa; font-size:0.75rem; letter-spacing:1px;">FÍSICA & ESPAÇO</strong><br>
+<div style="font-size:0.95rem; margin-top:3px;">{txt_espaco if txt_espaco else "Sem restrições físicas."}</div>
+</div>
+<div style="margin-bottom:12px;">
+<strong style="color:#aaa; font-size:0.75rem; letter-spacing:1px;">RAÍZES</strong><br>
+<div style="font-size:0.95rem; margin-top:3px;">{txt_raiz}</div>
+</div>
+<div style="margin-top:20px; padding:15px; background:rgba(255,255,255,0.05); border-radius:8px; border-left:3px solid {cor_layout};">
+<span style="color:{cor_layout}; font-weight:bold; font-size:0.9rem;">SUGESTÃO DO ESPECIALISTA:</span><br>
+<span style="color:#fff; font-size:1rem; line-height:1.5;">
+{recomendacao_premium if recomendacao_premium else "Seu setup está tecnicamente equilibrado. Mantenha a constância nos parâmetros."}
+</span>
+</div>
+</div>
+</div>
+"""
+    st.markdown(html_content, unsafe_allow_html=True)
 
 # ==============================================================================
 # 6. ABAS: NUTRIÇÃO & DOCTOR (ESTILO MASTER V13)
