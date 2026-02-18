@@ -928,3 +928,128 @@ with tab_doctor:
             </div>
         </div>
         """, unsafe_allow_html=True)
+
+# ==============================================================================
+# ABA: LABORATÓRIO & FERRAMENTAS (NOVO DIFERENCIAL COMPETITIVO)
+# ==============================================================================
+with tab_tools:
+    st.markdown("#### 🧮 Ferramentas de Precisão")
+    st.caption("Calculadoras essenciais para o dia-a-dia do cultivador profissional.")
+
+    # DIVISÃO EM DUAS COLUNAS
+    col_tool_1, col_tool_2 = st.columns(2)
+
+    # --- FERRAMENTA 1: CALCULADORA DE VPD REAL (O MAIS IMPORTANTE) ---
+    with col_tool_1:
+        st.markdown("""
+        <div style="background:#0f172a; padding:15px; border-radius:10px; border:1px solid #1e293b; height:100%;">
+            <div style="color:#38bdf8; font-weight:bold; margin-bottom:10px;">🌫️ CALCULADORA DE VPD REAL</div>
+        """, unsafe_allow_html=True)
+        
+        # Inputs Interativos
+        t_ar = st.number_input("Temperatura Atual (°C):", 15.0, 40.0, 25.0, step=0.5)
+        rh_ar = st.number_input("Umidade Relativa (%):", 20, 99, 60, step=1)
+        offset_folha = st.slider("Diferença Temp. Folha (°C):", -5.0, 0.0, -2.0, help="A folha saudável é geralmente 1 a 2 graus mais fria que o ar.")
+        
+        # CÁLCULO CIENTÍFICO DE VPD
+        # 1. Pressão de Vapor de Saturação (SVP)
+        svp = 0.61078 * 2.71828 ** ((17.27 * t_ar) / (t_ar + 237.3))
+        # 2. Pressão de Vapor Real (AVP)
+        avp = svp * (rh_ar / 100)
+        # 3. SVP da Folha (Considerando que a folha é mais fria)
+        t_folha = t_ar + offset_folha
+        svp_folha = 0.61078 * 2.71828 ** ((17.27 * t_folha) / (t_folha + 237.3))
+        # 4. VPD Real
+        vpd_real = svp_folha - avp
+
+        # Diagnóstico do Resultado
+        cor_vpd = "#ccc"
+        msg_vpd = "Neutro"
+        if vpd_real < 0.4: 
+            cor_vpd = "#ef4444"; msg_vpd = "PERIGO: RISCO DE MOFO (Umidade Alta)"
+        elif 0.4 <= vpd_real < 0.8:
+            cor_vpd = "#4ade80"; msg_vpd = "IDEAL: VEGA INICIAL / CLONES"
+        elif 0.8 <= vpd_real < 1.2:
+            cor_vpd = "#22c55e"; msg_vpd = "IDEAL: VEGA / PRÉ-FLORA"
+        elif 1.2 <= vpd_real < 1.6:
+            cor_vpd = "#facc15"; msg_vpd = "IDEAL: FLORAÇÃO (Alta Transpiração)"
+        else:
+            cor_vpd = "#ef4444"; msg_vpd = "PERIGO: PLANTA DESIDRATADA (Ar Seco)"
+
+        st.markdown(f"""
+            <div style="text-align:center; margin-top:15px; background:rgba(255,255,255,0.05); padding:15px; border-radius:8px;">
+                <div style="font-size:2.5rem; font-weight:900; color:{cor_vpd}; line-height:1;">{vpd_real:.2f} <span style="font-size:1rem;">kPa</span></div>
+                <div style="font-size:0.8rem; color:#aaa; margin-top:5px;">DIAGNÓSTICO:</div>
+                <div style="font-size:0.9rem; font-weight:bold; color:{cor_vpd};">{msg_vpd}</div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        
+
+    # --- FERRAMENTA 2: ESTIMATIVA DE CUSTO (ROI) ---
+    with col_tool_2:
+        st.markdown("""
+        <div style="background:#1c1917; padding:15px; border-radius:10px; border:1px solid #292524; height:100%;">
+            <div style="color:#f59e0b; font-weight:bold; margin-bottom:10px;">⚡ CUSTO DE ENERGIA (MENSAL)</div>
+        """, unsafe_allow_html=True)
+        
+        # Inputs
+        # Usa o valor do painel já configurado na sidebar como padrão
+        potencia_w = st.number_input("Potência Total (LED + Exaustão) em Watts:", 0, 5000, int(watts_painel + 50))
+        horas_dia = st.number_input("Horas Ligado por Dia:", 0, 24, int(horas_luz))
+        tarifa_kwh = st.number_input("Preço do kWh (R$):", 0.1, 2.0, 0.90, step=0.05, help="Média Brasil: R$ 0,90")
+        
+        # Cálculo
+        consumo_diario_kwh = (potencia_w * horas_dia) / 1000
+        consumo_mensal_kwh = consumo_diario_kwh * 30
+        custo_mensal = consumo_mensal_kwh * tarifa_kwh
+        custo_ciclo = custo_mensal * 3.5 # Média de 3.5 meses por ciclo
+
+        st.markdown(f"""
+            <div style="margin-top:15px;">
+                <div style="display:flex; justify-content:space-between; border-bottom:1px dashed #444; padding-bottom:5px; margin-bottom:5px;">
+                    <span style="color:#aaa;">Consumo Mensal:</span>
+                    <span style="color:#fff;">{consumo_mensal_kwh:.1f} kWh</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(245, 158, 11, 0.1); padding:10px; border-radius:6px; border:1px solid rgba(245, 158, 11, 0.3);">
+                    <span style="color:#f59e0b; font-weight:bold;">CUSTO MÊS:</span>
+                    <span style="color:#fff; font-size:1.4rem; font-weight:bold;">R$ {custo_mensal:.2f}</span>
+                </div>
+                <div style="margin-top:10px; text-align:right;">
+                    <span style="font-size:0.8rem; color:#888;">Custo estimado do ciclo completo:</span><br>
+                    <span style="color:#ccc; font-weight:bold;">R$ {custo_ciclo:.2f}</span>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    st.markdown("---")
+    
+    # --- FERRAMENTA 3: GUIA VISUAL DE ESTÁGIOS (BENCHMARK) ---
+    st.markdown("#### 📸 Benchmark Visual (O que esperar)")
+    col_img1, col_img2 = st.columns([1, 2])
+    
+    with col_img1:
+        # Lógica para mostrar a imagem correta da fase
+        # Como não posso hospedar imagens reais aqui, uso placeholders descritivos que funcionam como "wireframe"
+        st.info(f"Visual Referência: **Semana {semanas}**")
+        if fase_atual == "Vegetativo":
+             
+        elif "Flora" in fase_atual:
+             
+        else:
+             
+             
+    with col_img2:
+        st.markdown(f"""
+        <div style="background:#222; padding:15px; border-radius:8px;">
+            <div style="font-weight:bold; color:#fff; margin-bottom:5px;">COMO SUA PLANTA DEVE ESTAR AGORA:</div>
+            <ul style="color:#ccc; font-size:0.9rem; line-height:1.6;">
+                <li><b>Estrutura:</b> {fase_dados.get('foco')} visível.</li>
+                <li><b>Cor:</b> Verde vibrante (não escuro demais, nem pálido).</li>
+                <li><b>Folhas:</b> { "Apontando para cima (rezando) buscando luz." if vpd_real > 0.8 else "Planas e relaxadas."}</li>
+                <li><b>Caule:</b> Espesso e rígido (se houver ventilação correta).</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
