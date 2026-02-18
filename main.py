@@ -1034,7 +1034,7 @@ with tab_tools:
         # Lógica para mostrar a imagem correta da fase
         # Como não posso hospedar imagens reais aqui, uso placeholders descritivos que funcionam como "wireframe"
         st.info(f"Visual Referência: **Semana {semanas}**")
-        if fase_atual == "Vegetativo":
+    if fase_atual == "Vegetativo":
              
         elif "Flora" in fase_atual:
              
