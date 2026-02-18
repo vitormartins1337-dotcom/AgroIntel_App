@@ -656,27 +656,27 @@ with col_b:
     """
     st.markdown(html_yield, unsafe_allow_html=True)
 
+
 # ==============================================================================
-# CARD CONSULTORIA: COMMAND CENTER V31 (HUD INTERATIVO & COLORIDO)
+# CARD CONSULTORIA: COMMAND CENTER V33 (CORRIGIDO & BLINDADO)
 # ==============================================================================
 if show_consultoria:
     titulo_card = f"COMANDO TÁTICO: SEMANA {semanas}"
     cor_brand = "#a855f7" 
     
     # 1. CÉREBRO DE INTELIGÊNCIA POR SEMANA (TARGETS EXATOS)
-    # Define metas numéricas precisas para cada estágio da vida da planta
-    # EC = Comida, VPD = Clima, DLI = Luz Total
+    # Define metas numéricas precisas para cada estágio
     targets_semanais = {
-        0:  {"fase": "Raízes",    "ec": "0.4-0.8", "vpd": "0.6-0.8", "dli": "10-15", "rega": "MIST", "cor": "#4ade80", "foco": "Alta Umidade"},
-        1:  {"fase": "Vega Inicial", "ec": "0.8-1.2", "vpd": "0.8-1.0", "dli": "15-20", "rega": "LEVE", "cor": "#4ade80", "foco": "Raiz Pivotante"},
-        2:  {"fase": "Vega Rápida", "ec": "1.2-1.5", "vpd": "0.9-1.1", "dli": "20-30", "rega": "MÉDIA", "cor": "#22c55e", "foco": "Folhagem"},
-        3:  {"fase": "Pré-Flora",   "ec": "1.5-1.8", "vpd": "1.0-1.2", "dli": "30-40", "rega": "FREQUENTE", "cor": "#22c55e", "foco": "Branching (Galhos)"},
-        4:  {"fase": "Stretch",     "ec": "1.8-2.0", "vpd": "1.1-1.3", "dli": "40-45", "rega": "PESADA", "cor": "#eab308", "foco": "Estrutura Final"},
-        5:  {"fase": "Botão Floral", "ec": "2.0-2.2", "vpd": "1.2-1.4", "dli": "45-50", "rega": "DRYBACK", "cor": "#eab308", "foco": "Pistilos Brancos"},
-        6:  {"fase": "Engorda 1",    "ec": "2.2-2.4", "vpd": "1.3-1.5", "dli": "50+",  "rega": "SHOTS", "cor": "#f59e0b", "foco": "Empilhamento (Stacking)"},
-        7:  {"fase": "Engorda 2",    "ec": "2.4-2.6", "vpd": "1.4-1.6", "dli": "50+",  "rega": "SHOTS", "cor": "#f59e0b", "foco": "Densidade"},
-        8:  {"fase": "Maturação",    "ec": "1.5-1.8", "vpd": "1.5-1.7", "dli": "40-30", "rega": "REDUZIDA", "cor": "#a855f7", "foco": "Tricomas Leitosos"},
-        9:  {"fase": "Flush",        "ec": "0.0-0.2", "vpd": "1.5-1.8", "dli": "30-20", "rega": "LAVAGEM", "cor": "#a855f7", "foco": "Senescência (Outono)"},
+        0:  {"fase": "Raízes",    "ec": "0.4-0.8", "vpd": "0.6-0.8", "dli": "10-15", "rega": "MIST", "foco": "Alta Umidade"},
+        1:  {"fase": "Vega Inicial", "ec": "0.8-1.2", "vpd": "0.8-1.0", "dli": "15-20", "rega": "LEVE", "foco": "Raiz Pivotante"},
+        2:  {"fase": "Vega Rápida", "ec": "1.2-1.5", "vpd": "0.9-1.1", "dli": "20-30", "rega": "MÉDIA", "foco": "Folhagem"},
+        3:  {"fase": "Pré-Flora",   "ec": "1.5-1.8", "vpd": "1.0-1.2", "dli": "30-40", "rega": "FREQUENTE", "foco": "Ramificação"},
+        4:  {"fase": "Stretch",     "ec": "1.8-2.0", "vpd": "1.1-1.3", "dli": "40-45", "rega": "PESADA", "foco": "Estrutura Final"},
+        5:  {"fase": "Botão Floral", "ec": "2.0-2.2", "vpd": "1.2-1.4", "dli": "45-50", "rega": "DRYBACK", "foco": "Pistilos Brancos"},
+        6:  {"fase": "Engorda 1",    "ec": "2.2-2.4", "vpd": "1.3-1.5", "dli": "50+",  "rega": "SHOTS", "foco": "Empilhamento"},
+        7:  {"fase": "Engorda 2",    "ec": "2.4-2.6", "vpd": "1.4-1.6", "dli": "50+",  "rega": "SHOTS", "foco": "Densidade"},
+        8:  {"fase": "Maturação",    "ec": "1.5-1.8", "vpd": "1.5-1.7", "dli": "40-30", "rega": "REDUZIDA", "foco": "Tricomas Leitosos"},
+        9:  {"fase": "Flush",        "ec": "0.0-0.2", "vpd": "1.5-1.8", "dli": "30-20", "rega": "LAVAGEM", "foco": "Senescência"},
     }
     
     # Seleciona a inteligência da semana atual
@@ -698,71 +698,58 @@ if show_consultoria:
     }
     tarefa_txt = tarefas.get(idx, "Monitore a maturação.")
 
-    # 3. HTML "HUD" (DESIGN DE BALÕES E CORES VIBRANTES)
+    # 3. HTML "HUD" SEM INDENTAÇÃO (CORRIGIDO PARA NÃO DAR ERRO)
     html_consultoria = f"""
 <div class="diag-card" style="border-left: 4px solid {cor_brand}; background: linear-gradient(170deg, #18181b 0%, #09090b 100%); padding:20px; border-radius:15px; margin-top:20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-    
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; padding-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.1);">
-        <div style="display:flex; align-items:center; gap:10px;">
-            <div style="background:{cor_brand}; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">🚀</div>
-            <div>
-                <div style="font-weight:900; color:{cor_brand}; font-size:1.1rem; letter-spacing:0.5px;">{titulo_card}</div>
-                <div style="font-size:0.75rem; color:#888;">FASE TÁTICA: <b style="color:#fff;">{t['fase'].upper()}</b></div>
-            </div>
-        </div>
-        <div style="text-align:right;">
-             <span style="background:rgba(255,255,255,0.1); color:#fff; padding:4px 12px; border-radius:20px; font-size:0.7rem; border:1px solid #444;">🎯 FOCO: {t['foco'].upper()}</span>
-        </div>
-    </div>
-
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:20px;">
-        
-        <div style="background:rgba(6, 182, 212, 0.05); border:1px solid rgba(6, 182, 212, 0.2); border-radius:12px; padding:12px;">
-            <div style="color:#22d3ee; font-size:0.75rem; font-weight:bold; margin-bottom:10px; display:flex; align-items:center; gap:5px;">
-                💧 ALIMENTAÇÃO (FEED)
-            </div>
-            <div style="display:flex; flex-wrap:wrap; gap:8px;">
-                <div title="Eletrocondutividade Alvo" style="background:#083344; color:#67e8f9; padding:5px 10px; border-radius:8px; font-size:0.8rem; border:1px solid #155e75; flex:1; text-align:center;">
-                    <div style="font-size:0.6rem; color:#aaa;">EC ALVO</div>
-                    <b>{t['ec']}</b> <span style="font-size:0.6rem;">mS</span>
-                </div>
-                <div title="Estratégia de Rega" style="background:#083344; color:#67e8f9; padding:5px 10px; border-radius:8px; font-size:0.8rem; border:1px solid #155e75; flex:1; text-align:center;">
-                    <div style="font-size:0.6rem; color:#aaa;">ESTRATÉGIA</div>
-                    <b>{t['rega']}</b>
-                </div>
-            </div>
-        </div>
-
-        <div style="background:rgba(234, 179, 8, 0.05); border:1px solid rgba(234, 179, 8, 0.2); border-radius:12px; padding:12px;">
-            <div style="color:#facc15; font-size:0.75rem; font-weight:bold; margin-bottom:10px; display:flex; align-items:center; gap:5px;">
-                ☀️ ENERGIA (CLIMATE)
-            </div>
-            <div style="display:flex; flex-wrap:wrap; gap:8px;">
-                <div title="Vapor Pressure Deficit" style="background:#422006; color:#fde047; padding:5px 10px; border-radius:8px; font-size:0.8rem; border:1px solid #854d0e; flex:1; text-align:center;">
-                    <div style="font-size:0.6rem; color:#aaa;">VPD (kPa)</div>
-                    <b>{t['vpd']}</b>
-                </div>
-                <div title="Daily Light Integral" style="background:#422006; color:#fde047; padding:5px 10px; border-radius:8px; font-size:0.8rem; border:1px solid #854d0e; flex:1; text-align:center;">
-                    <div style="font-size:0.6rem; color:#aaa;">DLI (Luz)</div>
-                    <b>{t['dli']}</b>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div style="background:linear-gradient(90deg, rgba(168, 85, 247, 0.1), rgba(0,0,0,0)); border-left:4px solid {cor_brand}; padding:12px; border-radius:0 8px 8px 0;">
-        <div style="color:{cor_brand}; font-weight:bold; font-size:0.85rem; margin-bottom:4px;">📋 ORDENS DO HEAD GROWER:</div>
-        <div style="color:#e4e4e7; font-size:0.9rem; line-height:1.4;">
-            {tarefa_txt}
-        </div>
-    </div>
-    
-    <div style="margin-top:15px; display:flex; gap:10px; overflow-x:auto;">
-         <span style="background:#222; color:#888; padding:4px 10px; border-radius:15px; font-size:0.65rem; white-space:nowrap; border:1px solid #333;">📦 Vaso: {vol_vaso}L</span>
-         <span style="background:#222; color:#888; padding:4px 10px; border-radius:15px; font-size:0.65rem; white-space:nowrap; border:1px solid #333;">💡 Painel: {watts_painel}W</span>
-         <span style="background:#222; color:#888; padding:4px 10px; border-radius:15px; font-size:0.65rem; white-space:nowrap; border:1px solid #333;">🌱 {n_plantas} Plantas</span>
-    </div>
-
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; padding-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.1);">
+<div style="display:flex; align-items:center; gap:10px;">
+<div style="background:{cor_brand}; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">🚀</div>
+<div>
+<div style="font-weight:900; color:{cor_brand}; font-size:1.1rem; letter-spacing:0.5px;">{titulo_card}</div>
+<div style="font-size:0.75rem; color:#888;">FASE TÁTICA: <b style="color:#fff;">{t['fase'].upper()}</b></div>
+</div>
+</div>
+<div style="text-align:right;">
+<span style="background:rgba(255,255,255,0.1); color:#fff; padding:4px 12px; border-radius:20px; font-size:0.7rem; border:1px solid #444;">🎯 FOCO: {t['foco'].upper()}</span>
+</div>
+</div>
+<div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:20px;">
+<div style="background:rgba(6, 182, 212, 0.05); border:1px solid rgba(6, 182, 212, 0.2); border-radius:12px; padding:12px;">
+<div style="color:#22d3ee; font-size:0.75rem; font-weight:bold; margin-bottom:10px; display:flex; align-items:center; gap:5px;">💧 NUTRIÇÃO (FEED)</div>
+<div style="display:flex; flex-wrap:wrap; gap:8px;">
+<div title="Eletrocondutividade Alvo" style="background:#083344; color:#67e8f9; padding:5px 10px; border-radius:8px; font-size:0.8rem; border:1px solid #155e75; flex:1; text-align:center;">
+<div style="font-size:0.6rem; color:#aaa;">EC ALVO</div>
+<b>{t['ec']}</b> <span style="font-size:0.6rem;">mS</span>
+</div>
+<div title="Estratégia de Rega" style="background:#083344; color:#67e8f9; padding:5px 10px; border-radius:8px; font-size:0.8rem; border:1px solid #155e75; flex:1; text-align:center;">
+<div style="font-size:0.6rem; color:#aaa;">ESTRATÉGIA</div>
+<b>{t['rega']}</b>
+</div>
+</div>
+</div>
+<div style="background:rgba(234, 179, 8, 0.05); border:1px solid rgba(234, 179, 8, 0.2); border-radius:12px; padding:12px;">
+<div style="color:#facc15; font-size:0.75rem; font-weight:bold; margin-bottom:10px; display:flex; align-items:center; gap:5px;">☀️ ENERGIA (CLIMATE)</div>
+<div style="display:flex; flex-wrap:wrap; gap:8px;">
+<div title="Vapor Pressure Deficit" style="background:#422006; color:#fde047; padding:5px 10px; border-radius:8px; font-size:0.8rem; border:1px solid #854d0e; flex:1; text-align:center;">
+<div style="font-size:0.6rem; color:#aaa;">VPD (kPa)</div>
+<b>{t['vpd']}</b>
+</div>
+<div title="Daily Light Integral" style="background:#422006; color:#fde047; padding:5px 10px; border-radius:8px; font-size:0.8rem; border:1px solid #854d0e; flex:1; text-align:center;">
+<div style="font-size:0.6rem; color:#aaa;">DLI (Luz)</div>
+<b>{t['dli']}</b>
+</div>
+</div>
+</div>
+</div>
+<div style="background:linear-gradient(90deg, rgba(168, 85, 247, 0.1), rgba(0,0,0,0)); border-left:4px solid {cor_brand}; padding:12px; border-radius:0 8px 8px 0;">
+<div style="color:{cor_brand}; font-weight:bold; font-size:0.85rem; margin-bottom:4px;">📋 ORDENS DO HEAD GROWER:</div>
+<div style="color:#e4e4e7; font-size:0.9rem; line-height:1.4;">{tarefa_txt}</div>
+</div>
+<div style="margin-top:15px; display:flex; gap:10px; overflow-x:auto;">
+<span style="background:#222; color:#888; padding:4px 10px; border-radius:15px; font-size:0.65rem; white-space:nowrap; border:1px solid #333;">📦 Vaso: {vol_vaso}L</span>
+<span style="background:#222; color:#888; padding:4px 10px; border-radius:15px; font-size:0.65rem; white-space:nowrap; border:1px solid #333;">💡 Painel: {watts_painel}W</span>
+<span style="background:#222; color:#888; padding:4px 10px; border-radius:15px; font-size:0.65rem; white-space:nowrap; border:1px solid #333;">🌱 {n_plantas} Plantas</span>
+</div>
 </div>
 """
     st.markdown(html_consultoria, unsafe_allow_html=True)
