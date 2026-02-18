@@ -642,20 +642,111 @@ with col_a:
 """
     st.markdown(html_status, unsafe_allow_html=True)
 
-# --- COLUNA B: YIELD CARD ---
+# ==============================================================================
+# CARD: PREDIÇÃO DE SAFRA INTELIGENTE (ALGORITMO V40)
+# ==============================================================================
 with col_b:
+    
+    # --- 1. MOTOR DE CÁLCULO DE BIOMASSA (O CÉREBRO) ---
+    
+    # A. Base de Produtividade por Genética (g/planta em condições médias)
+    base_yield = 40 # Média padrão konservadora
+    tipo_gen = info_genetica.get('tipo', 'Foto')
+    if "Sativa" in ambiente_sel: base_yield = 55
+    if "Indica" in ambiente_sel: base_yield = 45
+    if "Auto" in tipo_gen: base_yield = 30 # Autos produzem menos em média
+    
+    # B. Fator Vaso (Volume de Raiz)
+    # Vaso de 7L é o padrão (fator 1.0). 
+    # Vaso 20L -> fator 1.5 | Vaso 50L -> fator 2.2
+    # Usamos uma lógica simplificada de curva:
+    vol_ref = 7.0
+    if vol_vaso == 999: # Chão
+        fator_vaso = 3.5 # Planta no chão cresce muito
+        txt_vaso = "Cultivo em Solo (Raízes Livres)"
+    else:
+        # Fórmula: Cada dobra de tamanho adiciona 50% de yield, até um limite
+        import math
+        fator_vaso = 1 + (math.log(vol_vaso / vol_ref) * 0.6) if vol_vaso > vol_ref else (vol_vaso / vol_ref)
+        fator_vaso = max(0.5, min(fator_vaso, 4.0)) # Trava entre 0.5x e 4x
+        txt_vaso = f"Vaso de {vol_vaso}L"
+
+    # C. Fator Ambiente & Luz
+    fator_luz = 1.0
+    txt_luz_yield = "Luz Padrão"
+    
+    if "Indoor" in ambiente_sel:
+        # Indoor depende dos Watts
+        fator_luz = 1.2 + (watts_painel / (n_plantas * 100)) # Mais watts por planta = mais yield
+        txt_luz_yield = "Indoor Controlado"
+    elif "Outdoor" in ambiente_sel and "Luz Comp" in ambiente_sel: # Outdoor Misto
+        fator_luz = 1.5 # Sol + LED é o cenário mais produtivo
+        txt_luz_yield = "Sol Pleno + Complemento"
+    elif "Outdoor" in ambiente_sel:
+        fator_luz = 1.0 # Sol apenas (depende do clima, média)
+        txt_luz_yield = "Outdoor (Sol)"
+    elif "Estufa" in ambiente_sel:
+        fator_luz = 1.3
+        txt_luz_yield = "Estufa Agrícola"
+
+    # D. Fator Método (Nutrição)
+    fator_metodo = 1.0
+    if "Hidro" in metodo_sel or "Coco" in metodo_sel or "DWC" in metodo_sel:
+        fator_metodo = 1.3 # Hidro cresce 30% mais rápido/maior
+        txt_metodo_yield = "Alta Performance (Hidro/Coco)"
+    elif "Orgânico" in metodo_sel:
+        fator_metodo = 1.0 # Foco em qualidade, volume normal
+        txt_metodo_yield = "Orgânico (Solo Vivo)"
+    else:
+        txt_metodo_yield = "Convencional"
+
+    # --- CÁLCULO FINAL ---
+    estimativa_g_planta = base_yield * fator_vaso * fator_luz * fator_metodo
+    estimativa_total_g = estimativa_g_planta * n_plantas
+    estimativa_total_kg = estimativa_total_g / 1000
+
+    # Definição de Cores da Safra
+    cor_yield = "#facc15" # Amarelo Ouro
+    if estimativa_total_g > 500: cor_yield = "#22c55e" # Verde (Alta produção)
+    
+    # HTML DO CARD DE PRODUÇÃO (COM EXPLICAÇÃO DOS PARÂMETROS)
     html_yield = f"""
-    <div class="yield-card">
-        <div class="card-label" style="color:#fcd34d;">ESTIMATIVA DE COLHEITA</div>
-        <div class="big-val" style="color:#fef08a;">{yield_total:.0f}g</div>
-        <div class="sub-info" style="color:#fde047;">~ {yield_kg:.2f} kg (Seco)</div>
-        <div style="height:1px; background:#422006; margin:15px 0;"></div>
-        <div style="font-size:0.75rem; color:#ca8a04;">BASE: <b>{n_plantas} plantas</b> ({info_genetica['tipo']})</div>
-        <div style="font-size:0.7rem; color:#888; margin-top:5px;">Método: {metodo_sel.split(' ')[0]}</div>
+    <div class="yield-card" style="height:100%; display:flex; flex-direction:column; justify-content:space-between;">
+        
+        <div>
+            <div class="card-label" style="color:#fcd34d; margin-bottom:5px;">ESTIMATIVA DE SAFRA (SECO)</div>
+            <div class="big-val" style="color:{cor_yield}; font-size:2.2rem; line-height:1;">{estimativa_total_g:.0f}g</div>
+            <div class="sub-info" style="color:#fef08a; font-size:0.9rem;">~ {estimativa_total_kg:.2f} kg Totais</div>
+            <div style="font-size:0.75rem; color:#888; margin-top:2px;">Média: <b>{estimativa_g_planta:.0f}g / planta</b></div>
+        </div>
+
+        <div style="height:1px; background:#422006; margin:10px 0;"></div>
+
+        <div style="background:rgba(0,0,0,0.2); padding:8px; border-radius:6px; border:1px solid #422006;">
+            <div style="font-size:0.65rem; color:#ca8a04; font-weight:bold; margin-bottom:4px;">PARÂMETROS DO CÁLCULO:</div>
+            
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
+                <span style="font-size:0.7rem; color:#ccc;">🪴 {txt_vaso}</span>
+                <span style="font-size:0.7rem; color:{'#4ade80' if fator_vaso > 1.2 else '#888'}; font-weight:bold;">x{fator_vaso:.1f}</span>
+            </div>
+            
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
+                <span style="font-size:0.7rem; color:#ccc;">☀️ {txt_luz_yield}</span>
+                <span style="font-size:0.7rem; color:{'#4ade80' if fator_luz > 1.1 else '#888'}; font-weight:bold;">x{fator_luz:.1f}</span>
+            </div>
+            
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:0.7rem; color:#ccc;">💧 {txt_metodo_yield}</span>
+                <span style="font-size:0.7rem; color:{'#4ade80' if fator_metodo > 1.0 else '#888'}; font-weight:bold;">x{fator_metodo:.1f}</span>
+            </div>
+        </div>
+        
+        <div style="margin-top:8px; font-size:0.65rem; color:#666; font-style:italic; line-height:1.2;">
+            *Estimativa baseada em genética {info_genetica['tipo']} com manejo ideal. Variações climáticas afetam o resultado.
+        </div>
     </div>
     """
     st.markdown(html_yield, unsafe_allow_html=True)
-
 
 # ==============================================================================
 # CARD CONSULTORIA: OPERAÇÕES TÁTICAS V35 (MANEJO, PODAS & KNF)
