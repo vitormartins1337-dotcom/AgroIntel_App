@@ -756,7 +756,7 @@ if show_consultoria:
 
 # ABAS INFERIORES
 st.markdown("<br>", unsafe_allow_html=True)
-tab_nutri, tab_doctor = st.tabs(["🧪 NUTRIÇÃO & ABSORÇÃO", "🚑 DOCTOR GROW"])
+tab_nutri, tab_doctor, tab_tools = st.tabs(["🧪 NUTRIÇÃO & ABSORÇÃO", "🚑 DOCTOR GROW", "🧮 LABORATÓRIO & TOOLS"])
 
 
 # ==============================================================================
