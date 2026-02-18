@@ -658,97 +658,133 @@ with col_b:
 
 
 # ==============================================================================
-# CARD CONSULTORIA: COMMAND CENTER V33 (CORRIGIDO & BLINDADO)
+# CARD CONSULTORIA: OPERAÇÕES TÁTICAS V35 (MANEJO, PODAS & KNF)
 # ==============================================================================
 if show_consultoria:
-    titulo_card = f"COMANDO TÁTICO: SEMANA {semanas}"
+    titulo_card = f"OPERAÇÕES TÁTICAS: SEMANA {semanas}"
     cor_brand = "#a855f7" 
     
-    # 1. CÉREBRO DE INTELIGÊNCIA POR SEMANA (TARGETS EXATOS)
-    # Define metas numéricas precisas para cada estágio
-    targets_semanais = {
-        0:  {"fase": "Raízes",    "ec": "0.4-0.8", "vpd": "0.6-0.8", "dli": "10-15", "rega": "MIST", "foco": "Alta Umidade"},
-        1:  {"fase": "Vega Inicial", "ec": "0.8-1.2", "vpd": "0.8-1.0", "dli": "15-20", "rega": "LEVE", "foco": "Raiz Pivotante"},
-        2:  {"fase": "Vega Rápida", "ec": "1.2-1.5", "vpd": "0.9-1.1", "dli": "20-30", "rega": "MÉDIA", "foco": "Folhagem"},
-        3:  {"fase": "Pré-Flora",   "ec": "1.5-1.8", "vpd": "1.0-1.2", "dli": "30-40", "rega": "FREQUENTE", "foco": "Ramificação"},
-        4:  {"fase": "Stretch",     "ec": "1.8-2.0", "vpd": "1.1-1.3", "dli": "40-45", "rega": "PESADA", "foco": "Estrutura Final"},
-        5:  {"fase": "Botão Floral", "ec": "2.0-2.2", "vpd": "1.2-1.4", "dli": "45-50", "rega": "DRYBACK", "foco": "Pistilos Brancos"},
-        6:  {"fase": "Engorda 1",    "ec": "2.2-2.4", "vpd": "1.3-1.5", "dli": "50+",  "rega": "SHOTS", "foco": "Empilhamento"},
-        7:  {"fase": "Engorda 2",    "ec": "2.4-2.6", "vpd": "1.4-1.6", "dli": "50+",  "rega": "SHOTS", "foco": "Densidade"},
-        8:  {"fase": "Maturação",    "ec": "1.5-1.8", "vpd": "1.5-1.7", "dli": "40-30", "rega": "REDUZIDA", "foco": "Tricomas Leitosos"},
-        9:  {"fase": "Flush",        "ec": "0.0-0.2", "vpd": "1.5-1.8", "dli": "30-20", "rega": "LAVAGEM", "foco": "Senescência"},
+    # 1. CÉREBRO DE MANEJO AVANÇADO (O "MASTER GROWER")
+    # Dicionário contendo: Manejo Físico, Insumos (KNF/Bio), Previsão Futura e Correção de Erros Passados
+    manejos = {
+        0: {
+            "fase": "Enraizamento",
+            "tecnica": "Nenhuma poda. Foco total em umidade (Domo).",
+            "insumo": "🌱 <b>Bio:</b> Trichoderma e Micorrizas (No buraco de plantio).<br>🧪 <b>KNF:</b> LAB (Bactérias Ácido Láticas) diluído 1:1000.",
+            "futuro": "Prepare-se para transplantar semana que vem.",
+            "esqueceu": "Se não usou micorrizas, aplique via rega agora.",
+            "icone": "🌱"
+        },
+        1: {
+            "fase": "Vegetativo Inicial",
+            "tecnica": "Vento Indireto (Fortalecer caule). Leve LST se for Auto.",
+            "insumo": "🌿 <b>Bio:</b> Extrato de Algas (Ascophyllum nodosum).<br>🧪 <b>KNF:</b> FPJ (Suco Fermentado de Planta) - Brotos verdes.",
+            "futuro": "Semana que vem faremos a Poda Top (Se for Fotoperíodo).",
+            "esqueceu": "Caule fraco? Adicione Silício na rega urgente.",
+            "icone": "🌿"
+        },
+        2: {
+            "fase": "Estruturação",
+            "tecnica": "✂️ <b>Poda Top/FIM:</b> Cortar o topo para dividir em 2 galhos principais.<br>🪢 <b>LST:</b> Começar a amarrar galhos laterais para abrir a planta.",
+            "insumo": "💪 <b>Bio:</b> Bokashi (Cobertura de solo).<br>🧪 <b>KNF:</b> FAA (Aminoácido de Peixe) para explosão de nitrogênio.",
+            "futuro": "Instalação de Rede (Scrog) ou Estacas.",
+            "esqueceu": "Não podou ainda? Faça HOJE. Se esperar mais, vai atrasar a vega.",
+            "icone": "✂️"
+        },
+        3: {
+            "fase": "Pré-Flora / Stretch",
+            "tecnica": "🕸️ <b>SCROG:</b> Passe os galhos pela rede. Preencha os quadrados.<br>🧹 <b>Limpeza:</b> Remova folhas grandes que tapam brotos novos.",
+            "insumo": "🦴 <b>Bio:</b> CalMag e Ácidos Húmicos.<br>🧪 <b>KNF:</b> WCA (Cálcio Solúvel em Água) - Casca de ovo e vinagre.",
+            "futuro": "A planta vai dobrar de tamanho. Suba as luzes.",
+            "esqueceu": "<b>Perdeu o time da Poda Top?</b> NÃO corte mais. Use Supercropping (esmagar o caule) para controlar altura.",
+            "icone": "🕸️"
+        },
+        4: {
+            "fase": "Transição Floral",
+            "tecnica": "🦵 <b>Canelas Nuas (Lollipopping):</b> Limpe os 30% inferiores da planta. Remova tudo que não recebe luz direta.",
+            "insumo": "🌸 <b>Bio:</b> Melado de Cana (Carboidratos).<br>🧪 <b>KNF:</b> FFJ (Suco Fermentado de Fruta) - Banana/Manga.",
+            "futuro": "Fim do crescimento vertical. Foco em engorda.",
+            "esqueceu": "Não fez LST? A planta está muito alta? Dobre os galhos mais altos agressivamente (High Stress Training) antes que os buds formem.",
+            "icone": "🦵"
+        },
+        5: {
+            "fase": "Formação de Buds",
+            "tecnica": "🛑 <b>PARAR PODAS:</b> Não estresse mais a planta. Apenas remova folhas que estejam fazendo sombra direta em buds principais (Defoliação Estratégica).",
+            "insumo": "🔥 <b>Bio:</b> Guano de Morcego (Rico em Fósforo).<br>🧪 <b>KNF:</b> FFJ + WCA (Cálcio para estrutura floral).",
+            "futuro": "Os buds vão começar a engordar e pedir Potássio.",
+            "esqueceu": "Esqueceu o Lollipopping? Faça uma limpeza leve apenas nas folhas amarelas de baixo. Não tire folhas saudáveis agora.",
+            "icone": "🛑"
+        },
+        6: {
+            "fase": "Engorda (Bulking)",
+            "tecnica": "🏋️ <b>Suporte:</b> Os galhos vão pesar. Use yoyos ou amarre os colas principais no teto para não quebrar.",
+            "insumo": "💎 <b>Bio:</b> Chá de Banana ou Cinzas de Madeira.<br>🧪 <b>KNF:</b> WCAP (Cálcio-Fosfato) - Ossos queimados + Vinagre.",
+            "futuro": "Monitorar Mofo (Botrytis) nos buds densos.",
+            "esqueceu": "Buds pequenos? Aumente a intensidade da luz (DLI) e garanta que o VPD esteja alto (1.4+).",
+            "icone": "🏋️"
+        },
+        7: {
+            "fase": "Maturação",
+            "tecnica": "❄️ <b>Estresse Térmico (Opcional):</b> Reduzir temperatura noturna para 18°C para estimular resina e cor roxa.",
+            "insumo": "🍬 <b>Bio:</b> Finalizador (Terpenos) ou água de coco.<br>🧪 <b>KNF:</b> Apenas água ou LAB leve para limpar solo.",
+            "futuro": "Prepare-se para o corte (Colheita).",
+            "esqueceu": "Mofo no bud? CORTE o pedaço afetado imediatamente e coloque um saco plástico antes de tirar para não espalhar esporos.",
+            "icone": "❄️"
+        },
+        8: {
+            "fase": "Flush / Colheita",
+            "tecnica": "✂️ <b>Manicure:</b> Comece a remover folhas grandes (Fan leaves) para facilitar a secagem pós-colheita.",
+            "insumo": "🚿 <b>Flush:</b> Apenas Água pH 6.0. Sem cloro.",
+            "futuro": "Secagem e Cura.",
+            "esqueceu": "Não fez Flush? Se estiver no orgânico, tudo bem. Se for mineral, tente dar 2 dias de água pura pelo menos.",
+            "icone": "🚿"
+        }
     }
     
-    # Seleciona a inteligência da semana atual
-    idx = min(semanas, 9)
-    t = targets_semanais.get(idx, targets_semanais[9])
-    
-    # 2. DIRETRIZES DE MANEJO (TEXTOS EXPLICATIVOS)
-    tarefas = {
-        0: "🌱 <b>Clonagem/Semente:</b> Use cúpula para manter umidade > 80%. Não adube via solo ainda.",
-        1: "🌿 <b>Aclimatação:</b> Comece a abrir a cúpula. Introduza vento indireto para fortalecer o caule.",
-        2: "✂️ <b>Treinamento:</b> Aplique Toppping (Poda Apical) ou LST. Aumente o Nitrogênio.",
-        3: "🔍 <b>Prevenção:</b> Aplique óleo de neem e terra de diatomáceas. Última chance para transplantes.",
-        4: "🕸️ <b>Suporte:</b> A planta vai esticar 100%. Instale rede (Scrog) ou estacas. Suba as luzes.",
-        5: "🪒 <b>Lollipopping:</b> Remova 30% da parte inferior da planta (galhos de pipoca). Foco no topo.",
-        6: "💣 <b>PK Booster:</b> Introduza reforço de Fósforo/Potássio. Monitore queima nas pontas.",
-        7: "🌬️ <b>Ventilação:</b> Umidade deve ficar abaixo de 50% para evitar Botrytis nos buds gordos.",
-        8: "🍂 <b>Finalização:</b> Corte o Nitrogênio. Comece a reduzir a temperatura noturna (Purple).",
-        9: "🚿 <b>Flush:</b> Apenas água com pH ajustado. Observe os tricomas ficarem âmbar."
-    }
-    tarefa_txt = tarefas.get(idx, "Monitore a maturação.")
+    # Seleção da semana (Trava na última se passar)
+    idx_m = min(semanas, 8)
+    dado_m = manejos.get(idx_m, manejos[8])
 
-    # 3. HTML "HUD" SEM INDENTAÇÃO (CORRIGIDO PARA NÃO DAR ERRO)
+    # HTML BLINDADO (SEM INDENTAÇÃO INTERNA)
     html_consultoria = f"""
 <div class="diag-card" style="border-left: 4px solid {cor_brand}; background: linear-gradient(170deg, #18181b 0%, #09090b 100%); padding:20px; border-radius:15px; margin-top:20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; padding-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.1);">
 <div style="display:flex; align-items:center; gap:10px;">
-<div style="background:{cor_brand}; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">🚀</div>
+<div style="background:{cor_brand}; width:45px; height:45px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.5rem; box-shadow: 0 0 10px {cor_brand}40;">{dado_m['icone']}</div>
 <div>
 <div style="font-weight:900; color:{cor_brand}; font-size:1.1rem; letter-spacing:0.5px;">{titulo_card}</div>
-<div style="font-size:0.75rem; color:#888;">FASE TÁTICA: <b style="color:#fff;">{t['fase'].upper()}</b></div>
-</div>
-</div>
-<div style="text-align:right;">
-<span style="background:rgba(255,255,255,0.1); color:#fff; padding:4px 12px; border-radius:20px; font-size:0.7rem; border:1px solid #444;">🎯 FOCO: {t['foco'].upper()}</span>
-</div>
-</div>
-<div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:20px;">
-<div style="background:rgba(6, 182, 212, 0.05); border:1px solid rgba(6, 182, 212, 0.2); border-radius:12px; padding:12px;">
-<div style="color:#22d3ee; font-size:0.75rem; font-weight:bold; margin-bottom:10px; display:flex; align-items:center; gap:5px;">💧 NUTRIÇÃO (FEED)</div>
-<div style="display:flex; flex-wrap:wrap; gap:8px;">
-<div title="Eletrocondutividade Alvo" style="background:#083344; color:#67e8f9; padding:5px 10px; border-radius:8px; font-size:0.8rem; border:1px solid #155e75; flex:1; text-align:center;">
-<div style="font-size:0.6rem; color:#aaa;">EC ALVO</div>
-<b>{t['ec']}</b> <span style="font-size:0.6rem;">mS</span>
-</div>
-<div title="Estratégia de Rega" style="background:#083344; color:#67e8f9; padding:5px 10px; border-radius:8px; font-size:0.8rem; border:1px solid #155e75; flex:1; text-align:center;">
-<div style="font-size:0.6rem; color:#aaa;">ESTRATÉGIA</div>
-<b>{t['rega']}</b>
+<div style="font-size:0.75rem; color:#888;">PROTOCOLO: <b style="color:#fff;">{dado_m['fase'].upper()}</b></div>
 </div>
 </div>
 </div>
-<div style="background:rgba(234, 179, 8, 0.05); border:1px solid rgba(234, 179, 8, 0.2); border-radius:12px; padding:12px;">
-<div style="color:#facc15; font-size:0.75rem; font-weight:bold; margin-bottom:10px; display:flex; align-items:center; gap:5px;">☀️ ENERGIA (CLIMATE)</div>
-<div style="display:flex; flex-wrap:wrap; gap:8px;">
-<div title="Vapor Pressure Deficit" style="background:#422006; color:#fde047; padding:5px 10px; border-radius:8px; font-size:0.8rem; border:1px solid #854d0e; flex:1; text-align:center;">
-<div style="font-size:0.6rem; color:#aaa;">VPD (kPa)</div>
-<b>{t['vpd']}</b>
-</div>
-<div title="Daily Light Integral" style="background:#422006; color:#fde047; padding:5px 10px; border-radius:8px; font-size:0.8rem; border:1px solid #854d0e; flex:1; text-align:center;">
-<div style="font-size:0.6rem; color:#aaa;">DLI (Luz)</div>
-<b>{t['dli']}</b>
+<div style="display:grid; grid-template-columns: 1fr; gap:15px;">
+<div style="background:rgba(255,255,255,0.03); border:1px solid #333; border-radius:10px; padding:15px; position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; width:4px; height:100%; background:#22c55e;"></div>
+<div style="margin-left:10px;">
+<div style="color:#22c55e; font-size:0.8rem; font-weight:bold; letter-spacing:1px; margin-bottom:5px;">✂️ MANEJO FÍSICO (PODAS & TREINOS)</div>
+<div style="color:#e4e4e7; font-size:0.95rem; line-height:1.4;">{dado_m['tecnica']}</div>
 </div>
 </div>
+<div style="background:rgba(255,255,255,0.03); border:1px solid #333; border-radius:10px; padding:15px; position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; width:4px; height:100%; background:#3b82f6;"></div>
+<div style="margin-left:10px;">
+<div style="color:#3b82f6; font-size:0.8rem; font-weight:bold; letter-spacing:1px; margin-bottom:5px;">🧪 BIO-INSUMOS & KNF (RECEITA)</div>
+<div style="color:#ccc; font-size:0.9rem; line-height:1.4;">{dado_m['insumo']}</div>
 </div>
 </div>
-<div style="background:linear-gradient(90deg, rgba(168, 85, 247, 0.1), rgba(0,0,0,0)); border-left:4px solid {cor_brand}; padding:12px; border-radius:0 8px 8px 0;">
-<div style="color:{cor_brand}; font-weight:bold; font-size:0.85rem; margin-bottom:4px;">📋 ORDENS DO HEAD GROWER:</div>
-<div style="color:#e4e4e7; font-size:0.9rem; line-height:1.4;">{tarefa_txt}</div>
+<div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+<div style="background:rgba(234, 179, 8, 0.05); border:1px solid rgba(234, 179, 8, 0.2); padding:10px; border-radius:8px;">
+<div style="color:#facc15; font-size:0.7rem; font-weight:bold; margin-bottom:3px;">🔮 RADAR FUTURO</div>
+<div style="color:#ddd; font-size:0.8rem; line-height:1.3;">{dado_m['futuro']}</div>
 </div>
-<div style="margin-top:15px; display:flex; gap:10px; overflow-x:auto;">
-<span style="background:#222; color:#888; padding:4px 10px; border-radius:15px; font-size:0.65rem; white-space:nowrap; border:1px solid #333;">📦 Vaso: {vol_vaso}L</span>
-<span style="background:#222; color:#888; padding:4px 10px; border-radius:15px; font-size:0.65rem; white-space:nowrap; border:1px solid #333;">💡 Painel: {watts_painel}W</span>
-<span style="background:#222; color:#888; padding:4px 10px; border-radius:15px; font-size:0.65rem; white-space:nowrap; border:1px solid #333;">🌱 {n_plantas} Plantas</span>
+<div style="background:rgba(239, 68, 68, 0.05); border:1px solid rgba(239, 68, 68, 0.2); padding:10px; border-radius:8px;">
+<div style="color:#f87171; font-size:0.7rem; font-weight:bold; margin-bottom:3px;">⚠️ ESQUECEU O ANTERIOR?</div>
+<div style="color:#ddd; font-size:0.8rem; line-height:1.3;">{dado_m['esqueceu']}</div>
+</div>
+</div>
+</div>
+<div style="margin-top:15px; text-align:center; font-size:0.7rem; color:#555;">
+<i>Sugestões baseadas no método {metodo_sel.split(' ')[0]} para plantas com {semanas} semanas.</i>
 </div>
 </div>
 """
