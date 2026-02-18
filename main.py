@@ -657,94 +657,112 @@ with col_b:
     st.markdown(html_yield, unsafe_allow_html=True)
 
 # ==============================================================================
-# CARD DE CONSULTORIA PROFISSIONAL (CORRIGIDO: VISUAL PREMIUM & ZERO BUGS)
+# CARD CONSULTORIA: COMMAND CENTER V31 (HUD INTERATIVO & COLORIDO)
 # ==============================================================================
 if show_consultoria:
-    titulo_card = f"CONSULTORIA TÉCNICA: {ambiente_sel.split('(')[0].upper()}"
-    cor_brand = "#a855f7" # Roxo Profissional
+    titulo_card = f"COMANDO TÁTICO: SEMANA {semanas}"
+    cor_brand = "#a855f7" 
     
-    # 1. LÓGICA DE DETECÇÃO DE STATUS (Define cores dos alertas internos)
-    # Luz
-    cor_luz = "#4ade80" # Verde (Padrão)
-    if "EXCESSIVA" in txt_luz_titulo or "SATURAÇÃO" in txt_luz_titulo or "BAIXA" in txt_luz_titulo:
-        cor_luz = "#fbbf24" # Amarelo/Alerta
-    if "CRÍTICO" in txt_luz_titulo: cor_luz = "#ef4444" # Vermelho
+    # 1. CÉREBRO DE INTELIGÊNCIA POR SEMANA (TARGETS EXATOS)
+    # Define metas numéricas precisas para cada estágio da vida da planta
+    # EC = Comida, VPD = Clima, DLI = Luz Total
+    targets_semanais = {
+        0:  {"fase": "Raízes",    "ec": "0.4-0.8", "vpd": "0.6-0.8", "dli": "10-15", "rega": "MIST", "cor": "#4ade80", "foco": "Alta Umidade"},
+        1:  {"fase": "Vega Inicial", "ec": "0.8-1.2", "vpd": "0.8-1.0", "dli": "15-20", "rega": "LEVE", "cor": "#4ade80", "foco": "Raiz Pivotante"},
+        2:  {"fase": "Vega Rápida", "ec": "1.2-1.5", "vpd": "0.9-1.1", "dli": "20-30", "rega": "MÉDIA", "cor": "#22c55e", "foco": "Folhagem"},
+        3:  {"fase": "Pré-Flora",   "ec": "1.5-1.8", "vpd": "1.0-1.2", "dli": "30-40", "rega": "FREQUENTE", "cor": "#22c55e", "foco": "Branching (Galhos)"},
+        4:  {"fase": "Stretch",     "ec": "1.8-2.0", "vpd": "1.1-1.3", "dli": "40-45", "rega": "PESADA", "cor": "#eab308", "foco": "Estrutura Final"},
+        5:  {"fase": "Botão Floral", "ec": "2.0-2.2", "vpd": "1.2-1.4", "dli": "45-50", "rega": "DRYBACK", "cor": "#eab308", "foco": "Pistilos Brancos"},
+        6:  {"fase": "Engorda 1",    "ec": "2.2-2.4", "vpd": "1.3-1.5", "dli": "50+",  "rega": "SHOTS", "cor": "#f59e0b", "foco": "Empilhamento (Stacking)"},
+        7:  {"fase": "Engorda 2",    "ec": "2.4-2.6", "vpd": "1.4-1.6", "dli": "50+",  "rega": "SHOTS", "cor": "#f59e0b", "foco": "Densidade"},
+        8:  {"fase": "Maturação",    "ec": "1.5-1.8", "vpd": "1.5-1.7", "dli": "40-30", "rega": "REDUZIDA", "cor": "#a855f7", "foco": "Tricomas Leitosos"},
+        9:  {"fase": "Flush",        "ec": "0.0-0.2", "vpd": "1.5-1.8", "dli": "30-20", "rega": "LAVAGEM", "cor": "#a855f7", "foco": "Senescência (Outono)"},
+    }
     
-    # Espaço
-    cor_espaco = "#4ade80"
-    if "ALTA DENSIDADE" in txt_espaco_titulo: cor_espaco = "#fbbf24"
-    if "ERRO" in txt_espaco_titulo: cor_espaco = "#ef4444"
+    # Seleciona a inteligência da semana atual
+    idx = min(semanas, 9)
+    t = targets_semanais.get(idx, targets_semanais[9])
+    
+    # 2. DIRETRIZES DE MANEJO (TEXTOS EXPLICATIVOS)
+    tarefas = {
+        0: "🌱 <b>Clonagem/Semente:</b> Use cúpula para manter umidade > 80%. Não adube via solo ainda.",
+        1: "🌿 <b>Aclimatação:</b> Comece a abrir a cúpula. Introduza vento indireto para fortalecer o caule.",
+        2: "✂️ <b>Treinamento:</b> Aplique Toppping (Poda Apical) ou LST. Aumente o Nitrogênio.",
+        3: "🔍 <b>Prevenção:</b> Aplique óleo de neem e terra de diatomáceas. Última chance para transplantes.",
+        4: "🕸️ <b>Suporte:</b> A planta vai esticar 100%. Instale rede (Scrog) ou estacas. Suba as luzes.",
+        5: "🪒 <b>Lollipopping:</b> Remova 30% da parte inferior da planta (galhos de pipoca). Foco no topo.",
+        6: "💣 <b>PK Booster:</b> Introduza reforço de Fósforo/Potássio. Monitore queima nas pontas.",
+        7: "🌬️ <b>Ventilação:</b> Umidade deve ficar abaixo de 50% para evitar Botrytis nos buds gordos.",
+        8: "🍂 <b>Finalização:</b> Corte o Nitrogênio. Comece a reduzir a temperatura noturna (Purple).",
+        9: "🚿 <b>Flush:</b> Apenas água com pH ajustado. Observe os tricomas ficarem âmbar."
+    }
+    tarefa_txt = tarefas.get(idx, "Monitore a maturação.")
 
-    # Raiz
-    cor_raiz = "#4ade80"
-    if "RESTRIÇÃO" in txt_raiz_titulo or "ROOT BOUND" in txt_raiz_titulo or "SOBRA" in txt_raiz_titulo:
-        cor_raiz = "#fbbf24"
-
-    # 2. HTML BLINDADO (SEM INDENTAÇÃO INTERNA PARA NÃO QUEBRAR)
+    # 3. HTML "HUD" (DESIGN DE BALÕES E CORES VIBRANTES)
     html_consultoria = f"""
-<div class="diag-card" style="border-left: 4px solid {cor_brand}; background: linear-gradient(160deg, #120520 0%, #0a0a0a 100%); padding:20px; border-radius:12px; margin-top:20px;">
-<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:10px;">
-<div style="display:flex; align-items:center; gap:10px;">
-<div style="font-size:1.5rem;">👨‍🌾</div>
-<div>
-<div style="font-weight:900; color:{cor_brand}; letter-spacing:1px; font-size:1.1rem;">{titulo_card}</div>
-<div style="font-size:0.7rem; color:#888;">ANÁLISE DE ECOSSISTEMA</div>
-</div>
-</div>
-<div style="background:{cor_brand}20; color:{cor_brand}; padding:4px 12px; border-radius:20px; font-size:0.7rem; font-weight:bold; letter-spacing:1px;">
-SDI SYSTEM
-</div>
-</div>
-<div style="display:grid; grid-template-columns: 1fr; gap:15px;">
-<div style="background:rgba(255,255,255,0.03); border-radius:8px; padding:15px; border:1px solid #222;">
-<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
-<strong style="color:#aaa; font-size:0.75rem; letter-spacing:1px;">1. ENGENHARIA FOTÔNICA & CLIMÁTICA</strong>
-<span style="font-size:0.8rem; color:{cor_luz}; font-weight:bold;">● STATUS</span>
-</div>
-<div style="font-size:1rem; font-weight:bold; color:{cor_luz}; margin-bottom:5px;">
-{txt_luz_titulo.replace('✅','').replace('⚠️','').replace('🔥','').strip()}
-</div>
-<div style="font-size:0.9rem; color:#ccc; line-height:1.4; margin-bottom:8px;">
-<span style="color:{cor_brand}; font-weight:bold;">DIAGNÓSTICO:</span> {txt_luz_desc}
-</div>
-<div style="font-size:0.8rem; color:#888; border-top:1px dashed #333; padding-top:6px; margin-top:6px;">
-🌪️ <b>CLIMATOLOGIA (HVAC):</b> {txt_clima_desc if txt_clima_desc else "Ventilação passiva/natural."}
-</div>
-</div>
-<div style="background:rgba(255,255,255,0.03); border-radius:8px; padding:15px; border:1px solid #222;">
-<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
-<strong style="color:#aaa; font-size:0.75rem; letter-spacing:1px;">2. DENSIDADE & FÍSICA</strong>
-<span style="font-size:0.8rem; color:{cor_espaco}; font-weight:bold;">● STATUS</span>
-</div>
-<div style="font-size:1rem; font-weight:bold; color:{cor_espaco}; margin-bottom:5px;">
-{txt_espaco_titulo.replace('✅','').replace('⚠️','').replace('🚫','').strip()}
-</div>
-<div style="font-size:0.9rem; color:#ccc; line-height:1.4;">
-<span style="color:{cor_brand}; font-weight:bold;">OBSERVAÇÃO:</span> {txt_espaco_desc}
-</div>
-</div>
-<div style="background:rgba(255,255,255,0.03); border-radius:8px; padding:15px; border:1px solid #222;">
-<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
-<strong style="color:#aaa; font-size:0.75rem; letter-spacing:1px;">3. SUBSTRATO & RAÍZES</strong>
-<span style="font-size:0.8rem; color:{cor_raiz}; font-weight:bold;">● STATUS</span>
-</div>
-<div style="font-size:1rem; font-weight:bold; color:{cor_raiz}; margin-bottom:5px;">
-{txt_raiz_titulo.replace('✅','').replace('⚠️','').replace('ℹ️','').strip()}
-</div>
-<div style="font-size:0.9rem; color:#ccc; line-height:1.4;">
-<span style="color:{cor_brand}; font-weight:bold;">ANÁLISE:</span> {txt_raiz_desc}
-</div>
-</div>
-</div>
-<div style="margin-top:20px; padding:15px; background:linear-gradient(90deg, {cor_brand}20 0%, rgba(0,0,0,0) 100%); border-radius:8px; border-left:4px solid {cor_brand}; display:flex; gap:15px; align-items:center;">
-<div style="font-size:2rem;">🧠</div>
-<div>
-<span style="color:{cor_brand}; font-weight:900; font-size:0.8rem; letter-spacing:1px; text-transform:uppercase;">CONCLUSÃO DO ESPECIALISTA</span>
-<span style="color:#fff; font-size:0.95rem; line-height:1.5; display:block; margin-top:4px;">
-{recomendacao_premium if recomendacao_premium else "O setup está calibrado. Mantenha a estabilidade dos parâmetros (Homeostase) para maximizar a expressão genética."}
-</span>
-</div>
-</div>
+<div class="diag-card" style="border-left: 4px solid {cor_brand}; background: linear-gradient(170deg, #18181b 0%, #09090b 100%); padding:20px; border-radius:15px; margin-top:20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+    
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; padding-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.1);">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <div style="background:{cor_brand}; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">🚀</div>
+            <div>
+                <div style="font-weight:900; color:{cor_brand}; font-size:1.1rem; letter-spacing:0.5px;">{titulo_card}</div>
+                <div style="font-size:0.75rem; color:#888;">FASE TÁTICA: <b style="color:#fff;">{t['fase'].upper()}</b></div>
+            </div>
+        </div>
+        <div style="text-align:right;">
+             <span style="background:rgba(255,255,255,0.1); color:#fff; padding:4px 12px; border-radius:20px; font-size:0.7rem; border:1px solid #444;">🎯 FOCO: {t['foco'].upper()}</span>
+        </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:20px;">
+        
+        <div style="background:rgba(6, 182, 212, 0.05); border:1px solid rgba(6, 182, 212, 0.2); border-radius:12px; padding:12px;">
+            <div style="color:#22d3ee; font-size:0.75rem; font-weight:bold; margin-bottom:10px; display:flex; align-items:center; gap:5px;">
+                💧 ALIMENTAÇÃO (FEED)
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                <div title="Eletrocondutividade Alvo" style="background:#083344; color:#67e8f9; padding:5px 10px; border-radius:8px; font-size:0.8rem; border:1px solid #155e75; flex:1; text-align:center;">
+                    <div style="font-size:0.6rem; color:#aaa;">EC ALVO</div>
+                    <b>{t['ec']}</b> <span style="font-size:0.6rem;">mS</span>
+                </div>
+                <div title="Estratégia de Rega" style="background:#083344; color:#67e8f9; padding:5px 10px; border-radius:8px; font-size:0.8rem; border:1px solid #155e75; flex:1; text-align:center;">
+                    <div style="font-size:0.6rem; color:#aaa;">ESTRATÉGIA</div>
+                    <b>{t['rega']}</b>
+                </div>
+            </div>
+        </div>
+
+        <div style="background:rgba(234, 179, 8, 0.05); border:1px solid rgba(234, 179, 8, 0.2); border-radius:12px; padding:12px;">
+            <div style="color:#facc15; font-size:0.75rem; font-weight:bold; margin-bottom:10px; display:flex; align-items:center; gap:5px;">
+                ☀️ ENERGIA (CLIMATE)
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                <div title="Vapor Pressure Deficit" style="background:#422006; color:#fde047; padding:5px 10px; border-radius:8px; font-size:0.8rem; border:1px solid #854d0e; flex:1; text-align:center;">
+                    <div style="font-size:0.6rem; color:#aaa;">VPD (kPa)</div>
+                    <b>{t['vpd']}</b>
+                </div>
+                <div title="Daily Light Integral" style="background:#422006; color:#fde047; padding:5px 10px; border-radius:8px; font-size:0.8rem; border:1px solid #854d0e; flex:1; text-align:center;">
+                    <div style="font-size:0.6rem; color:#aaa;">DLI (Luz)</div>
+                    <b>{t['dli']}</b>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="background:linear-gradient(90deg, rgba(168, 85, 247, 0.1), rgba(0,0,0,0)); border-left:4px solid {cor_brand}; padding:12px; border-radius:0 8px 8px 0;">
+        <div style="color:{cor_brand}; font-weight:bold; font-size:0.85rem; margin-bottom:4px;">📋 ORDENS DO HEAD GROWER:</div>
+        <div style="color:#e4e4e7; font-size:0.9rem; line-height:1.4;">
+            {tarefa_txt}
+        </div>
+    </div>
+    
+    <div style="margin-top:15px; display:flex; gap:10px; overflow-x:auto;">
+         <span style="background:#222; color:#888; padding:4px 10px; border-radius:15px; font-size:0.65rem; white-space:nowrap; border:1px solid #333;">📦 Vaso: {vol_vaso}L</span>
+         <span style="background:#222; color:#888; padding:4px 10px; border-radius:15px; font-size:0.65rem; white-space:nowrap; border:1px solid #333;">💡 Painel: {watts_painel}W</span>
+         <span style="background:#222; color:#888; padding:4px 10px; border-radius:15px; font-size:0.65rem; white-space:nowrap; border:1px solid #333;">🌱 {n_plantas} Plantas</span>
+    </div>
+
 </div>
 """
     st.markdown(html_consultoria, unsafe_allow_html=True)
