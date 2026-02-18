@@ -1036,7 +1036,7 @@ with tab_tools:
         st.info(f"Visual Referência: **Semana {semanas}**")
     if fase_atual == "Vegetativo":
              
-        elif "Flora" in fase_atual:
+    elif "Flora" in fase_atual:
              
         else:
              
