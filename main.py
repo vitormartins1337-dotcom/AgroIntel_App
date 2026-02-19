@@ -1102,62 +1102,84 @@ with tab_nutri:
 
     st.markdown("---")
     
-    # --- 3. GRÁFICO DE MARCHA DE ABSORÇÃO (MANTIDO ZOOM V22) ---
-    st.markdown(f"#### 📊 Demanda Nutricional: Semana {semanas}")
+    # --- 3. GRÁFICO DE MARCHA DE ABSORÇÃO (V51 - VISUAL PROFISSIONAL) ---
+    ciclo_total_dias = info_genetica.get('ciclo_dias', 90) + 30 
+    progresso_ciclo = min(1.0, dias_vida / ciclo_total_dias)
+    idx_nutri = min(11, int(progresso_ciclo * 11.99)) # Índice de 0 a 11
+    estagio_atual = idx_nutri + 1 # Estágio de 1 a 12 para acender a barra
+
+    st.markdown(f"#### 📊 Demanda Nutricional (Fase Atual: {estagio_atual}/12)")
+    st.caption("Acompanhe o pico de absorção de cada elemento químico durante o ciclo.")
     nutri = db["NUTRI_MARCHA_ABSORCAO"]
     
     macros_config = {
-        "N":  {"nome": "Nitrogênio", "cor": "#22c55e", "val": nutri['N'][min(semanas-1,11)]},
-        "P":  {"nome": "Fósforo",    "cor": "#3b82f6", "val": nutri['P'][min(semanas-1,11)]},
-        "K":  {"nome": "Potássio",   "cor": "#a855f7", "val": nutri['K'][min(semanas-1,11)]},
-        "Ca": {"nome": "Cálcio",     "cor": "#f97316", "val": nutri['Ca'][min(semanas-1,11)]},
-        "Mg": {"nome": "Magnésio",   "cor": "#eab308", "val": nutri['Mg'][min(semanas-1,11)]},
-        "S":  {"nome": "Enxofre",    "cor": "#facc15", "val": nutri['S'][min(semanas-1,11)]}
+        "N":  {"nome": "Nitrogênio", "cor": "#22c55e", "val": nutri['N'][idx_nutri]},
+        "P":  {"nome": "Fósforo",    "cor": "#3b82f6", "val": nutri['P'][idx_nutri]},
+        "K":  {"nome": "Potássio",   "cor": "#a855f7", "val": nutri['K'][idx_nutri]},
+        "Ca": {"nome": "Cálcio",     "cor": "#f97316", "val": nutri['Ca'][idx_nutri]},
+        "Mg": {"nome": "Magnésio",   "cor": "#eab308", "val": nutri['Mg'][idx_nutri]},
+        "S":  {"nome": "Enxofre",    "cor": "#facc15", "val": nutri['S'][idx_nutri]}
     }
     
     fig = go.Figure()
     for symbol, d in macros_config.items():
-        opacity_list = [1.0 if x == semanas else 0.3 for x in nutri['semanas']]
+        # Destaca a barra atual e deixa as outras transparentes
+        opacity_list = [1.0 if x == estagio_atual else 0.3 for x in nutri['semanas']]
+        
         fig.add_trace(go.Bar(
-            name=symbol, x=nutri['semanas'], y=nutri[symbol],
-            marker_color=d['cor'], marker_opacity=opacity_list,
-            text=nutri[symbol], textposition='auto'
+            name=d['nome'], # Mostra o nome completo na legenda
+            x=nutri['semanas'], 
+            y=nutri[symbol],
+            marker_color=d['cor'], 
+            marker_opacity=opacity_list,
+            text=[f"{val}%" for val in nutri[symbol]], # Coloca o símbolo % dentro da barra
+            textposition='auto',
+            hovertemplate=f"<b>{d['nome']}</b><br>Absorção Máxima: %{{y}}%<extra></extra>"
         ))
     
-    zoom_start = max(0.5, semanas - 2.5)
-    zoom_end = min(12.5, semanas + 2.5)
+    # Calcula o zoom dinâmico para seguir a semana atual
+    zoom_start = max(0.5, estagio_atual - 2.5)
+    zoom_end = min(12.5, estagio_atual + 2.5)
+    
+    # Cria os textos do eixo X ("1ª Semana", "2ª Semana", etc.)
+    textos_semanas = [f"{s}ª Semana" for s in nutri['semanas']]
+    
     fig.update_layout(
-        barmode='group', paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', 
-        font=dict(color="#ccc"), height=400, showlegend=True,
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-        margin=dict(l=20, r=20, t=20, b=20),
-        xaxis=dict(tickmode='linear', tick0=1, dtick=1, showgrid=False, range=[zoom_start, zoom_end]),
-        yaxis=dict(showgrid=True, gridcolor='#333', range=[0, 110])
+        barmode='group', 
+        paper_bgcolor='rgba(0,0,0,0)', 
+        plot_bgcolor='rgba(0,0,0,0)', 
+        font=dict(color="#ccc"), 
+        height=480, # Gráfico um pouco mais alto para caber a legenda embaixo
+        showlegend=True,
+        # MOVE A LEGENDA PARA BAIXO E CENTRALIZA
+        legend=dict(
+            orientation="h", 
+            yanchor="top", 
+            y=-0.25, # Joga para baixo do eixo X
+            xanchor="center", 
+            x=0.5
+        ),
+        margin=dict(l=20, r=20, t=20, b=80), # Margem inferior maior
+        xaxis=dict(
+            tickmode='array', 
+            tickvals=nutri['semanas'],
+            ticktext=textos_semanas, # Usa os textos por extenso
+            showgrid=False, 
+            range=[zoom_start, zoom_end]
+        ),
+        yaxis=dict(
+            title="Taxa de Absorção Máxima",
+            showgrid=True, 
+            gridcolor='#333', 
+            range=[0, 110],
+            ticksuffix="%" # ADICIONA O "%" NOS NÚMEROS DA LATERAL (0%, 20%, 40%...)
+        )
     )
     
-    st.plotly_chart(fig, use_container_width=True)
-
-with tab_doctor:
-    st.markdown("### 🚑 Doctor Grow")
-    busca = st.text_input("🔍 Buscar Praga:", placeholder="Ex: Ácaros...")
     
-    for nome, info in db["DOCTOR_GROW_FITOSSANIDADE"].items():
-        if busca and busca.lower() not in nome.lower() and busca.lower() not in info['sintomas'].lower(): continue
-        cor_g = "#ef4444" if info['gravidade'] in ["ALTA", "CRÍTICA", "FATAL"] else "#eab308"
-        
-        st.markdown(f"""
-        <div class="doc-card" style="border-left-color: {cor_g};">
-            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                <div style="font-weight:bold; color:#fff;">{nome}</div>
-                <div style="color:{cor_g}; font-size:0.7rem; font-weight:bold;">{info['gravidade']}</div>
-            </div>
-            <div style="color:#ccc; font-size:0.9rem; margin-bottom:10px;"><i>{info['sintomas']}</i></div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                <div style="color:#4ade80; font-size:0.8rem;"><b>BIO:</b> {', '.join(info['bio'])}</div>
-                <div style="color:#f87171; font-size:0.8rem;"><b>SOS:</b> {', '.join(info['quimico'])}</div>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+    
+    # RENDERIZA O GRÁFICO ESCONDENDO A BARRA FLUTUANTE (modebar)
+    st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 
     # ==============================================================================
 # ABA: LABORATÓRIO & FERRAMENTAS (V34 - SUÍTE DE CÁLCULO MASTER)
