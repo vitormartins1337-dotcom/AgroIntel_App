@@ -749,102 +749,133 @@ with col_b:
     st.markdown(html_yield, unsafe_allow_html=True)
 
 # ==============================================================================
-# CARD CONSULTORIA: OPERAÇÕES TÁTICAS V35 (MANEJO, PODAS & KNF)
+# CARD CONSULTORIA: MANEJO INTEGRADO & PRESCRIÇÃO (V41 - MASTER GROWER)
 # ==============================================================================
 if show_consultoria:
     titulo_card = f"OPERAÇÕES TÁTICAS: SEMANA {semanas}"
     cor_brand = "#a855f7" 
     
-    # 1. CÉREBRO DE MANEJO AVANÇADO (O "MASTER GROWER")
-    # Dicionário contendo: Manejo Físico, Insumos (KNF/Bio), Previsão Futura e Correção de Erros Passados
+    # 1. VERIFICAÇÃO DO SISTEMA DE CULTIVO (ORGÂNICO vs MINERAL)
+    is_organic = "Orgânico" in metodo_sel or "KNF" in metodo_sel or "Solo Vivo" in metodo_sel
+    tipo_txt = "ORGÂNICO/BIOLÓGICO" if is_organic else "MINERAL/HIDRO"
+    
+    # 2. CÉREBRO DE MANEJO INTEGRADO (CRUZAMENTO DE FASE x MARCHA DE ABSORÇÃO)
     manejos = {
         0: {
-            "fase": "Enraizamento",
-            "tecnica": "Nenhuma poda. Foco total em umidade (Domo).",
-            "insumo": "🌱 <b>Bio:</b> Trichoderma e Micorrizas (No buraco de plantio).<br>🧪 <b>KNF:</b> LAB (Bactérias Ácido Láticas) diluído 1:1000.",
-            "futuro": "Prepare-se para transplantar semana que vem.",
-            "esqueceu": "Se não usou micorrizas, aplique via rega agora.",
-            "icone": "🌱"
+            "fase": "Enraizamento", "icone": "🌱",
+            "foco_nutri": "Fósforo (P) Inicial - Foco em expansão de raízes.",
+            "manejo": "Mantenha a umidade alta (70%+). O sistema radicular é frágil e a planta bebe água pelas folhas. Não encharque o vaso para evitar o fungo Pythium (Damping-off).",
+            "org_prod": "Micorrizas + Trichoderma (Bio-estimulantes)", "org_dose": 2.0, "org_modo": "Misturado no berço de plantio",
+            "min_prod": "Enraizador / Root Juice", "min_dose": 1.0, "min_modo": "ml/L de água (Rega muito leve)",
+            "futuro": "Prepare-se para o início do crescimento vegetativo vigoroso semana que vem.",
+            "esqueceu": "Plantou direto na terra sem micorrizas? Aplique via rega (drench) o mais rápido possível."
         },
         1: {
-            "fase": "Vegetativo Inicial",
-            "tecnica": "Vento Indireto (Fortalecer caule). Leve LST se for Auto.",
-            "insumo": "🌿 <b>Bio:</b> Extrato de Algas (Ascophyllum nodosum).<br>🧪 <b>KNF:</b> FPJ (Suco Fermentado de Planta) - Brotos verdes.",
-            "futuro": "Semana que vem faremos a Poda Top (Se for Fotoperíodo).",
-            "esqueceu": "Caule fraco? Adicione Silício na rega urgente.",
-            "icone": "🌿"
+            "fase": "Vegetativo Inicial", "icone": "🌿",
+            "foco_nutri": "Início da Curva de Nitrogênio (N) - Foco em folhagem.",
+            "manejo": "A planta está desenvolvendo seus 'painéis solares'. Introduza uma leve brisa de vento para fortalecer o caule principal. Deixe o topo do solo secar levemente entre as regas para as raízes buscarem água.",
+            "org_prod": "Húmus de Minhoca ou FPJ (Suco de Brotos/KNF)", "org_dose": 5.0, "org_modo": "g/L de substrato (Top Dressing)",
+            "min_prod": "Fertilizante Grow (Parte A+B)", "min_dose": 1.5, "min_modo": "ml/L de água (Rega)",
+            "futuro": "Na próxima semana, a planta terá nós suficientes para a primeira poda (Topping).",
+            "esqueceu": "O caule está muito fino e a planta caindo? Coloque um tutor (haste) e aumente a ventilação oscilante urgentemente."
         },
         2: {
-            "fase": "Estruturação",
-            "tecnica": "✂️ <b>Poda Top/FIM:</b> Cortar o topo para dividir em 2 galhos principais.<br>🪢 <b>LST:</b> Começar a amarrar galhos laterais para abrir a planta.",
-            "insumo": "💪 <b>Bio:</b> Bokashi (Cobertura de solo).<br>🧪 <b>KNF:</b> FAA (Aminoácido de Peixe) para explosão de nitrogênio.",
-            "futuro": "Instalação de Rede (Scrog) ou Estacas.",
-            "esqueceu": "Não podou ainda? Faça HOJE. Se esperar mais, vai atrasar a vega.",
-            "icone": "✂️"
+            "fase": "Estruturação", "icone": "✂️",
+            "foco_nutri": "Pico de Nitrogênio (N) e Demanda de Cálcio (Ca).",
+            "manejo": "Hora de quebrar a dominância apical! Faça a Poda Top ou FIM para multiplicar os topos. Inicie amarras (LST) dobrando o caule para a luz penetrar no meio da planta.",
+            "org_prod": "Farinha de Sangue + Torta de Mamona", "org_dose": 4.0, "org_modo": "g/L de substrato (Top Dressing)",
+            "min_prod": "Fertilizante Grow Base + CalMag", "min_dose": 2.0, "min_modo": "ml/L de água (Rega)",
+            "futuro": "A planta começará a alargar. Prepare a rede (Scrog) se for usar.",
+            "esqueceu": "Não fez LST ainda? O topo principal vai sugar toda a energia. Dobre-o hoje mesmo."
         },
         3: {
-            "fase": "Pré-Flora / Stretch",
-            "tecnica": "🕸️ <b>SCROG:</b> Passe os galhos pela rede. Preencha os quadrados.<br>🧹 <b>Limpeza:</b> Remova folhas grandes que tapam brotos novos.",
-            "insumo": "🦴 <b>Bio:</b> CalMag e Ácidos Húmicos.<br>🧪 <b>KNF:</b> WCA (Cálcio Solúvel em Água) - Casca de ovo e vinagre.",
-            "futuro": "A planta vai dobrar de tamanho. Suba as luzes.",
-            "esqueceu": "<b>Perdeu o time da Poda Top?</b> NÃO corte mais. Use Supercropping (esmagar o caule) para controlar altura.",
-            "icone": "🕸️"
+            "fase": "Pré-Flora / Stretch", "icone": "🕸️",
+            "foco_nutri": "Transição N para P/K - Explosão de crescimento.",
+            "manejo": "A planta vai dobrar de tamanho (Stretch). Ajuste a altura das luzes diariamente. Limpe as folhas velhas que tocam o solo para melhorar o fluxo de ar e evitar pragas.",
+            "org_prod": "Farinha de Osso + Bokashi", "org_dose": 3.0, "org_modo": "g/L de substrato (Mistura na cobertura)",
+            "min_prod": "Transição (50% Grow / 50% Bloom)", "min_dose": 2.0, "min_modo": "ml/L de água (Rega)",
+            "futuro": "Os primeiros pistilos (pelinhos brancos) vão aparecer. Fim do crescimento vertical.",
+            "esqueceu": "Esqueceu da poda na Vega? NÃO CORTE NADA AGORA. Faça Supercropping (dobre e esmague levemente os galhos altos) para igualar o dossel."
         },
         4: {
-            "fase": "Transição Floral",
-            "tecnica": "🦵 <b>Canelas Nuas (Lollipopping):</b> Limpe os 30% inferiores da planta. Remova tudo que não recebe luz direta.",
-            "insumo": "🌸 <b>Bio:</b> Melado de Cana (Carboidratos).<br>🧪 <b>KNF:</b> FFJ (Suco Fermentado de Fruta) - Banana/Manga.",
-            "futuro": "Fim do crescimento vertical. Foco em engorda.",
-            "esqueceu": "Não fez LST? A planta está muito alta? Dobre os galhos mais altos agressivamente (High Stress Training) antes que os buds formem.",
-            "icone": "🦵"
+            "fase": "Formação de Botão Floral", "icone": "🦵",
+            "foco_nutri": "Pico de Fósforo (P) - Formação de sítios florais.",
+            "manejo": "Faça o Lollipopping: raspe e remova folhas e galhos finos dos 30% inferiores da planta (as 'canelas'). Concentre toda a energia da planta nos topos que recebem luz.",
+            "org_prod": "Guano de Morcego (Bloom) + FFJ (Fermentado de Fruta)", "org_dose": 4.0, "org_modo": "g/L de substrato / Rega",
+            "min_prod": "Fertilizante Bloom Base", "min_dose": 2.5, "min_modo": "ml/L de água (Rega)",
+            "futuro": "Os botões vão começar a inchar. Demanda de Potássio vai subir drasticamente.",
+            "esqueceu": "Não limpou a parte de baixo? A planta vai gastar energia gerando 'buds pipoca' (soltos e sem peso). Limpe apenas os micro-galhos inferiores hoje."
         },
         5: {
-            "fase": "Formação de Buds",
-            "tecnica": "🛑 <b>PARAR PODAS:</b> Não estresse mais a planta. Apenas remova folhas que estejam fazendo sombra direta em buds principais (Defoliação Estratégica).",
-            "insumo": "🔥 <b>Bio:</b> Guano de Morcego (Rico em Fósforo).<br>🧪 <b>KNF:</b> FFJ + WCA (Cálcio para estrutura floral).",
-            "futuro": "Os buds vão começar a engordar e pedir Potássio.",
-            "esqueceu": "Esqueceu o Lollipopping? Faça uma limpeza leve apenas nas folhas amarelas de baixo. Não tire folhas saudáveis agora.",
-            "icone": "🛑"
+            "fase": "Engorda Inicial (Bulking)", "icone": "🛑",
+            "foco_nutri": "Escalada do Potássio (K) e Cálcio (Ca).",
+            "manejo": "PARE DE PODAR! A partir de agora, a planta não recupera folhas facilmente. Se houver folhas bloqueando a luz dos buds principais, faça apenas defoliação pontual e cirúrgica.",
+            "org_prod": "Cinzas de Madeira + WCA (Cálcio de casca de ovo)", "org_dose": 3.0, "org_modo": "g/L de substrato / Rega",
+            "min_prod": "Bloom Base + PK 13/14 Booster", "min_dose": 2.0, "min_modo": "ml/L (Base) + 1ml/L (PK)",
+            "futuro": "Os galhos vão ficar muito pesados. Prepare suporte (yoyos).",
+            "esqueceu": "Fez defoliação agressiva tarde demais? Aumente o DLI (força da luz) para compensar a perda de painéis solares."
         },
         6: {
-            "fase": "Engorda (Bulking)",
-            "tecnica": "🏋️ <b>Suporte:</b> Os galhos vão pesar. Use yoyos ou amarre os colas principais no teto para não quebrar.",
-            "insumo": "💎 <b>Bio:</b> Chá de Banana ou Cinzas de Madeira.<br>🧪 <b>KNF:</b> WCAP (Cálcio-Fosfato) - Ossos queimados + Vinagre.",
-            "futuro": "Monitorar Mofo (Botrytis) nos buds densos.",
-            "esqueceu": "Buds pequenos? Aumente a intensidade da luz (DLI) e garanta que o VPD esteja alto (1.4+).",
-            "icone": "🏋️"
+            "fase": "Engorda Pesada", "icone": "🏋️",
+            "foco_nutri": "Pico Absoluto de Potássio (K) - Densidade e Peso.",
+            "manejo": "Mantenha o VPD ajustado (1.3 a 1.5) para maximizar a transpiração e a absorção de água. Verifique diariamente o interior dos buds maiores procurando sinais de mofo (Botrytis).",
+            "org_prod": "Kelp Meal (Algas) ou Chá de Banana Aerado", "org_dose": 5.0, "org_modo": "g/L (Top Dressing) ou Rega",
+            "min_prod": "Heavy PK Booster / Finalizador de Engorda", "min_dose": 3.0, "min_modo": "ml/L de água (Rega)",
+            "futuro": "Os cálices vão inchar e os pistilos começarão a ficar laranjas/marrons.",
+            "esqueceu": "A umidade passou de 60% à noite? Risco extremo de mofo! Ligue o desumidificador ou aumente a exaustão imediatamente."
         },
         7: {
-            "fase": "Maturação",
-            "tecnica": "❄️ <b>Estresse Térmico (Opcional):</b> Reduzir temperatura noturna para 18°C para estimular resina e cor roxa.",
-            "insumo": "🍬 <b>Bio:</b> Finalizador (Terpenos) ou água de coco.<br>🧪 <b>KNF:</b> Apenas água ou LAB leve para limpar solo.",
-            "futuro": "Prepare-se para o corte (Colheita).",
-            "esqueceu": "Mofo no bud? CORTE o pedaço afetado imediatamente e coloque um saco plástico antes de tirar para não espalhar esporos.",
-            "icone": "❄️"
+            "fase": "Maturação (Senescência)", "icone": "❄️",
+            "foco_nutri": "Demanda Nutricional em Queda - Foco em Terpenos.",
+            "manejo": "Pare a aplicação de Nitrogênio (N). O amarelecimento das folhas grandes é normal e desejado (Outono da planta). Baixe a temperatura noturna (18-20°C) para estimular cores roxas e preservar compostos voláteis.",
+            "org_prod": "Melado de Cana (Alimenta bactérias e dá peso/sabor)", "org_dose": 5.0, "org_modo": "ml/L de água (Rega)",
+            "min_prod": "Sweetener / Finalizador (Sem Nitrogênio)", "min_dose": 2.0, "min_modo": "ml/L de água (Rega)",
+            "futuro": "Verifique os tricomas com lupa para decidir o dia do corte.",
+            "esqueceu": "Ainda aplicando fertilizante forte de Vega? Pare imediatamente ou a flor terá gosto áspero e queimação na garganta (excesso de sais)."
         },
         8: {
-            "fase": "Flush / Colheita",
-            "tecnica": "✂️ <b>Manicure:</b> Comece a remover folhas grandes (Fan leaves) para facilitar a secagem pós-colheita.",
-            "insumo": "🚿 <b>Flush:</b> Apenas Água pH 6.0. Sem cloro.",
-            "futuro": "Secagem e Cura.",
-            "esqueceu": "Não fez Flush? Se estiver no orgânico, tudo bem. Se for mineral, tente dar 2 dias de água pura pelo menos.",
-            "icone": "🚿"
+            "fase": "Flush / Colheita", "icone": "🚿",
+            "foco_nutri": "Absorção Zero - Limpeza do sistema.",
+            "manejo": "Hora de limpar. Regue com volume suficiente para gerar escoamento (runoff) e lavar os sais do substrato. Remova as 'Fan Leaves' (folhas maiores sem resina) para facilitar a manicuração pós-colheita.",
+            "org_prod": "Apenas Água Pura (Sem cloro)", "org_dose": 0, "org_modo": "Rega profunda",
+            "min_prod": "Água pH 6.0 ou Solução Flawless Finish", "min_dose": 2.0, "min_modo": "ml/L de água (Rega profunda)",
+            "futuro": "Cortar, pendurar e secar em ambiente escuro (18°C e 60% UR).",
+            "esqueceu": "Vai cortar amanhã? Desligue as luzes e deixe 48h no escuro total para maximizar a explosão final de resina (estresse de sobrevivência)."
         }
     }
     
-    # Seleção da semana (Trava na última se passar)
+    # Pega o dado da semana (Trava no 8 se passar disso)
     idx_m = min(semanas, 8)
-    dado_m = manejos.get(idx_m, manejos[8])
+    d = manejos.get(idx_m, manejos[8])
 
-    # HTML BLINDADO (SEM INDENTAÇÃO INTERNA)
+    # 3. CÁLCULOS MATEMÁTICOS DE PRESCRIÇÃO
+    receita_txt = ""
+    produto_sugerido = d['org_prod'] if is_organic else d['min_prod']
+    modo_aplicacao = d['org_modo'] if is_organic else d['min_modo']
+    
+    if d['org_dose'] == 0:
+        receita_txt = "Apenas água. Sem aditivos adicionais necessários nesta fase."
+    elif is_organic and "g/L" in d['org_modo']:
+        # Se for g/L de terra e tiver o volume do vaso
+        vaso_calc = 20 if vol_vaso == 999 else vol_vaso # Padrão 20L se for no chão
+        dose_total = d['org_dose'] * vaso_calc
+        receita_txt = f"Misture <b>{dose_total:.1f}g</b> no seu vaso de {vaso_calc}L."
+    elif is_organic:
+        # Liquidos organicos (ml/L)
+        receita_txt = f"Dilua <b>{d['org_dose']} {modo_aplicacao.split(' ')[0]}</b> por Litro de água."
+    else:
+        # Mineral sempre dilui na água
+        receita_txt = f"Dilua <b>{d['min_dose']} {modo_aplicacao.split(' ')[0]}</b> para cada 1 Litro de água."
+
+    # 4. RENDERIZAÇÃO DO CARD (HTML BLINDADO SEM INDENTAÇÃO)
     html_consultoria = f"""
 <div class="diag-card" style="border-left: 4px solid {cor_brand}; background: linear-gradient(170deg, #18181b 0%, #09090b 100%); padding:20px; border-radius:15px; margin-top:20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; padding-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.1);">
-<div style="display:flex; align-items:center; gap:10px;">
-<div style="background:{cor_brand}; width:45px; height:45px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.5rem; box-shadow: 0 0 10px {cor_brand}40;">{dado_m['icone']}</div>
+<div style="display:flex; align-items:center; gap:12px;">
+<div style="background:{cor_brand}; width:45px; height:45px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.5rem; box-shadow: 0 0 10px {cor_brand}40;">{d['icone']}</div>
 <div>
 <div style="font-weight:900; color:{cor_brand}; font-size:1.1rem; letter-spacing:0.5px;">{titulo_card}</div>
-<div style="font-size:0.75rem; color:#888;">PROTOCOLO: <b style="color:#fff;">{dado_m['fase'].upper()}</b></div>
+<div style="font-size:0.75rem; color:#888;">FASE DA PLANTA: <b style="color:#fff;">{d['fase'].upper()}</b></div>
 </div>
 </div>
 </div>
@@ -852,30 +883,37 @@ if show_consultoria:
 <div style="background:rgba(255,255,255,0.03); border:1px solid #333; border-radius:10px; padding:15px; position:relative; overflow:hidden;">
 <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:#22c55e;"></div>
 <div style="margin-left:10px;">
-<div style="color:#22c55e; font-size:0.8rem; font-weight:bold; letter-spacing:1px; margin-bottom:5px;">✂️ MANEJO FÍSICO (PODAS & TREINOS)</div>
-<div style="color:#e4e4e7; font-size:0.95rem; line-height:1.4;">{dado_m['tecnica']}</div>
+<div style="color:#22c55e; font-size:0.8rem; font-weight:bold; letter-spacing:1px; margin-bottom:5px;">🎯 MANEJO INTEGRADO DA SEMANA</div>
+<div style="color:#a8a29e; font-size:0.8rem; font-weight:bold; margin-bottom:6px; border-bottom:1px dashed #444; padding-bottom:4px;">📈 {d['foco_nutri']}</div>
+<div style="color:#e4e4e7; font-size:0.95rem; line-height:1.5;">{d['manejo']}</div>
 </div>
 </div>
 <div style="background:rgba(255,255,255,0.03); border:1px solid #333; border-radius:10px; padding:15px; position:relative; overflow:hidden;">
 <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:#3b82f6;"></div>
 <div style="margin-left:10px;">
-<div style="color:#3b82f6; font-size:0.8rem; font-weight:bold; letter-spacing:1px; margin-bottom:5px;">🧪 BIO-INSUMOS & KNF (RECEITA)</div>
-<div style="color:#ccc; font-size:0.9rem; line-height:1.4;">{dado_m['insumo']}</div>
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+<div style="color:#3b82f6; font-size:0.8rem; font-weight:bold; letter-spacing:1px;">💊 PRESCRIÇÃO NUTRICIONAL ({tipo_txt})</div>
+</div>
+<div style="background:rgba(59, 130, 246, 0.1); border:1px solid rgba(59, 130, 246, 0.3); padding:10px; border-radius:6px;">
+<div style="color:#fff; font-size:0.9rem; font-weight:bold; margin-bottom:4px;">🧪 Produto: <span style="color:#93c5fd;">{produto_sugerido}</span></div>
+<div style="color:#e4e4e7; font-size:0.9rem;">⚖️ Dose Recomendada: <span style="color:#60a5fa; font-weight:bold;">{receita_txt}</span></div>
+<div style="color:#888; font-size:0.75rem; margin-top:4px;"><i>Via: {modo_aplicacao}</i></div>
+</div>
 </div>
 </div>
 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-<div style="background:rgba(234, 179, 8, 0.05); border:1px solid rgba(234, 179, 8, 0.2); padding:10px; border-radius:8px;">
-<div style="color:#facc15; font-size:0.7rem; font-weight:bold; margin-bottom:3px;">🔮 RADAR FUTURO</div>
-<div style="color:#ddd; font-size:0.8rem; line-height:1.3;">{dado_m['futuro']}</div>
+<div style="background:rgba(234, 179, 8, 0.05); border:1px solid rgba(234, 179, 8, 0.2); padding:12px; border-radius:8px;">
+<div style="color:#facc15; font-size:0.75rem; font-weight:bold; margin-bottom:5px;">🔮 RADAR FUTURO</div>
+<div style="color:#ddd; font-size:0.85rem; line-height:1.4;">{d['futuro']}</div>
 </div>
-<div style="background:rgba(239, 68, 68, 0.05); border:1px solid rgba(239, 68, 68, 0.2); padding:10px; border-radius:8px;">
-<div style="color:#f87171; font-size:0.7rem; font-weight:bold; margin-bottom:3px;">⚠️ ESQUECEU O ANTERIOR?</div>
-<div style="color:#ddd; font-size:0.8rem; line-height:1.3;">{dado_m['esqueceu']}</div>
+<div style="background:rgba(239, 68, 68, 0.05); border:1px solid rgba(239, 68, 68, 0.2); padding:12px; border-radius:8px;">
+<div style="color:#f87171; font-size:0.75rem; font-weight:bold; margin-bottom:5px;">⚠️ ESQUECEU O ANTERIOR?</div>
+<div style="color:#ddd; font-size:0.85rem; line-height:1.4;">{d['esqueceu']}</div>
 </div>
 </div>
 </div>
 <div style="margin-top:15px; text-align:center; font-size:0.7rem; color:#555;">
-<i>Sugestões baseadas no método {metodo_sel.split(' ')[0]} para plantas com {semanas} semanas.</i>
+<i>Prescrição AI cruzada com {vol_vaso}L de substrato e método {metodo_sel.split(' ')[0]}.</i>
 </div>
 </div>
 """
