@@ -557,16 +557,21 @@ mapa_clima_ideal = {
 # Pega os dados da fase atual (ou usa um padrão seguro se não encontrar)
 alvos_clima = mapa_clima_ideal.get(fase_nome, {"temp": "22-26°C", "rh": "50-60%"})
 
-# Dicionário de Conselhos (Estratégia)
-conselhos_fase = {
-    "Plântula": "🌱 <b>Foco:</b> Sobrevivência. Mantenha a umidade alta (cúpula) e não exagere na água.",
-    "Vegetativo": "🌿 <b>Foco:</b> Estrutura. A planta precisa crescer folhas e galhos fortes. Hora de podas e amarras (LST).",
-    "Pré-Flora": "🚀 <b>Foco:</b> Estirão. A planta vai dobrar de tamanho. Ajuste a altura da luz diariamente.",
-    "Flora Inicial": "🌸 <b>Foco:</b> Formação. Os pistilos apareceram. Pare o Nitrogênio e aumente Fósforo/Potássio.",
-    "Flora Média": "💪 <b>Foco:</b> Engorda. Os buds estão inchando. Garanta ventilação máxima para evitar mofo.",
-    "Flora Final": "💎 <b>Foco:</b> Resina e Sabor. Reduza a temperatura e umidade para destacar os terpenos e evitar Botrytis."
+# 1. CÉREBRO DE BENCHMARK BIOMÉTRICO (O QUE ESPERAR DA PLANTA FÍSICA)
+# Usa o mesmo idx_tatico (fisiológico) para garantir sincronia perfeita com o resto do app
+biometria_esperada = {
+    0: "🌱 <b>Morfologia:</b> 2 a 5cm. Cotilédones abertos e o primeiro par de folhas verdadeiras (com 1 ou 3 pontas) se formando. Raiz pivotante descendo.",
+    1: "🌿 <b>Morfologia:</b> 10 a 15cm. A planta deve ter de 3 a 4 'andares' (nós) de folhas. As raízes já devem estar tocando as bordas do vaso.",
+    2: "🌳 <b>Morfologia:</b> 20 a 30cm+. Caule principal engrossando visivelmente. De 5 a 8 andares de folhas. Galhos laterais começando a buscar a luz.",
+    3: "🚀 <b>Morfologia:</b> Crescimento vertical acelerado (esticando). Os internódios (espaço entre os galhos) ficam longos. Primeiros pistilos brancos surgem nas 'axilas' dos galhos.",
+    4: "👑 <b>Morfologia:</b> O crescimento para cima trava. Os topos dos galhos formam 'coroas' (botões densos cheios de cabelos brancos).",
+    5: "💎 <b>Morfologia:</b> Os cálices começam a inchar levemente. A produção de resina (açúcar) fica visível nas folhas mais próximas da flor. O cheiro fica evidente.",
+    6: "🏋️ <b>Morfologia:</b> As coroas se unem formando 'lanças' sólidas (colas). Os galhos pesam. Os pistilos brancos começam a se retrair e oxidar (ficar laranjas).",
+    7: "🍂 <b>Morfologia:</b> As flores estão duras como pedra. As folhas grandes (Fan Leaves) começam a perder o verde e desbotar (amarelo/roxo). Resina no pico máximo.",
+    8: "🏁 <b>Morfologia:</b> 70%+ dos cabelos estão laranjas/marrons e enrolados para dentro. Folhas maiores secando. Cálice inchado engolindo a base das folhas."
 }
-texto_estrategico = conselhos_fase.get(fase_nome, "Mantenha os parâmetros estáveis e monitore o clima.")
+
+texto_biometria = biometria_esperada.get(idx_tatico, "Monitorando maturação final.")
 
 # --- COLUNA A: STATUS CARD V21 (AGORA COM 4 MÉTRICAS DE CLIMA) ---
 with col_a:
@@ -633,9 +638,13 @@ with col_a:
 </div>
 </div>
 <div style="margin-top:20px; background:rgba(255,255,255,0.03); padding:12px; border-radius:8px; border-left:3px solid #a855f7;">
-<div class="card-label" style="margin:0; color:#a855f7; margin-bottom:4px;">ESTRATÉGIA DA SEMANA:</div>
+html_status = f"""
+<div style="margin-top:20px; background:rgba(255,255,255,0.03); padding:12px; border-radius:8px; border-left:3px solid #10b981;">
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+<div class="card-label" style="margin:0; color:#10b981;">🔍 BENCHMARK BIOMÉTRICO (STATUS FÍSICO):</div>
+</div>
 <div style="color:#e4e4e7; font-size:0.85rem; line-height:1.4;">
-{texto_estrategico}
+{texto_biometria}
 </div>
 </div>
 </div>
