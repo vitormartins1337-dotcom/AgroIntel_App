@@ -749,108 +749,114 @@ with col_b:
     st.markdown(html_yield, unsafe_allow_html=True)
 
 # ==============================================================================
-# CARD CONSULTORIA: DIDÁTICA MASTER & MANEJO ESPACIAL (V48)
+# CARD CONSULTORIA: ECOSSISTEMA INTEGRADO & DEEP LINKS (V49)
 # ==============================================================================
 if show_consultoria:
     titulo_card = f"CONSULTORIA MASTER: SEMANA {semanas}"
     cor_brand = "#a855f7" 
     
-    # 1. LÓGICA DE IDADE FISIOLÓGICA (MANTIDA)
+    # 1. LÓGICA DE IDADE FISIOLÓGICA
     ciclo_total_dias = info_genetica.get('ciclo_dias', 90) + 30 
     progresso_ciclo = min(1.0, dias_vida / ciclo_total_dias)
     idx_tatico = min(8, int(progresso_ciclo * 8.99))
     
-    is_organic = "Orgânico" in metodo_sel or "KNF" in metodo_sel or "Solo Vivo" in metodo_sel
-    tipo_txt = "ORGÂNICO/BIOLÓGICO" if is_organic else "MINERAL/HIDRO"
-    
-    # 2. CÉREBRO DIDÁTICO (O PROFESSOR DO CULTIVO)
+    # 2. CÉREBRO INTEGRADO (EXPANDIDO: MANEJO, PRAGAS E NUTRIÇÃO)
     manejos = {
         0: {
             "fase": "Enraizamento", "icone": "🌱",
             "acao_titulo": "Construindo as Fundações",
-            "acao_passo": "A planta precisa de umidade alta. Use um domo (estufa plástica) sobre ela. <b>Não adube o solo ainda</b>, ela tem reservas na semente/clone. Regue apenas com borrifador ao redor da planta, nunca no caule direto.",
-            "espaco_luz": "📏 <b>Luz:</b> Mantenha o painel alto (60 a 80cm) e luz fraca.<br>🪴 <b>Espaço:</b> Vasos podem ficar colados uns nos outros sob a luz central.",
-            "praga_nome": "Fungus Gnats (Mosquitinho do Solo)",
-            "praga_sintoma": "Mosquitinhos pretos voando ao regar. As larvas comem as raízes novas. Deixe o topo do solo secar para evitar.",
-            "nutri": "Micorrizas no berço ou Enraizador muito fraco (1ml/L)."
+            "acao_passo": "A planta precisa de umidade altíssima (80%+). Use um domo (estufa plástica) sobre ela. <b>Não adube o solo</b>, a semente tem energia própria. Regue apenas com borrifador ao redor da borda do vaso para forçar as raízes a buscarem água nas laterais.",
+            "espaco_luz": "📏 <b>Luz:</b> Painel alto (60 a 80cm) na potência mínima (PPFD 150-200).<br>🪴 <b>Espaço:</b> Vasos podem ficar agrupados no centro da estufa para concentrar a umidade.",
+            "praga_nome": "Fungus Gnats",
+            "praga_sintoma": "Mosquitinhos pretos voando ao redor do solo úmido. As larvas devoram os pelos radiculares novos, travando o crescimento.",
+            "nutri_nome": "Fósforo (P)",
+            "nutri_sintoma": "Caules roxos/avermelhados e crescimento paralisado. Nesta fase, o frio no solo (abaixo de 20°C) trava a absorção de Fósforo, mesmo que haja adubo na terra."
         },
         1: {
             "fase": "Vegetativo Inicial", "icone": "🌿",
-            "acao_titulo": "Fortalecimento do Caule",
-            "acao_passo": "Ligue um ventilador oscilante. O vento <b>não pode</b> ser um furacão direto na planta, deve apenas fazer as folhas balançarem levemente. Isso cria microfissuras no caule, deixando-o grosso e forte para aguentar flores pesadas no futuro.",
-            "espaco_luz": "📏 <b>Luz:</b> Desça o painel para 50 a 60cm.<br>🪴 <b>Espaço:</b> Separe os vasos para que as folhas de uma não toquem nas folhas da outra.",
+            "acao_titulo": "Fortalecimento Estrutural",
+            "acao_passo": "Ligue a ventilação oscilante. O vento deve causar um balanço suave nas folhas, gerando microfissuras que a planta repara com lignina, criando um caule grosso como um tronco. Deixe o primeiro centímetro do solo secar antes da próxima rega.",
+            "espaco_luz": "📏 <b>Luz:</b> Desça o painel para 50cm (PPFD 300-400).<br>🪴 <b>Espaço:</b> Separe os vasos. Se as folhas encostarem umas nas outras, elas criam microclimas úmidos que atraem fungos.",
             "praga_nome": "Tripes (Thrips)",
-            "praga_sintoma": "Manchas prateadas/brilhantes ou pontinhos pretos na parte de cima das folhas. Olhe bem de perto.",
-            "nutri": "Inicie o Fertilizante Grow (Nitrogênio) com meia dose."
+            "praga_sintoma": "Manchas irregulares prateadas ou metálicas nas folhas, acompanhadas de minúsculos pontos pretos (fezes). Insetos finos como agulhas.",
+            "nutri_nome": "Nitrogênio (N)",
+            "nutri_sintoma": "Folhas de baixo (mais velhas) começam a ficar verde-limão ou amarelo-pálido uniformemente. A planta está sugando energia de baixo para crescer o topo."
         },
         2: {
-            "fase": "Estruturação (Topping & Amarras)", "icone": "✂️",
-            "acao_titulo": "Tutorial de Poda Top (Quebra de Dominância)",
-            "acao_passo": "<b>1.</b> Conte de baixo para cima até o 4º ou 5º nó (andar) de folhas.<br><b>2.</b> Com uma tesoura esterilizada, corte a ponta principal (o topo) logo acima do nó.<br><b>3.</b> Isso fará a planta parar de crescer como 'pinheiro' e se dividir em dois galhos principais (formato de taça).<br><b>4.</b> Amarre os galhos laterais para baixo (LST) para abrir o meio da planta para a luz.",
-            "espaco_luz": "📏 <b>Luz:</b> Painel a 45-50cm de distância.<br>🪴 <b>Espaço:</b> A planta vai começar a crescer para os lados. Dê espaço!",
+            "fase": "Estruturação (Quebra de Dominância)", "icone": "✂️",
+            "acao_titulo": "Tutorial de Poda e HST",
+            "acao_passo": "A planta cresce como um pinheiro, focando energia em 1 topo só.<br><b>1. Poda Apical:</b> Conte até o 4º andar de folhas. Corte o topo principal com tesoura limpa. Isso redistribui os hormônios (auxinas).<br><b>2. Amarras (LST):</b> Puxe os galhos laterais para baixo e prenda-os na borda do vaso. O meio da planta deve receber luz direta.",
+            "espaco_luz": "📏 <b>Luz:</b> Painel a 45cm (PPFD 450-600).<br>🪴 <b>Espaço:</b> A planta vai 'engordar' para os lados. Garanta 15cm de espaço livre ao redor de cada vaso.",
             "praga_nome": "Ácaros (Spider Mites)",
-            "praga_sintoma": "Pontinhos amarelos na folha. Olhe <b>embaixo</b> da folha: se tiver pontinhos minúsculos andando ou teias de aranha, é ácaro.",
-            "nutri": "Pico de Nitrogênio e Cálcio (Torta de mamona ou CalMag)."
+            "praga_sintoma": "Milhares de pontinhos brancos/amarelos na superfície da folha. Vire a folha de cabeça para baixo e procure pequenos grãos de areia se mexendo perto das veias.",
+            "nutri_nome": "Cálcio (Ca) e Magnésio (Mg)",
+            "nutri_sintoma": "Manchas marrons (cor de ferrugem) que não saem ao passar o dedo (Falta de Cálcio), ou folhas amarelando entre as veias que continuam verdes (Falta de Magnésio)."
         },
         3: {
-            "fase": "Pré-Flora (Instalação do SCROG)", "icone": "🕸️",
-            "acao_titulo": "Tutorial da Rede SCROG",
-            "acao_passo": "<b>1.</b> A rede deve ter buracos de 5x5cm ou 10x10cm (buracos muito grandes não seguram a planta).<br><b>2.</b> Instale a rede a cerca de 20 a 30cm do vaso, bem firme nas hastes da estufa.<br><b>3. Técnica:</b> Conforme o galho cresce e passa do buraco, não deixe ele subir! Deite o galho e passe a ponta dele por baixo da rede para o buraco do lado. Isso preenche a tela e cria dezenas de topos iguais.",
-            "espaco_luz": "📏 <b>Luz:</b> A planta vai dobrar de tamanho (Stretch). Suba a luz diariamente para manter 40-45cm.<br>🪴 <b>Espaço:</b> Espalhe os galhos pela tela. Um topo por buraco.",
+            "fase": "Pré-Flora (Estirão e SCROG)", "icone": "🕸️",
+            "acao_titulo": "Instalação da Rede SCROG",
+            "acao_passo": "A planta vai dobrar de tamanho verticalmente (Stretch).<br><b>1.</b> Instale a rede de nylon (buracos de 5 a 10cm) esticada a 20cm acima do vaso.<br><b>2. Técnica de Tecelagem:</b> Todos os dias, pegue os galhos que passaram da rede, deite-os por baixo do nylon e direcione-os para o buraco vazio do lado. O objetivo é preencher 100% da tela antes da floração pesada.",
+            "espaco_luz": "📏 <b>Luz:</b> Suba a luz diariamente para não queimar as pontas que crescem rápido.<br>🪴 <b>Espaço:</b> Espalhe os galhos na tela, um topo por buraco. Corte os galhos que sobrarem embaixo.",
             "praga_nome": "Mosca Branca",
-            "praga_sintoma": "Ao balançar a planta, uma nuvem de mosquinhas brancas levanta voo. Elas sugam a seiva da folha.",
-            "nutri": "Transição para flora (50% Grow / 50% Bloom)."
+            "praga_sintoma": "Pequenas moscas brancas voam em nuvem ao balançar a planta. Elas se escondem debaixo das folhas e deixam uma resina grudenta (Melaço) que atrai fungo preto (Fumagina).",
+            "nutri_nome": "Nitrogênio (Pico Final)",
+            "nutri_sintoma": "Demanda altíssima de N para criar os novos galhos. Folhas médias amarelando rápido indicam que o solo não está suprindo a explosão de crescimento."
         },
         4: {
             "fase": "Botão Floral (Lollipopping)", "icone": "🦵",
-            "acao_titulo": "Tutorial de Lollipopping (Limpeza das Canelas)",
-            "acao_passo": "Nesta fase a planta foca energia. Tudo que fica na sombra embaixo da planta só rouba energia e gera 'buds pipoca' (flores pequenas e soltas).<br><b>1.</b> Olhe para a planta e divida visualmente em 3 partes.<br><b>2.</b> Raspe e corte absolutamente todas as folhas e galhinhos do terço inferior (os 30% de baixo).<br><b>3.</b> O caule deve ficar liso embaixo, parecendo um pirulito (Lollipop).",
-            "espaco_luz": "📏 <b>Luz:</b> 35 a 40cm. Agora precisamos de muita luz nos topos.<br>🪴 <b>Espaço:</b> A limpeza embaixo melhora muito o vento entre os vasos.",
+            "acao_titulo": "A Limpeza das Canelas",
+            "acao_passo": "A luz do seu LED não tem força para penetrar no fundo da planta. Tudo que fica na sombra vai roubar nutrientes das flores principais.<br><b>Ação:</b> Passe a mão ou a tesoura na metade de baixo da planta e arranque todos os micro-galhos e folhas. O caule deve ficar liso, parecendo um pirulito. Isso redireciona o fluxo de seiva 100% para o topo.",
+            "espaco_luz": "📏 <b>Luz:</b> Aumente a potência ao máximo (PPFD 800+).<br>🪴 <b>Espaço:</b> A remoção da folhagem de baixo cria um túnel de vento essencial sobre os vasos para evitar pragas.",
             "praga_nome": "Pulgões (Aphids)",
-            "praga_sintoma": "Bichinhos gordinhos (verdes ou pretos) grudados nos caules mais macios e nos brotos novos.",
-            "nutri": "Pico de Fósforo (Guano de morcego ou Fertilizante Bloom forte)."
+            "praga_sintoma": "Insetos gordinhos e imóveis, verdes ou pretos, grudados nos caules tenros, sugando a seiva como vampiros. Formigas andando na planta são o maior alerta.",
+            "nutri_nome": "Fósforo (P)",
+            "nutri_sintoma": "Caules extremamente roxos e manchas azuladas/necróticas nas folhas velhas. A planta precisa de Fósforo (ATP) para construir a estrutura inicial dos buds."
         },
         5: {
-            "fase": "Engorda Inicial", "icone": "🛑",
-            "acao_titulo": "Foco na Flor (Pare de Cortar!)",
-            "acao_passo": "<b>Guarde a tesoura!</b> A partir de agora, qualquer poda gera muito estresse e trava a engorda. Se uma folha grande estiver fazendo sombra exatamente em cima de um bud principal, você pode tirá-la (Defoliação Cirúrgica), mas não remova folhas sem necessidade, elas são os painéis solares que dão energia para a flor inchar.",
-            "espaco_luz": "📏 <b>Luz:</b> 30 a 40cm (Intensidade Máxima do seu painel).<br>🪴 <b>Espaço:</b> As plantas não podem estar 'montadas' umas nas outras ou a umidade ficará presa ali no meio.",
-            "praga_nome": "Lagartas",
-            "praga_sintoma": "Furos grandes nas folhas e bolinhas pretas (fezes) pelo solo ou folhas baixas. Se ver fezes, procure a lagarta de noite.",
-            "nutri": "Início do Potássio (Cinzas, Chá de Banana ou PK 13/14)."
+            "fase": "Engorda Inicial (Bulking)", "icone": "🛑",
+            "acao_titulo": "Pare de Estressar a Planta!",
+            "acao_passo": "Guarde a tesoura! Poda agora trava a floração. A planta precisa das 'Fan Leaves' (folhas grandes) como painéis solares para gerar energia e inchar as flores.<br><b>Rega Estratégica:</b> Permita um 'Dryback' severo (deixe o vaso ficar bem leve). A seca alerta a planta de um perigo, forçando ela a produzir mais resina para proteger a flor.",
+            "espaco_luz": "📏 <b>Luz:</b> Mantenha a 30-40cm. Fique de olho se as bordas das folhas do topo estão 'enrolando como um taco mexicano' (Sinal de estresse térmico/luminoso).",
+            "praga_nome": "Lagartas do Bud",
+            "praga_sintoma": "Furos e mordidas circulares nas folhas superiores. Encontrar bolinhas pretas pequenas (fezes) enganchadas nas folhas de baixo. Se vir uma mariposa no grow, ligue o alerta.",
+            "nutri_nome": "Potássio (K)",
+            "nutri_sintoma": "As bordas das folhas queimam, ficam marrons e secas (parecendo que o fogo pegou nas beiradas), enquanto o meio da folha continua verde. A planta puxa o K para engordar o bud."
         },
         6: {
             "fase": "Engorda Pesada", "icone": "🏋️",
-            "acao_titulo": "Suporte e Engorda Extrema",
-            "acao_passo": "Os galhos vão começar a pesar e tombar para o lado. <b>Amarre os galhos caídos!</b> Se um galho tombar, a planta entende que ele está fraco e corta o envio de nutrientes para aquela flor, paralisando o crescimento dela. Use 'yoyos' de cultivo ou barbantes presos ao teto da estufa para segurar os topos.",
-            "espaco_luz": "📏 <b>Luz:</b> Mantenha a 30-40cm, mas fique de olho se as pontas das folhas mais altas estão enrolando para cima (Sinal de Light Burn).",
+            "acao_titulo": "Suporte e Prevenção de Mofo",
+            "acao_passo": "A massa das flores (biomassa) atingiu o ápice. Galhos sem suporte vão curvar e quebrar.<br><b>Ação:</b> Use barbantes amarrados no teto ou Yoyos retráteis para erguer e segurar os 'colas' principais.<br><b>Aviso:</b> Se o galho tombar, o sistema vascular da planta entende como dano e corta o envio de nutrientes, paralisando a engorda daquele bud.",
+            "espaco_luz": "📏 <b>Luz:</b> Luz e ventilação no máximo. Mantenha os ventiladores circulando o ar 24/7 acima dos botões florais densos.",
             "praga_nome": "Botrytis (Mofo Cinzento)",
-            "praga_sintoma": "PERIGO MÁXIMO! Uma folha secando no meio de um bud gordo. Ao abrir o bud, ele está marrom e parecendo teia de aranha por dentro. Umidade >60% causa isso.",
-            "nutri": "Pico Máximo de PK (Fósforo e Potássio). Água em abundância."
+            "praga_sintoma": "O assassino invisível. Você nota uma folha seca e marrom presa no meio de um bud lindo. Ao tentar puxar, ela solta fácil. Ao abrir o bud, o interior está cinza, podre e cheio de teias. Corte imediatamente!",
+            "nutri_nome": "Pico de PK (Burn de Fertilizante)",
+            "nutri_sintoma": "Risco de Toxidez (Excesso). As pontas das folhas ficam amarelas e queimadas (Tip Burn) devido ao acúmulo de sais no vaso. Se piorar, faça um flush (rega com água pura)."
         },
         7: {
-            "fase": "Maturação (Fim de Ciclo)", "icone": "❄️",
-            "acao_titulo": "Simulando o Outono (Fade)",
-            "acao_passo": "A planta está pronta quando os tricomas (os cristaizinhos de resina) estão ficando leitosos (brancos) e alguns âmbar (marrom). Para forçar mais resina e cheiro:<br><b>1.</b> Corte totalmente o Nitrogênio.<br><b>2.</b> Deixe a noite mais fria se possível.<br><b>3.</b> É normal as folhas grandes ficarem amarelas, roxas ou caírem. Não se desespere, a planta está 'sugando' a energia das folhas para a flor.",
-            "espaco_luz": "📏 <b>Luz:</b> Afaste a luz para 45-50cm. Luz muito forte e quente agora evapora os cheiros (terpenos) da sua flor.",
-            "praga_nome": "Oídio (Mofo Branco)",
-            "praga_sintoma": "Manchas redondas que parecem farinha ou talco branco espalhadas por cima das folhas. Abaixe a umidade!",
-            "nutri": "Fim do adubo. Apenas adoçantes (Melaço) ou água."
+            "fase": "Maturação (Senescência e Fade)", "icone": "❄️",
+            "acao_titulo": "Outono Artificial (Fade)",
+            "acao_passo": "A planta está madura. O foco agora é sabor, cheiro (terpenos) e potência.<br><b>Ação 1:</b> Corte 100% o Nitrogênio.<br><b>Ação 2:</b> Baixe a temperatura à noite (se possível para 18°C) para forçar as cores roxas (antocianinas) e preservar os óleos voláteis.<br><b>Aviso:</b> As folhas amarelarão e cairão. Não adube, a planta está sugando energia vital das folhas para a flor.",
+            "espaco_luz": "📏 <b>Luz:</b> Afaste a luz para 50cm. Luz muito quente nesta reta final evapora a resina e degrada o THC (transformando em CBN, que dá sono).",
+            "praga_nome": "Oídio (Mofo Branco Foliar)",
+            "praga_sintoma": "Manchas perfeitamente circulares brancas, parecendo talco ou farinha de trigo espirrada nas folhas. Diferente do Botrytis, o Oídio ataca a superfície da folha, não o interior da flor.",
+            "nutri_nome": "Falta de Nitrogênio (Sintoma Desejado)",
+            "nutri_sintoma": "A planta inteira perde a cor verde vibrante e fica em tons pastéis de amarelo, roxo e vermelho. Este é o 'Fade' perfeito. Sinal de que não sobrará gosto de adubo ao fumar."
         },
         8: {
-            "fase": "Colheita e Lavagem", "icone": "🚿",
-            "acao_titulo": "Lavagem (Flush) e Colheita",
-            "acao_passo": "Regue com muita água (apenas água) para que vaze bastante pelo fundo do vaso. Isso lava os restos de fertilizantes do solo, deixando a flor com sabor limpo e evitando que arranhe a garganta ao fumar. <b>Dica Pro:</b> Antes de cortar com a tesoura, desligue as luzes e deixe a planta 48h no escuro total. O estresse final gera um pico de resina.",
-            "espaco_luz": "📏 <b>Luz:</b> Apagadas nas últimas 48h.<br>🪴 <b>Ambiente de Secagem:</b> Escuro, 18°C a 20°C, com 60% de umidade constante.",
-            "praga_nome": "Mofo de Secagem",
-            "praga_sintoma": "Colocar os buds muito juntos num ambiente sem circulação de ar fará eles mofarem no varal. Coloque um ventilador fraco girando no chão (não direto nas plantas).",
-            "nutri": "Zero Nutrientes. 100% Água Pura."
+            "fase": "Colheita e Secagem", "icone": "🚿",
+            "acao_titulo": "Limpeza Final e Ponto de Corte",
+            "acao_passo": "Regue com volume massivo de água para escorrer pelo fundo (Flush). Avalie com lupa os tricomas: 70% leitosos (brancos) e 30% âmbar (marrons) é o padrão ouro.<br><b>Dica Ninja:</b> Desligue a luz e a água 48 horas antes de cortar. A escuridão total com o solo seco manda um sinal de 'morte iminente' e a planta despeja uma última carga de resina em desespero.",
+            "espaco_luz": "📏 <b>Luz:</b> Desligadas.<br>🪴 <b>Secagem:</b> Corte e pendure de cabeça para baixo. Ambiente a 18°C e 60% de Umidade por 14 dias.",
+            "praga_nome": "Mofo de Varal",
+            "praga_sintoma": "Pendurar os galhos apertados dentro de uma caixa ou armário sem exaustor. O ar fica viciado e as flores mofam enquanto secam. Mantenha um micro-ventilador movendo o ar no chão.",
+            "nutri_nome": "Absorção Zero",
+            "nutri_sintoma": "O metabolismo da planta parou. Apenas aguarde a colheita."
         }
     }
     
     d = manejos.get(idx_tatico, manejos[8])
 
-    # 3. HTML BLINDADO (ZERO INDENTAÇÃO INTERNA)
+    # 3. HTML BLINDADO (COM LINKS SIMULADOS PROFISSIONAIS)
     html_consultoria = f"""
 <div class="diag-card" style="border-left: 4px solid {cor_brand}; background: linear-gradient(170deg, #18181b 0%, #09090b 100%); padding:20px; border-radius:15px; margin-top:20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
 
@@ -870,7 +876,7 @@ if show_consultoria:
 <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:#22c55e;"></div>
 <div style="margin-left:10px;">
 <div style="color:#22c55e; font-size:0.85rem; font-weight:900; letter-spacing:1px; margin-bottom:8px; text-transform:uppercase;">🛠️ {d['acao_titulo']}</div>
-<div style="color:#e4e4e7; font-size:0.95rem; line-height:1.6;">{d['acao_passo']}</div>
+<div style="color:#e4e4e7; font-size:0.95rem; line-height:1.6; text-align:justify;">{d['acao_passo']}</div>
 </div>
 </div>
 
@@ -882,18 +888,32 @@ if show_consultoria:
 </div>
 </div>
 
-<div style="background:rgba(239, 68, 68, 0.05); border:1px solid rgba(239, 68, 68, 0.3); border-radius:10px; padding:15px; position:relative; overflow:hidden;">
-<div style="position:absolute; top:0; left:0; width:4px; height:100%; background:#ef4444;"></div>
-<div style="margin-left:10px;">
-<div style="color:#ef4444; font-size:0.8rem; font-weight:900; letter-spacing:1px; margin-bottom:5px;">🐛 RADAR DE PRAGAS: ALERTA MÁXIMO NESTA FASE</div>
-<div style="color:#fff; font-size:0.95rem; font-weight:bold; margin-bottom:4px;">Inimigo da Semana: {d['praga_nome']}</div>
-<div style="color:#fca5a5; font-size:0.9rem; line-height:1.4; margin-bottom:12px;"><b>Sintoma Visual:</b> {d['praga_sintoma']}</div>
+<div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
 
-<div style="background:rgba(239, 68, 68, 0.15); border:1px dashed #ef4444; padding:10px; border-radius:6px; text-align:center;">
-<span style="color:#f87171; font-weight:bold; font-size:0.85rem;">👉 Identificou esse sintoma? Abra a aba "DOCTOR GROW" no topo da tela para ver o combate completo.</span>
-</div>
+    <div style="background:rgba(239, 68, 68, 0.05); border:1px solid rgba(239, 68, 68, 0.3); border-radius:10px; padding:12px; position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:space-between;">
+        <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:#ef4444;"></div>
+        <div style="margin-left:8px;">
+            <div style="color:#ef4444; font-size:0.75rem; font-weight:900; letter-spacing:1px; margin-bottom:5px;">🐛 RADAR BIOLÓGICO</div>
+            <div style="color:#fff; font-size:0.9rem; margin-bottom:4px;">Alvo: <a href="#central-de-diagn-stico" style="color:#f87171; text-decoration:underline; font-weight:bold;" title="Clique para abrir tratamento">[{d['praga_nome']}]</a></div>
+            <div style="color:#fca5a5; font-size:0.8rem; line-height:1.4; margin-bottom:10px;"><b>🕵️ Onde procurar:</b> {d['praga_sintoma']}</div>
+        </div>
+        <div style="background:rgba(239, 68, 68, 0.15); border:1px dashed #ef4444; padding:6px; border-radius:6px; text-align:center;">
+            <span style="color:#fca5a5; font-weight:bold; font-size:0.7rem;">🔗 Ver na aba Doctor Grow</span>
+        </div>
+    </div>
 
-</div>
+    <div style="background:rgba(249, 115, 22, 0.05); border:1px solid rgba(249, 115, 22, 0.3); border-radius:10px; padding:12px; position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:space-between;">
+        <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:#f97316;"></div>
+        <div style="margin-left:8px;">
+            <div style="color:#f97316; font-size:0.75rem; font-weight:900; letter-spacing:1px; margin-bottom:5px;">🧪 RADAR NUTRICIONAL</div>
+            <div style="color:#fff; font-size:0.9rem; margin-bottom:4px;">Maior Risco: <a href="#diagn-stico-visual" style="color:#fb923c; text-decoration:underline; font-weight:bold;" title="Clique para ver dosagem">[{d['nutri_nome']}]</a></div>
+            <div style="color:#fdba74; font-size:0.8rem; line-height:1.4; margin-bottom:10px;"><b>🕵️ Sintoma Crítico:</b> {d['nutri_sintoma']}</div>
+        </div>
+        <div style="background:rgba(249, 115, 22, 0.15); border:1px dashed #f97316; padding:6px; border-radius:6px; text-align:center;">
+            <span style="color:#fdba74; font-weight:bold; font-size:0.7rem;">🔗 Ver na aba Nutrição</span>
+        </div>
+    </div>
+
 </div>
 
 </div>
