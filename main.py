@@ -526,12 +526,6 @@ st.markdown("""
 <style>@keyframes ticker { 0% { transform: translate3d(100%, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }</style>
 """, unsafe_allow_html=True)
 
-# CÁLCULO DE ESTIMATIVA & PROGRESSO
-# 2. CÁLCULOS DE PROGRESSO E ESTRATÉGIA
-ciclo_total_dias = info_genetica.get('ciclo_dias', 90) + 30
-dias_restantes = max(0, ciclo_total_dias - dias_vida)
-progresso_pct = min(100, max(0, int((dias_vida / ciclo_total_dias) * 100)))
-
 # ==============================================================================
 # CARDS SUPERIORES (STATUS V21 + YIELD) - COM TEMP, UMIDADE E BIOMETRIA
 # ==============================================================================
