@@ -921,7 +921,7 @@ if show_consultoria:
     st.markdown(html_consultoria, unsafe_allow_html=True)
 
 # ==============================================================================
-# PAINEL DE TELEMETRIA E CRONOGRAMA VISUAL (V46 - DIF TÉRMICO)
+# PAINEL DE TELEMETRIA E CRONOGRAMA VISUAL (V47 - DIF DIDÁTICO)
 # ==============================================================================
 st.markdown("<div style='height:20px;'></div>", unsafe_allow_html=True) 
 
@@ -943,19 +943,24 @@ elif step == 3: rega_estrategia = "Rega de Alto Volume (Sem secar muito)"
 elif step == 4: rega_estrategia = "Seca de 40% (Dryback Severo) para estresse generativo"
 elif step == 5: rega_estrategia = "Lavagem (Flush) com bastante escoamento"
 
-# 3. LÓGICA DO DELTA TÉRMICO (DIF - Diferença de Temp. Dia/Noite)
-# Essa é a nova inteligência que substitui o pH/EC
-dif_alvo = "DIF Baixo (Queda de 2°C a 4°C)"
-dif_motivo = "Mantém os internódios curtos e a planta compacta."
+# 3. LÓGICA DO DELTA TÉRMICO (DIF EXPLICADO DE FORMA DIDÁTICA)
+# Agora ele diz exatamente o que fazer com o ambiente quando a luz apagar.
+dif_alvo = "Noite Levemente Mais Fria"
+dif_regra = "Abaixe de 2°C a 4°C quando a luz apagar."
+dif_motivo = "Ex: Dia 26°C ➔ Noite 23°C. Mantém a planta compacta."
+
 if step == 3: # Pré-Flora (Stretch)
-    dif_alvo = "DIF Zero (Queda de 0°C a 2°C)"
-    dif_motivo = "Trava o estirão vertical da planta."
+    dif_alvo = "Temperaturas Iguais (Dia e Noite)"
+    dif_regra = "Mantenha a mesma temperatura (0°C a 2°C de queda)."
+    dif_motivo = "Ex: Dia 25°C ➔ Noite 25°C. Isso 'freia' a planta para ela não crescer muito para cima."
 elif step == 4: # Engorda
-    dif_alvo = "DIF Médio (Queda de 4°C a 6°C)"
-    dif_motivo = "Otimiza a respiração celular noturna."
+    dif_alvo = "Noite Mais Fria"
+    dif_regra = "Abaixe de 4°C a 6°C quando a luz apagar."
+    dif_motivo = "Ex: Dia 26°C ➔ Noite 21°C. Ajuda a flor a poupar energia à noite."
 elif step == 5: # Colheita/Maturação
-    dif_alvo = "DIF Alto (Queda de 8°C a 12°C)"
-    dif_motivo = "Simula outono: força resina e cores roxas."
+    dif_alvo = "Noites Geladas (Simular Inverno)"
+    dif_regra = "Abaixe de 8°C a 12°C quando a luz apagar."
+    dif_motivo = "Ex: Dia 25°C ➔ Noite 15°C. O 'frio' força a flor a ficar roxa e produzir mais resina."
 
 # 4. HTML BLINDADO (FLEXBOX)
 html_telemetria = f"""
@@ -992,15 +997,17 @@ html_telemetria = f"""
 <div style="font-size:0.65rem; color:#888; margin-top:5px; border-top:1px dashed #333; padding-top:3px;"><i>Baseado no estágio fenológico atual.</i></div>
 </div>
 <div style="background:rgba(249, 115, 22, 0.05); border:1px solid rgba(249, 115, 22, 0.2); padding:12px; border-radius:8px;">
-<div style="display:flex; align-items:center; gap:5px; color:#fb923c; font-size:0.75rem; font-weight:bold; margin-bottom:5px;">🌡️ DELTA TÉRMICO (DIF)</div>
+<div style="display:flex; align-items:center; gap:5px; color:#fb923c; font-size:0.75rem; font-weight:bold; margin-bottom:5px;">🌡️ TEMPERATURA NOTURNA</div>
 <div style="color:#fff; font-size:0.85rem; font-weight:bold; margin-bottom:2px;">{dif_alvo}</div>
-<div style="font-size:0.7rem; color:#ccc; line-height:1.3;">{dif_motivo}</div>
+<div style="color:#fdba74; font-size:0.75rem; margin-bottom:4px;">{dif_regra}</div>
+<div style="font-size:0.7rem; color:#ccc; line-height:1.3; border-top:1px dashed rgba(249, 115, 22, 0.3); padding-top:4px;"><i>{dif_motivo}</i></div>
 </div>
 </div>
 </div>
 <div style="height:20px;"></div>
 """
 st.markdown(html_telemetria, unsafe_allow_html=True)
+
 
 # ABAS INFERIORES
 st.markdown("<br>", unsafe_allow_html=True)
