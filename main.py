@@ -864,22 +864,22 @@ if show_consultoria:
 
 <div style="display:grid; grid-template-columns: 1.2fr 1fr; gap:15px;">
 
-    <div style="background:rgba(255,255,255,0.03); border:1px solid #333; border-radius:10px; padding:15px; position:relative; overflow:hidden;">
-    <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:#eab308;"></div>
-    <div style="margin-left:10px;">
-    <div style="color:#eab308; font-size:0.8rem; font-weight:900; letter-spacing:1px; margin-bottom:8px;">📐 ESPAÇO & LUZ</div>
-    <div style="color:#ddd; font-size:0.9rem; line-height:1.6;">{d['espaco_luz']}</div>
-    </div>
-    </div>
+<div style="background:rgba(255,255,255,0.03); border:1px solid #333; border-radius:10px; padding:15px; position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; width:4px; height:100%; background:#eab308;"></div>
+<div style="margin-left:10px;">
+<div style="color:#eab308; font-size:0.8rem; font-weight:900; letter-spacing:1px; margin-bottom:8px;">📐 ESPAÇO & LUZ</div>
+<div style="color:#ddd; font-size:0.9rem; line-height:1.6;">{d['espaco_luz']}</div>
+</div>
+</div>
 
-    <div style="background:rgba(239, 68, 68, 0.05); border:1px solid rgba(239, 68, 68, 0.3); border-radius:10px; padding:12px; position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:space-between;">
-        <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:#ef4444;"></div>
-        <div style="margin-left:8px;">
-            <div style="color:#ef4444; font-size:0.75rem; font-weight:900; letter-spacing:1px; margin-bottom:5px;">🐛 ALERTA BIOLÓGICO</div>
-            <div style="color:#fff; font-size:0.9rem; margin-bottom:4px;">Alvo: <a href="#doctor-grow" style="color:#f87171; text-decoration:underline; font-weight:bold;" title="Ver tratamento na aba Doctor Grow">[{d['praga_nome']}]</a></div>
-            <div style="color:#fca5a5; font-size:0.8rem; line-height:1.4; margin-bottom:10px;"><b>🕵️ Procure por:</b> {d['praga_sintoma']}</div>
-        </div>
-    </div>
+<div style="background:rgba(239, 68, 68, 0.05); border:1px solid rgba(239, 68, 68, 0.3); border-radius:10px; padding:12px; position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:space-between;">
+<div style="position:absolute; top:0; left:0; width:4px; height:100%; background:#ef4444;"></div>
+<div style="margin-left:8px;">
+<div style="color:#ef4444; font-size:0.75rem; font-weight:900; letter-spacing:1px; margin-bottom:5px;">🐛 ALERTA BIOLÓGICO</div>
+<div style="color:#fff; font-size:0.9rem; margin-bottom:4px;">Alvo: <a href="#doctor-grow" style="color:#f87171; text-decoration:underline; font-weight:bold;" title="Ver tratamento na aba Doctor Grow">[{d['praga_nome']}]</a></div>
+<div style="color:#fca5a5; font-size:0.8rem; line-height:1.4; margin-bottom:10px;"><b>🕵️ Procure por:</b> {d['praga_sintoma']}</div>
+</div>
+</div>
 
 </div>
 
