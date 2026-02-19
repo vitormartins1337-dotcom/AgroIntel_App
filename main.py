@@ -890,29 +890,29 @@ if show_consultoria:
 
 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
 
-    <div style="background:rgba(239, 68, 68, 0.05); border:1px solid rgba(239, 68, 68, 0.3); border-radius:10px; padding:12px; position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:space-between;">
-        <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:#ef4444;"></div>
-        <div style="margin-left:8px;">
-            <div style="color:#ef4444; font-size:0.75rem; font-weight:900; letter-spacing:1px; margin-bottom:5px;">🐛 RADAR BIOLÓGICO</div>
-            <div style="color:#fff; font-size:0.9rem; margin-bottom:4px;">Alvo: <a href="#central-de-diagn-stico" style="color:#f87171; text-decoration:underline; font-weight:bold;" title="Clique para abrir tratamento">[{d['praga_nome']}]</a></div>
-            <div style="color:#fca5a5; font-size:0.8rem; line-height:1.4; margin-bottom:10px;"><b>🕵️ Onde procurar:</b> {d['praga_sintoma']}</div>
-        </div>
-        <div style="background:rgba(239, 68, 68, 0.15); border:1px dashed #ef4444; padding:6px; border-radius:6px; text-align:center;">
-            <span style="color:#fca5a5; font-weight:bold; font-size:0.7rem;">🔗 Ver na aba Doctor Grow</span>
-        </div>
-    </div>
+<div style="background:rgba(239, 68, 68, 0.05); border:1px solid rgba(239, 68, 68, 0.3); border-radius:10px; padding:12px; position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:space-between;">
+<div style="position:absolute; top:0; left:0; width:4px; height:100%; background:#ef4444;"></div>
+<div style="margin-left:8px;">
+<div style="color:#ef4444; font-size:0.75rem; font-weight:900; letter-spacing:1px; margin-bottom:5px;">🐛 RADAR BIOLÓGICO</div>
+<div style="color:#fff; font-size:0.9rem; margin-bottom:4px;">Alvo: <a href="#central-de-diagn-stico" style="color:#f87171; text-decoration:underline; font-weight:bold;" title="Clique para abrir tratamento">[{d['praga_nome']}]</a></div>
+<div style="color:#fca5a5; font-size:0.8rem; line-height:1.4; margin-bottom:10px;"><b>🕵️ Onde procurar:</b> {d['praga_sintoma']}</div>
+</div>
+<div style="background:rgba(239, 68, 68, 0.15); border:1px dashed #ef4444; padding:6px; border-radius:6px; text-align:center;">
+<span style="color:#fca5a5; font-weight:bold; font-size:0.7rem;">🔗 Ver na aba Doctor Grow</span>
+</div>
+</div>
 
-    <div style="background:rgba(249, 115, 22, 0.05); border:1px solid rgba(249, 115, 22, 0.3); border-radius:10px; padding:12px; position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:space-between;">
-        <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:#f97316;"></div>
-        <div style="margin-left:8px;">
-            <div style="color:#f97316; font-size:0.75rem; font-weight:900; letter-spacing:1px; margin-bottom:5px;">🧪 RADAR NUTRICIONAL</div>
-            <div style="color:#fff; font-size:0.9rem; margin-bottom:4px;">Maior Risco: <a href="#diagn-stico-visual" style="color:#fb923c; text-decoration:underline; font-weight:bold;" title="Clique para ver dosagem">[{d['nutri_nome']}]</a></div>
-            <div style="color:#fdba74; font-size:0.8rem; line-height:1.4; margin-bottom:10px;"><b>🕵️ Sintoma Crítico:</b> {d['nutri_sintoma']}</div>
-        </div>
-        <div style="background:rgba(249, 115, 22, 0.15); border:1px dashed #f97316; padding:6px; border-radius:6px; text-align:center;">
-            <span style="color:#fdba74; font-weight:bold; font-size:0.7rem;">🔗 Ver na aba Nutrição</span>
-        </div>
-    </div>
+<div style="background:rgba(249, 115, 22, 0.05); border:1px solid rgba(249, 115, 22, 0.3); border-radius:10px; padding:12px; position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:space-between;">
+<div style="position:absolute; top:0; left:0; width:4px; height:100%; background:#f97316;"></div>
+<div style="margin-left:8px;">
+<div style="color:#f97316; font-size:0.75rem; font-weight:900; letter-spacing:1px; margin-bottom:5px;">🧪 RADAR NUTRICIONAL</div>
+<div style="color:#fff; font-size:0.9rem; margin-bottom:4px;">Maior Risco: <a href="#diagn-stico-visual" style="color:#fb923c; text-decoration:underline; font-weight:bold;" title="Clique para ver dosagem">[{d['nutri_nome']}]</a></div>
+<div style="color:#fdba74; font-size:0.8rem; line-height:1.4; margin-bottom:10px;"><b>🕵️ Sintoma Crítico:</b> {d['nutri_sintoma']}</div>
+</div>
+<div style="background:rgba(249, 115, 22, 0.15); border:1px dashed #f97316; padding:6px; border-radius:6px; text-align:center;">
+<span style="color:#fdba74; font-weight:bold; font-size:0.7rem;">🔗 Ver na aba Nutrição</span>
+</div>
+</div>
 
 </div>
 
