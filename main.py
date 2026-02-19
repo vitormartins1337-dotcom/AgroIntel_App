@@ -1339,10 +1339,10 @@ Risco: {info['nivel']}
         st.markdown("<br>", unsafe_allow_html=True)
         render_doctor_cards(db_doctor["INSETOS & ÁCAROS"])
         
-    with tab_fungos:
+with tab_fungos:
         col_img1, col_img2 = st.columns(2)
-        with col_img1: 
-        with col_img2: 
+with col_img1: 
+with col_img2: 
         st.markdown("<br>", unsafe_allow_html=True)
         render_doctor_cards(db_doctor["FUNGOS & VÍRUS"])
 
