@@ -533,7 +533,7 @@ dias_restantes = max(0, ciclo_total_dias - dias_vida)
 progresso_pct = min(100, max(0, int((dias_vida / ciclo_total_dias) * 100)))
 
 # ==============================================================================
-# CARDS SUPERIORES (STATUS V21 + YIELD) - COM TEMP E UMIDADE
+# CARDS SUPERIORES (STATUS V21 + YIELD) - COM TEMP, UMIDADE E BIOMETRIA
 # ==============================================================================
 
 # 1. CRIAÇÃO DAS COLUNAS
@@ -544,109 +544,113 @@ ciclo_total_dias = info_genetica.get('ciclo_dias', 90) + 30
 dias_restantes = max(0, ciclo_total_dias - dias_vida)
 progresso_pct = min(100, max(0, int((dias_vida / ciclo_total_dias) * 100)))
 
+# Lógica fisiológica (Sincronizada com o resto do app)
+progresso_ciclo = min(1.0, dias_vida / ciclo_total_dias)
+idx_tatico = min(8, int(progresso_ciclo * 8.99))
+
 # 3. BASE DE CONHECIMENTO CLIMÁTICO (TEMP & UMIDADE POR FASE)
-# Define os alvos ideais dependendo da fase atual
 mapa_clima_ideal = {
     "Plântula":    {"temp": "20-25°C", "rh": "65-80%"},
     "Vegetativo":  {"temp": "22-28°C", "rh": "55-70%"},
     "Pré-Flora":   {"temp": "21-26°C", "rh": "50-60%"},
     "Flora Inicial": {"temp": "21-26°C", "rh": "45-55%"},
     "Flora Média":   {"temp": "20-25°C", "rh": "40-50%"},
-    "Flora Final":   {"temp": "18-23°C", "rh": "35-45%"} # Mais frio para terpenos
+    "Flora Final":   {"temp": "18-23°C", "rh": "35-45%"}
 }
-# Pega os dados da fase atual (ou usa um padrão seguro se não encontrar)
 alvos_clima = mapa_clima_ideal.get(fase_nome, {"temp": "22-26°C", "rh": "50-60%"})
 
-# 1. CÉREBRO DE BENCHMARK BIOMÉTRICO (O QUE ESPERAR DA PLANTA FÍSICA)
-# Usa o mesmo idx_tatico (fisiológico) para garantir sincronia perfeita com o resto do app
+# 4. CÉREBRO DE BENCHMARK BIOMÉTRICO (O QUE ESPERAR DA PLANTA FÍSICA)
 biometria_esperada = {
-    0: "🌱 <b>Morfologia:</b> 2 a 5cm. Cotilédones abertos e o primeiro par de folhas verdadeiras (com 1 ou 3 pontas) se formando. Raiz pivotante descendo.",
-    1: "🌿 <b>Morfologia:</b> 10 a 15cm. A planta deve ter de 3 a 4 'andares' (nós) de folhas. As raízes já devem estar tocando as bordas do vaso.",
-    2: "🌳 <b>Morfologia:</b> 20 a 30cm+. Caule principal engrossando visivelmente. De 5 a 8 andares de folhas. Galhos laterais começando a buscar a luz.",
-    3: "🚀 <b>Morfologia:</b> Crescimento vertical acelerado (esticando). Os internódios (espaço entre os galhos) ficam longos. Primeiros pistilos brancos surgem nas 'axilas' dos galhos.",
-    4: "👑 <b>Morfologia:</b> O crescimento para cima trava. Os topos dos galhos formam 'coroas' (botões densos cheios de cabelos brancos).",
-    5: "💎 <b>Morfologia:</b> Os cálices começam a inchar levemente. A produção de resina (açúcar) fica visível nas folhas mais próximas da flor. O cheiro fica evidente.",
-    6: "🏋️ <b>Morfologia:</b> As coroas se unem formando 'lanças' sólidas (colas). Os galhos pesam. Os pistilos brancos começam a se retrair e oxidar (ficar laranjas).",
-    7: "🍂 <b>Morfologia:</b> As flores estão duras como pedra. As folhas grandes (Fan Leaves) começam a perder o verde e desbotar (amarelo/roxo). Resina no pico máximo.",
-    8: "🏁 <b>Morfologia:</b> 70%+ dos cabelos estão laranjas/marrons e enrolados para dentro. Folhas maiores secando. Cálice inchado engolindo a base das folhas."
+    0: "🌱 <b>Morfologia:</b> 2 a 5cm. Cotilédones abertos e o primeiro par de folhas verdadeiras se formando. Raiz pivotante descendo.",
+    1: "🌿 <b>Morfologia:</b> 10 a 15cm. A planta deve ter de 3 a 4 'andares' (nós) de folhas. Raízes tocando as bordas do vaso.",
+    2: "🌳 <b>Morfologia:</b> 20 a 30cm+. Caule principal engrossando visivelmente. De 5 a 8 andares de folhas. Galhos laterais buscando luz.",
+    3: "🚀 <b>Morfologia:</b> Crescimento vertical acelerado (Stretch). Internódios longos. Primeiros pistilos brancos nas 'axilas'.",
+    4: "👑 <b>Morfologia:</b> Crescimento para cima trava. Topos formam 'coroas' (botões densos cheios de pistilos brancos).",
+    5: "💎 <b>Morfologia:</b> Cálices começam a inchar. Produção de resina (açúcar) visível nas folhas próximas da flor. Cheiro evidente.",
+    6: "🏋️ <b>Morfologia:</b> Coroas se unem formando 'lanças' sólidas (colas). Galhos pesam. Pistilos brancos começam a retrair e oxidar.",
+    7: "🍂 <b>Morfologia:</b> Flores duras como pedra. Folhas grandes (Fan Leaves) começam a desbotar (amarelo/roxo). Resina no pico.",
+    8: "🏁 <b>Morfologia:</b> 70%+ dos tricomas laranjas/marrons. Folhas maiores secando. Cálice inchado engolindo a base das folhas."
 }
 
 texto_biometria = biometria_esperada.get(idx_tatico, "Monitorando maturação final.")
 
-# --- COLUNA A: STATUS CARD V21 (AGORA COM 4 MÉTRICAS DE CLIMA) ---
+# --- COLUNA A: STATUS CARD (AGORA COM 4 MÉTRICAS DE CLIMA E BIOMETRIA) ---
 with col_a:
     meta_vpd = fase_dados.get('meta_vpd', '-')
     meta_ppfd = fase_dados.get('meta_ppfd', '-')
     regime_luz = fase_dados.get('luz_h', '-')
     
-    # HTML SEM INDENTAÇÃO (BLINDADO)
+    # HTML TOTALMENTE CORRIGIDO E BLINDADO
     html_status = f"""
-<div class="status-card">
-<div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:10px;">
-<div>
-<div class="card-label" style="color:#a855f7;">FASE ATUAL ({info_genetica.get('tipo', 'Foto').upper()})</div>
-<div class="big-val" style="font-size:1.8rem; margin-bottom:0;">{fase_nome.upper()}</div>
-<div style="font-size:0.75rem; color:#888; font-style:italic; margin-bottom:5px;">Semanas de vida: {semanas}</div>
-<div style="background:#3b0764; color:#d8b4fe; padding:2px 8px; border-radius:4px; font-size:0.7rem; display:inline-block; font-weight:bold;">
-💡 LUZ: {regime_luz}H/DIA
-</div>
-</div>
-<div style="text-align:right; width:45%;">
-<div class="card-label">PROGRESSO DO CICLO</div>
-<div style="font-size:1.4rem; font-weight:bold; color:#fff;">{progresso_pct}% <span style="font-size:0.8rem; color:#888;">CONCLUÍDO</span></div>
-<div style="width:100%; background:#333; height:8px; border-radius:10px; margin-top:5px; overflow:hidden;">
-<div style="width:{progresso_pct}%; background:linear-gradient(90deg, #a855f7, #d8b4fe); height:100%; border-radius:10px;"></div>
-</div>
-<div style="font-size:0.7rem; color:#666; margin-top:4px;">Faltam aprox. {dias_restantes} dias</div>
-</div>
-</div>
-<div style="height:1px; background:#333; margin:15px 0;"></div>
-<div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:10px;">
-<div>
-<div class="card-label" style="margin-bottom:8px;">🎯 ALVOS DE NUTRIÇÃO</div>
-<div style="display:flex; flex-direction:column; gap:6px;">
-<div style="display:flex; align-items:center; gap:6px;">
-<span class="meta-badge bg-ph">💧 PH {info_metodo['ph_ideal']}</span>
-<span style="font-size:0.65rem; color:#666;">(Acidez)</span>
-</div>
-<div style="display:flex; align-items:center; gap:6px;">
-<span class="meta-badge bg-ec">⚡ EC {info_metodo['ec_ideal']}</span>
-<span style="font-size:0.65rem; color:#666;">(Nutrientes)</span>
-</div>
-</div>
-</div>
-<div>
-<div class="card-label" style="margin-bottom:8px;">🌤️ ALVOS DE CLIMA</div>
-<div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
-<div title="Força da Luz Ideal">
-<span class="meta-badge" style="background:rgba(234, 179, 8, 0.15); color:#facc15; border:1px solid #854d0e; width:100%; text-align:center; display:block;">☀️ {meta_ppfd}</span>
-<div style="font-size:0.6rem; color:#666; text-align:center; margin-top:2px;">PPFD</div>
-</div>
-<div title="Déficit de Pressão de Vapor">
-<span class="meta-badge" style="background:rgba(236, 72, 153, 0.15); color:#f472b6; border:1px solid #831843; width:100%; text-align:center; display:block;">🌫️ {meta_vpd}</span>
-<div style="font-size:0.6rem; color:#666; text-align:center; margin-top:2px;">VPD (kPa)</div>
-</div>
-<div title="Temperatura Ambiente Ideal">
-<span class="meta-badge" style="background:rgba(249, 115, 22, 0.15); color:#fdba74; border:1px solid #9a3412; width:100%; text-align:center; display:block;">🌡️ {alvos_clima['temp']}</span>
-<div style="font-size:0.6rem; color:#666; text-align:center; margin-top:2px;">TEMP</div>
-</div>
-<div title="Umidade Relativa Ideal">
-<span class="meta-badge" style="background:rgba(6, 182, 212, 0.15); color:#67e8f9; border:1px solid #155e75; width:100%; text-align:center; display:block;">☁️ {alvos_clima['rh']}</span>
-<div style="font-size:0.6rem; color:#666; text-align:center; margin-top:2px;">UMIDADE</div>
-</div>
-</div>
-</div>
-</div>
-<div style="margin-top:20px; background:rgba(255,255,255,0.03); padding:12px; border-radius:8px; border-left:3px solid #a855f7;">
-html_status = f"""
-<div style="margin-top:20px; background:rgba(255,255,255,0.03); padding:12px; border-radius:8px; border-left:3px solid #10b981;">
-<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-<div class="card-label" style="margin:0; color:#10b981;"> BENCHMARK BIOMÉTRICO (STATUS FÍSICO):</div>
-</div>
-<div style="color:#e4e4e7; font-size:0.85rem; line-height:1.4;">
-{texto_biometria}
-</div>
-</div>
+<div class="status-card" style="height:100%; display:flex; flex-direction:column; justify-content:space-between;">
+    
+    <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:10px;">
+        <div>
+            <div class="card-label" style="color:#a855f7;">FASE ATUAL ({info_genetica.get('tipo', 'Foto').upper()})</div>
+            <div class="big-val" style="font-size:1.8rem; margin-bottom:0;">{fase_nome.upper()}</div>
+            <div style="font-size:0.75rem; color:#888; font-style:italic; margin-bottom:5px;">Semanas de vida: {semanas}</div>
+            <div style="background:#3b0764; color:#d8b4fe; padding:2px 8px; border-radius:4px; font-size:0.7rem; display:inline-block; font-weight:bold;">
+                💡 LUZ: {regime_luz}H/DIA
+            </div>
+        </div>
+        <div style="text-align:right; width:45%;">
+            <div class="card-label">PROGRESSO DO CICLO</div>
+            <div style="font-size:1.4rem; font-weight:bold; color:#fff;">{progresso_pct}% <span style="font-size:0.8rem; color:#888;">CONCLUÍDO</span></div>
+            <div style="width:100%; background:#333; height:8px; border-radius:10px; margin-top:5px; overflow:hidden;">
+                <div style="width:{progresso_pct}%; background:linear-gradient(90deg, #a855f7, #d8b4fe); height:100%; border-radius:10px;"></div>
+            </div>
+            <div style="font-size:0.7rem; color:#666; margin-top:4px;">Faltam aprox. {dias_restantes} dias</div>
+        </div>
+    </div>
+    
+    <div style="height:1px; background:#333; margin:15px 0;"></div>
+    
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:10px;">
+        <div>
+            <div class="card-label" style="margin-bottom:8px;">🎯 ALVOS DE NUTRIÇÃO</div>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+                <div style="display:flex; align-items:center; gap:6px;">
+                    <span class="meta-badge bg-ph" style="padding:4px 8px; border-radius:4px;">💧 PH {info_metodo.get('ph_ideal', '-')}</span>
+                    <span style="font-size:0.65rem; color:#666;">(Acidez)</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:6px;">
+                    <span class="meta-badge bg-ec" style="padding:4px 8px; border-radius:4px;">⚡ EC {info_metodo.get('ec_ideal', '-')}</span>
+                    <span style="font-size:0.65rem; color:#666;">(Nutrientes)</span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="card-label" style="margin-bottom:8px;">🌤️ ALVOS DE CLIMA</div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+                <div title="Força da Luz Ideal">
+                    <span class="meta-badge" style="background:rgba(234, 179, 8, 0.15); color:#facc15; border:1px solid #854d0e; width:100%; text-align:center; display:block; padding:3px; border-radius:4px;">☀️ {meta_ppfd}</span>
+                    <div style="font-size:0.6rem; color:#666; text-align:center; margin-top:2px;">PPFD</div>
+                </div>
+                <div title="Déficit de Pressão de Vapor">
+                    <span class="meta-badge" style="background:rgba(236, 72, 153, 0.15); color:#f472b6; border:1px solid #831843; width:100%; text-align:center; display:block; padding:3px; border-radius:4px;">🌫️ {meta_vpd}</span>
+                    <div style="font-size:0.6rem; color:#666; text-align:center; margin-top:2px;">VPD</div>
+                </div>
+                <div title="Temperatura Ambiente Ideal">
+                    <span class="meta-badge" style="background:rgba(249, 115, 22, 0.15); color:#fdba74; border:1px solid #9a3412; width:100%; text-align:center; display:block; padding:3px; border-radius:4px;">🌡️ {alvos_clima['temp']}</span>
+                    <div style="font-size:0.6rem; color:#666; text-align:center; margin-top:2px;">TEMP</div>
+                </div>
+                <div title="Umidade Relativa Ideal">
+                    <span class="meta-badge" style="background:rgba(6, 182, 212, 0.15); color:#67e8f9; border:1px solid #155e75; width:100%; text-align:center; display:block; padding:3px; border-radius:4px;">☁️ {alvos_clima['rh']}</span>
+                    <div style="font-size:0.6rem; color:#666; text-align:center; margin-top:2px;">UMIDADE</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div style="margin-top:20px; background:rgba(255,255,255,0.03); padding:12px; border-radius:8px; border-left:3px solid #10b981;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <div class="card-label" style="margin:0; color:#10b981;">🔍 BENCHMARK BIOMÉTRICO (STATUS FÍSICO):</div>
+        </div>
+        <div style="color:#e4e4e7; font-size:0.85rem; line-height:1.4;">
+            {texto_biometria}
+        </div>
+    </div>
+    
 </div>
 """
     st.markdown(html_status, unsafe_allow_html=True)
