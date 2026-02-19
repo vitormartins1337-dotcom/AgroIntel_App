@@ -1176,12 +1176,178 @@ with tab_nutri:
         )
     )
     
-    
-    
+
     # RENDERIZA O GRÁFICO ESCONDENDO A BARRA FLUTUANTE (modebar)
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 
-    # ==============================================================================
+# ==============================================================================
+# ABA: DOCTOR GROW (V52 - DATABASE GIGANTE DE FITOSSANIDADE & MIP)
+# ==============================================================================
+with tab_doctor:
+    st.markdown("""
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
+        <div style="font-size:2.5rem;">🚑</div>
+        <div>
+            <div style="font-weight:900; font-size:1.5rem; color:#ef4444;">DOCTOR GROW SDI</div>
+            <div style="color:#888; font-size:0.9rem;">MANEJO INTEGRADO DE PRAGAS E DOENÇAS (MIP)</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Verifica o método de cultivo do usuário para personalizar o tratamento
+    is_organic = "Orgânico" in metodo_sel or "KNF" in metodo_sel or "Solo Vivo" in metodo_sel if 'metodo_sel' in locals() else True
+
+    # --- BANCO DE DADOS GIGANTE DE FITOSSANIDADE ---
+    db_doctor = {
+        "INSETOS & ÁCAROS": {
+            "Ácaros (Spider Mites)": {
+                "nivel": "CRÍTICO", "cor": "#ef4444", "nome_cientifico": "Tetranychus urticae",
+                "sintoma": "Milhares de pontinhos amarelos/brancos na folha (Stippling). Teias de aranha minúsculas nos topos. Ficam embaixo das folhas.",
+                "causa": "Ambiente muito quente e seco (VPD alto demais) e falta de vento.",
+                "org_tratamento": "Óleo de Neem + Sabão Potássico (apenas na Vega). Predadores vivos: Phytoseiulus persimilis.",
+                "min_tratamento": "Acaricidas específicos (Abamectina) ANTES da flora. Nunca pulverize flores.",
+                "obs": "Eles criam resistência rápido. Alterne os produtos a cada 3 dias."
+            },
+            "Fungus Gnats (Mosca do Solo)": {
+                "nivel": "MÉDIO", "cor": "#f59e0b", "nome_cientifico": "Bradysia spp.",
+                "sintoma": "Mosquitinhos pretos voando ao redor do vaso. As larvas no solo comem os pelos radiculares, travando a planta.",
+                "causa": "Solo constantemente encharcado (excesso de rega) e matéria orgânica em decomposição no topo.",
+                "org_tratamento": "Rega com BTI (Bacillus thuringiensis israelensis) ou Beauveria bassiana. Terra de Diatomáceas no topo.",
+                "min_tratamento": "Peróxido de Hidrogênio (Água Oxigenada 10 volumes) diluído na rega para matar larvas.",
+                "obs": "Deixe o primeiro centímetro do solo secar completamente entre as regas. Use armadilhas amarelas adesivas (Yellow Sticky Traps)."
+            },
+            "Tripes (Thrips)": {
+                "nivel": "ALTO", "cor": "#f97316", "nome_cientifico": "Frankliniella occidentalis",
+                "sintoma": "Manchas prateadas, metálicas ou translúcidas nas folhas. Pontinhos pretos (fezes). Insetos finos e compridos que pulam.",
+                "causa": "Entram por clones infectados ou roupas de fora. Gostam de calor.",
+                "org_tratamento": "Spinosad (bactéria natural) é o mais letal. Pulverizar de noite.",
+                "min_tratamento": "Inseticidas à base de Imidacloprido (apenas na Vega, altamente tóxico).",
+                "obs": "As larvas caem no solo para pupar. Tratar o solo e as folhas simultaneamente é obrigatório."
+            },
+            "Pulgões (Aphids)": {
+                "nivel": "MÉDIO", "cor": "#f59e0b", "nome_cientifico": "Aphididae",
+                "sintoma": "Insetos gordinhos verdes/pretos colados nos caules novos. Folhas deformadas. Presença de formigas 'pastoreando' eles.",
+                "causa": "Excesso crônico de Nitrogênio deixa a seiva doce e atrai pulgões.",
+                "org_tratamento": "Joaninhas (predadores vivos). Spray de óleo essencial de hortelã/alho ou Sabão Potássico.",
+                "min_tratamento": "Inseticida sistêmico na vega. Sabão inseticida na pré-flora.",
+                "obs": "Onde tem pulgão, tem formiga. Destrua o caminho das formigas primeiro, ou elas defenderão os pulgões dos predadores."
+            },
+            "Mosca Branca": {
+                "nivel": "ALTO", "cor": "#f97316", "nome_cientifico": "Bemisia tabaci",
+                "sintoma": "Pequenas moscas brancas voam em nuvem ao mexer na planta. Deixam as folhas pegajosas (Honeydew).",
+                "causa": "Falta de ventilação agressiva. Clones contaminados.",
+                "org_tratamento": "Óleo de Neem + Extrato de Piretro (Crisântemo).",
+                "min_tratamento": "Flupyradifurone ou pulverizações químicas severas (Apenas Vega).",
+                "obs": "A seiva doce que elas deixam atrai o fungo Fumagina, que deixa a planta inteira preta e bloqueia a fotossíntese."
+            },
+            "Lagartas": {
+                "nivel": "CRÍTICO", "cor": "#ef4444", "nome_cientifico": "Helicoverpa spp.",
+                "sintoma": "Furos gigantes nas folhas. Encontrar bolinhas pretas (fezes) nas folhas de baixo. Destroem o meio do bud.",
+                "causa": "Mariposas/borboletas botando ovos no grow (especialmente outdoor ou estufa aberta).",
+                "org_tratamento": "BT (Bacillus thuringiensis kurstaki). É letal para lagartas e 100% orgânico/seguro.",
+                "min_tratamento": "Piretróides sintéticos (último caso). O BT orgânico costuma ser melhor e mais limpo.",
+                "obs": "Caça noturna: Vá com uma lanterna LED verde à noite. Elas saem para comer no escuro."
+            }
+        },
+        "FUNGOS & VÍRUS": {
+            "Botrytis (Mofo Cinzento / Bud Rot)": {
+                "nivel": "MORTAL", "cor": "#991b1b", "nome_cientifico": "Botrytis cinerea",
+                "sintoma": "Folha morta/amarela saindo do meio de um bud gordo. Bud fica marrom, mole e solta teia cinza. Cheiro de porão úmido.",
+                "causa": "Umidade relativa acima de 60% na flora avançada, aliada a queda de temperatura (Ponto de Orvalho/Condensação).",
+                "org_tratamento": "CORTE a parte afetada imediatamente (+5cm abaixo). Não existe cura, apenas amputação.",
+                "min_tratamento": "Amputação. Prevenção com fungicidas químicos só pode ser feita na Vega.",
+                "obs": "Coloque um saco plástico sobre a flor mofada ANTES de cortar, senão os esporos vão voar e infectar a estufa inteira."
+            },
+            "Oídio (Powdery Mildew)": {
+                "nivel": "ALTO", "cor": "#f97316", "nome_cientifico": "Podosphaera macularis",
+                "sintoma": "Manchas redondas de pó branco (parece farinha ou talco) na superfície das folhas grandes.",
+                "causa": "Altas flutuações de umidade (muito seco de dia, muito úmido de noite) e ar estagnado.",
+                "org_tratamento": "Pulverizar leite integral diluído 1:10 em água (no sol/luz) ou Água + Bicarbonato de Sódio.",
+                "min_tratamento": "Fungicidas à base de Enxofre ou Cobre (Não usar Enxofre se já tiver usado Neem em menos de 14 dias!).",
+                "obs": "O Oídio é sistêmico. Se você vê na folha, já está no caule. Melhore a exaustão imediatamente."
+            },
+            "Pythium (Podridão Radicular)": {
+                "nivel": "CRÍTICO", "cor": "#ef4444", "nome_cientifico": "Pythium spp.",
+                "sintoma": "Planta murcha como se faltasse água, mesmo com o solo molhado. Raízes ficam marrons, gosmentas e com cheiro de esgoto.",
+                "causa": "Solo encharcado, quente (acima de 25°C na raiz) e sem oxigênio. Água parada nos pratos do vaso.",
+                "org_tratamento": "Chá de Húmus super aerado + Trichoderma para colonizar as raízes mortas.",
+                "min_tratamento": "Água oxigenada (H2O2) para queimar a gosma, seguido de enzimas para limpar raízes mortas.",
+                "obs": "O Pythium se move pela água. Nunca use a mesma água de runoff de uma planta doente nas outras."
+            },
+            "Vírus do Mosaico (TMV/HpLVd)": {
+                "nivel": "MORTAL", "cor": "#991b1b", "nome_cientifico": "Hop Latent Viroid / TMV",
+                "sintoma": "Folhas nascem torcidas, com manchas amarelas em mosaico ou 'Dudding' (brotos param de crescer e ficam anões). Flores sem resina.",
+                "causa": "Transmissão por tesouras sujas ao clonar/podar ou via clones comprados infectados.",
+                "org_tratamento": "Incurável. Exterminar a planta (Matar com fogo) e jogar o vaso fora.",
+                "min_tratamento": "Incurável. Esterilizar TODA a estufa com Água Sanitária (10%).",
+                "obs": "Vírus não têm cura vegetal comercial. Prevenção: Limpe a tesoura com Álcool Isopropílico a cada planta que for podar."
+            }
+        }
+    }
+
+    # --- RENDERIZAÇÃO DA INTERFACE DOCTOR GROW ---
+    
+    tab_insetos, tab_fungos = st.tabs(["🐛 INSETOS E ÁCAROS", "🍄 FUNGOS E VÍRUS"])
+
+    # Função para renderizar os cards blindados em HTML
+    def render_doctor_cards(categoria_db):
+        for nome_praga, info in categoria_db.items():
+            tratamento = info['org_tratamento'] if is_organic else info['min_tratamento']
+            tipo_txt = "Orgânico/Bio" if is_organic else "Mineral/Químico"
+            
+            # Formatação HTML cravada à esquerda
+            card_html = f"""
+<div id="{nome_praga.split(' ')[0].lower()}" style="background:linear-gradient(145deg, #111, #0a0a0a); border:1px solid #222; border-left:6px solid {info['cor']}; border-radius:12px; margin-bottom:15px; box-shadow: 0 4px 10px rgba(0,0,0,0.4); overflow:hidden;">
+<div style="padding:15px;">
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid #333; padding-bottom:10px;">
+<div>
+<div style="font-size:1.3rem; font-weight:900; color:{info['cor']}; letter-spacing:0.5px; line-height:1.2;">{nome_praga.upper()}</div>
+<div style="font-size:0.8rem; color:#888; font-style:italic;">{info['nome_cientifico']}</div>
+</div>
+<div style="background:{info['cor']}20; border:1px solid {info['cor']}; color:{info['cor']}; padding:4px 10px; border-radius:6px; font-weight:bold; font-size:0.75rem; letter-spacing:1px;">
+Risco: {info['nivel']}
+</div>
+</div>
+<div style="display:grid; grid-template-columns: 1fr; gap:10px;">
+<div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
+<div style="color:#aaa; font-size:0.75rem; font-weight:bold; margin-bottom:4px;">🕵️ IDENTIFICAÇÃO (SINTOMAS):</div>
+<div style="color:#e4e4e7; font-size:0.9rem; line-height:1.5;">{info['sintoma']}</div>
+</div>
+<div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+<div style="background:rgba(239, 68, 68, 0.05); padding:12px; border-radius:8px; border:1px solid rgba(239, 68, 68, 0.2);">
+<div style="color:#f87171; font-size:0.75rem; font-weight:bold; margin-bottom:4px;">⚠️ CAUSA RAIZ (O QUE ATRAIU):</div>
+<div style="color:#fca5a5; font-size:0.85rem; line-height:1.4;">{info['causa']}</div>
+</div>
+<div style="background:rgba(59, 130, 246, 0.05); padding:12px; border-radius:8px; border:1px solid rgba(59, 130, 246, 0.2);">
+<div style="color:#60a5fa; font-size:0.75rem; font-weight:bold; margin-bottom:4px;">⚔️ TRATAMENTO ({tipo_txt.upper()}):</div>
+<div style="color:#93c5fd; font-size:0.85rem; line-height:1.4; font-weight:bold;">{tratamento}</div>
+</div>
+</div>
+<div style="margin-top:5px; background:rgba(245, 158, 11, 0.05); padding:10px; border-radius:8px; border-left:3px solid #f59e0b;">
+<div style="color:#fb923c; font-size:0.75rem; font-weight:bold; margin-bottom:2px;">💡 OBSERVAÇÃO DO MASTER GROWER:</div>
+<div style="color:#fcd34d; font-size:0.85rem; font-style:italic;">"{info['obs']}"</div>
+</div>
+</div>
+</div>
+</div>
+"""
+            st.markdown(card_html, unsafe_allow_html=True)
+
+    # Injeta imagens de contexto visual antes das listas para ajudar o usuário a identificar
+    with tab_insetos:
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        render_doctor_cards(db_doctor["INSETOS & ÁCAROS"])
+        
+    with tab_fungos:
+        col_img1, col_img2 = st.columns(2)
+        with col_img1: 
+        with col_img2: 
+        st.markdown("<br>", unsafe_allow_html=True)
+        render_doctor_cards(db_doctor["FUNGOS & VÍRUS"])
+
+
+# ==============================================================================
 # ABA: LABORATÓRIO & FERRAMENTAS (V34 - SUÍTE DE CÁLCULO MASTER)
 # ==============================================================================
 with tab_tools:
