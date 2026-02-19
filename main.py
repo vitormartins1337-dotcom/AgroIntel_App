@@ -641,7 +641,7 @@ with col_a:
 html_status = f"""
 <div style="margin-top:20px; background:rgba(255,255,255,0.03); padding:12px; border-radius:8px; border-left:3px solid #10b981;">
 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-<div class="card-label" style="margin:0; color:#10b981;">🔍 BENCHMARK BIOMÉTRICO (STATUS FÍSICO):</div>
+<div class="card-label" style="margin:0; color:#10b981;"> 🔍 BENCHMARK BIOMÉTRICO (STATUS FÍSICO):</div>
 </div>
 <div style="color:#e4e4e7; font-size:0.85rem; line-height:1.4;">
 {texto_biometria}
