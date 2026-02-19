@@ -735,7 +735,7 @@ with col_b:
 <div style="font-size:0.65rem; color:#ca8a04; font-weight:bold; margin-bottom:4px;">PARÂMETROS DO CÁLCULO:</div>
             
 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
-<span style="font-size:0.7rem; color:#ccc;"> 🪴 {txt_vaso}</span>
+<span style="font-size:0.7rem; color:#ccc;"> {txt_vaso}</span>
 <span style="font-size:0.7rem; color:{'#4ade80' if fator_vaso > 1.2 else '#888'}; font-weight:bold;">x{fator_vaso:.1f}</span>
 </div>
             
