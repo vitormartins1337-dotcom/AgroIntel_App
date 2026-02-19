@@ -921,12 +921,11 @@ if show_consultoria:
     st.markdown(html_consultoria, unsafe_allow_html=True)
 
 # ==============================================================================
-# PAINEL DE TELEMETRIA E CRONOGRAMA VISUAL (V45)
+# PAINEL DE TELEMETRIA E CRONOGRAMA VISUAL (V46 - DIF TÉRMICO)
 # ==============================================================================
-st.markdown("<div style='height:20px;'></div>", unsafe_allow_html=True) # Espaçamento
+st.markdown("<div style='height:20px;'></div>", unsafe_allow_html=True) 
 
 # 1. LÓGICA DO CRONOGRAMA (TIMELINE)
-# Define qual bolinha da linha do tempo vai acender com base no progresso
 pct = progresso_ciclo * 100
 step = 1
 if pct > 15: step = 2 # Vega
@@ -934,33 +933,37 @@ if pct > 45: step = 3 # Pré-Flora
 if pct > 65: step = 4 # Engorda
 if pct > 90: step = 5 # Colheita
 
-# Função para definir a cor do círculo (Roxo se já passou/está, Cinza se é futuro)
-def cor_step(s):
-    return "#a855f7" if step >= s else "#333"
-
-def cor_texto(s):
-    return "#fff" if step >= s else "#666"
-
-def cor_linha(s):
-    return "#a855f7" if step > s else "#333"
+def cor_step(s): return "#a855f7" if step >= s else "#333"
+def cor_texto(s): return "#fff" if step >= s else "#666"
 
 # 2. DIRETRIZES DE REGA (DRYBACK RÁPIDO)
 rega_estrategia = "Manter Úmido (Sem Encharcar)"
-rega_cor = "#3b82f6"
 if step == 2: rega_estrategia = "Seca de 20% (Dryback Leve) entre regas"
 elif step == 3: rega_estrategia = "Rega de Alto Volume (Sem secar muito)"
 elif step == 4: rega_estrategia = "Seca de 40% (Dryback Severo) para estresse generativo"
 elif step == 5: rega_estrategia = "Lavagem (Flush) com bastante escoamento"
 
-# 3. HTML BLINDADO: TIMELINE & TELEMETRIA (FLEXBOX)
+# 3. LÓGICA DO DELTA TÉRMICO (DIF - Diferença de Temp. Dia/Noite)
+# Essa é a nova inteligência que substitui o pH/EC
+dif_alvo = "DIF Baixo (Queda de 2°C a 4°C)"
+dif_motivo = "Mantém os internódios curtos e a planta compacta."
+if step == 3: # Pré-Flora (Stretch)
+    dif_alvo = "DIF Zero (Queda de 0°C a 2°C)"
+    dif_motivo = "Trava o estirão vertical da planta."
+elif step == 4: # Engorda
+    dif_alvo = "DIF Médio (Queda de 4°C a 6°C)"
+    dif_motivo = "Otimiza a respiração celular noturna."
+elif step == 5: # Colheita/Maturação
+    dif_alvo = "DIF Alto (Queda de 8°C a 12°C)"
+    dif_motivo = "Simula outono: força resina e cores roxas."
+
+# 4. HTML BLINDADO (FLEXBOX)
 html_telemetria = f"""
 <div style="background:#0a0a0a; border:1px solid #222; border-radius:12px; padding:20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
 <div style="color:#aaa; font-size:0.75rem; font-weight:bold; letter-spacing:1px; margin-bottom:15px;">⏱️ CRONOGRAMA FENOLÓGICO: {info_genetica['tipo'].upper()}</div>
-    
 <div style="display:flex; align-items:center; justify-content:space-between; position:relative; margin-bottom:25px; padding:0 10px;">
 <div style="position:absolute; top:15px; left:10%; right:10%; height:3px; background:#333; z-index:1;"></div>
 <div style="position:absolute; top:15px; left:10%; width:{min(100, (step-1)*25)}%; height:3px; background:#a855f7; z-index:2; transition: width 0.5s;"></div>
-        
 <div style="display:flex; flex-direction:column; align-items:center; z-index:3; width:20%;">
 <div style="width:30px; height:30px; border-radius:50%; background:{cor_step(1)}; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#fff; border:3px solid #0a0a0a; box-shadow: 0 0 8px {cor_step(1)}80;">1</div>
 <div style="font-size:0.65rem; color:{cor_texto(1)}; margin-top:5px; font-weight:bold; text-align:center;">RAÍZES</div>
@@ -982,38 +985,21 @@ html_telemetria = f"""
 <div style="font-size:0.65rem; color:{cor_texto(5)}; margin-top:5px; font-weight:bold; text-align:center;">COLHEITA</div>
 </div>
 </div>
-
 <div style="display:grid; grid-template-columns: 1.2fr 1fr; gap:10px;">
-        
 <div style="background:rgba(59, 130, 246, 0.05); border:1px solid rgba(59, 130, 246, 0.2); padding:12px; border-radius:8px;">
-<div style="display:flex; align-items:center; gap:5px; color:#60a5fa; font-size:0.75rem; font-weight:bold; margin-bottom:5px;">
-<span>💧 MODO DE IRRIGAÇÃO</span>
+<div style="display:flex; align-items:center; gap:5px; color:#60a5fa; font-size:0.75rem; font-weight:bold; margin-bottom:5px;">💧 MODO DE IRRIGAÇÃO</div>
+<div style="color:#fff; font-size:0.85rem; line-height:1.4;">{rega_estrategia}</div>
+<div style="font-size:0.65rem; color:#888; margin-top:5px; border-top:1px dashed #333; padding-top:3px;"><i>Baseado no estágio fenológico atual.</i></div>
 </div>
-<div style="color:#fff; font-size:0.85rem; line-height:1.4;">
-{rega_estrategia}
-</div>
-<div style="font-size:0.65rem; color:#888; margin-top:5px; border-top:1px dashed #333; padding-top:3px;">
-<i>Baseado no estágio fenológico atual.</i>
-</div>
-</div>
-
-<div style="background:rgba(255, 255, 255, 0.02); border:1px solid #333; padding:12px; border-radius:8px;">
-<div style="display:flex; align-items:center; gap:5px; color:#aaa; font-size:0.75rem; font-weight:bold; margin-bottom:5px;">
-<span>🎯 ALVOS DE RUNOFF (SAÍDA)</span>
-</div>
-<div style="display:flex; justify-content:space-between; margin-bottom:3px;">
-<span style="color:#ccc; font-size:0.8rem;">pH Alvo:</span>
-<b style="color:#fff; font-size:0.85rem;">{info_metodo['ph_ideal']}</b>
-</div>
-<div style="display:flex; justify-content:space-between;">
-<span style="color:#ccc; font-size:0.8rem;">EC Alvo:</span>
-<b style="color:#fff; font-size:0.85rem;">Até {float(info_metodo['ec_ideal'].split('-')[1]) + 0.3 if '-' in info_metodo['ec_ideal'] else '1.5'} mS</b>
+<div style="background:rgba(249, 115, 22, 0.05); border:1px solid rgba(249, 115, 22, 0.2); padding:12px; border-radius:8px;">
+<div style="display:flex; align-items:center; gap:5px; color:#fb923c; font-size:0.75rem; font-weight:bold; margin-bottom:5px;">🌡️ DELTA TÉRMICO (DIF)</div>
+<div style="color:#fff; font-size:0.85rem; font-weight:bold; margin-bottom:2px;">{dif_alvo}</div>
+<div style="font-size:0.7rem; color:#ccc; line-height:1.3;">{dif_motivo}</div>
 </div>
 </div>
-
 </div>
-</div>
-<div style="height:20px;"></div> """
+<div style="height:20px;"></div>
+"""
 st.markdown(html_telemetria, unsafe_allow_html=True)
 
 # ABAS INFERIORES
