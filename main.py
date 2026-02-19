@@ -724,9 +724,9 @@ with col_b:
         
 <div>
 <div class="card-label" style="color:#fcd34d; margin-bottom:5px;">ESTIMATIVA DE SAFRA (SECO)</div>
-<div class="big-val" style="color:{cor_yield}; font-size:2.2rem; line-height:1;">{estimativa_total_g:.0f}g</div>
+<div class="big-val" style="color:{cor_yield}; font-size:2.2rem; line-height:1;">{int(estimativa_total_g)}g</div>
 <div class="sub-info" style="color:#fef08a; font-size:0.9rem;">~ {estimativa_total_kg:.2f} kg Totais</div>
-<div style="font-size:0.75rem; color:#888; margin-top:2px;">Média: <b>{estimativa_g_planta:.0f}g / planta</b></div>
+<div style="font-size:0.75rem; color:#888; margin-top:2px;">Média: <b>{int(estimativa_g_planta)}g / planta</b></div>
 </div>
 
 <div style="height:1px; background:#422006; margin:10px 0;"></div>
